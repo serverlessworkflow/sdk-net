@@ -1,6 +1,6 @@
 # Serverless Workflow .NET SDK Maintainers
 
+* [Tihomir Surdilovic](https://github.com/tsurdilo)
+* [Ricardo Zanini](https://github.com/ricardozanini)
 * [Charles d'Avernas](https://github.com/Neuroglia)
 
-
-If you would like to be added as maintainer to this project, please open an issue.
