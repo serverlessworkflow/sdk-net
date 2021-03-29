@@ -1,0 +1,12 @@
+reviewers:
+  - tsurdilo
+  - manuelstein
+  - ricardozanini
+  - Neuroglia
+approvers:
+  - tsurdilo
+  - manuelstein
+  - ricardozanini
+  - Neuroglia
+labels:
+  - sig/contributor-experience
