@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,13 @@ namespace ServerlessWorkflow.Sdk.Models
 {
 
     /// <summary>
-    /// Represents the base class for all <see cref="SwitchStateDefinition"/> condition implementations
+    /// Represents the base class for all <see cref="SwitchStateDefinition"/> case implementations
     /// </summary>
-    public abstract class SwitchConditionDefinition
+    public abstract class SwitchCaseDefinition
     {
 
         /// <summary>
-        /// Gets the <see cref="SwitchConditionDefinition"/>'s type
+        /// Gets the <see cref="SwitchCaseDefinition"/>'s type
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
@@ -46,14 +46,14 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="SwitchConditionDefinition"/>'s name
+        /// Gets/sets the <see cref="SwitchCaseDefinition"/>'s name
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
         public virtual string Name { get; set; }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="SwitchConditionDefinition"/>'s <see cref="TransitionDefinition"/>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="SwitchCaseDefinition"/>'s <see cref="TransitionDefinition"/>
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Transition))]
         [System.Text.Json.Serialization.JsonPropertyName(nameof(Transition))]
@@ -91,7 +91,7 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="SwitchConditionDefinition"/>'s <see cref="EndDefinition"/>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="SwitchCaseDefinition"/>'s <see cref="EndDefinition"/>
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = nameof(End))]
         [System.Text.Json.Serialization.JsonPropertyName(nameof(End))]
@@ -131,6 +131,12 @@ namespace ServerlessWorkflow.Sdk.Models
                 this._End = value;
                 this.EndToken = JToken.FromObject(value);
             }
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return this.Name;
         }
 
     }

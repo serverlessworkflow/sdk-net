@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,19 @@
  *
  */
 
-namespace ServerlessWorkflow.Sdk.Models
+namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
-
     /// <summary>
-    /// Represents a data-based <see cref="SwitchConditionDefinition"/>
+    /// Defines the fundamentals of a service used to build workflow runners
     /// </summary>
-    public class DataConditionDefinition
-        : SwitchConditionDefinition
+    public interface ISubflowRunnerBuilder
     {
 
         /// <summary>
-        /// Gets/sets an expression evaluated against state data. True if results are not empty
+        /// Runs the specified workflow
         /// </summary>
-        public virtual string Condition { get; set; }
+        /// <param name="workflowId">The workflow to run</param>
+        void RunSubflow(string workflowId);
 
     }
 

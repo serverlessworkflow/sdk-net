@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "onEvents")]
         [System.Text.Json.Serialization.JsonPropertyName("onEvents")]
         [YamlMember(Alias = "onEvents")]
-        public virtual IEnumerable<EventStateTriggerDefinition> Triggers { get; set; }
+        public virtual List<EventStateTriggerDefinition> Triggers { get; set; } = new List<EventStateTriggerDefinition>();
 
         /// <summary>
         /// Gets/sets the duration to wait for incoming events

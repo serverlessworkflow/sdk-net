@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,12 +30,12 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates an action that invokes a function
         /// </summary>
         [EnumMember(Value = "function")]
-        InvokeFunction,
+        FunctionCall,
         /// <summary>
-        /// Indicates an action that produces a cloud event
+        /// Indicates an action that executes a cloud event trigger
         /// </summary>
-        [EnumMember(Value = "event")]
-        PublishEvent
+        [EnumMember(Value = "trigger")]
+        EventTrigger
     }
 
 }

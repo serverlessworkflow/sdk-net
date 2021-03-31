@@ -21,6 +21,10 @@
     <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>ServerlessWorkflow.Sdk.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
@@ -33,6 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CloudNative.CloudEvents" Version="1.3.80" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="YamlDotNet" Version="10.0.0" />
   </ItemGroup>
