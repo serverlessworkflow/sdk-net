@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,9 +66,9 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual ActionExecutionMode ActionMode { get; set; }
 
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> of actions to be executed for each of the elements of the <see cref="InputCollection"/>
+        /// Gets/sets an <see cref="List{T}"/> of actions to be executed for each of the elements of the <see cref="InputCollection"/>
         /// </summary>
-        public virtual IEnumerable<ActionDefinition> Actions { get; set; }
+        public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
         /// <summary>
         /// Gets/sets the unique Id of a workflow to be executed for each of the elements of <see cref="InputCollection"/>

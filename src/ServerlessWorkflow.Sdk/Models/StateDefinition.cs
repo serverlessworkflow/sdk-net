@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,7 +115,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "onErrors")]
         [System.Text.Json.Serialization.JsonPropertyName("onErrors")]
         [YamlMember(Alias = "onErrors")]
-        public virtual IEnumerable<ErrorHandlerDefinition> Errors { get; set; }
+        public virtual List<ErrorHandlerDefinition> Errors { get; set; } = new List<ErrorHandlerDefinition>();
 
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="StateDefinition"/>'s <see cref="TransitionDefinition"/>
@@ -168,7 +168,13 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="StateDefinition"/>'s metadata
         /// </summary>
-        public virtual JObject Metadata { get; set; }
+        public virtual JObject Metadata { get; set; } = new JObject();
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return this.Name;
+        }
 
     }
 

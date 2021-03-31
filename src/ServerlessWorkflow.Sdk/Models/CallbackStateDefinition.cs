@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents a workflow state that performs an action, then waits for the callback event that denotes completion of the action
     /// </summary>
@@ -60,7 +61,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the callback event data filter definition
         /// </summary>
-        public virtual EventDataFilterDefinition EventDataFilter { get; set; }
+        public virtual EventDataFilterDefinition EventDataFilter { get; set; } = new EventDataFilterDefinition();
 
     }
 

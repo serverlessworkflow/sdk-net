@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the maximum amount of retries allowed
         /// </summary>
-        public virtual int? Max { get; set; }
+        public virtual uint? Max { get; set; }
 
         /// <summary>
         /// Gets/sets the maximum delay between retries
@@ -75,7 +75,7 @@ namespace ServerlessWorkflow.Sdk.Models
         protected virtual JToken JitterToken { get; set; }
 
         /// <summary>
-        /// Gets/sets a value by which the delay is multiplied before each attempt. 
+        /// Gets/sets the maximum amount of random time added or subtracted from the delay between each retry relative to total delay
         /// </summary>
         public virtual float? JitterMultiplier
         {
@@ -116,6 +116,12 @@ namespace ServerlessWorkflow.Sdk.Models
                 }
                 this.JitterToken = XmlConvert.ToString(value.Value);
             }
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return this.Name;
         }
 
     }

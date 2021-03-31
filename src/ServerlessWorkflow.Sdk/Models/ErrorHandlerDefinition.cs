@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,6 +126,12 @@ namespace ServerlessWorkflow.Sdk.Models
                 this._End = value;
                 this.EndToken = JToken.FromObject(value);
             }
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{this.Error}{(string.IsNullOrWhiteSpace(this.Code) ? string.Empty : $" (code: '{this.Code}')")}";
         }
 
     }

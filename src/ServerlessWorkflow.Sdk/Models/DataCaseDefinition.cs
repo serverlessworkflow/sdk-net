@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,21 @@
  * limitations under the License.
  *
  */
-using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
-    /// Represents the definition of an event-based <see cref="SwitchStateDefinition"/>
+    /// Represents a data-based <see cref="SwitchCaseDefinition"/>
     /// </summary>
-    public class EventConditionDefinition
-        : SwitchConditionDefinition
+    public class DataCaseDefinition
+        : SwitchCaseDefinition
     {
 
         /// <summary>
-        /// Gets/sets the unique event name the condition applies to
+        /// Gets/sets an expression evaluated against state data. True if results are not empty
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "eventRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("eventRef")]
-        [YamlMember(Alias = "eventRef")]
-        public string Event { get; set; }
+        public virtual string Condition { get; set; }
 
     }
 

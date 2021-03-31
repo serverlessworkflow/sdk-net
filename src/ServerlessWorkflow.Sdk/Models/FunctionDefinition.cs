@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,13 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the function's metadata
         /// </summary>
-        public virtual JObject Metadata { get; set; }
+        public virtual JObject Metadata { get; set; } = new JObject();
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return this.Name;
+        }
 
     }
 

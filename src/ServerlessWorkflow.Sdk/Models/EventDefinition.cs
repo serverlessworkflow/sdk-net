@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,17 +54,23 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual EventKind Kind { get; set; } = EventKind.Consumed;
 
         /// <summary>
-        /// Gets/sets an object used to define the way the cloud event is correlated
+        /// Gets/sets an <see cref="List{T}"/> containing the <see cref="EventCorrelationDefinition"/>s used to define the way the cloud event is correlated
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = "correlation"), MinLength(1)]
         [System.Text.Json.Serialization.JsonPropertyName("correlation")]
         [YamlMember(Alias = "correlation")]
-        public virtual IEnumerable<EventCorrelationDefinition> Correlations { get; set; }
+        public virtual List<EventCorrelationDefinition> Correlations { get; set; } = new List<EventCorrelationDefinition>();
 
         /// <summary>
         /// Gets/sets the <see cref="EventDefinition"/>'s metadata
         /// </summary>
-        public virtual JObject Metadata { get; set; }
+        public virtual JObject Metadata { get; set; } = new JObject();
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return this.Name;
+        }
 
     }
 

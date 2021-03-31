@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,13 @@ namespace ServerlessWorkflow.Sdk.Models
     {
 
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> containing the references one or more unique event names in the defined workflow events
+        /// Gets/sets an <see cref="List{T}"/> containing the references one or more unique event names in the defined workflow events
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonProperty(PropertyName = "eventRefs"), Newtonsoft.Json.JsonRequired]
         [System.Text.Json.Serialization.JsonPropertyName("eventRefs")]
         [YamlMember(Alias = "eventRefs")]
-        public virtual IEnumerable<string> Events { get; set; }
+        public virtual List<string> Events { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets/sets a value that specifies how actions are to be performed (in sequence of parallel)
@@ -42,11 +42,11 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual ActionExecutionMode ActionMode { get; set; }
 
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> containing the actions to be performed if expression matches
+        /// Gets/sets an <see cref="List{T}"/> containing the actions to be performed if expression matches
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
-        public virtual IEnumerable<ActionDefinition> Actions { get; set; }
+        public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
         /// <summary>
         /// Gets/sets an object used to filter the event data 
@@ -54,7 +54,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "eventDataFilter")]
         [System.Text.Json.Serialization.JsonPropertyName("eventDataFilter")]
         [YamlMember(Alias = "eventDataFilter")]
-        public virtual EventDataFilterDefinition DataFilter { get; set; }
+        public virtual EventDataFilterDefinition DataFilter { get; set; } = new EventDataFilterDefinition();
 
     }
 

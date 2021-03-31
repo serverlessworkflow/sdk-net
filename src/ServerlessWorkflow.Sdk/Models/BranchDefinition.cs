@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,9 +40,15 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual ActionExecutionMode ActionMode { get; set; }
 
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> containing the actions to be executed in this branch
+        /// Gets/sets an <see cref="List{T}"/> containing the actions to be executed in this branch
         /// </summary>
-        public virtual IEnumerable<ActionDefinition> Actions { get; set; }
+        public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return this.Name;
+        }
 
     }
 

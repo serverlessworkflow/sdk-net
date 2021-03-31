@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,14 +53,14 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> of <see cref="DataConditionDefinition"/>s between which to switch. Assigning the property sets the <see cref="SwitchStateDefinition"/>'s <see cref="SwitchType"/> to <see cref="SwitchStateType.Data"/>.
+        /// Gets/sets an <see cref="List{T}"/> of <see cref="DataCaseDefinition"/>s between which to switch. Assigning the property sets the <see cref="SwitchStateDefinition"/>'s <see cref="SwitchType"/> to <see cref="SwitchStateType.Data"/>.
         /// </summary>
-        public virtual IEnumerable<DataConditionDefinition> DataConditions { get; set; }
+        public virtual List<DataCaseDefinition> DataConditions { get; set; } = new List<DataCaseDefinition>();
 
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> of <see cref="EventConditionDefinition"/>s between which to switch. Assigning the property sets the <see cref="SwitchStateDefinition"/>'s <see cref="SwitchType"/> to <see cref="SwitchStateType.Event"/>.
+        /// Gets/sets an <see cref="List{T}"/> of <see cref="EventCaseDefinition"/>s between which to switch. Assigning the property sets the <see cref="SwitchStateDefinition"/>'s <see cref="SwitchType"/> to <see cref="SwitchStateType.Event"/>.
         /// </summary>
-        public virtual IEnumerable<EventConditionDefinition> EventConditions { get; set; }
+        public virtual List<EventCaseDefinition> EventConditions { get; set; } = new List<EventCaseDefinition>();
 
         /// <summary>
         /// Gets/sets the duration to wait for incoming events

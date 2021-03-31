@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2020-Present The Serverless Workflow Specification Authors
+ * Copyright 2021-Present The Serverless Workflow Specification Authors
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,27 +125,33 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s metadata
         /// </summary>
-        public virtual JObject Metadata { get; set; }
+        public virtual JObject Metadata { get; set; } = new JObject();
+
+        /// <summary>
+        /// Gets/sets an <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
+        /// </summary>
+        public virtual List<EventDefinition> Events { get; set; } = new List<EventDefinition>();
 
         /// <summary>
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
         /// </summary>
-        public virtual IEnumerable<EventDefinition> Events { get; set; }
-
-        /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
-        /// </summary>
-        public virtual IEnumerable<FunctionDefinition> Functions { get; set; }
+        public virtual List<FunctionDefinition> Functions { get; set; } = new List<FunctionDefinition>();
 
         /// <summary>
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="RetryStrategyDefinition"/>s
         /// </summary>
-        public virtual IEnumerable<RetryStrategyDefinition> Retries { get; set; }
+        public virtual List<RetryStrategyDefinition> Retries { get; set; } = new List<RetryStrategyDefinition>();
 
         /// <summary>
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="StateDefinition"/>s
         /// </summary>
-        public virtual IEnumerable<StateDefinition> States { get; set; }
+        public virtual List<StateDefinition> States { get; set; } = new List<StateDefinition>();
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{ this.Id} {this.Version}";
+        }
 
     }
 
