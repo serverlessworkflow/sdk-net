@@ -57,7 +57,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// </summary>
         /// <param name="data">The data to inject</param>
         /// <returns>A new <see cref="IInjectStateBuilder"/></returns>
-        IInjectStateBuilder Inject(JObject data);
+        IInjectStateBuilder Inject(object data);
 
         /// <summary>
         /// Creates and configures a new <see cref="OperationStateDefinition"/>
@@ -72,6 +72,14 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <param name="actionSetup">An <see cref="Action{T}"/> used to setup the <see cref="ActionDefinition"/> to execute</param>
         /// <returns>A new <see cref="IOperationStateBuilder"/></returns>
         IOperationStateBuilder Execute(Action<IActionBuilder> actionSetup);
+
+        /// <summary>
+        /// Creates and configures a new <see cref="OperationStateDefinition"/>
+        /// </summary>
+        /// <param name="name">the name of the <see cref="ActionDefinition"/> to execute</param>
+        /// <param name="actionSetup">An <see cref="Action{T}"/> used to setup the <see cref="ActionDefinition"/> to execute</param>
+        /// <returns>A new <see cref="IOperationStateBuilder"/></returns>
+        IOperationStateBuilder Execute(string name, Action<IActionBuilder> actionSetup);
 
         /// <summary>
         /// Creates and configures a new <see cref="ParallelStateDefinition"/>

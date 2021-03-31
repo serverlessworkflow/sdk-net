@@ -27,6 +27,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     {
 
         /// <summary>
+        /// Sets the name of the <see cref="StateDefinition"/> to build
+        /// </summary>
+        /// <param name="name">The name of the <see cref="StateDefinition"/> to build</param>
+        /// <returns>The configured <see cref="IStateBuilder"/></returns>
+        IStateBuilder WithName(string name);
+
+        /// <summary>
         /// Builds the <see cref="StateDefinition"/>
         /// </summary>
         /// <returns>A new <see cref="StateDefinition"/></returns>
@@ -42,6 +49,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         : IStateBuilder, IMetadataContainerBuilder<IStateBuilder<TState>>
         where TState : StateDefinition, new()
     {
+
+        /// <summary>
+        /// Sets the name of the <see cref="StateDefinition"/> to build
+        /// </summary>
+        /// <param name="name">The name of the <see cref="StateDefinition"/> to build</param>
+        /// <returns>The configured <see cref="IStateBuilder{TState}"/></returns>
+        new IStateBuilder<TState> WithName(string name);
 
         /// <summary>
         /// Filters the <see cref="StateDefinition"/>'s input

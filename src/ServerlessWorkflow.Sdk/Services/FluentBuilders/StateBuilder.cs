@@ -59,6 +59,20 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IStateBuilder<TState> WithName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            this.State.Name = name;
+            return this;
+        }
+
+        IStateBuilder IStateBuilder.WithName(string name)
+        {
+            return this.WithName(name);
+        }
+
+        /// <inheritdoc/>
         public virtual IStateBuilder<TState> FilterInput(string expression)
         {
             this.State.DataFilter.Input = expression;

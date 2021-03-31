@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 
@@ -86,6 +85,20 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IOperationStateBuilder Execute(string name, Action<IActionBuilder> actionSetup)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            if (actionSetup == null)
+                throw new ArgumentNullException(nameof(actionSetup));
+            return this.Execute(a =>
+            {
+                actionSetup(a);
+                a.WithName(name);
+            });
+        }
+
+        /// <inheritdoc/>
         public virtual IParallelStateBuilder ExecuteInParallel()
         {
             return new ParallelStateBuilder(this.Pipeline);
@@ -113,8 +126,10 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IInjectStateBuilder Inject(JObject data)
+        public virtual IInjectStateBuilder Inject(object data)
         {
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
             return this.Inject().Data(data);
         }
 

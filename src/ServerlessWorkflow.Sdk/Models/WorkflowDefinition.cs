@@ -15,6 +15,8 @@
  *
  */
 using Newtonsoft.Json.Linq;
+using ServerlessWorkflow.Sdk.Services.FluentBuilders;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using YamlDotNet.Serialization;
@@ -151,6 +153,27 @@ namespace ServerlessWorkflow.Sdk.Models
         public override string ToString()
         {
             return $"{ this.Id} {this.Version}";
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="IWorkflowBuilder"/> used to build a new <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="id">The id of the <see cref="WorkflowDefinition"/> to create</param>
+        /// <param name="name">The name of the <see cref="WorkflowDefinition"/> to create</param>
+        /// <param name="version">The version of the <see cref="WorkflowDefinition"/> to create</param>
+        /// <returns>A new <see cref="IWorkflowBuilder"/></returns>
+        public static IWorkflowBuilder Create(string id, string name, string version)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                throw new ArgumentNullException(nameof(id));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            if (string.IsNullOrWhiteSpace(version))
+                throw new ArgumentNullException(nameof(version));
+            return new WorkflowBuilder()
+                .WithId(id)
+                .WithName(name)
+                .WithVersion(version);
         }
 
     }

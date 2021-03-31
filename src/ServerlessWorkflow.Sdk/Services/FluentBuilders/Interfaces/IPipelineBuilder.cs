@@ -77,11 +77,27 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IPipelineBuilder Then(Func<IStateBuilderFactory, IStateBuilder> stateSetup);
 
         /// <summary>
+        /// Transitions to the specified <see cref="StateDefinition"/>
+        /// </summary>
+        /// <param name="name">The name of the <see cref="StateDefinition"/> to transition to</param>
+        /// <param name="stateSetup">An <see cref="Action{T}"/> used to setup the <see cref="StateDefinition"/> to transition to</param>
+        /// <returns>A new <see cref="IStateBuilder{TState}"/> used to configure the <see cref="StateDefinition"/> to transition to</returns>
+        IPipelineBuilder Then(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup);
+
+        /// <summary>
         /// Configure the <see cref="StateDefinition"/> to end the workflow upon completion
         /// </summary>
         /// <param name="stateSetup">An <see cref="Action{T}"/> used to setup the <see cref="StateDefinition"/> to end the workflow with</param>
         /// <returns>The configured <see cref="IStateBuilder{TState}"/></returns>
         IWorkflowBuilder EndsWith(Func<IStateBuilderFactory, IStateBuilder> stateSetup);
+
+        /// <summary>
+        /// Configure the <see cref="StateDefinition"/> to end the workflow upon completion
+        /// </summary>
+        /// <param name="name">The name of the <see cref="StateDefinition"/> to end the workflow execution with</param>
+        /// <param name="stateSetup">An <see cref="Action{T}"/> used to setup the <see cref="StateDefinition"/> to end the workflow with</param>
+        /// <returns>The configured <see cref="IStateBuilder{TState}"/></returns>
+        IWorkflowBuilder EndsWith(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup);
 
         /// <summary>
         /// Configures the last <see cref="StateDefinition"/> to end the workflow upon completion

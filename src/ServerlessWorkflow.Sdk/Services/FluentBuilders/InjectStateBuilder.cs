@@ -16,6 +16,7 @@
  */
 using Newtonsoft.Json.Linq;
 using ServerlessWorkflow.Sdk.Models;
+using System;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
@@ -37,9 +38,11 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IInjectStateBuilder Data(JObject data)
+        public virtual IInjectStateBuilder Data(object data)
         {
-            this.State.Data = data;
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+            this.State.Data = JObject.FromObject(data);
             return this;
         }
 

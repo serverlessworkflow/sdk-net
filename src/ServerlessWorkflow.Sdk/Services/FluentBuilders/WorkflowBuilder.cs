@@ -148,10 +148,33 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IPipelineBuilder StartsWith(StateDefinition state)
+        {
+            if (state == null)
+                throw new ArgumentNullException(nameof(state));
+            this.Pipeline = new PipelineBuilder(this);
+            this.Pipeline.AddState(state);
+            return this.Pipeline;
+        }
+
+        /// <inheritdoc/>
         public virtual IPipelineBuilder StartsWith(Func<IStateBuilderFactory, IStateBuilder> stateSetup)
         {
-            this.Pipeline = new PipelineBuilder(this).Then(stateSetup);
+            if (stateSetup == null)
+                throw new ArgumentNullException(nameof(stateSetup));
+            this.Pipeline = new PipelineBuilder(this);
+            this.Pipeline.AddState(stateSetup);
             return this.Pipeline;
+        }
+
+        /// <inheritdoc/>
+        public virtual IPipelineBuilder StartsWith(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            if (stateSetup == null)
+                throw new ArgumentNullException(nameof(stateSetup));
+            return this.StartsWith(flow => stateSetup(flow).WithName(name));
         }
 
         /// <inheritdoc/>

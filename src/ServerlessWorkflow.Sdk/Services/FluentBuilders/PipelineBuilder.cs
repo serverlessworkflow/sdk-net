@@ -107,8 +107,20 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IPipelineBuilder Then(Func<IStateBuilderFactory, IStateBuilder> stateSetup)
         {
+            if (stateSetup == null)
+                throw new ArgumentNullException(nameof(stateSetup));
             this.AddState(stateSetup);
             return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IPipelineBuilder Then(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            if (stateSetup == null)
+                throw new ArgumentNullException(nameof(stateSetup));
+            return this.Then(flow => stateSetup(flow).WithName(name));
         }
 
         /// <inheritdoc/>
@@ -117,6 +129,14 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             StateDefinition state = this.AddState(stateSetup);
             state.End = new EndDefinition();
             return this.Workflow;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder EndsWith(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            return this.EndsWith(flow => stateSetup(flow).WithName(name));
         }
 
         /// <inheritdoc/>
@@ -131,6 +151,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             return this.States;
         }
+
 
 
     }
