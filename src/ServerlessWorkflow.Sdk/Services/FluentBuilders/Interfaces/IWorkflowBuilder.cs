@@ -63,6 +63,14 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IPipelineBuilder StartsWith(Func<IStateBuilderFactory, IStateBuilder> stateSetup);
 
         /// <summary>
+        /// Sets and configures the startup <see cref="StateDefinition"/>
+        /// </summary>
+        /// <param name="name">The name of the startup <see cref="StateDefinition"/></param>
+        /// <param name="stateSetup">An <see cref="Func{T, TResult}"/> used to setup the startup <see cref="StateDefinition"/></param>
+        /// <returns>A new <see cref="IPipelineBuilder"/> used to configure the <see cref="WorkflowDefinition"/>'s <see cref="StateDefinition"/>s</returns>
+        IPipelineBuilder StartsWith(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup);
+
+        /// <summary>
         /// Adds the specified <see cref="EventDefinition"/> to the <see cref="WorkflowDefinition"/> to create
         /// </summary>
         /// <param name="e">The <see cref="EventDefinition"/> to add</param>

@@ -41,6 +41,14 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <returns>The configured container</returns>
         TContainer Execute(Action<IActionBuilder> actionSetup);
 
+        /// <summary>
+        /// Creates and configures a new <see cref="ActionDefinition"/> to be executed by the container
+        /// </summary>
+        /// <param name="name">The name of the <see cref="ActionDefinition"/> to execute</param>
+        /// <param name="actionSetup">An <see cref="Action{T}"/> used to setup the <see cref="ActionDefinition"/> to execute</param>
+        /// <returns>The configured container</returns>
+        TContainer Execute(string name, Action<IActionBuilder> actionSetup);
+
     }
 
 }

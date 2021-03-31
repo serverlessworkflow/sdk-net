@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using ServerlessWorkflow.Sdk.Models;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
@@ -31,7 +30,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// </summary>
         /// <param name="data">The data to inject</param>
         /// <returns>A new <see cref="IInjectStateBuilder"/></returns>
-        IInjectStateBuilder Data(JObject data);
+        IInjectStateBuilder Data(object data);
 
     }
 

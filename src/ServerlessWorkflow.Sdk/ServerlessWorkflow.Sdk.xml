@@ -1055,6 +1055,15 @@
         <member name="M:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ToString">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Create(System.String,System.String,System.String)">
+            <summary>
+            Creates a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/> used to build a new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="id">The id of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create</param>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create</param>
+            <param name="version">The version of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create</param>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.ActionType">
             <summary>
             Enumerates all types of actions
@@ -1294,6 +1303,9 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.BranchBuilder.Execute(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.BranchBuilder.Execute(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.BranchBuilder.Concurrently">
             <inheritdoc/>
         </member>
@@ -1512,6 +1524,9 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.EventStateTriggerBuilder.Execute(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.EventStateTriggerBuilder.Execute(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.EventStateTriggerBuilder.Sequentially">
             <inheritdoc/>
         </member>
@@ -1565,6 +1580,9 @@
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ForEachStateBuilder.Execute(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ForEachStateBuilder.Execute(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ForEachStateBuilder.Concurrently">
@@ -1624,7 +1642,7 @@
             </summary>
             <param name="pipeline">The <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder"/> the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilder`1"/> belongs to</param>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.InjectStateBuilder.Data(Newtonsoft.Json.Linq.JObject)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.InjectStateBuilder.Data(System.Object)">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder">
@@ -1743,6 +1761,14 @@
             <summary>
             Creates and configures a new <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to be executed by the container
             </summary>
+            <param name="actionSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to execute</param>
+            <returns>The configured container</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionContainerBuilder`1.Execute(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
+            <summary>
+            Creates and configures a new <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to be executed by the container
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to execute</param>
             <param name="actionSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to execute</param>
             <returns>The configured container</returns>
         </member>
@@ -2222,7 +2248,7 @@
             Defines the fundamentals of a service used to build <see cref="T:ServerlessWorkflow.Sdk.Models.InjectStateDefinition"/>s
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IInjectStateBuilder.Data(Newtonsoft.Json.Linq.JObject)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IInjectStateBuilder.Data(System.Object)">
             <summary>
             Injects the specified data into the workflow
             </summary>
@@ -2345,10 +2371,26 @@
             <param name="stateSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to transition to</param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder`1"/> used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to transition to</returns>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder.Then(System.String,System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
+            <summary>
+            Transitions to the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to transition to</param>
+            <param name="stateSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to transition to</param>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder`1"/> used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to transition to</returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder.EndsWith(System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
             <summary>
             Configure the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to end the workflow upon completion
             </summary>
+            <param name="stateSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to end the workflow with</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder`1"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder.EndsWith(System.String,System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
+            <summary>
+            Configure the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to end the workflow upon completion
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to end the workflow execution with</param>
             <param name="stateSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to end the workflow with</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder`1"/></returns>
         </member>
@@ -2442,6 +2484,13 @@
             Defines the fundamentals of a service used to configure a <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder.WithName(System.String)">
+            <summary>
+            Sets the name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to build
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to build</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder"/></returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder.Build">
             <summary>
             Builds the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
@@ -2453,6 +2502,13 @@
             Defines the fundamentals of a service used to configure a <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
             </summary>
             <typeparam name="TState">The type of <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to build</typeparam>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder`1.WithName(System.String)">
+            <summary>
+            Sets the name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to build
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to build</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder`1"/></returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder`1.FilterInput(System.String)">
             <summary>
@@ -2525,7 +2581,7 @@
             </summary>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IInjectStateBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory.Inject(Newtonsoft.Json.Linq.JObject)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory.Inject(System.Object)">
             <summary>
             Creates and configures a new <see cref="T:ServerlessWorkflow.Sdk.Models.InjectStateDefinition"/>
             </summary>
@@ -2543,6 +2599,14 @@
             <summary>
             Creates and configures a new <see cref="T:ServerlessWorkflow.Sdk.Models.OperationStateDefinition"/>
             </summary>
+            <param name="actionSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to execute</param>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOperationStateBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory.Execute(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
+            <summary>
+            Creates and configures a new <see cref="T:ServerlessWorkflow.Sdk.Models.OperationStateDefinition"/>
+            </summary>
+            <param name="name">the name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to execute</param>
             <param name="actionSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to execute</param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOperationStateBuilder"/></returns>
         </member>
@@ -2683,6 +2747,14 @@
             <param name="stateSetup">An <see cref="T:System.Func`2"/> used to setup the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder"/> used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s</returns>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.StartsWith(System.String,System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
+            <summary>
+            Sets and configures the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            </summary>
+            <param name="name">The name of the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></param>
+            <param name="stateSetup">An <see cref="T:System.Func`2"/> used to setup the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></param>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder"/> used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s</returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddEvent(ServerlessWorkflow.Sdk.Models.EventDefinition)">
             <summary>
             Adds the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create
@@ -2763,6 +2835,9 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OperationStateBuilder.Execute(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OperationStateBuilder.Execute(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OperationStateBuilder.Concurrently">
             <inheritdoc/>
         </member>
@@ -2834,7 +2909,13 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.PipelineBuilder.Then(System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.PipelineBuilder.Then(System.String,System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.PipelineBuilder.EndsWith(System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.PipelineBuilder.EndsWith(System.String,System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.PipelineBuilder.End">
@@ -2908,6 +2989,9 @@
         <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilder`1.Metadata">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilder`1.WithName(System.String)">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilder`1.FilterInput(System.String)">
             <inheritdoc/>
         </member>
@@ -2963,6 +3047,9 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilderFactory.Execute(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilderFactory.Execute(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder})">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilderFactory.ExecuteInParallel">
             <inheritdoc/>
         </member>
@@ -2972,7 +3059,7 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilderFactory.Inject">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilderFactory.Inject(Newtonsoft.Json.Linq.JObject)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilderFactory.Inject(System.Object)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilderFactory.Switch">
@@ -3104,7 +3191,13 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddRetryStrategy(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IRetryStrategyBuilder})">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.StartsWith(ServerlessWorkflow.Sdk.Models.StateDefinition)">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.StartsWith(System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.StartsWith(System.String,System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Build">

@@ -75,6 +75,20 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IBranchBuilder Execute(string name, Action<IActionBuilder> actionSetup)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            if (actionSetup == null)
+                throw new ArgumentNullException(nameof(actionSetup));
+            return this.Execute(a =>
+            {
+                actionSetup(a);
+                a.WithName(name);
+            });
+        }
+
+        /// <inheritdoc/>
         public virtual IBranchBuilder Concurrently()
         {
             this.Branch.ActionMode = ActionExecutionMode.Parallel;
