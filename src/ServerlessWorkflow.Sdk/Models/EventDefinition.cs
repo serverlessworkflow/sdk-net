@@ -41,7 +41,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
-        public virtual Uri Source { get; set; }
+        public virtual string Source { get; set; }
 
         /// <summary>
         /// Gets/sets the cloud event type

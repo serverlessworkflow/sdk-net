@@ -27,13 +27,13 @@ namespace ServerlessWorkflow.Sdk.Models
     {
 
         /// <summary>
-        /// Gets/sets the timeout interval
+        /// Gets/sets the duration after which the workflow's execution will time out
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
-        public virtual TimeSpan Interval { get; set; }
+        public virtual TimeSpan Duration { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to terminate the workflow execution.

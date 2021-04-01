@@ -14,25 +14,25 @@
  * limitations under the License.
  *
  */
-using ServerlessWorkflow.Sdk;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using YamlDotNet.Core;
 
-namespace YamlDotNet.Serialization.Converters
+namespace YamlDotNet.Serialization
 {
-
     /// <summary>
-    /// Represents an <see cref="INodeDeserializer"/> used to deserialize ISO8601 <see cref="TimeSpan"/>s
+    /// Represents an <see cref="INodeDeserializer"/> used to deserialize <see cref="JToken"/>s
     /// </summary>
-    public class Iso8601TimeSpanConverter
+    public class JTokenDeserializer
         : INodeDeserializer
     {
 
         /// <summary>
-        /// Initializes a new <see cref="Iso8601TimeSpanConverter"/>
+        /// Initializes a new <see cref="JTokenDeserializer"/>
         /// </summary>
         /// <param name="inner">The inner <see cref="INodeDeserializer"/></param>
-        public Iso8601TimeSpanConverter(INodeDeserializer inner)
+        public JTokenDeserializer(INodeDeserializer inner)
         {
             this.Inner = inner;
         }
@@ -45,12 +45,11 @@ namespace YamlDotNet.Serialization.Converters
         /// <inheritdoc/>
         public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object> nestedObjectDeserializer, out object value)
         {
-            if (expectedType != typeof(TimeSpan)
-                && expectedType != typeof(TimeSpan?))
+            if (!typeof(JToken).IsAssignableFrom(expectedType))
                 return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value);
-            if (!this.Inner.Deserialize(reader, typeof(string), nestedObjectDeserializer, out value))
+            if (!this.Inner.Deserialize(reader, typeof(Dictionary<object, object>), nestedObjectDeserializer, out value))
                 return false;
-            value = Iso8601TimeSpan.Parse((string)value);
+            value = JToken.FromObject(value);
             return true;
         }
 

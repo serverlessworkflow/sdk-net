@@ -58,7 +58,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="System.Version"/> of the Serverless Workflow schema to use
         /// </summary>
-        public virtual string SchemaVersion { get; set; } = "0.5";
+        public virtual string SchemaVersion { get; set; } = "0.6";
 
         /// <summary>
         /// Gets/sets the language the <see cref="WorkflowDefinition"/>'s expressions are expressed in
@@ -68,6 +68,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "expressionLang")]
         [Required]
         public virtual string ExpressionLanguage { get; set; } = "jq";
+
+        /// <summary>
+        /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s annotations
+        /// </summary>
+        public virtual List<string> Annotations { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s execution timeout

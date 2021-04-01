@@ -48,8 +48,6 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="SwitchCaseDefinition"/>'s name
         /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired]
         public virtual string Name { get; set; }
 
         /// <summary>

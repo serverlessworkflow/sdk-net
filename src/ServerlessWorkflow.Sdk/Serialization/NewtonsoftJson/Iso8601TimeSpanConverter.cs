@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using ServerlessWorkflow.Sdk;
 using System;
 using System.Xml;
 
@@ -30,10 +31,10 @@ namespace Newtonsoft.Json.Converters
         /// <inheritdoc/>
         public override TimeSpan ReadJson(JsonReader reader, Type objectType, TimeSpan existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            string expression = reader.Value.ToString();
+            string expression = reader.Value?.ToString();
             if (string.IsNullOrWhiteSpace(expression))
                 return default;
-            return XmlConvert.ToTimeSpan(expression);
+            return Iso8601TimeSpan.Parse(expression);
         }
 
         /// <inheritdoc/>
