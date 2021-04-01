@@ -16,37 +16,27 @@
  */
 using Iso8601DurationHelper;
 using System;
-using System.Xml;
 
 namespace ServerlessWorkflow.Sdk
 {
-
     /// <summary>
-    /// Represents an helper class for handling ISO 8601 timespans
+    /// Defines extensions for <see cref="Duration"/>s
     /// </summary>
-    public static class Iso8601TimeSpan
+    public static class DurationExtensions
     {
 
         /// <summary>
-        /// Parses the specified input
+        /// Converts the <see cref="Duration"/> into a <see cref="TimeSpan"/>
         /// </summary>
-        /// <param name="input">The input string to parse</param>
-        /// <returns>The parsed <see cref="TimeSpan"/></returns>
-        public static TimeSpan Parse(string input)
+        /// <param name="duration">The <see cref="Duration"/> to convert</param>
+        /// <returns>The converted <see cref="TimeSpan"/></returns>
+        public static TimeSpan ToTimeSpan(this Duration duration)
         {
-            Duration duration = Duration.Parse(input);
-            return duration.ToTimeSpan();
-        }
-
-        /// <summary>
-        /// Formats the specified <see cref="TimeSpan"/>
-        /// </summary>
-        /// <param name="timeSpan">The <see cref="TimeSpan"/> to format</param>
-        /// <returns>The parsed <see cref="TimeSpan"/></returns>
-        public static string Format(TimeSpan timeSpan)
-        {
-
-            return XmlConvert.ToString(timeSpan);
+            int days = (int)duration.Days;
+            days += (int)duration.Weeks * 7;
+            days += (int)duration.Months * 30;
+            days += (int)duration.Years * 365;
+            return new TimeSpan(days, (int)duration.Hours, (int)duration.Minutes, (int)duration.Seconds);
         }
 
     }

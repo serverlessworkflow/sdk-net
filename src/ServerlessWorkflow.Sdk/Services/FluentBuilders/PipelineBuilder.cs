@@ -17,7 +17,6 @@
 using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
@@ -47,6 +46,11 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// Gets a <see cref="List{T}"/> containing the <see cref="StateDefinition"/>s the pipeline is made out of
         /// </summary>
         protected List<StateDefinition> States { get; } = new List<StateDefinition>();
+
+        /// <summary>
+        /// Gets the current <see cref="StateDefinition"/> in the main pipeline of the <see cref="WorkflowDefinition"/>
+        /// </summary>
+        protected StateDefinition CurrentStep { get; private set; }
 
         /// <inheritdoc/>
         public virtual EventDefinition AddEvent(Action<IEventBuilder> eventSetup)
@@ -109,7 +113,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
-            this.AddState(stateSetup);
+            this.CurrentStep = this.AddState(stateSetup);
             return this;
         }
 
@@ -142,7 +146,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IWorkflowBuilder End()
         {
-            this.States.Last().End = new EndDefinition();
+            this.CurrentStep.End = new EndDefinition() {  };
             return this.Workflow;
         }
 
@@ -151,8 +155,6 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             return this.States;
         }
-
-
 
     }
 

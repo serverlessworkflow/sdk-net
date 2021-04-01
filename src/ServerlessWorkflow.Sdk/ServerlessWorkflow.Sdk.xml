@@ -1114,6 +1114,18 @@
             Indicates an event to produce
             </summary>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.DurationExtensions">
+            <summary>
+            Defines extensions for <see cref="T:Iso8601DurationHelper.Duration"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.DurationExtensions.ToTimeSpan(Iso8601DurationHelper.Duration)">
+            <summary>
+            Converts the <see cref="T:Iso8601DurationHelper.Duration"/> into a <see cref="T:System.TimeSpan"/>
+            </summary>
+            <param name="duration">The <see cref="T:Iso8601DurationHelper.Duration"/> to convert</param>
+            <returns>The converted <see cref="T:System.TimeSpan"/></returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.IServiceCollectionExtensions">
             <summary>
             Defines extensions for <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>s
@@ -1158,6 +1170,18 @@
             </summary>
             <param name="services">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/> to configure</param>
             <returns>The configured <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.StringExtensions">
+            <summary>
+            Exposes extensions for <see cref="T:System.String"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.StringExtensions.ToCamelCase(System.String)">
+            <summary>
+            Converts the specified text to a camel-cased string
+            </summary>
+            <param name="text">The text to convert</param>
+            <returns>The camel-cased text</returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.TypeExtensions">
             <summary>
@@ -1207,10 +1231,19 @@
             Represents an helper class for handling ISO 8601 timespans
             </summary>
         </member>
-        <member name="T:ServerlessWorkflow.Sdk.DurationExtensions">
+        <member name="M:ServerlessWorkflow.Sdk.Iso8601TimeSpan.Parse(System.String)">
             <summary>
-            Defines extensions for <see cref="T:Iso8601DurationHelper.Duration"/>s
+            Parses the specified input
             </summary>
+            <param name="input">The input string to parse</param>
+            <returns>The parsed <see cref="T:System.TimeSpan"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Iso8601TimeSpan.Format(System.TimeSpan)">
+            <summary>
+            Formats the specified <see cref="T:System.TimeSpan"/>
+            </summary>
+            <param name="timeSpan">The <see cref="T:System.TimeSpan"/> to format</param>
+            <returns>The parsed <see cref="T:System.TimeSpan"/></returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.ParallelCompletionType">
             <summary>
@@ -3059,6 +3092,11 @@
         <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.PipelineBuilder.States">
             <summary>
             Gets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s the pipeline is made out of
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.PipelineBuilder.CurrentStep">
+            <summary>
+            Gets the current <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> in the main pipeline of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
             </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.PipelineBuilder.AddEvent(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IEventBuilder})">
