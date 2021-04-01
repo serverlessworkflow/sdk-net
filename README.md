@@ -1,12 +1,14 @@
+<img src="https://github.com/Neuroglia/sdk-net/raw/main/media/logos/icon.png" width="250" height="250" />
+
 # Serverless Workflow Specification - .NET SDK
 
 Provides .NET 5.0 API/SPI and Model Validation for the [Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
 
 With the SDK, you can:
 
-- Parse workflow JSON and YAML definitions
-- Programmatically build workflow definitions
-- Validate workflow definitions (both schema and workflow integrity validation)
+- [x] Read and write workflow JSON and YAML definitions
+- [x] Programmatically build workflow definitions
+- [ ] Validate workflow definitions (both schema and workflow integrity validation)
 
 ### Status
 
