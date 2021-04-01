@@ -18,6 +18,7 @@ using System.Runtime.Serialization;
 
 namespace ServerlessWorkflow.Sdk
 {
+
     /// <summary>
     /// Enumerates all types of conditions
     /// </summary>
