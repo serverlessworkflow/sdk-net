@@ -6,7 +6,7 @@ Provides .NET 5.0 API/SPI and Model Validation for the [Serverless Workflow Spec
 
 With the SDK, you can:
 
-- Parse workflow JSON and YAML definitions
+- Read and write workflow JSON and YAML definitions
 - Programmatically build workflow definitions
 - Validate workflow definitions (both schema and workflow integrity validation)
 
