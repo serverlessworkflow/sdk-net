@@ -15,6 +15,7 @@
  *
  */
 using Newtonsoft.Json.Linq;
+using ServerlessWorkflow.Sdk;
 using System;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
@@ -62,7 +63,20 @@ namespace YamlDotNet.Serialization
                     this.WriteJArray(emitter, jarray);
                     break;
                 default:
-                    emitter.Emit(new Scalar(token.ToString()));
+                    string scalar = null;
+                    switch (token.Type)
+                    {
+                        case JTokenType.Boolean:
+                            scalar = token.ToString().ToLower();
+                            break;
+                        case JTokenType.TimeSpan:
+                            scalar = Iso8601TimeSpan.Format(token.ToObject<TimeSpan>());
+                            break;
+                        default:
+                            scalar = token.ToString();
+                            break;
+                    }
+                    emitter.Emit(new Scalar(scalar));
                     break;
             }
         }
@@ -104,7 +118,10 @@ namespace YamlDotNet.Serialization
         /// <param name="jproperty">The <see cref="JProperty"/> to serialize</param>
         protected void WriteJProperty(IEmitter emitter, JProperty jproperty)
         {
-            emitter.Emit(new Scalar(jproperty.Name));
+            if (jproperty.Value == null
+                || jproperty.Value.Type == JTokenType.Null)
+                return;
+            emitter.Emit(new Scalar(jproperty.Name.ToCamelCase()));
             this.WriteJToken(emitter, jproperty.Value);
         }
 

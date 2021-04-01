@@ -121,6 +121,7 @@ namespace ServerlessWorkflow.Sdk
             services.AddNewtonsoftJsonSerializer();
             services.AddYamlDotNetSerializer(
                 serializer => serializer
+                    .IncludeNonPublicProperties()
                     .WithTypeConverter(new JTokenSerializer())
                     .WithTypeConverter(new Iso8601TimeSpanSerializer())
                     .WithTypeConverter(new StringEnumSerializer())
