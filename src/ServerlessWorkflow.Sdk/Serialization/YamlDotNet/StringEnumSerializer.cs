@@ -15,30 +15,35 @@
  *
  */
 using ServerlessWorkflow.Sdk;
+using System;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 
-namespace System.Text.Json.Serialization.Converters
+namespace YamlDotNet.Serialization
 {
     /// <summary>
-    /// Represents the <see cref="JsonConverter{T}"/> used to convert <see cref="TimeSpan"/>s from and to ISO 8601 durations
+    /// Represents the <see cref="IYamlTypeConverter"/> used to serialize ISO 8601 <see cref="Enum"/>s
     /// </summary>
-    public class Iso8601TimeSpanConverter
-        : JsonConverter<TimeSpan?>
+    public class StringEnumSerializer
+        : IYamlTypeConverter
     {
 
         /// <inheritdoc/>
-        public override TimeSpan? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public virtual bool Accepts(Type type)
         {
-            string iso8601Input = reader.GetString();
-            if (string.IsNullOrWhiteSpace(iso8601Input))
-                return null;
-            return Iso8601TimeSpan.Parse(iso8601Input);
+            return type.IsEnum;
         }
 
         /// <inheritdoc/>
-        public override void Write(Utf8JsonWriter writer, TimeSpan? value, JsonSerializerOptions options)
+        public virtual object ReadYaml(IParser parser, Type type)
         {
-            if(value.HasValue)
-                writer.WriteStringValue(value.ToString());
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public virtual void WriteYaml(IEmitter emitter, object value, Type type)
+        {
+            emitter.Emit(new Scalar(EnumHelper.Stringify(value, type)));
         }
 
     }

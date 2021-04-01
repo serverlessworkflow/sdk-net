@@ -30,8 +30,6 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the expression evaluated against <see cref="SubFlowStateDefinition"/> state data. <see cref="SubFlowStateDefinition"/> will repeat execution as long as this expression is true or until the max property count is reached
         /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired]
         public virtual string Expression { get; set; }
 
         /// <summary>

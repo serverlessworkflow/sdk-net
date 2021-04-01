@@ -56,6 +56,34 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IWorkflowBuilder WithVersion(string version);
 
         /// <summary>
+        /// Annotates the <see cref="WorkflowDefinition"/> to build
+        /// </summary>
+        /// <param name="annotation">The annotation to append to the <see cref="WorkflowDefinition"/> to build</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder Annotate(string annotation);
+
+        /// <summary>
+        /// Configures the expression language used by the <see cref="WorkflowDefinition"/> to build
+        /// </summary>
+        /// <param name="language">The expression language to use</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder UseExpressionLanguage(string language);
+
+        /// <summary>
+        /// Configures the <see cref="WorkflowDefinition"/>'s <see cref="ExecutionTimeoutDefinition"/>
+        /// </summary>
+        /// <param name="timeoutSetup">An <see cref="Action{T}"/> used to setup the <see cref="WorkflowDefinition"/>'s <see cref="ExecutionTimeoutDefinition"/></param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder WithExecutionTimeout(Action<IExecutionTimeoutBuilder> timeoutSetup);
+
+        /// <summary>
+        /// Configures the <see cref="WorkflowDefinition"/> to not terminate its execution when there are no active execution paths
+        /// </summary>
+        /// <param name="keepActive">A boolean indicating whether or not to keep the <see cref="WorkflowDefinition"/> active</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder KeepActive(bool keepActive = true);
+
+        /// <summary>
         /// Sets and configures the startup <see cref="StateDefinition"/>
         /// </summary>
         /// <param name="stateSetup">An <see cref="Func{T, TResult}"/> used to setup the startup <see cref="StateDefinition"/></param>

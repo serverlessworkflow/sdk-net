@@ -28,14 +28,6 @@ dotnet nuget add package ServerlessWorkflow.Sdk
 
 ### How to use
 
-#### Parsing workflows
-
-```csharp
-var parser = new WorkflowParser();
-var yaml = File.ReadAllText("myworkflow.yaml");
-var workflow = parser.Parse(yaml);
-```
-
 #### Building workflows programatically
 
 ```csharp
@@ -60,4 +52,32 @@ var workflow = WorkflowDefinition.Create("MyWorkflow", "MyWorkflow", "1.0")
           }))
   .End()
   .Build();
+```
+
+#### Reading workflows
+
+```csharp
+var reader = WorkflowReader.Create();
+using(Stream stream = File.OpenRead("myWorkflow.json"))
+{
+  var definition = reader.Read(stream, WorkflowDefinitionFormat.Json);
+}
+```
+
+#### Writing workflows
+
+```csharp
+  var writer = WorkflowWriter.Create();
+  using(Stream stream = new MemoryStream())
+  {
+      writer.Write(workflow, stream);
+      stream.Flush();
+      stream.Position = 0;
+      using(StreamReader reader = new StreamReader(stream))
+      {
+          var yaml = reader.ReadToEnd();
+          Console.WriteLine(yaml);
+          Console.ReadLine();
+      }
+  }
 ```

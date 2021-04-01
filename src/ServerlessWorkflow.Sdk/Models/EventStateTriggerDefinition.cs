@@ -44,8 +44,6 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> containing the actions to be performed if expression matches
         /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired]
         public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
         /// <summary>

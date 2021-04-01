@@ -30,6 +30,14 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     {
 
         /// <summary>
+        /// Initializes a new <see cref="WorkflowBuilder"/>
+        /// </summary>
+        public WorkflowBuilder()
+        {
+            this.Pipeline = new PipelineBuilder(this);
+        }
+
+        /// <summary>
         /// Gets the <see cref="WorkflowDefinition"/> to configure
         /// </summary>
         protected WorkflowDefinition Workflow { get; } = new WorkflowDefinition();
@@ -37,7 +45,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <summary>
         /// Gets the service used to build the <see cref="WorkflowDefinition"/>'s <see cref="StartDefinition"/> chart
         /// </summary>
-        protected IPipelineBuilder Pipeline { get; set; }
+        protected IPipelineBuilder Pipeline { get; }
 
         /// <inheritdoc/>
         public override JObject Metadata
@@ -81,6 +89,40 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (!Version.TryParse(version, out _))
                 throw new ArgumentException("The specified value '{version}' is not a valid version");
             this.Workflow.Version = version;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder Annotate(string annotation)
+        {
+            if (string.IsNullOrWhiteSpace(annotation))
+                throw new ArgumentNullException(nameof(annotation));
+            this.Workflow.Annotations.Add(annotation);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder UseExpressionLanguage(string language)
+        {
+            if (string.IsNullOrWhiteSpace(language))
+                throw new ArgumentNullException(nameof(language));
+            this.Workflow.ExpressionLanguage = language;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder WithExecutionTimeout(Action<IExecutionTimeoutBuilder> timeoutSetup)
+        {
+            IExecutionTimeoutBuilder builder = new ExecutionTimeoutBuilder(this.Pipeline);
+            timeoutSetup(builder);
+            this.Workflow.ExecutionTimeout = builder.Build();
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder KeepActive(bool keepActive = true)
+        {
+            this.Workflow.KeepActive = keepActive;
             return this;
         }
 
@@ -152,7 +194,6 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            this.Pipeline = new PipelineBuilder(this);
             this.Pipeline.AddState(state);
             return this.Pipeline;
         }
@@ -162,7 +203,6 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
-            this.Pipeline = new PipelineBuilder(this);
             this.Pipeline.AddState(stateSetup);
             return this.Pipeline;
         }

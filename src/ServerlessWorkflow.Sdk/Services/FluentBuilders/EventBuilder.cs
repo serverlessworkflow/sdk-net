@@ -57,7 +57,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (source == null)
                 throw new ArgumentNullException(nameof(source));
-            this.Event.Source = source;
+            this.Event.Source = source.ToString();
             return this;
         }
 
