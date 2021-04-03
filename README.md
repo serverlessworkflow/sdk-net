@@ -19,12 +19,6 @@ With the SDK, you can:
 
 ### Getting Started
 
-1. Add Serverless Workflow package source:
-```bash
-dotnet nuget add source "TODO"
-```
-
-2. Add nuget package:
 ```bash
 dotnet nuget add package ServerlessWorkflow.Sdk
 ```
