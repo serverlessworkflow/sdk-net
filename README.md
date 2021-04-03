@@ -1,3 +1,6 @@
+![Publish Packages](https://github.com/serverlessworkflow/sdk-net/workflows/Publish%20Packages/badge.svg)
+
+
 # Serverless Workflow Specification - .NET SDK
 
 Provides .NET 5.0 API/SPI and Model Validation for the [Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
