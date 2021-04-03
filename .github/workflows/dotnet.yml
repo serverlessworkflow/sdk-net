@@ -21,4 +21,7 @@ jobs:
     - name: Test
       run: dotnet test "./src/ServerlessWorkflow.Sdk.sln" --no-restore --verbosity normal
     - name: Push
-      run: dotnet nuget push "./src/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://nuget.pkg.github.com/serverlessworkflow/index.json --skip-duplicate
+      uses: brandedoutcast/publish-nuget@v2.5.2
+        with:
+          PROJECT_FILE_PATH: src/ServerlessWorkflow.Sdk/ServerlessWorkflow.Sdk.csproj
+          NUGET_KEY: ${{secrets.NUGET_API_KEY}}
