@@ -22,6 +22,7 @@ using System.ComponentModel.DataAnnotations;
 using YamlDotNet.Serialization;
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents a <see href="https://github.com/serverlessworkflow/specification/blob/master/specification.md#State-Definition">serverless workflow state definition</see>
     /// </summary>
@@ -152,6 +153,48 @@ namespace ServerlessWorkflow.Sdk.Models
                     throw new ArgumentNullException(nameof(value));
                 this._Transition = value;
                 this.TransitionToken = JToken.FromObject(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="StateDefinition"/>'s <see cref="EndDefinition"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(End))]
+        [System.Text.Json.Serialization.JsonPropertyName(nameof(End))]
+        [YamlMember(Alias = nameof(End))]
+        protected virtual JToken DataInputSchemaToken { get; set; }
+
+        private DataInputSchemaDefinition _DataInputSchema;
+        /// <summary>
+        /// Gets/sets the <see cref="StateDefinition"/>'s <see cref="DataInputSchemaDefinition"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual DataInputSchemaDefinition DataInputSchema
+        {
+            get
+            {
+                if (this._DataInputSchema == null
+                    && this.DataInputSchemaToken != null)
+                {
+                    if (this.DataInputSchemaToken.Type == JTokenType.String)
+                        this._DataInputSchema = new DataInputSchemaDefinition() { Schema = this.DataInputSchemaToken.Value<string>() };
+                    else
+                        this._DataInputSchema = this.EndToken.ToObject<DataInputSchemaDefinition>();
+                }
+                return this._DataInputSchema;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._DataInputSchema = null;
+                    this.DataInputSchemaToken = null;
+                    return;
+                }
+                this._DataInputSchema = value;
+                this.DataInputSchemaToken = JToken.FromObject(value);
             }
         }
 
