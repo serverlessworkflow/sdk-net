@@ -175,6 +175,21 @@
             Gets/sets an expression evaluated against state data. True if results are not empty
             </summary>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition">
+            <summary>
+            Represents the object used to configure a <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s data input schema
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition.Schema">
+            <summary>
+            Gets/sets the url of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s input data schema
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition.FailOnValidationError">
+            <summary>
+            Gets/sets a boolean indicating whether or not to terminate the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s execution whenever the validation of the input data fails. Defaults to true.
+            </summary>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.DefaultDefinition">
             <summary>
             Represents an object used to define the transition of the workflow if there is no matching data conditions or event timeout is reached
@@ -799,6 +814,16 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.Transition">
             <summary>
             Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.DataInputSchemaToken">
+            <summary>
+            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.DataInputSchema">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/>
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.CompensatedBy">
@@ -3894,6 +3919,16 @@
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.Serialization.YamlDotNetSerializer.SerializeAsync(System.Object,System.Type,System.Threading.CancellationToken)">
             <inheritdoc/>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator">
+            <summary>
+            Represents the service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.#ctor">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator"/>
+            </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.StateType">
             <summary>
