@@ -21,7 +21,7 @@
     <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+  <PropertyGroup>
     <DocumentationFile>ServerlessWorkflow.Sdk.xml</DocumentationFile>
   </PropertyGroup>
 
