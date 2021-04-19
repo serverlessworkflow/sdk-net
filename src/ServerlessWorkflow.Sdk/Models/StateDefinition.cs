@@ -159,9 +159,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="StateDefinition"/>'s <see cref="EndDefinition"/>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(End))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(End))]
-        [YamlMember(Alias = nameof(End))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(DataInputSchema))]
+        [System.Text.Json.Serialization.JsonPropertyName(nameof(DataInputSchema))]
+        [YamlMember(Alias = nameof(DataInputSchema))]
         protected virtual JToken DataInputSchemaToken { get; set; }
 
         private DataInputSchemaDefinition _DataInputSchema;
