@@ -1,4 +1,4 @@
-![Publish Packages](https://github.com/serverlessworkflow/sdk-net/workflows/Publish%20Packages/badge.svg)
+![Publish Packages](https://github.com/serverlessworkflow/sdk-net/workflows/Publish%20Packages/badge.svg) [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/serverlessworkflow/sdk-net)
 
 
 # Serverless Workflow Specification - .NET SDK
