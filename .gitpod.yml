@@ -1,0 +1,29 @@
+image:
+  file: .gitpod.Dockerfile
+
+# List the start up tasks. You can start them in parallel in multiple terminals.
+# https://www.gitpod.io/docs/config-start-tasks/
+tasks:
+  - init: >
+      dotnet restore "./src/ServerlessWorkflow.Sdk.sln" &&
+      dotnet build "./src/ServerlessWorkflow.Sdk.sln" --configuration Release --no-restore &&
+      dotnet test "./src/ServerlessWorkflow.Sdk.sln" --no-restore --verbosity normal
+    command: dotnet watch --project "./src/ServerlessWorkflow.Sdk.sln" test --no-restore --verbosity normal
+    
+# Enable prebuilds of your project to enable faster workspace start times.
+# https://www.gitpod.io/docs/prebuilds/#configure-the-github-app
+github:
+  prebuilds:
+    master: true
+    branches: true
+    pullRequests: true
+    pullRequestsFromForks: true
+    addCheck: true
+
+# The official C# extension from Microsoft is proprietary and unfortunately cannot be used. 
+# The MIT licensed muhammad-sammy.csharp extension from Samsung brings code completion, 
+# snippets, auto-formatting, peek definition, refactoring, hover documentation and
+# breakpoint debugging for C# however!
+vscode:
+  extensions:
+    - muhammad-sammy.csharp
