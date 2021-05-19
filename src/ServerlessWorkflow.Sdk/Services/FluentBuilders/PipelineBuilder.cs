@@ -50,7 +50,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <summary>
         /// Gets the current <see cref="StateDefinition"/> in the main pipeline of the <see cref="WorkflowDefinition"/>
         /// </summary>
-        protected StateDefinition CurrentStep { get; private set; }
+        protected StateDefinition CurrentState { get; private set; }
 
         /// <inheritdoc/>
         public virtual EventDefinition AddEvent(Action<IEventBuilder> eventSetup)
@@ -105,7 +105,10 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
             IStateBuilder builder = stateSetup(new StateBuilderFactory(this));
-            return this.AddState(builder.Build());
+            StateDefinition state = this.AddState(builder.Build());
+            if (this.CurrentState == null)
+                this.CurrentState = state;
+            return state;
         }
 
         /// <inheritdoc/>
@@ -113,7 +116,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
-            this.CurrentStep = this.AddState(stateSetup);
+            this.CurrentState = this.AddState(stateSetup);
             return this;
         }
 
@@ -146,7 +149,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IWorkflowBuilder End()
         {
-            this.CurrentStep.End = new EndDefinition() {  };
+            this.CurrentState.End = new EndDefinition() {  };
             return this.Workflow;
         }
 

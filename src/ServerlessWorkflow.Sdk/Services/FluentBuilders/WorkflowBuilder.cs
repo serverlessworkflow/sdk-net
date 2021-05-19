@@ -86,8 +86,6 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (string.IsNullOrWhiteSpace(version))
                 throw new ArgumentNullException(nameof(version));
-            if (!Version.TryParse(version, out _))
-                throw new ArgumentException("The specified value '{version}' is not a valid version");
             this.Workflow.Version = version;
             return this;
         }

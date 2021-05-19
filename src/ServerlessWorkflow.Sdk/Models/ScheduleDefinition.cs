@@ -43,6 +43,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a CRON expression that defines when the workflow instance should be created
         /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
         public virtual CronDefinition Cron
         {
             get

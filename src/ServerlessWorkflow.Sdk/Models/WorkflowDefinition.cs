@@ -19,6 +19,7 @@ using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using YamlDotNet.Serialization;
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -153,6 +154,114 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="StateDefinition"/>s
         /// </summary>
         public virtual List<StateDefinition> States { get; set; } = new List<StateDefinition>();
+
+        /// <summary>
+        /// Gets the <see cref="StateDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="StateDefinition"/> to get</param>
+        /// <returns>The <see cref="StateDefinition"/> with the specified name, if any</returns>
+        public virtual StateDefinition GetState(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            return this.States?.FirstOrDefault(s => s.Name == name);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the <see cref="StateDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="StateDefinition"/> to retrieve</param>
+        /// <param name="state">The <see cref="StateDefinition"/> with the specified name, if any</param>
+        /// <returns>A boolean indicating whether or not a <see cref="StateDefinition"/> with the specified name could be found</returns>
+        public virtual bool TryGetState(string name, out StateDefinition state)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            state = this.GetState(name);
+            return state != null;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="StateDefinition"/> with the specified name
+        /// </summary>
+        /// <typeparam name="TState">The expected type of the <see cref="StateDefinition"/> with the specified name</typeparam>
+        /// <param name="name">The name of the <see cref="StateDefinition"/> to get</param>
+        /// <returns>The <see cref="StateDefinition"/> with the specified name, if any</returns>
+        public virtual TState GetState<TState>(string name)
+            where TState : StateDefinition
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            return this.GetState(name) as TState;
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the <see cref="StateDefinition"/> with the specified name
+        /// </summary>
+        /// <typeparam name="TState">The expected type of the <see cref="StateDefinition"/> with the specified name</typeparam>
+        /// <param name="name">The name of the <see cref="StateDefinition"/> to retrieve</param>
+        /// <param name="state">The <see cref="StateDefinition"/> with the specified name, if any</param>
+        /// <returns>A boolean indicating whether or not a <see cref="StateDefinition"/> with the specified name could be found</returns>
+        public virtual bool TryGetState<TState>(string name, out TState state)
+            where TState : StateDefinition
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            state = this.GetState<TState>(name);
+            return state != null;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="EventDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="EventDefinition"/> to get</param>
+        /// <returns>The <see cref="EventDefinition"/> with the specified name, if any</returns>
+        public virtual EventDefinition GetEvent(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            return this.Events?.FirstOrDefault(e => e.Name == name);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the <see cref="EventDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="EventDefinition"/> to retrieve</param>
+        /// <param name="e">The <see cref="EventDefinition"/> with the specified name, if any</param>
+        /// <returns>A boolean indicating whether or not a <see cref="EventDefinition"/> with the specified name could be found</returns>
+        public virtual bool TryGetEvent(string name, out EventDefinition e)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            e = this.GetEvent(name);
+            return e != null;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="FunctionDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="FunctionDefinition"/> to get</param>
+        /// <returns>The <see cref="FunctionDefinition"/> with the specified name, if any</returns>
+        public virtual FunctionDefinition GetFunction(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            return this.Functions?.FirstOrDefault(e => e.Name == name);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the <see cref="FunctionDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="FunctionDefinition"/> to retrieve</param>
+        /// <param name="function">The <see cref="FunctionDefinition"/> with the specified name, if any</param>
+        /// <returns>A boolean indicating whether or not a <see cref="FunctionDefinition"/> with the specified name could be found</returns>
+        public virtual bool TryGetFunction(string name, out FunctionDefinition function)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            function = this.GetFunction(name);
+            return function != null;
+        }
 
         /// <inheritdoc/>
         public override string ToString()

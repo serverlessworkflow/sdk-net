@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
-using FluentValidation.Validators;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Linq;
@@ -87,92 +86,6 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
 
     }
 
-    public abstract class StateDefinitionValidator<TState>
-        : AbstractValidator<TState>
-        where TState : StateDefinition
-    {
-
-        protected StateDefinitionValidator(WorkflowDefinition workflow)
-        {
-            this.Workflow = workflow;
-            this.RuleFor(s => s.Name)
-                .NotNull();
-            this.RuleFor(s => s.CompensatedBy)
-                .Must(ReferenceExistingState)
-                    .When(s => !string.IsNullOrWhiteSpace(s.CompensatedBy))
-                    .WithMessage((state, stateName) => $"Failed to find the state '{stateName}' to use for compensation");
-            this.RuleFor(s => s.Transition)
-                .Must(ReferenceExistingState)
-                    .When(s => s.Transition != null)
-                    .WithMessage((state, stateName) => $"Failed to find the state '{stateName}' to transition to")
-                .Must(DefineCompensationState)
-                    .When(s => s.Transition != null && s.Transition.Compensate)
-                    .WithMessage(state => $"The '{nameof(StateDefinition.CompensatedBy)}' property of the state '{state.Name}' must be set when enabling its compensation (in both Transition and End definitions)"); ;
-            this.RuleFor(s => s.End)
-                .Must(DefineCompensationState)
-                    .When(s => s.End != null && s.End.Compensate)
-                    .WithMessage(state => $"The '{nameof(StateDefinition.CompensatedBy)}' property of the state '{state.Name}' must be set when enabling its compensation (in both Transition and End definitions)");
-            this.RuleForEach(s => s.Errors)
-                .SetValidator((s, e) => new ErrorHandlerDefinitionValidator(this.Workflow, s));
-            this.RuleFor(s => s.UseForCompensation)
-                .Custom(CanBeUsedForCompensation);
-        }
-
-        protected WorkflowDefinition Workflow { get; }
-
-        protected virtual bool ReferenceExistingState(string stateName)
-        {
-            return this.Workflow.TryGetState(stateName, out _);
-        }
-
-        protected virtual bool ReferenceExistingState(TransitionDefinition transition)
-        {
-            return this.ReferenceExistingState(transition.To);
-        }
-
-        protected virtual bool DefineCompensationState(TState state, EndDefinition endDefinition)
-        {
-            return !string.IsNullOrWhiteSpace(state.CompensatedBy);
-        }
-
-        protected virtual bool DefineCompensationState(TState state, TransitionDefinition transitionDefinition)
-        {
-            return !string.IsNullOrWhiteSpace(state.CompensatedBy);
-        }
-
-        protected virtual void MustReferenceExistingFunction(string functionName, CustomContext context)
-        {
-
-        }
-
-        protected virtual void MustReferenceExistingEvent(string eventName, CustomContext context)
-        {
-
-        }
-
-        protected virtual void ReferenceExistingState(string stateName, CustomContext context)
-        {
-            if (string.IsNullOrWhiteSpace(stateName))
-                return;
-            if (!this.Workflow.TryGetState(stateName, out _))
-                context.AddFailure($"Failed to find the state with name '{stateName}'");
-        }
-
-        protected virtual void ReferenceExistingState(TransitionDefinition transition, CustomContext context)
-        {
-            this.ReferenceExistingState(transition.To, context);
-        }
-
-        protected virtual void CanBeUsedForCompensation(bool useForCompensation, CustomContext context)
-        {
-            TState state = (TState)context.ParentContext.InstanceToValidate;
-            //TODO
-            //if (useForCompensation && this.Workflow.IsPartOfMainFlow(state))
-            //    context.AddFailure($"The state with name '{state.Name}' must not be part of the main control flow to be used as a compensation state");
-        }
-
-    }
-
     public class ErrorHandlerDefinitionValidator
         : AbstractValidator<ErrorHandlerDefinition>
     {
@@ -211,36 +124,6 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.Workflow = workflow;
             this.RuleFor(t => t.To)
                 .NotEmpty();
-        }
-
-        protected WorkflowDefinition Workflow { get; }
-
-    }
-
-    public class CallbacKStateValidator
-        : StateDefinitionValidator<CallbackStateDefinition>
-    {
-
-        public CallbacKStateValidator(WorkflowDefinition workflow) 
-            : base(workflow)
-        {
-            this.RuleFor(s => s.Action)
-                .NotNull()
-                .SetValidator(new ActionDefinitionValidation(workflow));
-            this.RuleFor(s => s.Event)
-                .NotNull()
-                .Custom(MustReferenceExistingEvent);
-        }
-
-    }
-
-    public class ActionDefinitionValidation
-        : AbstractValidator<ActionDefinition>
-    {
-
-        public ActionDefinitionValidation(WorkflowDefinition workflow)
-        {
-            this.Workflow = workflow;
         }
 
         protected WorkflowDefinition Workflow { get; }
