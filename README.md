@@ -23,6 +23,10 @@ With the SDK, you can:
 dotnet nuget add package ServerlessWorkflow.Sdk
 ```
 
+```csharp
+services.AddServerlessWorkflow();
+```
+
 ### How to use
 
 #### Building workflows programatically
@@ -77,4 +81,11 @@ using(Stream stream = File.OpenRead("myWorkflow.json"))
           Console.ReadLine();
       }
   }
+```
+
+#### Validating workflows
+
+```csharp
+var validator = serviceProvider.GetRequiredService<IValidator<WorkflowDefinition>>();
+var validationResult = validator.Validate(myWorkflow);
 ```
