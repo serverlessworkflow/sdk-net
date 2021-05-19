@@ -4022,6 +4022,37 @@
             </summary>
             <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.DataCaseDefinitionValidator">
+            <summary>
+            Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.DataCaseDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.DataCaseDefinitionValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Models.SwitchStateDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.DataCaseDefinitionValidator"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataCaseDefinition"/> to validate belongs to</param>
+            <param name="state">The <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataCaseDefinition"/> to validate belongs to</param>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.EventCaseDefinitionValidator">
+            <summary>
+            Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.EventCaseDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.EventCaseDefinitionValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Models.SwitchStateDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.EventCaseDefinitionValidator"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.EventCaseDefinition"/> to validate belongs to</param>
+            <param name="state">The <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.EventCaseDefinition"/> to validate belongs to</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.EventCaseDefinitionValidator.ReferenceExistingEvent(System.String)">
+            <summary>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> exists
+            </summary>
+            <param name="eventName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> to check</param>
+            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> exists</returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.EventReferenceValidator">
             <summary>
             Represents the service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.EventReference"/>s
@@ -4058,6 +4089,53 @@
             </summary>
             <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> to check</param>
             <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> of kind <see cref="F:ServerlessWorkflow.Sdk.EventKind.Consumed"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.EventStateTriggerDefinitionValidator">
+            <summary>
+            Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.EventStateTriggerDefinitionValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Models.EventStateDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.EventStateTriggerDefinitionValidator"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> to validate belongs to</param>
+            <param name="eventState">The <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> to validate belongs to</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.EventStateTriggerDefinitionValidator.Workflow">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> to validate belongs to
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.EventStateTriggerDefinitionValidator.EventState">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> to validate belongs to
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.EventStateTriggerDefinitionValidator.ReferenceExistingEvent(System.String)">
+            <summary>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> exists
+            </summary>
+            <param name="eventName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> to check</param>
+            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> exists</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.EventStateTriggerDefinitionValidator.BeConsumed(System.String)">
+            <summary>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> is of kind <see cref="F:ServerlessWorkflow.Sdk.EventKind.Consumed"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> to check</param>
+            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> of kind <see cref="F:ServerlessWorkflow.Sdk.EventKind.Consumed"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.EventStateValidator">
+            <summary>
+            Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.EventStateValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.EventStateValidator"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionValidator">
             <summary>
@@ -4097,6 +4175,17 @@
             </summary>
             <param name="functionName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to check</param>
             <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> exists</returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.OperationStateValidator">
+            <summary>
+            Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.OperationStateDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.OperationStateValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.OperationStateValidator"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.StateDefinitionValidator`1">
             <summary>
@@ -4159,6 +4248,40 @@
             <param name="state">The <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
             <param name="useForCompensation">A boolean indicating whether or not the states needs to be compensated. Always true.</param>
             <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> defines a compensation state</returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.SwitchCaseDefinitionValidator`1">
+            <summary>
+            Represents the base class of all services used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/>s
+            </summary>
+            <typeparam name="TCondition">The type of <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/> to validate</typeparam>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.SwitchCaseDefinitionValidator`1.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Models.SwitchStateDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.SwitchCaseDefinitionValidator`1"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/> to validate belongs to</param>
+            <param name="state">The <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/> to validate belongs to</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.SwitchCaseDefinitionValidator`1.Workflow">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/> to validate belongs to
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.SwitchCaseDefinitionValidator`1.State">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/> to validate belongs to
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.SwitchStateValidator">
+            <summary>
+            Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.SwitchStateValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.SwitchStateValidator"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowDefinitionValidator">
             <summary>

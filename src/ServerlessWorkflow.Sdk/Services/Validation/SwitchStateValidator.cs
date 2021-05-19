@@ -20,7 +20,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         {
             this.RuleFor(s => s.DataConditions)
                 .NotEmpty()
-                .When(s => s.EventConditions == null)
+                .When(s => s.EventConditions == null || !s.EventConditions.Any())
                 .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DataConditions)}")
                 .WithMessage($"One of either '{nameof(SwitchStateDefinition.DataConditions)}' or '{nameof(SwitchStateDefinition.EventConditions)}' properties must be set");
             this.RuleForEach(s => s.DataConditions)
@@ -29,7 +29,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DataConditions)}");
             this.RuleFor(s => s.EventConditions)
                 .NotEmpty()
-                .When(s => s.DataConditions == null)
+                .When(s => s.DataConditions == null || !s.DataConditions.Any())
                 .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.EventConditions)}")
                 .WithMessage($"One of either '{nameof(SwitchStateDefinition.DataConditions)}' or '{nameof(SwitchStateDefinition.EventConditions)}' properties must be set");
             this.RuleForEach(s => s.EventConditions)

@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
+
     /// <summary>
     /// Represents a service used to validate <see cref="EventStateTriggerDefinition"/>s
     /// </summary>
@@ -20,9 +21,6 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         {
             this.Workflow = workflow;
             this.EventState = eventState;
-            this.RuleFor(t => t.Actions)
-                .NotEmpty()
-                .WithErrorCode($"{nameof(EventStateTriggerDefinition)}.{nameof(EventStateTriggerDefinition.Actions)}");
             this.RuleForEach(t => t.Actions)
                 .SetValidator(new ActionDefinitionValidator(this.Workflow))
                 .When(t => t.Actions != null && t.Actions.Any())

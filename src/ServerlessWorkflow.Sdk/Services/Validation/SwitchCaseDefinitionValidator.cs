@@ -3,6 +3,7 @@ using ServerlessWorkflow.Sdk.Models;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
+
     /// <summary>
     /// Represents the base class of all services used to validate <see cref="SwitchCaseDefinition"/>s
     /// </summary>
