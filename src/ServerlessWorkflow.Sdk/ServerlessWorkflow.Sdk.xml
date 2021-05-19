@@ -4034,6 +4034,17 @@
             <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataCaseDefinition"/> to validate belongs to</param>
             <param name="state">The <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataCaseDefinition"/> to validate belongs to</param>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.DelayStateValidator">
+            <summary>
+            Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.DelayStateDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.DelayStateValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.DelayStateValidator"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.EventCaseDefinitionValidator">
             <summary>
             Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.EventCaseDefinition"/>s
@@ -4175,6 +4186,17 @@
             </summary>
             <param name="functionName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to check</param>
             <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> exists</returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.InjectStateValidator">
+            <summary>
+            Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.InjectStateDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.InjectStateValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.InjectStateValidator"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.OperationStateValidator">
             <summary>
