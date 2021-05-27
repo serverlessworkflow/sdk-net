@@ -21,11 +21,12 @@ using System.Collections.Generic;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
+
     /// <summary>
     /// Represents the default implementation of the <see cref="IActionBuilder"/> interface
     /// </summary>
     public class ActionBuilder
-        : IActionBuilder, IEventTriggerActionBuilder, IFunctionActionBuilder
+        : IActionBuilder, IEventTriggerActionBuilder, IFunctionActionBuilder, ISubflowActionBuilder
     {
 
         /// <summary>
@@ -78,35 +79,6 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IEventTriggerActionBuilder Consume(string e)
-        {
-            if (string.IsNullOrWhiteSpace(e))
-                throw new ArgumentNullException(nameof(e));
-            this.Action.Event = new EventReference() { TriggerEvent = e, ResultEvent = string.Empty };
-            return this;
-        }
-
-        /// <inheritdoc/>
-        public virtual IEventTriggerActionBuilder Consume(Action<IEventBuilder> eventSetup)
-        {
-            if (eventSetup == null)
-                throw new ArgumentNullException(nameof(eventSetup));
-            EventDefinition e = this.Pipeline.AddEvent(eventSetup);
-            this.Action.Event = new EventReference() { TriggerEvent = e.Name, ResultEvent = string.Empty };
-            return this;
-        }
-
-        /// <inheritdoc/>
-        public virtual IEventTriggerActionBuilder Consume(EventDefinition e)
-        {
-            if (e == null)
-                throw new ArgumentNullException(nameof(e));
-            this.Pipeline.AddEvent(e);
-            this.Action.Event = new EventReference() { TriggerEvent = e.Name, ResultEvent = string.Empty };
-            return this;
-        }
-
-        /// <inheritdoc/>
         public virtual IFunctionActionBuilder Invoke(string function)
         {
             if (string.IsNullOrWhiteSpace(function))
@@ -136,6 +108,49 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IFunctionActionBuilder WithArgument(string name, string value)
+        {
+            this.Action.Function.Arguments.Add(name, value);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IFunctionActionBuilder WithArguments(IDictionary<string, string> args)
+        {
+            this.Action.Function.Arguments = JObject.FromObject(args);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IEventTriggerActionBuilder Consume(string e)
+        {
+            if (string.IsNullOrWhiteSpace(e))
+                throw new ArgumentNullException(nameof(e));
+            this.Action.Event = new EventReference() { TriggerEvent = e, ResultEvent = string.Empty };
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IEventTriggerActionBuilder Consume(Action<IEventBuilder> eventSetup)
+        {
+            if (eventSetup == null)
+                throw new ArgumentNullException(nameof(eventSetup));
+            EventDefinition e = this.Pipeline.AddEvent(eventSetup);
+            this.Action.Event = new EventReference() { TriggerEvent = e.Name, ResultEvent = string.Empty };
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IEventTriggerActionBuilder Consume(EventDefinition e)
+        {
+            if (e == null)
+                throw new ArgumentNullException(nameof(e));
+            this.Pipeline.AddEvent(e);
+            this.Action.Event = new EventReference() { TriggerEvent = e.Name, ResultEvent = string.Empty };
+            return this;
+        }
+
+        /// <inheritdoc/>
         public virtual IEventTriggerActionBuilder ThenProduce(string e)
         {
             this.Action.Event.ResultEvent = e;
@@ -157,16 +172,41 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IFunctionActionBuilder WithArgument(string name, string value)
+        public virtual ISubflowActionBuilder Run(string workflowId, string version, bool waitForCompletion = true)
         {
-            this.Action.Function.Arguments.Add(name, value);
+            if (string.IsNullOrWhiteSpace(workflowId))
+                throw new ArgumentNullException(nameof(workflowId));
+            this.Action.Subflow = new SubflowReference(workflowId, version, waitForCompletion);
             return this;
         }
 
         /// <inheritdoc/>
-        public virtual IFunctionActionBuilder WithArguments(IDictionary<string, string> args)
+        public virtual ISubflowActionBuilder Run(string workflowId, bool waitForCompletion = true)
         {
-            this.Action.Function.Arguments = JObject.FromObject(args);
+            if (string.IsNullOrWhiteSpace(workflowId))
+                throw new ArgumentNullException(nameof(workflowId));
+            return this.Run(workflowId, null, waitForCompletion);
+        }
+
+        /// <inheritdoc/>
+        public virtual ISubflowActionBuilder LatestVersion()
+        {
+            return this.Version("latest");
+        }
+
+        /// <inheritdoc/>
+        public virtual ISubflowActionBuilder Version(string version)
+        {
+            if (string.IsNullOrWhiteSpace(version))
+                throw new ArgumentNullException(nameof(version));
+            this.Action.Subflow.Version = version;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual ISubflowActionBuilder WaitForCompletion(bool wait = true)
+        {
+            this.Action.Subflow.WaitForCompletion = wait;
             return this;
         }
 

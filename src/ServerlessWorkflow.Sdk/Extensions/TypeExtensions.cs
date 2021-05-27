@@ -15,6 +15,8 @@
  *
  */
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace ServerlessWorkflow.Sdk
@@ -69,6 +71,30 @@ namespace ServerlessWorkflow.Sdk
                 return Activator.CreateInstance(extended);
             else
                 return null;
+        }
+
+        /// <summary>
+        /// Gets the generic type implementation of the specified generic type definition
+        /// </summary>
+        /// <param name="extended">The extended type</param>
+        /// <param name="genericTypeDefinition">The generic type definition (opened, that is) to get the implementation type of</param>
+        /// <returns>The generic type implementation of the specified generic type definition</returns>
+        public static Type GetGenericType(this Type extended, Type genericTypeDefinition)
+        {
+            if (extended.IsGenericType
+                && extended.GetGenericTypeDefinition() == genericTypeDefinition)
+                return extended;
+            Type genericType = null;
+            if (!genericTypeDefinition.IsInterface
+                && extended.BaseType != null)
+            {
+                genericType = extended.BaseType.GetGenericType(genericTypeDefinition);
+                if (genericType != null)
+                    return genericType;
+            }
+            IEnumerable<Type> interfaceTypes = extended.GetInterfaces();
+            var t = interfaceTypes.FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == genericTypeDefinition);
+            return t;
         }
 
     }

@@ -96,6 +96,23 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IEventTriggerActionBuilder Consume(EventDefinition e);
 
         /// <summary>
+        /// Configures the <see cref="ActionDefinition"/> to build to run the specified <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="workflowId">The id of the <see cref="WorkflowDefinition"/> to run</param>
+        /// <param name="version">The version of the <see cref="WorkflowDefinition"/> to run</param>
+        /// <param name="waitForCompletion">A boolean indicating whether or not to wait for the completion of the <see cref="WorkflowDefinition"/> to run</param>
+        /// <returns>The service used to build <see cref="SubflowReference"/>s</returns>
+        ISubflowActionBuilder Run(string workflowId, string version, bool waitForCompletion = true);
+
+        /// <summary>
+        /// Configures the <see cref="ActionDefinition"/> to build to run the specified <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="workflowId">The id of the <see cref="WorkflowDefinition"/> to run</param>
+        /// <param name="waitForCompletion">A boolean indicating whether or not to wait for the completion of the <see cref="WorkflowDefinition"/> to run</param>
+        /// <returns>The service used to build <see cref="SubflowReference"/>s</returns>
+        ISubflowActionBuilder Run(string workflowId, bool waitForCompletion = true);
+
+        /// <summary>
         /// Builds the <see cref="ActionDefinition"/>
         /// </summary>
         /// <returns>A new <see cref="ActionDefinition"/></returns>

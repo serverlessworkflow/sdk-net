@@ -14,12 +14,15 @@
  * limitations under the License.
  *
  */
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
+using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 using ServerlessWorkflow.Sdk.Services.IO;
 using ServerlessWorkflow.Sdk.Services.Serialization;
+using ServerlessWorkflow.Sdk.Services.Validation;
 using System;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.Converters;
@@ -133,6 +136,7 @@ namespace ServerlessWorkflow.Sdk
             services.AddSingleton<IWorkflowReader, WorkflowReader>();
             services.AddSingleton<IWorkflowWriter, WorkflowWriter>();
             services.AddTransient<IWorkflowBuilder, WorkflowBuilder>();
+            services.AddTransient<IValidator<WorkflowDefinition>, WorkflowDefinitionValidator>();
             return services;
         }
 

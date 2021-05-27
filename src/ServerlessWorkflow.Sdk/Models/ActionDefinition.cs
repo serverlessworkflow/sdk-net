@@ -38,9 +38,9 @@ namespace ServerlessWorkflow.Sdk.Models
             get
             {
                 if (this.Function != null)
-                    return ActionType.FunctionCall;
+                    return ActionType.Function;
                 else
-                    return ActionType.EventTrigger;
+                    return ActionType.Trigger;
             }
         }
 
@@ -75,31 +75,11 @@ namespace ServerlessWorkflow.Sdk.Models
             }
             set
             {
-                if(value != null)
-                {
-                    this._Function = value;
-                    this.FunctionToken = JToken.FromObject(value);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the reference of the function to invoke
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        public string FunctionReference
-        {
-            get
-            {
-                if (this.Function != null)
-                    return this.Function.Name;
-                else if (this.FunctionReference != null
-                    && this.FunctionToken.Type == JTokenType.String)
-                    return this.FunctionToken.ToObject<string>();
+                this._Function = value;
+                if (this._Function == null)
+                    this.FunctionToken = null;
                 else
-                    return null;
+                    this.FunctionToken = JToken.FromObject(this._Function);
             }
         }
 
@@ -129,11 +109,50 @@ namespace ServerlessWorkflow.Sdk.Models
             }
             set
             {
-                if (value != null)
+                this._Event = value;
+                if (this._Event == null)
+                    this.EventToken = null;
+                else
+                    this.EventToken = JToken.FromObject(this._Event);
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets a <see cref="JToken"/> that references a subflow to run
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = "subflowRef")]
+        [System.Text.Json.Serialization.JsonPropertyName("subflowRef")]
+        [YamlMember(Alias = "subflowRef")]
+        protected virtual JToken SubflowToken { get; set; }
+
+        private SubflowReference _Subflow;
+        /// <summary>
+        /// Gets the object used to configure the reference of the subflow to run
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public SubflowReference Subflow
+        {
+            get
+            {
+                if (this._Subflow == null
+                    && this.SubflowToken != null)
                 {
-                    this._Event = value;
-                    this.EventToken = JToken.FromObject(value);
+                    if (this.SubflowToken?.Type == JTokenType.Object)
+                        this._Subflow = this.SubflowToken.ToObject<SubflowReference>();
+                    else if (this.SubflowToken?.Type == JTokenType.String)
+                        this._Subflow = SubflowReference.Parse(this.SubflowToken.ToObject<string>());
                 }
+                return this._Subflow;
+            }
+            set
+            {
+                this._Subflow = value;
+                if (this._Subflow == null)
+                    this.SubflowToken = null;
+                else
+                    this.SubflowToken = JToken.FromObject(this._Subflow);
             }
         }
 
