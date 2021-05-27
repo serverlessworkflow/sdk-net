@@ -39,8 +39,12 @@ namespace ServerlessWorkflow.Sdk.Models
             {
                 if (this.Function != null)
                     return ActionType.Function;
-                else
+                else if (this.Event != null)
                     return ActionType.Trigger;
+                else if (this.Subflow != null)
+                    return ActionType.Subflow;
+                else
+                    throw new InvalidOperationException("Failed to determine the action type");
             }
         }
 
