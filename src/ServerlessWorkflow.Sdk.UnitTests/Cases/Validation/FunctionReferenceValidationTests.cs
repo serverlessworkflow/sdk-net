@@ -5,6 +5,7 @@ using Xunit;
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
 {
+
     public class FunctionReferenceValidationTests
     {
 
@@ -13,17 +14,17 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         {
             //arrange
             var workflow = WorkflowDefinition.Create("fake", "fake", "fake")
-               .StartsWith("fake", flow => flow.Callback())
-               .End()
-               .Build();
+                .StartsWith("fake", flow => flow.Callback())
+                .End()
+                .Build();
             var functionRef = new FunctionReference();
 
             //act
             var result = new FunctionReferenceValidator(workflow).Validate(functionRef);
 
-            //asset
+            //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(FunctionReference.Name));
@@ -42,7 +43,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             //act
             var result = new FunctionReferenceValidator(workflow).Validate(functionRef);
 
-            //asset
+            //assert
             result.Should()
                .NotBeNull();
             result.Errors.Should()

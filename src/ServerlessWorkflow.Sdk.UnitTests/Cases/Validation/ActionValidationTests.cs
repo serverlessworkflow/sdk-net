@@ -27,9 +27,10 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.HaveCount(2)
+                .And.HaveCount(3)
                 .And.Contain(e => e.PropertyName == nameof(ActionDefinition.Event))
-                .And.Contain(e => e.PropertyName == nameof(ActionDefinition.Function));
+                .And.Contain(e => e.PropertyName == nameof(ActionDefinition.Function))
+                .And.Contain(e => e.PropertyName == nameof(ActionDefinition.Subflow));
         }
 
     }

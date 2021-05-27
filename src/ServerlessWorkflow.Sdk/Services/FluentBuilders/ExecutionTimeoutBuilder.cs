@@ -62,7 +62,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IExecutionTimeoutBuilder Run(string state)
         {
-            if (string.IsNullOrWhiteSpace(nameof(state)))
+            if (string.IsNullOrWhiteSpace(state))
                 throw new ArgumentNullException(nameof(state));
             this.Timeout.RunBefore = state;
             return this;

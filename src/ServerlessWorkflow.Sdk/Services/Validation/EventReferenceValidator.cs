@@ -24,12 +24,12 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .Must(ReferenceExistingEvent)
                 .When(e => !string.IsNullOrWhiteSpace(e.TriggerEvent))
                 .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.TriggerEvent)}")
-                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef}'");
+                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef.TriggerEvent}'");
             this.RuleFor(e => e.TriggerEvent)
                 .Must(BeProduced)
                 .When(e => !string.IsNullOrWhiteSpace(e.TriggerEvent))
                 .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.TriggerEvent)}")
-                .WithMessage(eventRef => $"The event with name '{eventRef}' must be of kind '{EnumHelper.Stringify(EventKind.Produced)}'");
+                .WithMessage(eventRef => $"The event with name '{eventRef.TriggerEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Produced)}'");
             this.RuleFor(e => e.ResultEvent)
                 .NotEmpty()
                 .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ResultEvent)}");
@@ -37,12 +37,12 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .Must(ReferenceExistingEvent)
                 .When(e => !string.IsNullOrWhiteSpace(e.ResultEvent))
                 .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ResultEvent)}")
-                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef}'");
+                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef.ResultEvent}'");
             this.RuleFor(e => e.ResultEvent)
                 .Must(BeConsumed)
                 .When(e => !string.IsNullOrWhiteSpace(e.ResultEvent))
                 .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ResultEvent)}")
-                .WithMessage(eventRef => $"The event with name '{eventRef}' must be of kind '{EnumHelper.Stringify(EventKind.Consumed)}'");
+                .WithMessage(eventRef => $"The event with name '{eventRef.ResultEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Consumed)}'");
         }
 
         /// <summary>

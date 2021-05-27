@@ -21,9 +21,9 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             //act
             var result = new EventReferenceValidator(workflow).Validate(eventRef);
 
-            //asset
+            //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(EventReference.TriggerEvent));
@@ -42,9 +42,9 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             //act
             var result = new EventReferenceValidator(workflow).Validate(eventRef);
 
-            //asset
+            //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(EventReference.TriggerEvent));
@@ -64,9 +64,9 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             //act
             var result = new EventReferenceValidator(workflow).Validate(eventRef);
 
-            //asset
+            //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(EventReference.TriggerEvent));
@@ -77,17 +77,17 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         {
             //arrange
             var workflow = WorkflowDefinition.Create("fake", "fake", "fake")
-               .StartsWith("fake", flow => flow.Callback())
-               .End()
-               .Build();
+                .StartsWith("fake", flow => flow.Callback())
+                .End()
+                .Build();
             var eventRef = new EventReference() { TriggerEvent = "fake" };
 
             //act
             var result = new EventReferenceValidator(workflow).Validate(eventRef);
 
-            //asset
+            //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(EventReference.ResultEvent));
@@ -98,17 +98,17 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         {
             //arrange
             var workflow = WorkflowDefinition.Create("fake", "fake", "fake")
-               .StartsWith("fake", flow => flow.Callback())
-               .End()
-               .Build();
+                .StartsWith("fake", flow => flow.Callback())
+                .End()
+                .Build();
             var eventRef = new EventReference() { TriggerEvent = "fakeTrigger", ResultEvent = "fakeResult" };
 
             //act
             var result = new EventReferenceValidator(workflow).Validate(eventRef);
 
-            //asset
+            //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(EventReference.ResultEvent));
@@ -128,9 +128,9 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             //act
             var result = new EventReferenceValidator(workflow).Validate(eventRef);
 
-            //asset
+            //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(EventReference.ResultEvent));

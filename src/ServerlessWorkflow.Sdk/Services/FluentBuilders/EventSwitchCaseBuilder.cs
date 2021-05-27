@@ -39,7 +39,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IStateOutcomeBuilder On(string e)
         {
-            if(string.IsNullOrWhiteSpace(nameof(e)))
+            if(string.IsNullOrWhiteSpace(e))
                 throw new ArgumentNullException(nameof(e));
             this.Case.Event = e;
             return this;

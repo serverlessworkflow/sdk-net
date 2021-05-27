@@ -20,7 +20,7 @@ using System.Collections.Generic;
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
     /// <summary>
-    /// Defines the service used to build <see cref="ActionDefinition"/>s of type <see cref="ActionType.FunctionCall"/>
+    /// Defines the service used to build <see cref="ActionDefinition"/>s of type <see cref="ActionType.Function"/>
     /// </summary>
     public interface IFunctionActionBuilder
         : IActionBuilder
