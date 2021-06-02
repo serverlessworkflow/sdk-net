@@ -36,9 +36,9 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .SetValidator(state => new EventCaseDefinitionValidator(this.Workflow, state))
                 .When(s => s.EventConditions != null && s.EventConditions.Any())
                 .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.EventConditions)}");
-            this.RuleFor(s => s.Default)
+            this.RuleFor(s => s.DefaultCondition)
                 .NotNull()
-                .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.Default)}");
+                .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DefaultCondition)}");
  
         }
 

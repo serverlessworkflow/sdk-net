@@ -74,7 +74,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the version of the <see cref="WorkflowDefinition"/> to run. Defaults to 'latest'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "version"), Newtonsoft.Json.JsonRequired]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "version")]
         [System.Text.Json.Serialization.JsonPropertyName("version")]
         [YamlMember(Alias = "version")]
         public virtual string Version { get; set; } = "latest";
@@ -82,7 +82,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to wait for the completion of the <see cref="WorkflowDefinition"/> to run. Defaults to true
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "waitForCompletion"), Newtonsoft.Json.JsonRequired]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "waitForCompletion")]
         [System.Text.Json.Serialization.JsonPropertyName("waitForCompletion")]
         [YamlMember(Alias = "waitForCompletion")]
         public virtual bool WaitForCompletion { get; set; } = true;

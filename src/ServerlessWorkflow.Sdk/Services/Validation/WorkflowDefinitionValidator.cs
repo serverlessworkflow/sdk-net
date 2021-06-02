@@ -22,7 +22,11 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         {
             this.ServiceProvider = serviceProvider;
             this.RuleFor(w => w.Id)
-                .NotEmpty();
+                .NotEmpty()
+                .When(w => string.IsNullOrWhiteSpace(w.Key));
+            this.RuleFor(w => w.Key)
+                .NotEmpty()
+                .When(w => string.IsNullOrWhiteSpace(w.Id));
             this.RuleFor(w => w.Name)
                 .NotEmpty();
             this.RuleFor(w => w.Version)
@@ -81,52 +85,8 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <returns>A boolean indicating whether or not the specified <see cref="StartDefinition"/> defines an existing <see cref="StateDefinition"/></returns>
         protected virtual bool ReferenceExistingState(WorkflowDefinition workflow, StartDefinition start)
         {
-            return workflow.TryGetState(start.StateName, out StateDefinition x);
+            return workflow.TryGetState(start.StateName, out _);
         }
-
-    }
-
-    public class ErrorHandlerDefinitionValidator
-        : AbstractValidator<ErrorHandlerDefinition>
-    {
-
-        public ErrorHandlerDefinitionValidator(WorkflowDefinition workflow, StateDefinition state)
-        {
-            this.Workflow = workflow;
-            this.State = state;
-            this.RuleFor(h => h.Error)
-                .NotEmpty();
-            this.RuleFor(h => h.Code)
-                .Empty()
-                .When(h => h.Error == "*")
-                .WithMessage("The 'Code' property cannot be set when the 'Error' property has been set to '*'");
-            this.RuleFor(h => h.End)
-                .NotNull()
-                .When(h => h.Transition == null);
-            this.RuleFor(h => h.Transition)
-                .NotNull()
-                    .When(h => h.End == null)
-                .SetValidator(new TransitionDefinitionValidator(workflow));
-        }
-
-        protected WorkflowDefinition Workflow { get; }
-
-        protected StateDefinition State { get; }
-
-    }
-
-    public class TransitionDefinitionValidator
-        : AbstractValidator<TransitionDefinition>
-    {
-
-        public TransitionDefinitionValidator(WorkflowDefinition workflow)
-        {
-            this.Workflow = workflow;
-            this.RuleFor(t => t.To)
-                .NotEmpty();
-        }
-
-        protected WorkflowDefinition Workflow { get; }
 
     }
 

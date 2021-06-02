@@ -15,26 +15,23 @@
  *
  */
 using ServerlessWorkflow.Sdk.Models;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace ServerlessWorkflow.Sdk.Services.IO
 {
-
     /// <summary>
-    /// Defines the fundamentals of a service used to read <see cref="WorkflowDefinition"/>s
+    /// Defines the fundamentals of a service used to validate <see cref="WorkflowDefinition"/>s
     /// </summary>
-    public interface IWorkflowReader
+    public interface IWorkflowSchemaValidator
     {
 
         /// <summary>
-        /// Reads a <see cref="WorkflowDefinition"/> from the specified <see cref="Stream"/>
+        /// Validates the specified JSON input
         /// </summary>
-        /// <param name="stream">The <see cref="Stream"/> to read the <see cref="WorkflowDefinition"/> from</param>
-        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A new <see cref="WorkflowDefinition"/></returns>
-        Task<WorkflowDefinition> ReadAsync(Stream stream, CancellationToken cancellationToken = default);
+        /// <param name="json">The input to validate</param>
+        /// <param name="errors">An <see cref="IList{T}"/> containing the validation errors key/value pairs</param>
+        /// <returns>A boolean indicating whether or not the specified JSON input is a valid <see cref="WorkflowDefinition"/></returns>
+        bool Validate(string json, out IList<string> errors);
 
     }
 

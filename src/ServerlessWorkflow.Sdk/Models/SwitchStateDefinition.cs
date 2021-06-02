@@ -72,7 +72,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets an object used to configure the <see cref="SwitchStateDefinition"/>'s default condition, in case none of the specified conditions were met
         /// </summary>
-        public virtual DefaultDefinition Default { get; set; }
+        public virtual DefaultDefinition DefaultCondition { get; set; }
 
     }
 

@@ -53,11 +53,6 @@ namespace ServerlessWorkflow.Sdk
         [EnumMember(Value = "switch")]
         Switch,
         /// <summary>
-        /// Indicates a subflow state
-        /// </summary>
-        [EnumMember(Value = "subFlow")]
-        SubFlow,
-        /// <summary>
         /// Indicates an inject state
         /// </summary>
         [EnumMember(Value = "inject")]

@@ -17,6 +17,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Xml;
 using YamlDotNet.Serialization;
 namespace ServerlessWorkflow.Sdk.Models
@@ -44,7 +45,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the maximum amount of retries allowed
         /// </summary>
-        public virtual uint? Max { get; set; }
+        public virtual uint? MaxAttempts { get; set; }
 
         /// <summary>
         /// Gets/sets the maximum delay between retries
@@ -81,7 +82,8 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             get
             {
-                if (this.JitterToken?.Type != JTokenType.Float)
+                if (this.JitterToken?.Type != JTokenType.Float
+                    || (this.JitterToken?.Type == JTokenType.String && !float.TryParse(this.JitterToken.Value<string>(), NumberStyles.Float, CultureInfo.InvariantCulture, out _)))
                     return null;
                 return this.JitterToken.ToObject<float>();
             }
@@ -103,7 +105,8 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             get
             {
-                if (this.JitterToken?.Type != JTokenType.String)
+                if (this.JitterToken?.Type != JTokenType.String
+                    || float.TryParse(this.JitterToken.Value<string>(), NumberStyles.Any, CultureInfo.InvariantCulture, out _))
                     return null;
                 return XmlConvert.ToTimeSpan(this.JitterToken.ToString());
             }

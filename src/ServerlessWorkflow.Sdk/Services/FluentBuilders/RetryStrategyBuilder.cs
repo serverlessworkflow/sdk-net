@@ -78,7 +78,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IRetryStrategyBuilder MaxAttempts(uint maxAttempts)
         {
-            this.Strategy.Max = maxAttempts;
+            this.Strategy.MaxAttempts = maxAttempts;
             return this;
         }
 

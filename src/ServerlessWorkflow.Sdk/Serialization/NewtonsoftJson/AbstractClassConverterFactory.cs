@@ -33,7 +33,7 @@ namespace Newtonsoft.Json.Converters
         /// <summary>
         /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the mappings of types to their respective <see cref="JsonConverter"/>
         /// </summary>
-        protected static Dictionary<Type, JsonConverter> Converters = new Dictionary<Type, JsonConverter>();
+        private static Dictionary<Type, JsonConverter> Converters = new();
 
         /// <inheritdoc/>
         public override bool CanConvert(Type objectType)
