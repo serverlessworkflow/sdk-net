@@ -71,9 +71,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(DataInputSchema))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(DataInputSchema))]
-        [YamlMember(Alias = nameof(DataInputSchema))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema")]
+        [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema")]
+        [YamlMember(Alias = "dataInputSchema")]
         protected virtual JToken DataInputSchemaToken { get; set; }
 
         private JSchema _DataInputSchema;
@@ -135,9 +135,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that defines the <see cref="WorkflowDefinition"/>'s start
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Start))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(Start))]
-        [YamlMember(Alias = nameof(Start))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "start")]
+        [System.Text.Json.Serialization.JsonPropertyName("start")]
+        [YamlMember(Alias = "start")]
         protected virtual JToken StartToken { get; set; }
 
         private StartDefinition _Start;
@@ -187,9 +187,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/> collection
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Events))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(Events))]
-        [YamlMember(Alias = nameof(Events))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "events")]
+        [System.Text.Json.Serialization.JsonPropertyName("events")]
+        [YamlMember(Alias = "events")]
         protected virtual JToken EventsToken { get; set; }
 
         private List<EventDefinition> _Events;
@@ -231,9 +231,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="FunctionDefinition"/> collection
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Functions))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(Functions))]
-        [YamlMember(Alias = nameof(Functions))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "functions")]
+        [System.Text.Json.Serialization.JsonPropertyName("functions")]
+        [YamlMember(Alias = "functions")]
         protected virtual JToken FunctionsToken { get; set; }
 
         private List<FunctionDefinition> _Functions;
@@ -275,9 +275,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="RetryStrategyDefinition"/> collection
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Retries))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(Retries))]
-        [YamlMember(Alias = nameof(Retries))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "retries")]
+        [System.Text.Json.Serialization.JsonPropertyName("retries")]
+        [YamlMember(Alias = "retries")]
         protected virtual JToken RetriesToken { get; set; }
 
         private List<RetryStrategyDefinition> _Retries;
@@ -324,9 +324,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s constants
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Constants))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(Constants))]
-        [YamlMember(Alias = nameof(Constants))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "constants")]
+        [System.Text.Json.Serialization.JsonPropertyName("constants")]
+        [YamlMember(Alias = "constants")]
         protected virtual JToken ConstantsToken { get; set; }
 
         private JObject _Constants;
@@ -368,9 +368,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s secrets
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Secrets))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(Secrets))]
-        [YamlMember(Alias = nameof(Secrets))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "secrets")]
+        [System.Text.Json.Serialization.JsonPropertyName("secrets")]
+        [YamlMember(Alias = "secrets")]
         protected virtual JToken SecretsToken { get; set; }
 
         private JObject _Secrets;

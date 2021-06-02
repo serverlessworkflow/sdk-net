@@ -5069,7 +5069,7 @@
         </member>
         <member name="T:Newtonsoft.Json.Converters.AbstractClassConverter`1">
             <summary>
-            Represents a <see cref="T:Newtonsoft.Json.JsonConvert"/> used to deserialize implementations of the specified abstract class
+            Represents a <see cref="T:Newtonsoft.Json.JsonConverter"/> used to deserialize implementations of the specified abstract class
             </summary>
             <typeparam name="T">The type of the abstract class to deserialize</typeparam>
         </member>

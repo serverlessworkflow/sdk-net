@@ -15,6 +15,7 @@
  *
  */
 using System.ComponentModel.DataAnnotations;
+using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -31,6 +32,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Required]
         [Newtonsoft.Json.JsonProperty(PropertyName = "stateName")]
         [System.Text.Json.Serialization.JsonPropertyName("stateName")]
+        [YamlMember(Alias = "stateName")]
         public virtual string StateName { get; set; }
 
         /// <summary>
@@ -38,7 +40,10 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
-        public virtual ScheduleDefinition Schedule { get; set; } = new ScheduleDefinition();
+        [Newtonsoft.Json.JsonProperty(PropertyName = "schedule")]
+        [System.Text.Json.Serialization.JsonPropertyName("schedule")]
+        [YamlMember(Alias = "schedule")]
+        public virtual ScheduleDefinition Schedule { get; set; }
 
     }
 

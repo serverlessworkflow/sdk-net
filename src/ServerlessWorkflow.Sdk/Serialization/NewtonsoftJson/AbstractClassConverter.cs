@@ -25,7 +25,7 @@ using System.Reflection;
 namespace Newtonsoft.Json.Converters
 {
     /// <summary>
-    /// Represents a <see cref="JsonConvert"/> used to deserialize implementations of the specified abstract class
+    /// Represents a <see cref="JsonConverter"/> used to deserialize implementations of the specified abstract class
     /// </summary>
     /// <typeparam name="T">The type of the abstract class to deserialize</typeparam>
     public class AbstractClassConverter<T>
