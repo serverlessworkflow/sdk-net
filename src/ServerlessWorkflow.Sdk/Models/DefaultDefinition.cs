@@ -29,9 +29,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a <see cref="JToken"/> that represents the next transition of the workflow if there is valid matches
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Transition))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(Transition))]
-        [YamlMember(Alias = nameof(Transition))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "transition")]
+        [System.Text.Json.Serialization.JsonPropertyName("transition")]
+        [YamlMember(Alias = "transition")]
         protected virtual JToken TransitionToken { get; set; }
 
         private TransitionDefinition _Transition;
@@ -67,9 +67,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a <see cref="JToken"/> that represents the object used to configure the end of the workflow
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(End))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(End))]
-        [YamlMember(Alias = nameof(End))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "end")]
+        [System.Text.Json.Serialization.JsonPropertyName("end")]
+        [YamlMember(Alias = "end")]
         protected virtual JToken EndToken { get; set; }
 
         private EndDefinition _End;

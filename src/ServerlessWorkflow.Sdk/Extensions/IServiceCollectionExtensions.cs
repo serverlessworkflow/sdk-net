@@ -48,6 +48,12 @@ namespace ServerlessWorkflow.Sdk
         public static IServiceCollection AddNewtonsoftJsonSerializer(this IServiceCollection services, Action<JsonSerializerSettings> configurationAction)
         {
             services.Configure(configurationAction);
+            JsonConvert.DefaultSettings = () => 
+            {
+                JsonSerializerSettings settings = new JsonSerializerSettings();
+                configurationAction(settings);
+                return settings;
+            };
             services.TryAddSingleton<NewtonsoftJsonSerializer>();
             services.AddSingleton<Services.Serialization.ISerializer>(provider => provider.GetRequiredService<NewtonsoftJsonSerializer>());
             services.AddSingleton<IJsonSerializer>(provider => provider.GetRequiredService<NewtonsoftJsonSerializer>());
@@ -64,11 +70,10 @@ namespace ServerlessWorkflow.Sdk
             services.AddNewtonsoftJsonSerializer(settings => 
             {
                 settings.NullValueHandling = NullValueHandling.Ignore;
-                settings.DefaultValueHandling = DefaultValueHandling.Ignore;
                 settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 settings.ContractResolver = new IgnoreEmptyEnumerableContractResolver
                 {
-                    NamingStrategy = new CamelCaseNamingStrategy()
+                    NamingStrategy = new CamelCaseNamingStrategy(true, true, true)
                 };
             });
             return services;

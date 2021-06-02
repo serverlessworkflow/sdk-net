@@ -39,6 +39,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a <see cref="JObject"/> that contains the parameters of the function to invoke
         /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = "arguments"), Newtonsoft.Json.JsonRequired]
+        [System.Text.Json.Serialization.JsonPropertyName("arguments")]
+        [YamlMember(Alias = "arguments")]
         public virtual JObject Arguments { get; set; } = new JObject();
 
         /// <inheritdoc/>

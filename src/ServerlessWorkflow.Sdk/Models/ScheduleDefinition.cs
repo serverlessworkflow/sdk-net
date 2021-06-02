@@ -34,9 +34,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a <see cref="JToken"/> that represents the CRON expression that defines when the workflow instance should be created
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Cron))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(Cron))]
-        [YamlMember(Alias = nameof(Cron))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "cron")]
+        [System.Text.Json.Serialization.JsonPropertyName("cron")]
+        [YamlMember(Alias = "cron")]
         public virtual JToken CronToken { get; set; }
 
         private CronDefinition _Cron;
@@ -76,11 +76,17 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a boolean indicating whether or not workflow instances can be created outside of the defined interval/cron. Defaults to false.
         /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = "directInvoke")]
+        [System.Text.Json.Serialization.JsonPropertyName("directInvoke")]
+        [YamlMember(Alias = "directInvoke")]
         public virtual bool DirectInvoke { get; set; } = false;
 
         /// <summary>
         /// Gets/sets the timezone name used to evaluate the cron expression. Not used for interval as timezone can be specified there directly. If not specified, should default to local machine timezone.
         /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = "timezone")]
+        [System.Text.Json.Serialization.JsonPropertyName("timezone")]
+        [YamlMember(Alias = "timezone")]
         public virtual string Timezone { get; set; }
 
     }
