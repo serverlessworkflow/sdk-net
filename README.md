@@ -1,4 +1,5 @@
-<img src="https://github.com/Neuroglia/sdk-net/raw/main/media/logos/icon.png" width="250" height="250" />
+![Publish Packages](https://github.com/serverlessworkflow/sdk-net/workflows/Publish%20Packages/badge.svg) [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/serverlessworkflow/sdk-net)
+
 
 # Serverless Workflow Specification - .NET SDK
 
@@ -14,18 +15,16 @@ With the SDK, you can:
 
 | Latest Releases | Conformance to spec version |
 | :---: | :---: |
-| [0.6.1](https://github.com/serverlessworkflow/sdk-net/releases/) | [v0.6](https://github.com/serverlessworkflow/specification/tree/0.6.x) |
+| [0.6.2](https://github.com/serverlessworkflow/sdk-net/releases/) | [v0.6](https://github.com/serverlessworkflow/specification/tree/0.6.x) |
 
 ### Getting Started
 
-1. Add Serverless Workflow package source:
-```bash
-dotnet nuget add source "TODO"
-```
-
-2. Add nuget package:
 ```bash
 dotnet nuget add package ServerlessWorkflow.Sdk
+```
+
+```csharp
+services.AddServerlessWorkflow();
 ```
 
 ### How to use
@@ -82,4 +81,11 @@ using(Stream stream = File.OpenRead("myWorkflow.json"))
           Console.ReadLine();
       }
   }
+```
+
+#### Validating workflows
+
+```csharp
+var validator = serviceProvider.GetRequiredService<IValidator<WorkflowDefinition>>();
+var validationResult = validator.Validate(myWorkflow);
 ```
