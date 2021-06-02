@@ -15,7 +15,6 @@
  *
  */
 using ServerlessWorkflow.Sdk.Models;
-using System;
 using System.IO;
 
 namespace ServerlessWorkflow.Sdk.Services.IO

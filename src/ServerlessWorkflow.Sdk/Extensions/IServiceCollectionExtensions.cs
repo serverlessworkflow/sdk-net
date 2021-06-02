@@ -18,6 +18,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 using ServerlessWorkflow.Sdk.Services.IO;
@@ -60,7 +61,16 @@ namespace ServerlessWorkflow.Sdk
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddNewtonsoftJsonSerializer(this IServiceCollection services)
         {
-            services.AddNewtonsoftJsonSerializer(settings => { });
+            services.AddNewtonsoftJsonSerializer(settings => 
+            {
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                settings.DefaultValueHandling = DefaultValueHandling.Ignore;
+                settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                settings.ContractResolver = new IgnoreEmptyEnumerableContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
+            });
             return services;
         }
 
@@ -133,8 +143,10 @@ namespace ServerlessWorkflow.Sdk
                     .WithNodeDeserializer(
                         inner => new Iso8601TimeSpanConverter(inner),
                         syntax => syntax.InsteadOf<ScalarNodeDeserializer>()));
+            services.AddHttpClient();
             services.AddSingleton<IWorkflowReader, WorkflowReader>();
             services.AddSingleton<IWorkflowWriter, WorkflowWriter>();
+            services.AddSingleton<IWorkflowSchemaValidator, WorkflowSchemaValidator>();
             services.AddTransient<IWorkflowBuilder, WorkflowBuilder>();
             services.AddTransient<IValidator<WorkflowDefinition>, WorkflowDefinitionValidator>();
             return services;

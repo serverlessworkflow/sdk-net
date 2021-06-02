@@ -60,7 +60,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.ErrorCode == "States[0]" && e.ErrorMessage.Contains($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.Default)}"));
+                .And.Contain(e => e.ErrorCode == "States[0]" && e.ErrorMessage.Contains($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DefaultCondition)}"));
         }
 
     }

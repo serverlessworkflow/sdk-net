@@ -63,19 +63,12 @@ namespace YamlDotNet.Serialization
                     this.WriteJArray(emitter, jarray);
                     break;
                 default:
-                    string scalar = null;
-                    switch (token.Type)
+                    string scalar = token.Type switch
                     {
-                        case JTokenType.Boolean:
-                            scalar = token.ToString().ToLower();
-                            break;
-                        case JTokenType.TimeSpan:
-                            scalar = Iso8601TimeSpan.Format(token.ToObject<TimeSpan>());
-                            break;
-                        default:
-                            scalar = token.ToString();
-                            break;
-                    }
+                        JTokenType.Boolean => token.ToString().ToLower(),
+                        JTokenType.TimeSpan => Iso8601TimeSpan.Format(token.ToObject<TimeSpan>()),
+                        _ => token.ToString(),
+                    };
                     emitter.Emit(new Scalar(scalar));
                     break;
             }

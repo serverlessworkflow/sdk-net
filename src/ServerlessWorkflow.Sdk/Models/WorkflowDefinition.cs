@@ -15,11 +15,15 @@
  *
  */
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -33,9 +37,12 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s unique identifier
         /// </summary>
-        [Newtonsoft.Json.JsonRequired]
-        [Required]
         public virtual string Id { get; set; }
+
+        /// <summary>
+        /// Gets/sets the <see cref="WorkflowDefinition"/>'s domain-specific workflow identifier
+        /// </summary>
+        public virtual string Key { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s name
@@ -59,7 +66,49 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="System.Version"/> of the Serverless Workflow schema to use
         /// </summary>
-        public virtual string SchemaVersion { get; set; } = "0.6";
+        public virtual string SpecVersion { get; set; } = "0.7";
+
+        /// <summary>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(DataInputSchema))]
+        [System.Text.Json.Serialization.JsonPropertyName(nameof(DataInputSchema))]
+        [YamlMember(Alias = nameof(DataInputSchema))]
+        protected virtual JToken DataInputSchemaToken { get; set; }
+
+        private JSchema _DataInputSchema;
+        /// <summary>
+        /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual JSchema DataInputSchema
+        {
+            get
+            {
+                if (this._DataInputSchema == null
+                    && this.DataInputSchemaToken != null)
+                {
+                    if (this.DataInputSchemaToken.Type == JTokenType.String)
+                        this._DataInputSchema = new ExternalJSchema(this.DataInputSchemaToken.ToObject<Uri>());
+                    else
+                        this._DataInputSchema = this.DataInputSchemaToken.ToObject<JSchema>();
+                }
+                return this._DataInputSchema;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._DataInputSchema = null;
+                    this.DataInputSchemaToken = null;
+                    return;
+                }
+                this._DataInputSchema = value;
+                this.DataInputSchemaToken = JToken.FromObject(value);
+            }
+        }
 
         /// <summary>
         /// Gets/sets the language the <see cref="WorkflowDefinition"/>'s expressions are expressed in
@@ -136,24 +185,229 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual JObject Metadata { get; set; } = new JObject();
 
         /// <summary>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/> collection
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Events))]
+        [System.Text.Json.Serialization.JsonPropertyName(nameof(Events))]
+        [YamlMember(Alias = nameof(Events))]
+        protected virtual JToken EventsToken { get; set; }
+
+        private List<EventDefinition> _Events;
+        /// <summary>
         /// Gets/sets an <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
         /// </summary>
-        public virtual List<EventDefinition> Events { get; set; } = new List<EventDefinition>();
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual List<EventDefinition> Events
+        {
+            get
+            {
+                if (this._Events == null
+                    && this.EventsToken != null)
+                {
+                    if (this.EventsToken.Type == JTokenType.String)
+                        this._Events = new ExternalDefinitionCollection<EventDefinition>(this.EventsToken.ToObject<Uri>());
+                    else
+                        this._Events = this.EventsToken.ToObject<List<EventDefinition>>();
+                }
+                if (this._Events == null)
+                    this._Events = new List<EventDefinition>();
+                return this._Events;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._Events = null;
+                    this.EventsToken = null;
+                    return;
+                }
+                this._Events = value;
+                this.EventsToken = JToken.FromObject(value);
+            }
+        }
 
+        /// <summary>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="FunctionDefinition"/> collection
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Functions))]
+        [System.Text.Json.Serialization.JsonPropertyName(nameof(Functions))]
+        [YamlMember(Alias = nameof(Functions))]
+        protected virtual JToken FunctionsToken { get; set; }
+
+        private List<FunctionDefinition> _Functions;
         /// <summary>
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
         /// </summary>
-        public virtual List<FunctionDefinition> Functions { get; set; } = new List<FunctionDefinition>();
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual List<FunctionDefinition> Functions
+        {
+            get
+            {
+                if (this._Functions == null
+                    && this.FunctionsToken != null)
+                {
+                    if (this.FunctionsToken.Type == JTokenType.String)
+                        this._Functions = new ExternalDefinitionCollection<FunctionDefinition>(this.FunctionsToken.ToObject<Uri>());
+                    else
+                        this._Functions = this.FunctionsToken.ToObject<List<FunctionDefinition>>();
+                }
+                if (this._Functions == null)
+                    this._Functions = new List<FunctionDefinition>();
+                return this._Functions;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._Functions = null;
+                    this.FunctionsToken = null;
+                    return;
+                }
+                this._Functions = value;
+                this.FunctionsToken = JToken.FromObject(value);
+            }
+        }
 
+        /// <summary>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="RetryStrategyDefinition"/> collection
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Retries))]
+        [System.Text.Json.Serialization.JsonPropertyName(nameof(Retries))]
+        [YamlMember(Alias = nameof(Retries))]
+        protected virtual JToken RetriesToken { get; set; }
+
+        private List<RetryStrategyDefinition> _Retries;
         /// <summary>
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="RetryStrategyDefinition"/>s
         /// </summary>
-        public virtual List<RetryStrategyDefinition> Retries { get; set; } = new List<RetryStrategyDefinition>();
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual List<RetryStrategyDefinition> Retries
+        {
+            get
+            {
+                if (this._Retries == null
+                    && this.RetriesToken != null)
+                {
+                    if (this.RetriesToken.Type == JTokenType.String)
+                        this._Retries = new ExternalDefinitionCollection<RetryStrategyDefinition>(this.RetriesToken.ToObject<Uri>());
+                    else
+                        this._Retries = this.RetriesToken.ToObject<List<RetryStrategyDefinition>>();
+                }
+                if (this._Retries == null)
+                    this._Retries = new List<RetryStrategyDefinition>();
+                return this._Retries;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._Retries = null;
+                    this.RetriesToken = null;
+                    return;
+                }
+                this._Retries = value;
+                this.RetriesToken = JToken.FromObject(value);
+            }
+        }
 
         /// <summary>
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="StateDefinition"/>s
         /// </summary>
         public virtual List<StateDefinition> States { get; set; } = new List<StateDefinition>();
+
+        /// <summary>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s constants
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Constants))]
+        [System.Text.Json.Serialization.JsonPropertyName(nameof(Constants))]
+        [YamlMember(Alias = nameof(Constants))]
+        protected virtual JToken ConstantsToken { get; set; }
+
+        private JObject _Constants;
+        /// <summary>
+        /// Gets/sets an <see cref="JObject"/> containing the <see cref="WorkflowDefinition"/>'s constants, which are globally accessible, read-only variables
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual JObject Constants
+        {
+            get
+            {
+                if (this._Constants == null
+                    && this.ConstantsToken != null)
+                {
+                    if (this.ConstantsToken.Type == JTokenType.String)
+                        this._Constants = new ExternalDefinition(this.ConstantsToken.ToObject<Uri>());
+                    else
+                        this._Constants = (JObject)this.ConstantsToken;
+                }
+                if (this._Constants == null)
+                    this._Constants = new JObject();
+                return this._Constants;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._Constants = null;
+                    this.ConstantsToken = null;
+                    return;
+                }
+                this._Constants = value;
+                this.ConstantsToken = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s secrets
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(Secrets))]
+        [System.Text.Json.Serialization.JsonPropertyName(nameof(Secrets))]
+        [YamlMember(Alias = nameof(Secrets))]
+        protected virtual JToken SecretsToken { get; set; }
+
+        private JObject _Secrets;
+        /// <summary>
+        /// Gets/sets an <see cref="JObject"/> containing the secrets the <see cref="WorkflowDefinition"/> has access to
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual JObject Secrets
+        {
+            get
+            {
+                if (this._Secrets == null
+                    && this.SecretsToken != null)
+                {
+                    if (this.SecretsToken.Type == JTokenType.String)
+                        this._Secrets = new ExternalDefinition(this.SecretsToken.ToObject<Uri>());
+                    else
+                        this._Secrets = (JObject)this.SecretsToken;
+                }
+                if (this._Secrets == null)
+                    this._Secrets = new JObject();
+                return this._Secrets;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._Secrets = null;
+                    this.SecretsToken = null;
+                    return;
+                }
+                this._Secrets = value;
+                this.SecretsToken = value;
+            }
+        }
 
         /// <summary>
         /// Gets the <see cref="StateDefinition"/> with the specified name

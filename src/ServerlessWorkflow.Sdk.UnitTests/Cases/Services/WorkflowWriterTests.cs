@@ -18,6 +18,7 @@ using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.IO;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
@@ -30,7 +31,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
 
         protected IWorkflowReader Reader { get; } = WorkflowReader.Create();
 
-        protected WorkflowDefinition BuildWorkflow()
+        protected static WorkflowDefinition BuildWorkflow()
         {
             return WorkflowDefinition.Create("MyWorkflow", "MyWorkflow", "1.0")
                 .WithExecutionTimeout(timeout =>
@@ -58,43 +59,33 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
         }
 
         [Fact]
-        public void WriteYaml()
+        public async Task WriteYaml()
         {
-            var workflow = this.BuildWorkflow();
-            var yaml = "";
-            using(Stream stream = new MemoryStream())
-            {
-                this.Writer.Write(workflow, stream);
-                stream.Flush();
-                stream.Position = 0;
-                using(StreamReader reader = new StreamReader(stream))
-                {
-                    yaml = reader.ReadToEnd();
-                    stream.Position = 0;
-                    workflow = this.Reader.Read(stream);
-                    Assert.NotNull(workflow);
-                }
-            }
+            var workflow = BuildWorkflow();
+            using Stream stream = new MemoryStream();
+            this.Writer.Write(workflow, stream);
+            stream.Flush();
+            stream.Position = 0;
+            using StreamReader reader = new(stream);
+            string yaml = reader.ReadToEnd();
+            stream.Position = 0;
+            workflow = await this.Reader.ReadAsync(stream);
+            Assert.NotNull(workflow);
         }
 
         [Fact]
-        public void WriteJson()
+        public async Task WriteJson()
         {
-            var workflow = this.BuildWorkflow();
-            var json = "";
-            using (Stream stream = new MemoryStream())
-            {
-                this.Writer.Write(workflow, stream, WorkflowDefinitionFormat.Json);
-                stream.Flush();
-                stream.Position = 0;
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    json = reader.ReadToEnd();
-                    stream.Position = 0;
-                    workflow = this.Reader.Read(stream, WorkflowDefinitionFormat.Json);
-                    Assert.NotNull(workflow);
-                }
-            }
+            var workflow = BuildWorkflow();
+            using Stream stream = new MemoryStream();
+            this.Writer.Write(workflow, stream, WorkflowDefinitionFormat.Json);
+            stream.Flush();
+            stream.Position = 0;
+            using StreamReader reader = new(stream);
+            string json = reader.ReadToEnd();
+            stream.Position = 0;
+            workflow = await this.Reader.ReadAsync(stream);
+            Assert.NotNull(workflow);
         }
 
     }

@@ -55,21 +55,17 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <inheritdoc/>
         public virtual T Deserialize<T>(Stream input)
         {
-            using (StreamReader reader = new StreamReader(input, leaveOpen: true))
-            {
-                string yaml = reader.ReadToEnd();
-                return this.Deserializer.Deserialize<T>(yaml);
-            }
+            using StreamReader reader = new(input, leaveOpen: true);
+            string yaml = reader.ReadToEnd();
+            return this.Deserializer.Deserialize<T>(yaml);
         }
 
         /// <inheritdoc/>
         public virtual async Task<T> DeserializeAsync<T>(Stream input, CancellationToken cancellationToken = default)
         {
-            using (StreamReader reader = new StreamReader(input, leaveOpen: true))
-            {
-                string yaml = await reader.ReadToEndAsync();
-                return this.Deserializer.Deserialize<T>(yaml);
-            }
+            using StreamReader reader = new(input, leaveOpen: true);
+            string yaml = await reader.ReadToEndAsync();
+            return this.Deserializer.Deserialize<T>(yaml);
         }
 
         /// <inheritdoc/>
@@ -88,21 +84,17 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <inheritdoc/>
         public virtual object Deserialize(Stream input, Type returnType)
         {
-            using (StreamReader reader = new StreamReader(input, leaveOpen: true))
-            {
-                string yaml = reader.ReadToEnd();
-                return this.Deserializer.Deserialize(yaml, returnType);
-            }
+            using StreamReader reader = new(input, leaveOpen: true);
+            string yaml = reader.ReadToEnd();
+            return this.Deserializer.Deserialize(yaml, returnType);
         }
 
         /// <inheritdoc/>
         public virtual async Task<object> DeserializeAsync(Stream input, Type returnType, CancellationToken cancellationToken = default)
         {
-            using (StreamReader reader = new StreamReader(input, leaveOpen: true))
-            {
-                string yaml = await reader.ReadToEndAsync();
-                return this.Deserializer.Deserialize(yaml, returnType);
-            }
+            using StreamReader reader = new(input, leaveOpen: true);
+            string yaml = await reader.ReadToEndAsync();
+            return this.Deserializer.Deserialize(yaml, returnType);
         }
 
         /// <inheritdoc/>
@@ -145,43 +137,35 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <inheritdoc/>
         public virtual void Serialize(object value, Stream output)
         {
-            using (StreamWriter writer = new StreamWriter(output, leaveOpen: true))
-            {
-                string yaml = this.Serializer.Serialize(value);
-                writer.Write(yaml);
-                writer.Flush();
-            }
+            using StreamWriter writer = new(output, leaveOpen: true);
+            string yaml = this.Serializer.Serialize(value);
+            writer.Write(yaml);
+            writer.Flush();
         }
 
         /// <inheritdoc/>
         public virtual async Task SerializeAsync(object value, Stream output, CancellationToken cancellationToken = default)
         {
-            using (StreamWriter writer = new StreamWriter(output, leaveOpen: true))
-            {
-                string yaml = this.Serializer.Serialize(value);
-                await writer.WriteAsync(yaml);
-                await writer.FlushAsync();
-            }
+            using StreamWriter writer = new(output, leaveOpen: true);
+            string yaml = this.Serializer.Serialize(value);
+            await writer.WriteAsync(yaml);
+            await writer.FlushAsync();
         }
 
         /// <inheritdoc/>
         public virtual void Serialize(object value, Stream output, Type type)
         {
-            using (StreamWriter writer = new StreamWriter(output, leaveOpen: true))
-            {
-                this.Serializer.Serialize(writer, value, type);
-                writer.Flush();
-            }
+            using StreamWriter writer = new(output, leaveOpen: true);
+            this.Serializer.Serialize(writer, value, type);
+            writer.Flush();
         }
 
         /// <inheritdoc/>
         public virtual async Task SerializeAsync(object value, Stream output, Type type, CancellationToken cancellationToken = default)
         {
-            using (StreamWriter writer = new StreamWriter(output, leaveOpen: true))
-            {
-                this.Serializer.Serialize(writer, value, type);
-                await writer.FlushAsync();
-            }
+            using StreamWriter writer = new(output, leaveOpen: true);
+            this.Serializer.Serialize(writer, value, type);
+            await writer.FlushAsync();
         }
 
         /// <inheritdoc/>
@@ -200,7 +184,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <inheritdoc/>
         public virtual byte[] Serialize(object value, Type type)
         {
-            StringWriter writer = new StringWriter();
+            StringWriter writer = new();
             this.Serializer.Serialize(writer, value, type);
             return Encoding.UTF8.GetBytes(writer.ToString());
         }

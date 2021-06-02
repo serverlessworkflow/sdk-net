@@ -194,14 +194,14 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             workflow.Id = "fake";
             workflow.Name = "fake";
             workflow.Version = "fake";
-            workflow.Events = new() { new() { Name = "fake" }, new() { Name = "fake" } };
+            workflow.Events = new() { new() { Name = "fake", Source = "fake", Type = "fake" }, new() { Name = "fake", Source = "fake", Type = "fake" } };
 
             //act
             var result = this.WorkflowDefinitionValidator.Validate(workflow);
 
             //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(WorkflowDefinition.Events));
@@ -215,7 +215,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             workflow.Id = "fake";
             workflow.Name = "fake";
             workflow.Version = "fake";
-            workflow.Functions = new () { new() { Name = "fake" }, new() { Name = "fake" } };
+            workflow.Functions = new() { new() { Name = "fake", Operation = "fake" }, new() { Name = "fake", Operation = "fake" } };
 
             //act
             var result = this.WorkflowDefinitionValidator.Validate(workflow);

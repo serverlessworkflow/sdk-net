@@ -30,7 +30,18 @@ namespace ServerlessWorkflow.Sdk
         /// <returns>The camel-cased text</returns>
         public static string ToCamelCase(this string text)
         {
-            return string.IsNullOrEmpty(text) || text.Length < 2 ? text.ToLowerInvariant() : char.ToLowerInvariant(text[0]) + text.Substring(1);
+            return string.IsNullOrEmpty(text) || text.Length < 2 ? text.ToLowerInvariant() : $"{char.ToLowerInvariant(text[0])}{text[1..]}";
+        }
+
+        /// <summary>
+        /// Determines whether or not the specified text is a JSON string
+        /// </summary>
+        /// <param name="text">The text to check</param>
+        /// <returns>A boolean indicating whether or not the specified text is a JSON string</returns>
+        public static bool IsJson(this string text)
+        {
+            string input = text.Trim();
+            return input.StartsWith('{') || input.StartsWith('[');
         }
 
     }

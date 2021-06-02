@@ -57,18 +57,12 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                 throw new ArgumentNullException(nameof(workflow));
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
-            ISerializer serializer;
-            switch (format)
+            ISerializer serializer = format switch
             {
-                case WorkflowDefinitionFormat.Json:
-                    serializer = this.JsonSerializer;
-                    break;
-                case WorkflowDefinitionFormat.Yaml:
-                    serializer = this.YamlSerializer;
-                    break;
-                default:
-                    throw new NotSupportedException($"The specified workflow definition format '{format}' is not supported");
-            }
+                WorkflowDefinitionFormat.Json => this.JsonSerializer,
+                WorkflowDefinitionFormat.Yaml => this.YamlSerializer,
+                _ => throw new NotSupportedException($"The specified workflow definition format '{format}' is not supported"),
+            };
             serializer.Serialize(workflow, stream);
         }
 
