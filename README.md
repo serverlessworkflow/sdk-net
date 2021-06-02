@@ -9,7 +9,7 @@ With the SDK, you can:
 
 - [x] Read and write workflow JSON and YAML definitions
 - [x] Programmatically build workflow definitions
-- [ ] Validate workflow definitions (both schema and workflow integrity validation)
+- [x] Validate workflow definitions (both schema and DSL integrity validation)
 
 ### Status
 
