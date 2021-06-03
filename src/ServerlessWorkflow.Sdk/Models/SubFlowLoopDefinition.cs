@@ -22,13 +22,13 @@ namespace ServerlessWorkflow.Sdk.Models
 {
 
     /// <summary>
-    /// Represents the definition of a <see cref="SubFlowStateDefinition"/>'s loop
+    /// Represents the definition of a subflow's loop
     /// </summary>
     public class SubFlowLoopDefinition
     {
 
         /// <summary>
-        /// Gets/sets the expression evaluated against <see cref="SubFlowStateDefinition"/> state data. <see cref="SubFlowStateDefinition"/> will repeat execution as long as this expression is true or until the max property count is reached
+        /// Gets/sets the expression evaluated against subflow data. Subflow will repeat execution as long as this expression is true or until the max property count is reached
         /// </summary>
         public virtual string Expression { get; set; }
 

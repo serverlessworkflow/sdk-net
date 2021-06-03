@@ -79,17 +79,15 @@ namespace System.Text.Json.Serialization.Converters
         {
             if (reader.TokenType != JsonTokenType.StartObject)
                 throw new JsonException("Start object token type expected");
-            using (JsonDocument jsonDocument = JsonDocument.ParseValue(ref reader))
-            {
-                string discriminatorPropertyName = this.JsonSerializerOptions?.PropertyNamingPolicy == null ? this.DiscriminatorProperty.Name : this.JsonSerializerOptions.PropertyNamingPolicy.ConvertName(this.DiscriminatorProperty.Name);
-                if (!jsonDocument.RootElement.TryGetProperty(discriminatorPropertyName, out JsonElement discriminatorProperty))
-                    throw new JsonException($"Failed to find the required '{this.DiscriminatorProperty.Name}' discriminator property");
-                string discriminatorValue = discriminatorProperty.GetString();
-                if (!this.TypeMappings.TryGetValue(discriminatorValue, out Type derivedType))
-                    throw new JsonException($"Failed to find the derived type with the specified discriminator value '{discriminatorValue}'");
-                string json = jsonDocument.RootElement.GetRawText();
-                return (T)JsonSerializer.Deserialize(json, derivedType, this.JsonSerializerOptions);
-            }
+            using JsonDocument jsonDocument = JsonDocument.ParseValue(ref reader);
+            string discriminatorPropertyName = this.JsonSerializerOptions?.PropertyNamingPolicy == null ? this.DiscriminatorProperty.Name : this.JsonSerializerOptions.PropertyNamingPolicy.ConvertName(this.DiscriminatorProperty.Name);
+            if (!jsonDocument.RootElement.TryGetProperty(discriminatorPropertyName, out JsonElement discriminatorProperty))
+                throw new JsonException($"Failed to find the required '{this.DiscriminatorProperty.Name}' discriminator property");
+            string discriminatorValue = discriminatorProperty.GetString();
+            if (!this.TypeMappings.TryGetValue(discriminatorValue, out Type derivedType))
+                throw new JsonException($"Failed to find the derived type with the specified discriminator value '{discriminatorValue}'");
+            string json = jsonDocument.RootElement.GetRawText();
+            return (T)JsonSerializer.Deserialize(json, derivedType, this.JsonSerializerOptions);
         }
 
         /// <inheritdoc/>

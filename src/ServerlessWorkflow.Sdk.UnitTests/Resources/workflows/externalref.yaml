@@ -3,7 +3,6 @@ name: ExternalRef
 version: "0.1.0"
 dataInputSchema: file://resources/schemas/externalref.yaml
 constants: file://resources/constants/petstore.yaml
-secrets: file://resources/secrets/petstore.yaml
 events: file://resources/events/petstore.yaml
 functions: file://resources/functions/petstore.yaml
 retries: file://resources/retries/default.yaml

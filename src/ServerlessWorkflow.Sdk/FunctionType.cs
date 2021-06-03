@@ -17,6 +17,7 @@
 using System.Runtime.Serialization;
 namespace ServerlessWorkflow.Sdk
 {
+
     /// <summary>
     /// Enumerates all types of functions
     /// </summary>
@@ -30,7 +31,17 @@ namespace ServerlessWorkflow.Sdk
         [EnumMember(Value = "rest")]
         Rest,
         /// <summary>
-        /// Indicates an expression
+        /// Indicates an Remote Procedure Call (RPC)
+        /// </summary>
+        [EnumMember(Value = "rpc")]
+        Rpc,
+        /// <summary>
+        /// Indicates a GraphQL function
+        /// </summary>
+        [EnumMember(Value = "graphql")]
+        GraphQL,
+        /// <summary>
+        /// Indicates an expression function
         /// </summary>
         [EnumMember(Value = "expression")]
         Expression

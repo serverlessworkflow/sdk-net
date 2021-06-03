@@ -35,9 +35,6 @@
     <None Update="Resources\retries\default.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Resources\secrets\petstore.yaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="Resources\workflows\externalref.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

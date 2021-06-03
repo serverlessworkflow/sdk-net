@@ -34,6 +34,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IFunctionBuilder WithName(string name);
 
         /// <summary>
+        /// Sets the type of the <see cref="FunctionDefinition"/> to build
+        /// </summary>
+        /// <param name="type">The type of the <see cref="FunctionDefinition"/> to build</param>
+        /// <returns>The configured <see cref="IFunctionBuilder"/></returns>
+        IFunctionBuilder OfType(FunctionType type);
+
+        /// <summary>
         /// Sets the <see cref="FunctionDefinition"/>'s operation expression. Sets the <see cref="FunctionDefinition"/>'s <see cref="FunctionDefinition.Type"/> to <see cref="FunctionType.Expression"/>
         /// </summary>
         /// <param name="operation">The <see cref="FunctionDefinition"/>'s operation expression</param>

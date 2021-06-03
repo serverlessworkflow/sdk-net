@@ -474,6 +474,32 @@
             Gets/sets the name of a workflow state to be executed before workflow instance is terminated
             </summary>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition">
+            <summary>
+            Represents an external definition reference
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition.#ctor">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition.#ctor(System.Uri)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition"/>
+            </summary>
+            <param name="definitionUri">The <see cref="T:System.Uri"/> used to reference the file that defines the element described by the <see cref="T:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition"/></param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition.DefinitionUri">
+            <summary>
+            Gets the <see cref="T:System.Uri"/> used to reference the file that defines the element described by the <see cref="T:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition.Loaded">
+            <summary>
+            Gets a boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition"/> has been loaded
+            </summary>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.ExternalDefinition">
             <summary>
             Represents an external definition reference
@@ -946,12 +972,12 @@
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.SubFlowLoopDefinition">
             <summary>
-            Represents the definition of a <see cref="!:SubFlowStateDefinition"/>'s loop
+            Represents the definition of a subflow's loop
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.SubFlowLoopDefinition.Expression">
             <summary>
-            Gets/sets the expression evaluated against <see cref="!:SubFlowStateDefinition"/> state data. <see cref="!:SubFlowStateDefinition"/> will repeat execution as long as this expression is true or until the max property count is reached
+            Gets/sets the expression evaluated against subflow data. Subflow will repeat execution as long as this expression is true or until the max property count is reached
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.SubFlowLoopDefinition.CheckBefore">
@@ -1156,7 +1182,12 @@
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.DataInputSchema">
             <summary>
-            Gets/sets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s data input <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s data input <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.DataInputSchemaUri">
+            <summary>
+            Gets/sets the <see cref="T:System.Uri"/> to the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s data input <see cref="T:Newtonsoft.Json.Schema.JSchema"/> 
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ExpressionLanguage">
@@ -1204,6 +1235,11 @@
             Gets/sets an <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>s
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.EventsUri">
+            <summary>
+            Gets/sets the <see cref="T:System.Uri"/> to the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>s
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.FunctionsToken">
             <summary>
             Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> collection
@@ -1214,6 +1250,11 @@
             Gets/sets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>s
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.FunctionsUri">
+            <summary>
+            Gets/sets the <see cref="T:System.Uri"/> to the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>s
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.RetriesToken">
             <summary>
             Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.RetryStrategyDefinition"/> collection
@@ -1222,6 +1263,11 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Retries">
             <summary>
             Gets/sets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.RetryStrategyDefinition"/>s
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.RetriesUri">
+            <summary>
+            Gets/sets the <see cref="T:System.Uri"/> to the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.RetryStrategyDefinition"/>s
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.States">
@@ -1239,14 +1285,14 @@
             Gets/sets an <see cref="T:Newtonsoft.Json.Linq.JObject"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants, which are globally accessible, read-only variables
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.SecretsToken">
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ConstantsUri">
             <summary>
-            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s secrets
+            Gets/sets the <see cref="T:System.Uri"/> to the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Secrets">
             <summary>
-            Gets/sets an <see cref="T:Newtonsoft.Json.Linq.JObject"/> containing the secrets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> has access to
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the secrets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> has access to
             </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.GetState(System.String)">
@@ -1509,9 +1555,19 @@
             Indicates a REST function
             </summary>
         </member>
+        <member name="F:ServerlessWorkflow.Sdk.FunctionType.Rpc">
+            <summary>
+            Indicates an Remote Procedure Call (RPC)
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.FunctionType.GraphQL">
+            <summary>
+            Indicates a GraphQL function
+            </summary>
+        </member>
         <member name="F:ServerlessWorkflow.Sdk.FunctionType.Expression">
             <summary>
-            Indicates an expression
+            Indicates an expression function
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Iso8601TimeSpan">
@@ -2055,6 +2111,9 @@
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.WithName(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.OfType(ServerlessWorkflow.Sdk.FunctionType)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.SetOperationExpression(System.String)">
@@ -2721,6 +2780,13 @@
             <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to build</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.OfType(ServerlessWorkflow.Sdk.FunctionType)">
+            <summary>
+            Sets the type of the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to build
+            </summary>
+            <param name="type">The type of the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to build</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.SetOperationExpression(System.String)">
             <summary>
             Sets the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>'s operation expression. Sets the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>'s <see cref="P:ServerlessWorkflow.Sdk.Models.FunctionDefinition.Type"/> to <see cref="F:ServerlessWorkflow.Sdk.FunctionType.Expression"/>
@@ -3239,7 +3305,14 @@
             <summary>
             Sets the id of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create
             </summary>
-            <param name="id">The id of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create</param>
+            <param name="key">The id of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.WithKey(System.String)">
+            <summary>
+            Sets the unique key of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create
+            </summary>
+            <param name="key">The unique key of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.WithName(System.String)">
@@ -3263,7 +3336,28 @@
             <param name="version">The description of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.Annotate(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.WithSpecVersion(System.String)">
+            <summary>
+            Sets the Serverless Workflow specification version. Defaults to latest
+            </summary>
+            <param name="specVersion">The Serverless Workflow specification version</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.WithDataInputSchema(System.Uri)">
+            <summary>
+            Sets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s data input <see cref="T:Newtonsoft.Json.Schema.JSchema"/> <see cref="T:System.Uri"/>
+            </summary>
+            <param name="uri">The <see cref="T:System.Uri"/> to the data <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s data input <see cref="T:Newtonsoft.Json.Schema.JSchema"/></param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.WithDataInputSchema(Newtonsoft.Json.Schema.JSchema)">
+            <summary>
+            Sets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> data input <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
+            </summary>
+            <param name="schema">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:Newtonsoft.Json.Schema.JSchema"/></param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AnnotateWith(System.String)">
             <summary>
             Annotates the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to build
             </summary>
@@ -3275,6 +3369,48 @@
             Configures the expression language used by the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to build
             </summary>
             <param name="language">The expression language to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.UseJq">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to use the 'jq' expression language
+            </summary>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.ImportConstantsFrom(System.Uri)">
+            <summary>
+            Adds the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> constants defined in the specified file
+            </summary>
+            <param name="uri">The <see cref="T:System.Uri"/> of the file that defines the constants</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.UseConstants(System.Object)">
+            <summary>
+            Uses the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants
+            </summary>
+            <param name="constants">An object that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddConstant(System.String,System.Object)">
+            <summary>
+            Adds the specified constants to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="name">The name of the constant to add</param>
+            <param name="value">The value of the constant to add</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.UseSecrets(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Uses the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> secrets
+            </summary>
+            <param name="secrets">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the secrets to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddSecret(System.String)">
+            <summary>
+            Adds the specified secret to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="secret">The secret to add</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.WithExecutionTimeout(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IExecutionTimeoutBuilder})">
@@ -3306,6 +3442,13 @@
             <param name="stateSetup">An <see cref="T:System.Func`2"/> used to setup the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder"/> used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s</returns>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.ImportEventsFrom(System.Uri)">
+            <summary>
+            Adds the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>s defined in the specified file
+            </summary>
+            <param name="uri">The <see cref="T:System.Uri"/> of the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>s</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddEvent(ServerlessWorkflow.Sdk.Models.EventDefinition)">
             <summary>
             Adds the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create
@@ -3320,6 +3463,13 @@
             <param name="eventSetup">The <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> to add</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.ImportFunctionsFrom(System.Uri)">
+            <summary>
+            Adds the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>s defined in the specified file
+            </summary>
+            <param name="uri">The <see cref="T:System.Uri"/> of the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>s</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddFunction(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder})">
             <summary>
             Adds the specified <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create
@@ -3332,6 +3482,13 @@
             Adds the specified <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to create
             </summary>
             <param name="function">The <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to add</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.ImportRetryStrategiesFrom(System.Uri)">
+            <summary>
+            Adds the <see cref="T:ServerlessWorkflow.Sdk.Models.RetryStrategyDefinition"/>s defined in the specified file
+            </summary>
+            <param name="uri">The <see cref="T:System.Uri"/> of the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.RetryStrategyDefinition"/>s</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddRetryStrategy(ServerlessWorkflow.Sdk.Models.RetryStrategyDefinition)">
@@ -3704,9 +3861,26 @@
             Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/> interface
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.#ctor(System.Net.Http.HttpClient)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/>
+            </summary>
+            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> to use to fetch external resources</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.#ctor(System.Net.Http.IHttpClientFactory)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/>
+            </summary>
+            <param name="httpClientFactory">The service used to create <see cref="T:System.Net.Http.HttpClient"/>s</param>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.#ctor">
             <summary>
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.HttpClient">
+            <summary>
+            Gets the <see cref="T:System.Net.Http.HttpClient"/> to use to fetch external resources
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Workflow">
@@ -3722,6 +3896,9 @@
         <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Metadata">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.WithKey(System.String)">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.WithId(System.String)">
             <inheritdoc/>
         </member>
@@ -3734,10 +3911,22 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.WithVersion(System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Annotate(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.WithSpecVersion(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.WithDataInputSchema(System.Uri)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.WithDataInputSchema(Newtonsoft.Json.Schema.JSchema)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AnnotateWith(System.String)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.UseExpressionLanguage(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.UseJq">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.WithExecutionTimeout(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IExecutionTimeoutBuilder})">
@@ -3746,16 +3935,40 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.KeepActive(System.Boolean)">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.ImportConstantsFrom(System.Uri)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.UseConstants(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddConstant(System.String,System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.UseSecrets(System.Collections.Generic.IEnumerable{System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddSecret(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.ImportEventsFrom(System.Uri)">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddEvent(ServerlessWorkflow.Sdk.Models.EventDefinition)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddEvent(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IEventBuilder})">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.ImportFunctionsFrom(System.Uri)">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddFunction(ServerlessWorkflow.Sdk.Models.FunctionDefinition)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddFunction(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.ImportRetryStrategiesFrom(System.Uri)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddRetryStrategy(ServerlessWorkflow.Sdk.Models.RetryStrategyDefinition)">
@@ -3774,6 +3987,15 @@
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Dispose(System.Boolean)">
+            <summary>
+            Disposes of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/>
+            </summary>
+            <param name="disposing">A boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/> is being disposed of</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Dispose">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader">
@@ -3881,7 +4103,7 @@
             </summary>
             <param name="uri">The <see cref="T:System.Uri"/> the external definition to load is located at</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new <see cref="T:Newtonsoft.Json.Linq.JObject"/> that represents the object defined in the loaded external definition</returns>
+            <returns>A new <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the object defined in the loaded external definition</returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionCollectionAsync``1(System.Uri,System.Threading.CancellationToken)">
             <summary>
@@ -4919,7 +5141,7 @@
             Represents the <see cref="T:System.Text.Json.Serialization.JsonConverterFactory"/> used to create <see cref="T:System.Text.Json.Serialization.Converters.AbstractClassConverter`1"/>
             </summary>
         </member>
-        <member name="F:System.Text.Json.Serialization.Converters.AbstractClassConverterFactory.Converters">
+        <member name="P:System.Text.Json.Serialization.Converters.AbstractClassConverterFactory.Converters">
             <summary>
             Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the mappings of types to their respective <see cref="T:System.Text.Json.Serialization.JsonConverter"/>
             </summary>

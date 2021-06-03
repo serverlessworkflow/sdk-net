@@ -78,9 +78,7 @@ namespace ServerlessWorkflow.Sdk.Models
             }
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-                this._Transition = value;
+                this._Transition = value ?? throw new ArgumentNullException(nameof(value));
                 this.TransitionToken = JToken.FromObject(value);
             }
         }

@@ -133,11 +133,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (workflow.Constants != null
                 && workflow.Constants is ExternalDefinition externalConstantsDefinition
                 && !externalConstantsDefinition.Loaded)
-                workflow.Constants = await this.LoadExternalDefinitionAsync(externalConstantsDefinition.DefinitionUri, cancellationToken);
-            if (workflow.Secrets != null
-               && workflow.Secrets is ExternalDefinition externalSecretsDefinition
-               && !externalSecretsDefinition.Loaded)
-                workflow.Secrets = await this.LoadExternalDefinitionAsync(externalSecretsDefinition.DefinitionUri, cancellationToken);
+                workflow.Constants = (JObject)await this.LoadExternalDefinitionAsync(externalConstantsDefinition.DefinitionUri, cancellationToken);
             return workflow;
         }
 
@@ -176,8 +172,8 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// </summary>
         /// <param name="uri">The <see cref="Uri"/> the external definition to load is located at</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>A new <see cref="JObject"/> that represents the object defined in the loaded external definition</returns>
-        protected virtual async Task<JObject> LoadExternalDefinitionAsync(Uri uri, CancellationToken cancellationToken = default)
+        /// <returns>A new <see cref="JToken"/> that represents the object defined in the loaded external definition</returns>
+        protected virtual async Task<JToken> LoadExternalDefinitionAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
@@ -197,9 +193,9 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                     response.EnsureSuccessStatusCode();
             }
             if (content.IsJson())
-                return await this.JsonSerializer.DeserializeAsync<JObject>(content, cancellationToken);
+                return await this.JsonSerializer.DeserializeAsync<JToken>(content, cancellationToken);
             else
-                return await this.YamlSerializer.DeserializeAsync<JObject>(content, cancellationToken);
+                return await this.YamlSerializer.DeserializeAsync<JToken>(content, cancellationToken);
         }
 
         /// <summary>

@@ -14,8 +14,10 @@
  * limitations under the License.
  *
  */
+using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
 using System;
+using System.Collections.Generic;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
@@ -30,9 +32,16 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <summary>
         /// Sets the id of the <see cref="WorkflowDefinition"/> to create
         /// </summary>
-        /// <param name="id">The id of the <see cref="WorkflowDefinition"/> to create</param>
+        /// <param name="key">The id of the <see cref="WorkflowDefinition"/> to create</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
-        IWorkflowBuilder WithId(string id);
+        IWorkflowBuilder WithId(string key);
+
+        /// <summary>
+        /// Sets the unique key of the <see cref="WorkflowDefinition"/> to create
+        /// </summary>
+        /// <param name="key">The unique key of the <see cref="WorkflowDefinition"/> to create</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder WithKey(string key);
 
         /// <summary>
         /// Sets the name of the <see cref="WorkflowDefinition"/> to create
@@ -56,11 +65,32 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IWorkflowBuilder WithVersion(string version);
 
         /// <summary>
+        /// Sets the Serverless Workflow specification version. Defaults to latest
+        /// </summary>
+        /// <param name="specVersion">The Serverless Workflow specification version</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder WithSpecVersion(string specVersion);
+
+        /// <summary>
+        /// Sets the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/> <see cref="Uri"/>
+        /// </summary>
+        /// <param name="uri">The <see cref="Uri"/> to the data <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/></param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder WithDataInputSchema(Uri uri);
+
+        /// <summary>
+        /// Sets the <see cref="WorkflowDefinition"/> data input <see cref="JSchema"/>
+        /// </summary>
+        /// <param name="schema">The <see cref="WorkflowDefinition"/>'s <see cref="JSchema"/></param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder WithDataInputSchema(JSchema schema);
+
+        /// <summary>
         /// Annotates the <see cref="WorkflowDefinition"/> to build
         /// </summary>
         /// <param name="annotation">The annotation to append to the <see cref="WorkflowDefinition"/> to build</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
-        IWorkflowBuilder Annotate(string annotation);
+        IWorkflowBuilder AnnotateWith(string annotation);
 
         /// <summary>
         /// Configures the expression language used by the <see cref="WorkflowDefinition"/> to build
@@ -68,6 +98,48 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <param name="language">The expression language to use</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
         IWorkflowBuilder UseExpressionLanguage(string language);
+
+        /// <summary>
+        /// Configures the <see cref="WorkflowDefinition"/> to use the 'jq' expression language
+        /// </summary>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder UseJq();
+
+        /// <summary>
+        /// Adds the <see cref="WorkflowDefinition"/> constants defined in the specified file
+        /// </summary>
+        /// <param name="uri">The <see cref="Uri"/> of the file that defines the constants</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder ImportConstantsFrom(Uri uri);
+
+        /// <summary>
+        /// Uses the specified <see cref="WorkflowDefinition"/>'s constants
+        /// </summary>
+        /// <param name="constants">An object that represents the <see cref="WorkflowDefinition"/>'s constants</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder UseConstants(object constants);
+
+        /// <summary>
+        /// Adds the specified constants to the <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="name">The name of the constant to add</param>
+        /// <param name="value">The value of the constant to add</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder AddConstant(string name, object value);
+
+        /// <summary>
+        /// Uses the specified <see cref="WorkflowDefinition"/> secrets
+        /// </summary>
+        /// <param name="secrets">An <see cref="IEnumerable{T}"/> containing the secrets to use</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder UseSecrets(IEnumerable<string> secrets);
+
+        /// <summary>
+        /// Adds the specified secret to the <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="secret">The secret to add</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder AddSecret(string secret);
 
         /// <summary>
         /// Configures the <see cref="WorkflowDefinition"/>'s <see cref="ExecutionTimeoutDefinition"/>
@@ -99,6 +171,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IPipelineBuilder StartsWith(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup);
 
         /// <summary>
+        /// Adds the <see cref="EventDefinition"/>s defined in the specified file
+        /// </summary>
+        /// <param name="uri">The <see cref="Uri"/> of the file that defines the <see cref="EventDefinition"/>s</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder ImportEventsFrom(Uri uri);
+
+        /// <summary>
         /// Adds the specified <see cref="EventDefinition"/> to the <see cref="WorkflowDefinition"/> to create
         /// </summary>
         /// <param name="e">The <see cref="EventDefinition"/> to add</param>
@@ -113,6 +192,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IWorkflowBuilder AddEvent(Action<IEventBuilder> eventSetup);
 
         /// <summary>
+        /// Adds the <see cref="FunctionDefinition"/>s defined in the specified file
+        /// </summary>
+        /// <param name="uri">The <see cref="Uri"/> of the file that defines the <see cref="FunctionDefinition"/>s</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder ImportFunctionsFrom(Uri uri);
+
+        /// <summary>
         /// Adds the specified <see cref="FunctionDefinition"/> to the <see cref="WorkflowDefinition"/> to create
         /// </summary>
         /// <param name="functionSetup">The <see cref="Action{T}"/> used to setup the <see cref="FunctionDefinition"/> to add</param>
@@ -125,6 +211,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <param name="function">The <see cref="FunctionDefinition"/> to add</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
         IWorkflowBuilder AddFunction(FunctionDefinition function);
+
+        /// <summary>
+        /// Adds the <see cref="RetryStrategyDefinition"/>s defined in the specified file
+        /// </summary>
+        /// <param name="uri">The <see cref="Uri"/> of the file that defines the <see cref="RetryStrategyDefinition"/>s</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder ImportRetryStrategiesFrom(Uri uri);
 
         /// <summary>
         /// Adds the specified <see cref="RetryStrategyDefinition"/> to the <see cref="WorkflowDefinition"/> to create

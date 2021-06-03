@@ -69,9 +69,6 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
             workflow.Retries
                 .Should()
                 .NotBeEmpty();
-            workflow.Secrets
-                .Should()
-                .NotBeEmpty();
         }
 
         private class Example
