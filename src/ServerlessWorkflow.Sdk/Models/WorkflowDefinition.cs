@@ -78,7 +78,7 @@ namespace ServerlessWorkflow.Sdk.Models
 
         private JSchema _DataInputSchema;
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/>
+        /// Gets/sets the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/>
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
@@ -106,6 +106,30 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._DataInputSchema = value;
+                this.DataInputSchemaToken = JToken.FromObject(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/> 
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual Uri DataInputSchemaUri
+        {
+            get
+            {
+                if (this.DataInputSchema == null
+                    || this._DataInputSchema is not ExternalJSchema externalSchema)
+                    return null;
+                return externalSchema.DefinitionUri;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+                this._DataInputSchema = new ExternalJSchema(value);
                 this.DataInputSchemaToken = JToken.FromObject(value);
             }
         }
@@ -229,6 +253,30 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
+        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual Uri EventsUri
+        {
+            get
+            {
+                if (this.Events == null
+                    || this._Events is not ExternalDefinitionCollection<EventDefinition> events)
+                    return null;
+                return events.DefinitionUri;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+                this._Events = new ExternalDefinitionCollection<EventDefinition>(value);
+                this.EventsToken = JToken.FromObject(value);
+            }
+        }
+
+        /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="FunctionDefinition"/> collection
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = "functions")]
@@ -273,6 +321,30 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
+        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual Uri FunctionsUri
+        {
+            get
+            {
+                if (this.Functions == null
+                    || this._Functions is not ExternalDefinitionCollection<FunctionDefinition> functions)
+                    return null;
+                return functions.DefinitionUri;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+                this._Functions = new ExternalDefinitionCollection<FunctionDefinition>(value);
+                this.FunctionsToken = JToken.FromObject(value);
+            }
+        }
+
+        /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="RetryStrategyDefinition"/> collection
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = "retries")]
@@ -312,6 +384,30 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._Retries = value;
+                this.RetriesToken = JToken.FromObject(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s <see cref="RetryStrategyDefinition"/>s
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual Uri RetriesUri
+        {
+            get
+            {
+                if (this.Retries == null
+                    || this._Retries is not ExternalDefinitionCollection<RetryStrategyDefinition> retries)
+                    return null;
+                return retries.DefinitionUri;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+                this._Retries = new ExternalDefinitionCollection<RetryStrategyDefinition>(value);
                 this.RetriesToken = JToken.FromObject(value);
             }
         }
@@ -366,48 +462,33 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s secrets
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "secrets")]
-        [System.Text.Json.Serialization.JsonPropertyName("secrets")]
-        [YamlMember(Alias = "secrets")]
-        protected virtual JToken SecretsToken { get; set; }
-
-        private JObject _Secrets;
-        /// <summary>
-        /// Gets/sets an <see cref="JObject"/> containing the secrets the <see cref="WorkflowDefinition"/> has access to
+        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s constants
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
-        public virtual JObject Secrets
+        public virtual Uri ConstantsUri
         {
             get
             {
-                if (this._Secrets == null
-                    && this.SecretsToken != null)
-                {
-                    if (this.SecretsToken.Type == JTokenType.String)
-                        this._Secrets = new ExternalDefinition(this.SecretsToken.ToObject<Uri>());
-                    else
-                        this._Secrets = (JObject)this.SecretsToken;
-                }
-                if (this._Secrets == null)
-                    this._Secrets = new JObject();
-                return this._Secrets;
+                if (this.Constants == null
+                    || this._Constants is not ExternalDefinition constants)
+                    return null;
+                return constants.DefinitionUri;
             }
             set
             {
                 if (value == null)
-                {
-                    this._Secrets = null;
-                    this.SecretsToken = null;
-                    return;
-                }
-                this._Secrets = value;
-                this.SecretsToken = value;
+                    throw new ArgumentNullException(nameof(value));
+                this._Constants = new ExternalDefinition(value);
+                this.ConstantsToken = JToken.FromObject(value);
             }
         }
+
+        /// <summary>
+        /// Gets/sets a <see cref="List{T}"/> containing the secrets the <see cref="WorkflowDefinition"/> has access to
+        /// </summary>
+        public virtual List<string> Secrets { get; set; }
 
         /// <summary>
         /// Gets the <see cref="StateDefinition"/> with the specified name

@@ -28,10 +28,17 @@ namespace System.Text.Json.Serialization.Converters
         : JsonConverterFactory
     {
 
+        private static readonly Dictionary<Type, JsonConverter> _Converters = new();
         /// <summary>
         /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the mappings of types to their respective <see cref="JsonConverter"/>
         /// </summary>
-        protected static Dictionary<Type, JsonConverter> Converters = new Dictionary<Type, JsonConverter>();
+        protected static Dictionary<Type, JsonConverter> Converters
+        {
+            get
+            {
+                return _Converters;
+            }
+        }
 
         /// <summary>
         /// Initializes a new <see cref="AbstractClassConverterFactory"/>

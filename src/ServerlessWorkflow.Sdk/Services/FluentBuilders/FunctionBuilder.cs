@@ -51,6 +51,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IFunctionBuilder OfType(FunctionType type)
+        {
+            this.Function.Type = type;
+            return this;
+        }
+
+        /// <inheritdoc/>
         public virtual IFunctionBuilder SetOperationExpression(string operation)
         {
             if (string.IsNullOrWhiteSpace(operation))

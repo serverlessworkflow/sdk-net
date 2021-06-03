@@ -15,9 +15,12 @@
  *
  */
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
@@ -26,16 +29,43 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     /// Represents the default implementation of the <see cref="IWorkflowBuilder"/> interface
     /// </summary>
     public class WorkflowBuilder
-        : MetadataContainerBuilder<IWorkflowBuilder>, IWorkflowBuilder
+        : MetadataContainerBuilder<IWorkflowBuilder>, IWorkflowBuilder, IDisposable
     {
+        private bool _Disposed;
+
+        /// <summary>
+        /// Initializes a new <see cref="WorkflowBuilder"/>
+        /// </summary>
+        /// <param name="httpClient">The <see cref="System.Net.Http.HttpClient"/> to use to fetch external resources</param>
+        public WorkflowBuilder(HttpClient httpClient)
+        {
+            this.HttpClient = httpClient;
+            this.Pipeline = new PipelineBuilder(this);
+        }
+
+        /// <summary>
+        /// Initializes a new <see cref="WorkflowBuilder"/>
+        /// </summary>
+        /// <param name="httpClientFactory">The service used to create <see cref="System.Net.Http.HttpClient"/>s</param>
+        public WorkflowBuilder(IHttpClientFactory httpClientFactory)
+            : this(httpClientFactory.CreateClient())
+        {
+
+        }
 
         /// <summary>
         /// Initializes a new <see cref="WorkflowBuilder"/>
         /// </summary>
         public WorkflowBuilder()
+            : this(new HttpClient())
         {
-            this.Pipeline = new PipelineBuilder(this);
+
         }
+
+        /// <summary>
+        /// Gets the <see cref="System.Net.Http.HttpClient"/> to use to fetch external resources
+        /// </summary>
+        protected HttpClient HttpClient { get; }
 
         /// <summary>
         /// Gets the <see cref="WorkflowDefinition"/> to configure
@@ -54,6 +84,15 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             {
                 return this.Workflow.Metadata;
             }
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder WithKey(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+                throw new ArgumentNullException(nameof(key));
+            this.Workflow.Key = key;
+            return this;
         }
 
         /// <inheritdoc/>
@@ -91,7 +130,30 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IWorkflowBuilder Annotate(string annotation)
+        public virtual IWorkflowBuilder WithSpecVersion(string specVersion)
+        {
+            if (string.IsNullOrWhiteSpace(specVersion))
+                throw new ArgumentNullException(nameof(specVersion));
+            this.Workflow.SpecVersion = specVersion;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder WithDataInputSchema(Uri uri)
+        {
+            this.Workflow.DataInputSchemaUri = uri ?? throw new ArgumentNullException(nameof(uri));
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder WithDataInputSchema(JSchema schema)
+        {
+            this.Workflow.DataInputSchema = schema ?? throw new ArgumentNullException(nameof(schema));
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder AnnotateWith(string annotation)
         {
             if (string.IsNullOrWhiteSpace(annotation))
                 throw new ArgumentNullException(nameof(annotation));
@@ -109,6 +171,12 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IWorkflowBuilder UseJq()
+        {
+            return this.UseExpressionLanguage("jq");
+        }
+
+        /// <inheritdoc/>
         public virtual IWorkflowBuilder WithExecutionTimeout(Action<IExecutionTimeoutBuilder> timeoutSetup)
         {
             IExecutionTimeoutBuilder builder = new ExecutionTimeoutBuilder(this.Pipeline);
@@ -121,6 +189,58 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         public virtual IWorkflowBuilder KeepActive(bool keepActive = true)
         {
             this.Workflow.KeepActive = keepActive;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder ImportConstantsFrom(Uri uri)
+        {
+            this.Workflow.ConstantsUri = uri ?? throw new ArgumentNullException(nameof(uri));
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder UseConstants(object constants)
+        {
+            if (constants == null)
+                throw new ArgumentNullException(nameof(constants));
+            this.Workflow.Constants = JObject.FromObject(constants);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder AddConstant(string name, object value)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+            if (this.Workflow.Constants == null)
+                this.Workflow.Constants = new JObject();
+            this.Workflow.Constants.Add(name, JToken.FromObject(value));
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder UseSecrets(IEnumerable<string> secrets)
+        {
+            this.Workflow.Secrets = secrets?.ToList();
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder AddSecret(string secret)
+        {
+            if(this.Workflow.Secrets == null)
+                this.Workflow.Secrets = new();
+            this.Workflow.Secrets.Add(secret);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder ImportEventsFrom(Uri uri)
+        {
+            this.Workflow.EventsUri = uri ?? throw new ArgumentNullException(nameof(uri));
             return this;
         }
 
@@ -144,6 +264,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             eventSetup(builder);
             return this.AddEvent(builder.Build());
         }
+        
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder ImportFunctionsFrom(Uri uri)
+        {
+            this.Workflow.FunctionsUri = uri ?? throw new ArgumentNullException(nameof(uri));
+            return this;
+        }
 
         /// <inheritdoc/>
         public virtual IWorkflowBuilder AddFunction(FunctionDefinition function)
@@ -164,6 +291,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             IFunctionBuilder builder = new FunctionBuilder();
             functionSetup(builder);
             return this.AddFunction(builder.Build());
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder ImportRetryStrategiesFrom(Uri uri)
+        {
+            this.Workflow.RetriesUri = uri ?? throw new ArgumentNullException(nameof(uri));
+            return this;
         }
 
         /// <inheritdoc/>
@@ -222,6 +356,27 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             this.Workflow.States = this.Pipeline.Build().ToList();
             return this.Workflow;
+        }
+
+        /// <summary>
+        /// Disposes of the <see cref="WorkflowBuilder"/>
+        /// </summary>
+        /// <param name="disposing">A boolean indicating whether or not the <see cref="WorkflowBuilder"/> is being disposed of</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this._Disposed)
+            {
+                if (disposing)
+                    this.HttpClient?.Dispose();
+                this._Disposed = true;
+            }
+        }
+
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            this.Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
 
     }

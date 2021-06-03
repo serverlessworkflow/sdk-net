@@ -50,7 +50,7 @@ namespace ServerlessWorkflow.Sdk
             services.Configure(configurationAction);
             JsonConvert.DefaultSettings = () => 
             {
-                JsonSerializerSettings settings = new JsonSerializerSettings();
+                JsonSerializerSettings settings = new();
                 configurationAction(settings);
                 return settings;
             };

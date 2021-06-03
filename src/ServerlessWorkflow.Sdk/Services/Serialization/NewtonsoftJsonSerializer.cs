@@ -48,21 +48,17 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <inheritdoc/>
         public virtual T Deserialize<T>(Stream input)
         {
-            using (StreamReader reader = new StreamReader(input, leaveOpen: true))
-            {
-                string json = reader.ReadToEnd();
-                return JsonConvert.DeserializeObject<T>(json, this.Settings);
-            }
+            using StreamReader reader = new(input, leaveOpen: true);
+            string json = reader.ReadToEnd();
+            return JsonConvert.DeserializeObject<T>(json, this.Settings);
         }
 
         /// <inheritdoc/>
         public virtual async Task<T> DeserializeAsync<T>(Stream input, CancellationToken cancellationToken = default)
         {
-            using (StreamReader reader = new StreamReader(input, leaveOpen: true))
-            {
-                string json = await reader.ReadToEndAsync();
-                return JsonConvert.DeserializeObject<T>(json, this.Settings);
-            }
+            using StreamReader reader = new(input, leaveOpen: true);
+            string json = await reader.ReadToEndAsync();
+            return JsonConvert.DeserializeObject<T>(json, this.Settings);
         }
 
         /// <inheritdoc/>
@@ -81,21 +77,17 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <inheritdoc/>
         public virtual object Deserialize(Stream input, Type returnType)
         {
-            using (StreamReader reader = new StreamReader(input, leaveOpen: true))
-            {
-                string json = reader.ReadToEnd();
-                return JsonConvert.DeserializeObject(json, returnType, this.Settings);
-            }
+            using StreamReader reader = new(input, leaveOpen: true);
+            string json = reader.ReadToEnd();
+            return JsonConvert.DeserializeObject(json, returnType, this.Settings);
         }
 
         /// <inheritdoc/>
         public virtual async Task<object> DeserializeAsync(Stream input, Type returnType, CancellationToken cancellationToken = default)
         {
-            using (StreamReader reader = new StreamReader(input, leaveOpen: true))
-            {
-                string json = await reader.ReadToEndAsync();
-                return JsonConvert.DeserializeObject(json, returnType, this.Settings);
-            }
+            using StreamReader reader = new(input, leaveOpen: true);
+            string json = await reader.ReadToEndAsync();
+            return JsonConvert.DeserializeObject(json, returnType, this.Settings);
         }
 
         /// <inheritdoc/>
@@ -138,45 +130,37 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <inheritdoc/>
         public virtual void Serialize(object value, Stream output)
         {
-            using (StreamWriter writer = new StreamWriter(output, leaveOpen: true))
-            {
-                string json = JsonConvert.SerializeObject(value, this.Settings);
-                writer.Write(json);
-                writer.Flush();
-            }
+            using StreamWriter writer = new(output, leaveOpen: true);
+            string json = JsonConvert.SerializeObject(value, this.Settings);
+            writer.Write(json);
+            writer.Flush();
         }
 
         /// <inheritdoc/>
         public virtual async Task SerializeAsync(object value, Stream output, CancellationToken cancellationToken = default)
         {
-            using (StreamWriter writer = new StreamWriter(output, leaveOpen: true))
-            {
-                string json = JsonConvert.SerializeObject(value, this.Settings);
-                await writer.WriteAsync(json);
-                await writer.FlushAsync();
-            }
+            using StreamWriter writer = new(output, leaveOpen: true);
+            string json = JsonConvert.SerializeObject(value, this.Settings);
+            await writer.WriteAsync(json);
+            await writer.FlushAsync();
         }
 
         /// <inheritdoc/>
         public virtual void Serialize(object value, Stream output, Type type)
         {
-            using (StreamWriter writer = new StreamWriter(output, leaveOpen: true))
-            {
-                string json = JsonConvert.SerializeObject(value, type, this.Settings);
-                writer.Write(json);
-                writer.Flush();
-            }
+            using StreamWriter writer = new(output, leaveOpen: true);
+            string json = JsonConvert.SerializeObject(value, type, this.Settings);
+            writer.Write(json);
+            writer.Flush();
         }
 
         /// <inheritdoc/>
         public virtual async Task SerializeAsync(object value, Stream output, Type type, CancellationToken cancellationToken = default)
         {
-            using (StreamWriter writer = new StreamWriter(output, leaveOpen: true))
-            {
-                string json = JsonConvert.SerializeObject(value, type, this.Settings);
-                await writer.WriteAsync(json);
-                await writer.FlushAsync();
-            }
+            using StreamWriter writer = new(output, leaveOpen: true);
+            string json = JsonConvert.SerializeObject(value, type, this.Settings);
+            await writer.WriteAsync(json);
+            await writer.FlushAsync();
         }
 
         /// <inheritdoc/>
