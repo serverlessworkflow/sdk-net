@@ -9,13 +9,13 @@ With the SDK, you can:
 
 - [x] Read and write workflow JSON and YAML definitions
 - [x] Programmatically build workflow definitions
-- [ ] Validate workflow definitions (both schema and workflow integrity validation)
+- [x] Validate workflow definitions (both schema and DSL integrity validation)
 
 ### Status
 
 | Latest Releases | Conformance to spec version |
 | :---: | :---: |
-| [0.6.2](https://github.com/serverlessworkflow/sdk-net/releases/) | [v0.6](https://github.com/serverlessworkflow/specification/tree/0.6.x) |
+| [0.7.1](https://github.com/serverlessworkflow/sdk-net/releases/) | [v0.7](https://github.com/serverlessworkflow/specification/tree/0.6.x) |
 
 ### Getting Started
 
