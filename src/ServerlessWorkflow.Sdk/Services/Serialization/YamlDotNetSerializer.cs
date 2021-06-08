@@ -24,6 +24,7 @@ using IYamlDotNetDeserializer = YamlDotNet.Serialization.IDeserializer;
 
 namespace ServerlessWorkflow.Sdk.Services.Serialization
 {
+
     /// <summary>
     /// Represents the default <see href="https://github.com/aaubry/YamlDotNet">YamlDotNet</see> implementation of the <see cref="ISerializer"/> interface
     /// </summary>
