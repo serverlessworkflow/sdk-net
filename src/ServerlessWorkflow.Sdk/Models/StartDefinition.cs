@@ -43,7 +43,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "schedule")]
         [System.Text.Json.Serialization.JsonPropertyName("schedule")]
         [YamlMember(Alias = "schedule")]
-        public virtual ScheduleDefinition Schedule { get; set; }
+        public virtual ScheduleDefinition Schedule { get; set; } = new ScheduleDefinition();
 
     }
 
