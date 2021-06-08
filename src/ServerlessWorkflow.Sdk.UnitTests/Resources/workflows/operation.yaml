@@ -1,0 +1,29 @@
+﻿id: operation
+name: Operation
+version: "0.1.0"
+events:
+  - name: ProducedEvent
+    kind: produced
+    type: producedEvent
+    source: workflow
+  - name: ConsumedEvent
+    kind: consumed  
+    type: consumedEvent
+    source: workflow
+functions:
+  - name: Function
+    operation: http://fake.address
+states:
+  - name: Operation
+    type: operation
+    actions:
+      - name: Function
+        functionRef:
+          refName: Function
+          arguments:
+            message: Hello world!
+      - name: Function
+        eventRef:
+          triggerEventRef: ProducedEvent
+          resultEventRef: ConsumedEvent
+    end: true

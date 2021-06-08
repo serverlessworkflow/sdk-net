@@ -100,6 +100,9 @@ namespace ServerlessWorkflow.Sdk
                 DeserializerBuilder builder = new DeserializerBuilder()
                     .WithNamingConvention(CamelCaseNamingConvention.Instance)
                     .WithNodeDeserializer(
+                        inner => new JArrayDeserializer(inner),
+                        syntax => syntax.InsteadOf<ArrayNodeDeserializer>())
+                    .WithNodeDeserializer(
                         inner => new AbstractTypeDeserializer(inner),
                         syntax => syntax.InsteadOf<ObjectNodeDeserializer>())
                     .WithNodeDeserializer(

@@ -5494,6 +5494,25 @@
         <member name="M:YamlDotNet.Serialization.Iso8601TimeSpanSerializer.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
             <inheritdoc/>
         </member>
+        <member name="T:YamlDotNet.Serialization.JArrayDeserializer">
+            <summary>
+            Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize <see cref="T:Newtonsoft.Json.Linq.JArray"/>s
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.JArrayDeserializer.#ctor(YamlDotNet.Serialization.INodeDeserializer)">
+            <summary>
+            Initializes a new <see cref="T:YamlDotNet.Serialization.JArrayDeserializer"/>
+            </summary>
+            <param name="inner">The inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/></param>
+        </member>
+        <member name="P:YamlDotNet.Serialization.JArrayDeserializer.Inner">
+            <summary>
+            Gets the inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/>
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.JArrayDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
+            <inheritdoc/>
+        </member>
         <member name="T:YamlDotNet.Serialization.JTokenDeserializer">
             <summary>
             Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize <see cref="T:Newtonsoft.Json.Linq.JToken"/>s
