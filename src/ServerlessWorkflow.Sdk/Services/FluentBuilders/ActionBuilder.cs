@@ -83,7 +83,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (string.IsNullOrWhiteSpace(function))
                 throw new ArgumentNullException(nameof(function));
-            this.Action.Function = new FunctionReference() { Name = function };
+            this.Action.Function = new FunctionReference() { RefName = function };
             return this;
         }
 
@@ -93,7 +93,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (functionSetup == null)
                 throw new ArgumentNullException(nameof(functionSetup));
             FunctionDefinition function = this.Pipeline.AddFunction(functionSetup);
-            this.Action.Function = new FunctionReference() { Name = function.Name };
+            this.Action.Function = new FunctionReference() { RefName = function.Name };
             return this;
         }
 
@@ -103,7 +103,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
             this.Pipeline.AddFunction(function);
-            this.Action.Function = new FunctionReference() { Name = function.Name };
+            this.Action.Function = new FunctionReference() { RefName = function.Name };
             return this;
         }
 
@@ -118,6 +118,15 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         public virtual IFunctionActionBuilder WithArguments(IDictionary<string, string> args)
         {
             this.Action.Function.Arguments = JObject.FromObject(args);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IFunctionActionBuilder WithSelectionSet(string selectionSet)
+        {
+            if (string.IsNullOrWhiteSpace(selectionSet))
+                throw new ArgumentNullException(nameof(selectionSet));
+            this.Action.Function.SelectionSet = selectionSet;
             return this;
         }
 

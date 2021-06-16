@@ -664,7 +664,7 @@
             Represents a reference to a <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.FunctionReference.Name">
+        <member name="P:ServerlessWorkflow.Sdk.Models.FunctionReference.RefName">
             <summary>
             Gets/sets the referenced function's name
             </summary>
@@ -672,6 +672,11 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.FunctionReference.Arguments">
             <summary>
             Gets/sets a <see cref="T:Newtonsoft.Json.Linq.JObject"/> that contains the parameters of the function to invoke
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.FunctionReference.SelectionSet">
+            <summary>
+            Gets/sets a <see href="https://spec.graphql.org/June2018/#sec-Selection-Sets">GraphQL selection set</see>
             </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.FunctionReference.ToString">
@@ -1687,6 +1692,9 @@
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder.WithArguments(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder.WithSelectionSet(System.String)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder.Consume(System.String)">
@@ -2753,9 +2761,17 @@
             Defines the service used to build <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>s of type <see cref="F:ServerlessWorkflow.Sdk.ActionType.Function"/>
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionActionBuilder.WithSelectionSet(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to use the specified <see href="https://spec.graphql.org/June2018/#sec-Selection-Sets">GraphQL selection set</see>
+            </summary>
+            <param name="selectionSet">The <see href="https://spec.graphql.org/June2018/#sec-Selection-Sets">GraphQL selection set</see> to use</param>
+            <remarks>Only supported for <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>s of type <see cref="F:ServerlessWorkflow.Sdk.FunctionType.GraphQL"/></remarks>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionActionBuilder"/></returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionActionBuilder.WithArgument(System.String,System.String)">
             <summary>
-            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to use the specified argument when performing the function call
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to use the specified argument when performing the function call
             </summary>
             <param name="name">The name of the argument to add</param>
             <param name="value">The value or workflow expression of the argument to add</param>
@@ -2763,7 +2779,7 @@
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionActionBuilder.WithArguments(System.Collections.Generic.IDictionary{System.String,System.String})">
             <summary>
-            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to use the specified argument when performing the function call
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to use the specified argument when performing the function call
             </summary>
             <param name="args">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the name/value pairs of the arguments to use</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionActionBuilder"/></returns>
@@ -4786,6 +4802,20 @@
             </summary>
             <param name="functionName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to check</param>
             <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> exists</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.FunctionReferenceValidator.DoesNotReferenceGraphQLFunction(ServerlessWorkflow.Sdk.Models.FunctionReference)">
+            <summary>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionReference"/> references a <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> of type '<see cref="F:ServerlessWorkflow.Sdk.FunctionType.GraphQL"/>'
+            </summary>
+            <param name="functionReference">The <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionReference"/> to validate</param>
+            <returns>A boolean indicating whether or not the referenced <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> is not of '<see cref="F:ServerlessWorkflow.Sdk.FunctionType.GraphQL"/>' type</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.FunctionReferenceValidator.ReferencesGraphQLFunction(ServerlessWorkflow.Sdk.Models.FunctionReference)">
+            <summary>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionReference"/> references a <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> of type '<see cref="F:ServerlessWorkflow.Sdk.FunctionType.GraphQL"/>'
+            </summary>
+            <param name="functionReference">The <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionReference"/> to validate</param>
+            <returns>A boolean indicating whether or not the referenced <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> is of '<see cref="F:ServerlessWorkflow.Sdk.FunctionType.GraphQL"/>' type</returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.InjectStateValidator">
             <summary>

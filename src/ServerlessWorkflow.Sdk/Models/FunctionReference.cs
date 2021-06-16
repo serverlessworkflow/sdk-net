@@ -34,7 +34,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "refName"), Newtonsoft.Json.JsonRequired]
         [System.Text.Json.Serialization.JsonPropertyName("refName")]
         [YamlMember(Alias = "refName")]
-        public virtual string Name { get; set; }
+        public virtual string RefName { get; set; }
 
         /// <summary>
         /// Gets/sets a <see cref="JObject"/> that contains the parameters of the function to invoke
@@ -44,10 +44,18 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "arguments")]
         public virtual JObject Arguments { get; set; } = new JObject();
 
+        /// <summary>
+        /// Gets/sets a <see href="https://spec.graphql.org/June2018/#sec-Selection-Sets">GraphQL selection set</see>
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = "selectionSet")]
+        [System.Text.Json.Serialization.JsonPropertyName("selectionSet")]
+        [YamlMember(Alias = "selectionSet")]
+        public virtual string SelectionSet { get; set; }
+
         /// <inheritdoc/>
         public override string ToString()
         {
-            return this.Name;
+            return this.RefName;
         }
 
     }
