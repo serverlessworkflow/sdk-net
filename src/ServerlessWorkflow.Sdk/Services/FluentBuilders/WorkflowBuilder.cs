@@ -322,6 +322,60 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IWorkflowBuilder ImportAuthenticationDefinitionsFrom(Uri uri)
+        {
+            this.Workflow.AuthUri = uri ?? throw new ArgumentNullException(nameof(uri));
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder UseAuthenticationDefinitions(params AuthenticationDefinition[] authenticationDefinitions)
+        {
+            if (authenticationDefinitions == null)
+                throw new ArgumentNullException(nameof(authenticationDefinitions));
+            this.Workflow.Auth = authenticationDefinitions.ToList();
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder AddAuthenticationDefinition(AuthenticationDefinition authenticationDefinition)
+        {
+            if (authenticationDefinition == null)
+                throw new ArgumentNullException(nameof(authenticationDefinition));
+            if (this.Workflow.Auth == null)
+                this.Workflow.Auth = new();
+            this.Workflow.Auth.Add(authenticationDefinition);
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder AddBasicAuthentication(string name, Action<IBasicAuthenticationBuilder> configurationAction)
+        {
+            IBasicAuthenticationBuilder builder = new BasicAuthenticationBuilder();
+            builder.WithName(name);
+            configurationAction(builder);
+            return AddAuthenticationDefinition(builder.Build());
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder AddBearerAuthentication(string name, Action<IBearerAuthenticationBuilder> configurationAction)
+        {
+            IBearerAuthenticationBuilder builder = new BearerAuthenticationBuilder();
+            builder.WithName(name);
+            configurationAction(builder);
+            return AddAuthenticationDefinition(builder.Build());
+        }
+
+        /// <inheritdoc/>
+        public virtual IWorkflowBuilder AddOpenIDConnectAuthentication(string name, Action<IOpenIDConnectAuthenticationBuilder> configurationAction)
+        {
+            IOpenIDConnectAuthenticationBuilder builder = new OpenIDConnectAuthenticationBuilder();
+            builder.WithName(name);
+            configurationAction(builder);
+            return AddAuthenticationDefinition(builder.Build());
+        }
+
+        /// <inheritdoc/>
         public virtual IPipelineBuilder StartsWith(StateDefinition state)
         {
             if (state == null)

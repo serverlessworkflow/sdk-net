@@ -97,6 +97,61 @@
         <member name="M:ServerlessWorkflow.Sdk.Models.ActionDefinition.ToString">
             <inheritdoc/>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition">
+            <summary>
+            Represents a reusable definition of a workflow authentication mechanism
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition.Name">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>'s name
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition.Scheme">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>'s scheme
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition.PropertiesToken">
+            <summary>
+            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationProperties"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition.Properties">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>'s info
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.AuthenticationProperties">
+            <summary>
+            Represents an object used to configure an authentication mechanism
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.BasicAuthenticationProperties">
+            <summary>
+            Represents an object used to configure a 'Basic' authentication scheme
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.BasicAuthenticationProperties.Username">
+            <summary>
+            Gets/sets the username to use when authenticating
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.BasicAuthenticationProperties.Password">
+            <summary>
+            Gets/sets the password to use when authenticating
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.BearerAuthenticationProperties">
+            <summary>
+            Represents an object used to configure a 'Bearer' authentication scheme
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.BearerAuthenticationProperties.Token">
+            <summary>
+            Gets/sets the token used to authenticate
+            </summary>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.BranchDefinition">
             <summary>
             Represents a workflow execution branch
@@ -651,6 +706,11 @@
             Gets/sets the type of the defined function. Defaults to '<see cref="F:ServerlessWorkflow.Sdk.FunctionType.Rest"/>'
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.FunctionDefinition.AuthRef">
+            <summary>
+            Gets/sets the reference to the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use when invoking the function. Ignored when <see cref="P:ServerlessWorkflow.Sdk.Models.FunctionDefinition.Type"/> has been set to <see cref="F:ServerlessWorkflow.Sdk.FunctionType.Expression"/>
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.FunctionDefinition.Metadata">
             <summary>
             Gets/sets the function's metadata
@@ -695,6 +755,61 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.InjectStateDefinition.Data">
             <summary>
             Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> which can be set as state's data input and can be manipulated via filter
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties">
+            <summary>
+            Represents an object used to configure an 'OIDC' authentication scheme
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.GrantType">
+            <summary>
+            Gets/sets the OIDC grant type to use
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.ClientId">
+            <summary>
+            Gets/sets the id of the OIDC client to use
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.ClientSecret">
+            <summary>
+            Gets/sets the secret of the non-public OIDC client to use. Required when <see cref="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.GrantType"/> has been set to <see cref="F:ServerlessWorkflow.Sdk.OpenIDConnectGrantType.TokenExchange"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.Username">
+            <summary>
+            Gets/sets the username to use when authenticating
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.Password">
+            <summary>
+            Gets/sets the password to use when authenticating
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.Scopes">
+            <summary>
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the authorized scopes of the resulting token
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.Audiences">
+            <summary>
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the authorized audiences of the resulting token
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.SubjectToken">
+            <summary>
+            Gets/sets the token to exchange for Impersonation
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.RequestedSubject">
+            <summary>
+            Gets/sets the requested subject for Impersonation and Direct Naked Impersonation, which can be the id or the username of the user to impersonate
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties.RequestedIssuer">
+            <summary>
+            Gets/sets the issuer that must generate a new token in return for the exchanged one
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.OperationStateDefinition">
@@ -839,6 +954,27 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.ScheduleDefinition.Timezone">
             <summary>
             Gets/sets the timezone name used to evaluate the cron expression. Not used for interval as timezone can be specified there directly. If not specified, should default to local machine timezone.
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.SecretBasedAuthenticationProperties">
+            <summary>
+            Represents <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationProperties"/> loaded from a specific secret
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.SecretBasedAuthenticationProperties.#ctor">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.SecretBasedAuthenticationProperties"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.SecretBasedAuthenticationProperties.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.SecretBasedAuthenticationProperties"/>
+            </summary>
+            <param name="secret">The name of the secret to load the <see cref="T:ServerlessWorkflow.Sdk.Models.SecretBasedAuthenticationProperties"/> from</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.SecretBasedAuthenticationProperties.Secret">
+            <summary>
+            Gets the name of the secret to load the <see cref="T:ServerlessWorkflow.Sdk.Models.SecretBasedAuthenticationProperties"/> from
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.StartDefinition">
@@ -1295,6 +1431,21 @@
             Gets/sets the <see cref="T:System.Uri"/> to the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AuthToken">
+            <summary>
+            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Auth">
+            <summary>
+            Gets/sets an <see cref="T:Newtonsoft.Json.Linq.JObject"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AuthUri">
+            <summary>
+            Gets/sets the <see cref="T:System.Uri"/> to the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Secrets">
             <summary>
             Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the secrets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> has access to
@@ -1392,6 +1543,26 @@
         <member name="F:ServerlessWorkflow.Sdk.ActionType.Subflow">
             <summary>
             Indicates an action that executes a subflow
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.AuthenticationScheme">
+            <summary>
+            Enumerates all supported authentication schemes
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.AuthenticationScheme.Basic">
+            <summary>
+            Indicates the basic (username/password) authentication scheme
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.AuthenticationScheme.Bearer">
+            <summary>
+            Indicates the bearer (JwT) authentication scheme
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.AuthenticationScheme.OIDC">
+            <summary>
+            Indicates the OpenID Connect (OIDC) authentication scheme
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.ConditionType">
@@ -1593,6 +1764,26 @@
             </summary>
             <param name="timeSpan">The <see cref="T:System.TimeSpan"/> to format</param>
             <returns>The parsed <see cref="T:System.TimeSpan"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.OpenIDConnectGrantType">
+            <summary>
+            Enumerates all supported <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4">OIDC grant types</see>
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.OpenIDConnectGrantType.ResourceOwner">
+            <summary>
+            Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.3">resource-owner password credentials grant type</see>
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.OpenIDConnectGrantType.ClientCredentials">
+            <summary>
+            Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">client credentials grant type</see>
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.OpenIDConnectGrantType.TokenExchange">
+            <summary>
+            Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc8693">token exchange grant type</see>
+            </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.ParallelCompletionType">
             <summary>
@@ -2147,6 +2338,70 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.InjectStateBuilder.Data(System.Object)">
             <inheritdoc/>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.AuthenticationDefinitionBuilder">
+            <summary>
+            Represents the base class for all <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IAuthenticationDefinitionBuilder"/> implementations
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.AuthenticationDefinitionBuilder.#ctor(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.AuthenticationDefinitionBuilder"/>
+            </summary>
+            <param name="authenticationDefinition">The <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to configure</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.AuthenticationDefinitionBuilder.AuthenticationDefinition">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to configure
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.AuthenticationDefinitionBuilder.WithName(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.AuthenticationDefinitionBuilder.LoadFromSecret(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.AuthenticationDefinitionBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.BasicAuthenticationBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.BasicAuthenticationBuilder.#ctor">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.BasicAuthenticationBuilder"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.BasicAuthenticationBuilder.Properties">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.BasicAuthenticationProperties"/> of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to build
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.BasicAuthenticationBuilder.WithUserName(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.BasicAuthenticationBuilder.WithPassword(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.BearerAuthenticationBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBearerAuthenticationBuilder"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.BearerAuthenticationBuilder.#ctor">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.BearerAuthenticationBuilder"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.BearerAuthenticationBuilder.Properties">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.BearerAuthenticationProperties"/> of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to build
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.BearerAuthenticationBuilder.WithToken(System.String)">
+            <inheritdoc/>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder">
             <summary>
             Defines the fundamentals of a service used to build <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>s
@@ -2290,6 +2545,61 @@
             <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to execute</param>
             <param name="actionSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to execute</param>
             <returns>The configured container</returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IAuthenticationDefinitionBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build an <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IAuthenticationDefinitionBuilder.WithName(System.String)">
+            <summary>
+            Sets the name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to build
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to build</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IAuthenticationDefinitionBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IAuthenticationDefinitionBuilder.LoadFromSecret(System.String)">
+            <summary>
+            Loads the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> from a secret
+            </summary>
+            <param name="secret">The name of the secret to load the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> from</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IAuthenticationDefinitionBuilder.Build">
+            <summary>
+            Builds the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>
+            </summary>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build a <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.Basic"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder.WithUserName(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified username to authenticate
+            </summary>
+            <param name="username">The username to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder.WithPassword(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified password to authenticate
+            </summary>
+            <param name="password">The password to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBearerAuthenticationBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build a <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.Bearer"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBearerAuthenticationBuilder.WithToken(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified token to authenticate
+            </summary>
+            <param name="token">The token to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder"/></returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IBranchBuilder">
             <summary>
@@ -2861,6 +3171,81 @@
             <param name="metadata">An <see cref="T:System.Collections.Generic.IDictionary`2"/> representing the container's metadata</param>
             <returns>The configured container</returns>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build a <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.OIDC"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.UseGranType(ServerlessWorkflow.Sdk.OpenIDConnectGrantType)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified <see cref="T:ServerlessWorkflow.Sdk.OpenIDConnectGrantType"/> when requesting an access token
+            </summary>
+            <param name="grantType">The <see cref="T:ServerlessWorkflow.Sdk.OpenIDConnectGrantType"/> to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.WithClientId(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified client ID when requesting an access token
+            </summary>
+            <param name="clientId">The client ID to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.WithClientSecret(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified client secret when requesting an access token
+            </summary>
+            <param name="clientSecret">The username to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.WithUserName(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified username to authenticate
+            </summary>
+            <param name="username">The username to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.WithPassword(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified password to authenticate
+            </summary>
+            <param name="password">The password to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.UseScopes(System.String[])">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified scopes when requesting an access token
+            </summary>
+            <param name="scopes">An array containing the scopes to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.UseAudiences(System.String[])">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified audiences when requesting an access token
+            </summary>
+            <param name="audiences">An array containing the audiences to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.WithSubjectToken(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to exchange the specified subject token when requesting an access token
+            </summary>
+            <param name="token">The token to exchange</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.WithRequestedSubject(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to impersonate the specified user
+            </summary>
+            <param name="subject">The subject of the user to impersonate</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder.WithRequestedIssuer(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to exchange an access token with a new one from the specified issuer
+            </summary>
+            <param name="issuer">The issuer to exchnage the token with</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/></returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOperationStateBuilder">
             <summary>
             Defines the fundamentals of a service used to build <see cref="T:ServerlessWorkflow.Sdk.Models.OperationStateDefinition"/>s
@@ -3393,6 +3778,51 @@
             </summary>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.ImportAuthenticationDefinitionsFrom(System.Uri)">
+            <summary>
+            Adds the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s defined in the specified file
+            </summary>
+            <param name="uri">The <see cref="T:System.Uri"/> of the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.UseAuthenticationDefinitions(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition[])">
+            <summary>
+            Uses the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s
+            </summary>
+            <param name="authenticationDefinitions">An array that contains the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddAuthenticationDefinition(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition)">
+            <summary>
+            Adds the specified <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="authenticationDefinition">The <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to add</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddBasicAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder})">
+            <summary>
+            Adds a new <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.Basic"/> to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to add</param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the service used to build <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to add</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddBearerAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IBearerAuthenticationBuilder})">
+            <summary>
+            Adds a new <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.Bearer"/> to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to add</param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the service used to build <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to add</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddOpenIDConnectAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder})">
+            <summary>
+            Adds a new <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.OIDC"/> to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to add</param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> used to configure the service used to build <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to add</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.ImportConstantsFrom(System.Uri)">
             <summary>
             Adds the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> constants defined in the specified file
@@ -3526,6 +3956,51 @@
             Builds the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
             </summary>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.#ctor">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.Properties">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.OpenIDConnectAuthenticationProperties"/> of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to build
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.UseAudiences(System.String[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.UseGranType(ServerlessWorkflow.Sdk.OpenIDConnectGrantType)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.UseScopes(System.String[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.WithClientId(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.WithClientSecret(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.WithPassword(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.WithRequestedIssuer(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.WithRequestedSubject(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.WithSubjectToken(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OpenIDConnectAuthenticationBuilder.WithUserName(System.String)">
+            <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.MetadataContainerBuilder`1">
             <summary>
@@ -3991,6 +4466,24 @@
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddRetryStrategy(System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IRetryStrategyBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.ImportAuthenticationDefinitionsFrom(System.Uri)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.UseAuthenticationDefinitions(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition[])">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddAuthenticationDefinition(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddBasicAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddBearerAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IBearerAuthenticationBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddOpenIDConnectAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IOpenIDConnectAuthenticationBuilder})">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.StartsWith(ServerlessWorkflow.Sdk.Models.StateDefinition)">

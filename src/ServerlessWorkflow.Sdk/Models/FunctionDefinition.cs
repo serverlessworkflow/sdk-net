@@ -18,6 +18,7 @@ using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents an object used to define a reusable function
     /// </summary>
@@ -43,6 +44,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Gets/sets the type of the defined function. Defaults to '<see cref="FunctionType.Rest"/>'
         /// </summary>
         public virtual FunctionType Type { get; set; } = FunctionType.Rest;
+
+        /// <summary>
+        /// Gets/sets the reference to the <see cref="AuthenticationDefinition"/> to use when invoking the function. Ignored when <see cref="Type"/> has been set to <see cref="FunctionType.Expression"/>
+        /// </summary>
+        public virtual string AuthRef { get; set; }
 
         /// <summary>
         /// Gets/sets the function's metadata
