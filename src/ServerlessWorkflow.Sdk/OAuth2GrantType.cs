@@ -19,17 +19,17 @@ using System.Runtime.Serialization;
 namespace ServerlessWorkflow.Sdk
 {
     /// <summary>
-    /// Enumerates all supported <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4">OIDC grant types</see>
+    /// Enumerates all <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4">OAuth 2 grant types</see> supported for workflow runtime token generation
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.StringEnumConverterFactory))]
-    public enum OpenIDConnectGrantType
+    public enum OAuth2GrantType
     {
         /// <summary>
         /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.3">resource-owner password credentials grant type</see>
         /// </summary>
-        [EnumMember(Value = "resourceOwner")]
-        ResourceOwner,
+        [EnumMember(Value = "password")]
+        Password,
         /// <summary>
         /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">client credentials grant type</see>
         /// </summary>

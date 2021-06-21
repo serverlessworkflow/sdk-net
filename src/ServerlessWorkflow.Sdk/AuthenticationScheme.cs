@@ -37,10 +37,10 @@ namespace ServerlessWorkflow.Sdk
         [EnumMember(Value = "bearer")]
         Bearer,
         /// <summary>
-        /// Indicates the OpenID Connect (OIDC) authentication scheme
+        /// Indicates the OAuth 2 authentication scheme
         /// </summary>
-        [EnumMember(Value = "oidc")]
-        OIDC
+        [EnumMember(Value = "oauth")]
+        OAuth2
     }
 
 }

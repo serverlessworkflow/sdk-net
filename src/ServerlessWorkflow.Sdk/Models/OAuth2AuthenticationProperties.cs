@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-
+using System;
 using System.Collections.Generic;
 using YamlDotNet.Serialization;
 
@@ -22,22 +22,30 @@ namespace ServerlessWorkflow.Sdk.Models
 {
 
     /// <summary>
-    /// Represents an object used to configure an 'OIDC' authentication scheme
+    /// Represents an object used to configure an 'OAuth2' authentication scheme
     /// </summary>
-    public class OpenIDConnectAuthenticationProperties
+    public class OAuth2AuthenticationProperties
         : AuthenticationProperties
     {
 
         /// <summary>
-        /// Gets/sets the OIDC grant type to use
+        /// Gets/sets the OAuth2 grant type to use
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = "grantType")]
         [System.Text.Json.Serialization.JsonPropertyName("grantType")]
         [YamlMember(Alias = "grantType")]
-        public virtual OpenIDConnectGrantType GrantType { get; set; }
+        public virtual OAuth2GrantType GrantType { get; set; }
 
         /// <summary>
-        /// Gets/sets the id of the OIDC client to use
+        /// Gets/sets the uri of the OAuth2 authority to use to generate an access token
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = "authority")]
+        [System.Text.Json.Serialization.JsonPropertyName("authority")]
+        [YamlMember(Alias = "authority")]
+        public virtual Uri Authority { get; set; }
+
+        /// <summary>
+        /// Gets/sets the id of the OAuth2 client to use
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = "clientId")]
         [System.Text.Json.Serialization.JsonPropertyName("clientId")]
@@ -45,7 +53,7 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual string ClientId { get; set; }
 
         /// <summary>
-        /// Gets/sets the secret of the non-public OIDC client to use. Required when <see cref="GrantType"/> has been set to <see cref="OpenIDConnectGrantType.TokenExchange"/>
+        /// Gets/sets the secret of the non-public OAuth2 client to use. Required when <see cref="GrantType"/> has been set to <see cref="OAuth2GrantType.TokenExchange"/>
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = "clientSecret")]
         [System.Text.Json.Serialization.JsonPropertyName("clientSecret")]

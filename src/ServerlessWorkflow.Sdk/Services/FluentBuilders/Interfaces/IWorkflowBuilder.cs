@@ -143,12 +143,12 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IWorkflowBuilder AddBearerAuthentication(string name, Action<IBearerAuthenticationBuilder> configurationAction);
 
         /// <summary>
-        /// Adds a new <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.OIDC"/> to the <see cref="WorkflowDefinition"/>
+        /// Adds a new <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.OAuth2"/> to the <see cref="WorkflowDefinition"/>
         /// </summary>
         /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to add</param>
         /// <param name="configurationAction">An <see cref="Action{T}"/> used to configure the service used to build <see cref="AuthenticationDefinition"/> to add</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
-        IWorkflowBuilder AddOpenIDConnectAuthentication(string name, Action<IOpenIDConnectAuthenticationBuilder> configurationAction);
+        IWorkflowBuilder AddOAuth2Authentication(string name, Action<IOAuth2AuthenticationBuilder> configurationAction);
 
         /// <summary>
         /// Adds the <see cref="WorkflowDefinition"/> constants defined in the specified file

@@ -486,12 +486,81 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s secrets
+        /// </summary>
+        [Newtonsoft.Json.JsonProperty(PropertyName = "secrets")]
+        [System.Text.Json.Serialization.JsonPropertyName("secrets")]
+        [YamlMember(Alias = "secrets")]
+        protected virtual JToken SecretsToken { get; set; }
+
+        private List<string> _Secrets;
+        /// <summary>
+        /// Gets/sets an <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s secrets
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual List<string> Secrets
+        {
+            get
+            {
+                if (this._Secrets == null
+                    && this.SecretsToken != null)
+                {
+                    if (this.SecretsToken.Type == JTokenType.String)
+                        this._Secrets = new ExternalDefinitionCollection<string>(this.SecretsToken.ToObject<Uri>());
+                    else
+                        this._Secrets = this.SecretsToken.ToObject<List<string>>();
+                }
+                if (this._Secrets == null)
+                    this._Secrets = new List<string>();
+                return this._Secrets;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this._Secrets = null;
+                    this.SecretsToken = null;
+                    return;
+                }
+                this._Secrets = value;
+                this.SecretsToken = JToken.FromObject(value);
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s secrets
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual Uri SecretshUri
+
+        {
+            get
+            {
+                if (this.Secrets == null
+                    || this._Secrets is not ExternalDefinitionCollection<string> secrets)
+                    return null;
+                return secrets.DefinitionUri;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+                this._Secrets = new ExternalDefinitionCollection<string>(value);
+                this.AuthsToken = JToken.FromObject(value);
+            }
+        }
+
+        /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/>s
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "auth")]
-        [System.Text.Json.Serialization.JsonPropertyName("auth")]
-        [YamlMember(Alias = "auth")]
-        protected virtual JToken AuthToken { get; set; }
+        [Newtonsoft.Json.JsonProperty(PropertyName = "auths")]
+        [System.Text.Json.Serialization.JsonPropertyName("auths")]
+        [YamlMember(Alias = "auths")]
+        protected virtual JToken AuthsToken { get; set; }
 
         private List<AuthenticationDefinition> _Auth;
         /// <summary>
@@ -500,17 +569,17 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
-        public virtual List<AuthenticationDefinition> Auth
+        public virtual List<AuthenticationDefinition> Auths
         {
             get
             {
                 if (this._Auth == null
-                    && this.AuthToken != null)
+                    && this.AuthsToken != null)
                 {
-                    if (this.AuthToken.Type == JTokenType.String)
-                        this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(this.AuthToken.ToObject<Uri>());
+                    if (this.AuthsToken.Type == JTokenType.String)
+                        this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(this.AuthsToken.ToObject<Uri>());
                     else
-                        this._Auth = this.AuthToken.ToObject<List<AuthenticationDefinition>>();
+                        this._Auth = this.AuthsToken.ToObject<List<AuthenticationDefinition>>();
                 }
                 if (this._Auth == null)
                     this._Auth = new List<AuthenticationDefinition>();
@@ -521,11 +590,11 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                 {
                     this._Auth = null;
-                    this.AuthToken = null;
+                    this.AuthsToken = null;
                     return;
                 }
                 this._Auth = value;
-                this.AuthToken = JToken.FromObject(value);
+                this.AuthsToken = JToken.FromObject(value);
             }
         }
 
@@ -535,12 +604,12 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
-        public virtual Uri AuthUri
+        public virtual Uri AuthsUri
 
         {
             get
             {
-                if (this.Auth == null
+                if (this.Auths == null
                     || this._Auth is not ExternalDefinitionCollection<AuthenticationDefinition> auth)
                     return null;
                 return auth.DefinitionUri;
@@ -550,14 +619,9 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(value);
-                this.AuthToken = JToken.FromObject(value);
+                this.AuthsToken = JToken.FromObject(value);
             }
         }
-
-        /// <summary>
-        /// Gets/sets a <see cref="List{T}"/> containing the secrets the <see cref="WorkflowDefinition"/> has access to
-        /// </summary>
-        public virtual List<string> Secrets { get; set; }
 
         /// <summary>
         /// Gets the <see cref="StateDefinition"/> with the specified name

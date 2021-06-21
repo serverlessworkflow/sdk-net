@@ -134,6 +134,14 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                 && workflow.Constants is ExternalDefinition externalConstantsDefinition
                 && !externalConstantsDefinition.Loaded)
                 workflow.Constants = (JObject)await this.LoadExternalDefinitionAsync(externalConstantsDefinition.DefinitionUri, cancellationToken);
+            if (workflow.Secrets != null
+                && workflow.Secrets is ExternalDefinitionCollection<string> externalSecretsDefinition
+                && !externalSecretsDefinition.Loaded)
+                workflow.Secrets = await this.LoadExternalDefinitionCollectionAsync<string>(externalSecretsDefinition.DefinitionUri, cancellationToken);
+            if (workflow.Auths != null
+                && workflow.Auths is ExternalDefinitionCollection<AuthenticationDefinition> externalAuthDefinition
+                && !externalAuthDefinition.Loaded)
+                workflow.Auths = await this.LoadExternalDefinitionCollectionAsync<AuthenticationDefinition>(externalAuthDefinition.DefinitionUri, cancellationToken);
             return workflow;
         }
 
@@ -151,8 +159,8 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
-                if (filePath.StartsWith("\\\\"))
-                    filePath = filePath[2..];
+                if (filePath.StartsWith('/'))
+                    filePath = filePath[1..];
                 content = File.ReadAllText(filePath);
             }
             else
@@ -181,8 +189,8 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
-                if (filePath.StartsWith("\\\\"))
-                    filePath = filePath[2..];
+                if (filePath.StartsWith('/'))
+                    filePath = filePath[1..];
                 content = File.ReadAllText(filePath);
             }
             else
@@ -213,8 +221,8 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
-                if (filePath.StartsWith("\\\\"))
-                    filePath = filePath[2..];
+                if (filePath.StartsWith("/"))
+                    filePath = filePath[1..];
                 content = File.ReadAllText(filePath);
             }
             else

@@ -324,7 +324,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IWorkflowBuilder ImportAuthenticationDefinitionsFrom(Uri uri)
         {
-            this.Workflow.AuthUri = uri ?? throw new ArgumentNullException(nameof(uri));
+            this.Workflow.AuthsUri = uri ?? throw new ArgumentNullException(nameof(uri));
             return this;
         }
 
@@ -333,7 +333,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (authenticationDefinitions == null)
                 throw new ArgumentNullException(nameof(authenticationDefinitions));
-            this.Workflow.Auth = authenticationDefinitions.ToList();
+            this.Workflow.Auths = authenticationDefinitions.ToList();
             return this;
         }
 
@@ -342,9 +342,9 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (authenticationDefinition == null)
                 throw new ArgumentNullException(nameof(authenticationDefinition));
-            if (this.Workflow.Auth == null)
-                this.Workflow.Auth = new();
-            this.Workflow.Auth.Add(authenticationDefinition);
+            if (this.Workflow.Auths == null)
+                this.Workflow.Auths = new();
+            this.Workflow.Auths.Add(authenticationDefinition);
             return this;
         }
 
@@ -367,9 +367,9 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IWorkflowBuilder AddOpenIDConnectAuthentication(string name, Action<IOpenIDConnectAuthenticationBuilder> configurationAction)
+        public virtual IWorkflowBuilder AddOAuth2Authentication(string name, Action<IOAuth2AuthenticationBuilder> configurationAction)
         {
-            IOpenIDConnectAuthenticationBuilder builder = new OpenIDConnectAuthenticationBuilder();
+            IOAuth2AuthenticationBuilder builder = new OAuth2AuthenticationBuilder();
             builder.WithName(name);
             configurationAction(builder);
             return AddAuthenticationDefinition(builder.Build());

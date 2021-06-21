@@ -15,11 +15,11 @@
  *
  */
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 using ServerlessWorkflow.Sdk.Services.IO;
 using ServerlessWorkflow.Sdk.Services.Serialization;
@@ -156,7 +156,7 @@ namespace ServerlessWorkflow.Sdk
             services.AddSingleton<IWorkflowWriter, WorkflowWriter>();
             services.AddSingleton<IWorkflowSchemaValidator, WorkflowSchemaValidator>();
             services.AddTransient<IWorkflowBuilder, WorkflowBuilder>();
-            services.AddTransient<IValidator<WorkflowDefinition>, WorkflowDefinitionValidator>();
+            services.AddValidatorsFromAssemblyContaining<WorkflowDefinitionValidator>();
             return services;
         }
 

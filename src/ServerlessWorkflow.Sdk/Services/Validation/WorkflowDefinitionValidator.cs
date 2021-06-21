@@ -57,16 +57,32 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .WithMessage((workflow, start) => $"Failed to find the state with name '{start.StateName}' specified by the workflow's start definition");
             this.RuleFor(w => w.Events)
                 .Must(events => events.Select(s => s.Name).Distinct().Count() == events.Count)
-                    .When(w => w.Functions != null)
-                    .WithMessage("Duplicate EventDefinition name(s) found");
+                .When(w => w.Functions != null)
+                .WithMessage("Duplicate EventDefinition name(s) found");
+            this.RuleFor(w => w.Events)
+                .SetValidator(new CollectionPropertyValidator<EventDefinition>(this.ServiceProvider))
+                .When(w => w.Events != null);
             this.RuleFor(w => w.Functions)
                 .Must(functions => functions.Select(s => s.Name).Distinct().Count() == functions.Count)
-                    .When(w => w.Functions != null)
-                    .WithMessage("Duplicate FunctionDefinition name(s) found");
+                .When(w => w.Functions != null)
+                .WithMessage("Duplicate FunctionDefinition name(s) found");
+            this.RuleFor(w => w.Functions)
+                .SetValidator(new CollectionPropertyValidator<FunctionDefinition>(this.ServiceProvider))
+                .When(w => w.Functions != null);
             this.RuleFor(w => w.Retries)
                 .Must(retries => retries.Select(s => s.Name).Distinct().Count() == retries.Count)
-                    .When(w => w.Retries != null)
-                    .WithMessage("Duplicate RetryPolicyDefinition name(s) found");
+                .When(w => w.Retries != null)
+                .WithMessage("Duplicate RetryPolicyDefinition name(s) found");
+            this.RuleFor(w => w.Retries)
+                .SetValidator(new CollectionPropertyValidator<RetryStrategyDefinition>(this.ServiceProvider))
+                .When(w => w.Functions != null);
+            this.RuleFor(w => w.Auths)
+                .Must(auths => auths.Select(s => s.Name).Distinct().Count() == auths.Count)
+                .When(w => w.Auths != null)
+                .WithMessage("Duplicate AuthenticationDefinition name(s) found");
+            this.RuleFor(w => w.Auths)
+                .SetValidator(new CollectionPropertyValidator<AuthenticationDefinition>(this.ServiceProvider))
+                .When(w => w.Auths != null);
             this.RuleFor(w => w.States)
                 .NotEmpty();
             this.RuleFor(w => w.States)
@@ -74,7 +90,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .When(w => w.States != null)
                 .WithMessage("Duplicate StateDefinition name(s) found");
             this.RuleFor(w => w.States)
-                .SetValidator(new WorkflowStatesValidator(this.ServiceProvider))
+                .SetValidator(new WorkflowStatesPropertyValidator(this.ServiceProvider))
                 .When(w => w.States != null);
         }
 

@@ -21,34 +21,34 @@ using System.Linq;
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
     /// <summary>
-    /// Represents the default implementation of the <see cref="IOpenIDConnectAuthenticationBuilder"/>
+    /// Represents the default implementation of the <see cref="IOAuth2AuthenticationBuilder"/>
     /// </summary>
-    public class OpenIDConnectAuthenticationBuilder
-        : AuthenticationDefinitionBuilder, IOpenIDConnectAuthenticationBuilder
+    public class OAuth2AuthenticationBuilder
+        : AuthenticationDefinitionBuilder, IOAuth2AuthenticationBuilder
     {
 
         /// <summary>
-        /// Initializes a new <see cref="OpenIDConnectAuthenticationBuilder"/>
+        /// Initializes a new <see cref="OAuth2AuthenticationBuilder"/>
         /// </summary>
-        public OpenIDConnectAuthenticationBuilder()
-            : base(new AuthenticationDefinition() { Properties = new OpenIDConnectAuthenticationProperties() })
+        public OAuth2AuthenticationBuilder()
+            : base(new AuthenticationDefinition() { Properties = new OAuth2AuthenticationProperties() })
         {
 
         }
 
         /// <summary>
-        /// Gets the <see cref="OpenIDConnectAuthenticationProperties"/> of the <see cref="AuthenticationDefinition"/> to build
+        /// Gets the <see cref="OAuth2AuthenticationProperties"/> of the <see cref="AuthenticationDefinition"/> to build
         /// </summary>
-        protected OpenIDConnectAuthenticationProperties Properties
+        protected OAuth2AuthenticationProperties Properties
         {
             get
             {
-                return (OpenIDConnectAuthenticationProperties)this.AuthenticationDefinition.Properties;
+                return (OAuth2AuthenticationProperties)this.AuthenticationDefinition.Properties;
             }
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder UseAudiences(params string[] audiences)
+        public virtual IOAuth2AuthenticationBuilder UseAudiences(params string[] audiences)
         {
             if (audiences == null)
                 throw new ArgumentNullException(nameof(audiences));
@@ -57,14 +57,14 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder UseGranType(OpenIDConnectGrantType grantType)
+        public virtual IOAuth2AuthenticationBuilder UseGranType(OAuth2GrantType grantType)
         {
             this.Properties.GrantType = grantType;
             return this;
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder UseScopes(params string[] scopes)
+        public virtual IOAuth2AuthenticationBuilder UseScopes(params string[] scopes)
         {
             if (scopes == null)
                 throw new ArgumentNullException(nameof(scopes));
@@ -73,7 +73,16 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder WithClientId(string clientId)
+        public virtual IOAuth2AuthenticationBuilder WithAuthority(Uri authority)
+        {
+            if (authority == null)
+                throw new ArgumentNullException(nameof(authority));
+            this.Properties.Authority = authority;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual IOAuth2AuthenticationBuilder WithClientId(string clientId)
         {
             if (string.IsNullOrWhiteSpace(clientId))
                 throw new ArgumentNullException(nameof(clientId));
@@ -82,7 +91,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder WithClientSecret(string clientSecret)
+        public virtual IOAuth2AuthenticationBuilder WithClientSecret(string clientSecret)
         {
             if (string.IsNullOrWhiteSpace(clientSecret))
                 throw new ArgumentNullException(nameof(clientSecret));
@@ -91,7 +100,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder WithPassword(string password)
+        public virtual IOAuth2AuthenticationBuilder WithPassword(string password)
         {
             if (string.IsNullOrWhiteSpace(password))
                 throw new ArgumentNullException(nameof(password));
@@ -100,7 +109,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder WithRequestedIssuer(string issuer)
+        public virtual IOAuth2AuthenticationBuilder WithRequestedIssuer(string issuer)
         {
             if (string.IsNullOrWhiteSpace(issuer))
                 throw new ArgumentNullException(nameof(issuer));
@@ -109,7 +118,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder WithRequestedSubject(string subject)
+        public virtual IOAuth2AuthenticationBuilder WithRequestedSubject(string subject)
         {
             if (string.IsNullOrWhiteSpace(subject))
                 throw new ArgumentNullException(nameof(subject));
@@ -118,7 +127,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder WithSubjectToken(string token)
+        public virtual IOAuth2AuthenticationBuilder WithSubjectToken(string token)
         {
             if (string.IsNullOrWhiteSpace(token))
                 throw new ArgumentNullException(nameof(token));
@@ -127,7 +136,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOpenIDConnectAuthenticationBuilder WithUserName(string username)
+        public virtual IOAuth2AuthenticationBuilder WithUserName(string username)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentNullException(nameof(username));

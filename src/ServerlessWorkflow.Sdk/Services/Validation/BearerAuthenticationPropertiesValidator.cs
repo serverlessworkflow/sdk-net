@@ -19,25 +19,20 @@ using ServerlessWorkflow.Sdk.Models;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
-
     /// <summary>
-    /// Represents the service used to validate <see cref="FunctionDefinition"/>s
+    /// Represents the service used to validate <see cref="BearerAuthenticationProperties"/>s
     /// </summary>
-    public class FunctionDefinitionValidator
-        : AbstractValidator<FunctionDefinition>
+    public class BearerAuthenticationPropertiesValidator
+        : AbstractValidator<BearerAuthenticationProperties>
     {
 
         /// <summary>
-        /// Initializes a new <see cref="FunctionDefinitionValidator"/>
+        /// Initializes a new <see cref="BearerAuthenticationPropertiesValidator"/>
         /// </summary>
-        public FunctionDefinitionValidator()
+        public BearerAuthenticationPropertiesValidator()
         {
-            this.RuleFor(f => f.Name)
-                .NotEmpty()
-                .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.Name)}");
-            this.RuleFor(f => f.Operation)
-                .NotEmpty()
-                .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.Operation)}");
+            this.RuleFor(p => p.Token)
+                .NotEmpty();
         }
 
     }

@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-
 using Newtonsoft.Json.Linq;
 using System;
 using YamlDotNet.Serialization;
@@ -73,7 +72,7 @@ namespace ServerlessWorkflow.Sdk.Models
                         {
                             AuthenticationScheme.Basic => this.PropertiesToken.ToObject<BasicAuthenticationProperties>(),
                             AuthenticationScheme.Bearer => this.PropertiesToken.ToObject<BearerAuthenticationProperties>(),
-                            AuthenticationScheme.OIDC => this.PropertiesToken.ToObject<OpenIDConnectAuthenticationProperties>(),
+                            AuthenticationScheme.OAuth2 => this.PropertiesToken.ToObject<OAuth2AuthenticationProperties>(),
                             _ => throw new NotSupportedException($"The specified authentication scheme '{EnumHelper.Stringify(this.Scheme)}' is not supported"),
                         };
                 }
@@ -91,8 +90,8 @@ namespace ServerlessWorkflow.Sdk.Models
                     case BearerAuthenticationProperties:
                         this.Scheme = AuthenticationScheme.Bearer;
                         break;
-                    case OpenIDConnectAuthenticationProperties:
-                        this.Scheme = AuthenticationScheme.OIDC;
+                    case OAuth2AuthenticationProperties:
+                        this.Scheme = AuthenticationScheme.OAuth2;
                         break;
                     case SecretBasedAuthenticationProperties:
                         break;
@@ -102,6 +101,38 @@ namespace ServerlessWorkflow.Sdk.Models
                 this._Properties = value;
                 this.PropertiesToken = JToken.FromObject(value);
             }
+        }
+
+        /// <summary>
+        /// Gets/sets the reference to the secret that defines the <see cref="AuthenticationDefinition"/>'s properties
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        public virtual string SecretRef
+        {
+            get
+            {
+                if (this.Properties is SecretBasedAuthenticationProperties secret)
+                    return secret.Secret;
+                return null;
+            }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(value));
+                if (this.Properties is SecretBasedAuthenticationProperties secret)
+                    secret.Secret = value;
+                else
+                    this._Properties = new SecretBasedAuthenticationProperties(value);
+                this.PropertiesToken = JToken.FromObject(value);
+            }
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return this.Name;
         }
 
     }
