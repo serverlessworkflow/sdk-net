@@ -324,7 +324,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IWorkflowBuilder ImportAuthenticationDefinitionsFrom(Uri uri)
         {
-            this.Workflow.AuthsUri = uri ?? throw new ArgumentNullException(nameof(uri));
+            this.Workflow.AuthUri = uri ?? throw new ArgumentNullException(nameof(uri));
             return this;
         }
 
@@ -333,7 +333,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (authenticationDefinitions == null)
                 throw new ArgumentNullException(nameof(authenticationDefinitions));
-            this.Workflow.Auths = authenticationDefinitions.ToList();
+            this.Workflow.Auth = authenticationDefinitions.ToList();
             return this;
         }
 
@@ -342,9 +342,9 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (authenticationDefinition == null)
                 throw new ArgumentNullException(nameof(authenticationDefinition));
-            if (this.Workflow.Auths == null)
-                this.Workflow.Auths = new();
-            this.Workflow.Auths.Add(authenticationDefinition);
+            if (this.Workflow.Auth == null)
+                this.Workflow.Auth = new();
+            this.Workflow.Auth.Add(authenticationDefinition);
             return this;
         }
 

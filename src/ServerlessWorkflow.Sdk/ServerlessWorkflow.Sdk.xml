@@ -1459,17 +1459,17 @@
             Gets/sets the <see cref="T:System.Uri"/> to the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s secrets
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AuthsToken">
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AuthToken">
             <summary>
             Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Auths">
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Auth">
             <summary>
             Gets/sets an <see cref="T:Newtonsoft.Json.Linq.JObject"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AuthsUri">
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AuthUri">
             <summary>
             Gets/sets the <see cref="T:System.Uri"/> to the file that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s
             </summary>
@@ -1762,6 +1762,11 @@
         <member name="F:ServerlessWorkflow.Sdk.FunctionType.GraphQL">
             <summary>
             Indicates a GraphQL function
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.FunctionType.OData">
+            <summary>
+            Indicates an OData function
             </summary>
         </member>
         <member name="F:ServerlessWorkflow.Sdk.FunctionType.Expression">

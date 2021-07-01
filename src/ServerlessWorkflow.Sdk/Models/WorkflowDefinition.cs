@@ -550,17 +550,17 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Secrets = new ExternalDefinitionCollection<string>(value);
-                this.AuthsToken = JToken.FromObject(value);
+                this.AuthToken = JToken.FromObject(value);
             }
         }
 
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/>s
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "auths")]
-        [System.Text.Json.Serialization.JsonPropertyName("auths")]
-        [YamlMember(Alias = "auths")]
-        protected virtual JToken AuthsToken { get; set; }
+        [Newtonsoft.Json.JsonProperty(PropertyName = "auth")]
+        [System.Text.Json.Serialization.JsonPropertyName("auth")]
+        [YamlMember(Alias = "auth")]
+        protected virtual JToken AuthToken { get; set; }
 
         private List<AuthenticationDefinition> _Auth;
         /// <summary>
@@ -569,17 +569,17 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
-        public virtual List<AuthenticationDefinition> Auths
+        public virtual List<AuthenticationDefinition> Auth
         {
             get
             {
                 if (this._Auth == null
-                    && this.AuthsToken != null)
+                    && this.AuthToken != null)
                 {
-                    if (this.AuthsToken.Type == JTokenType.String)
-                        this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(this.AuthsToken.ToObject<Uri>());
+                    if (this.AuthToken.Type == JTokenType.String)
+                        this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(this.AuthToken.ToObject<Uri>());
                     else
-                        this._Auth = this.AuthsToken.ToObject<List<AuthenticationDefinition>>();
+                        this._Auth = this.AuthToken.ToObject<List<AuthenticationDefinition>>();
                 }
                 if (this._Auth == null)
                     this._Auth = new List<AuthenticationDefinition>();
@@ -590,11 +590,11 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                 {
                     this._Auth = null;
-                    this.AuthsToken = null;
+                    this.AuthToken = null;
                     return;
                 }
                 this._Auth = value;
-                this.AuthsToken = JToken.FromObject(value);
+                this.AuthToken = JToken.FromObject(value);
             }
         }
 
@@ -604,12 +604,12 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
-        public virtual Uri AuthsUri
+        public virtual Uri AuthUri
 
         {
             get
             {
-                if (this.Auths == null
+                if (this.Auth == null
                     || this._Auth is not ExternalDefinitionCollection<AuthenticationDefinition> auth)
                     return null;
                 return auth.DefinitionUri;
@@ -619,7 +619,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(value);
-                this.AuthsToken = JToken.FromObject(value);
+                this.AuthToken = JToken.FromObject(value);
             }
         }
 

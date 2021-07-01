@@ -138,10 +138,10 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                 && workflow.Secrets is ExternalDefinitionCollection<string> externalSecretsDefinition
                 && !externalSecretsDefinition.Loaded)
                 workflow.Secrets = await this.LoadExternalDefinitionCollectionAsync<string>(externalSecretsDefinition.DefinitionUri, cancellationToken);
-            if (workflow.Auths != null
-                && workflow.Auths is ExternalDefinitionCollection<AuthenticationDefinition> externalAuthDefinition
+            if (workflow.Auth != null
+                && workflow.Auth is ExternalDefinitionCollection<AuthenticationDefinition> externalAuthDefinition
                 && !externalAuthDefinition.Loaded)
-                workflow.Auths = await this.LoadExternalDefinitionCollectionAsync<AuthenticationDefinition>(externalAuthDefinition.DefinitionUri, cancellationToken);
+                workflow.Auth = await this.LoadExternalDefinitionCollectionAsync<AuthenticationDefinition>(externalAuthDefinition.DefinitionUri, cancellationToken);
             return workflow;
         }
 

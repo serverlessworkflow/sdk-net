@@ -7,7 +7,7 @@ events: file:///resources/events/petstore.yaml
 functions: file:///resources/functions/petstore.yaml
 retries: file:///resources/retries/default.yaml
 secrets: file:///resources/secrets/default.yaml
-auths: file:///resources/auths/default.yaml
+auth: file:///resources/auths/default.yaml
 states:
   - name: CreatePet
     type: operation
