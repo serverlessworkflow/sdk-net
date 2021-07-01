@@ -288,7 +288,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (functionSetup == null)
                 throw new ArgumentNullException(nameof(functionSetup));
-            IFunctionBuilder builder = new FunctionBuilder();
+            IFunctionBuilder builder = new FunctionBuilder(this);
             functionSetup(builder);
             return this.AddFunction(builder.Build());
         }
@@ -338,7 +338,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IWorkflowBuilder AddAuthenticationDefinition(AuthenticationDefinition authenticationDefinition)
+        public virtual IWorkflowBuilder AddAuthentication(AuthenticationDefinition authenticationDefinition)
         {
             if (authenticationDefinition == null)
                 throw new ArgumentNullException(nameof(authenticationDefinition));
@@ -354,7 +354,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             IBasicAuthenticationBuilder builder = new BasicAuthenticationBuilder();
             builder.WithName(name);
             configurationAction(builder);
-            return AddAuthenticationDefinition(builder.Build());
+            return AddAuthentication(builder.Build());
         }
 
         /// <inheritdoc/>
@@ -363,7 +363,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             IBearerAuthenticationBuilder builder = new BearerAuthenticationBuilder();
             builder.WithName(name);
             configurationAction(builder);
-            return AddAuthenticationDefinition(builder.Build());
+            return AddAuthentication(builder.Build());
         }
 
         /// <inheritdoc/>
@@ -372,7 +372,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             IOAuth2AuthenticationBuilder builder = new OAuth2AuthenticationBuilder();
             builder.WithName(name);
             configurationAction(builder);
-            return AddAuthenticationDefinition(builder.Build());
+            return AddAuthentication(builder.Build());
         }
 
         /// <inheritdoc/>

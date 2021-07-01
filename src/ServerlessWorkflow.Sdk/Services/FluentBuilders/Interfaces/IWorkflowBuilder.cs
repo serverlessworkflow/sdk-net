@@ -124,7 +124,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// </summary>
         /// <param name="authenticationDefinition">The <see cref="AuthenticationDefinition"/> to add</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
-        IWorkflowBuilder AddAuthenticationDefinition(AuthenticationDefinition authenticationDefinition);
+        IWorkflowBuilder AddAuthentication(AuthenticationDefinition authenticationDefinition);
 
         /// <summary>
         /// Adds a new <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.Basic"/> to the <see cref="WorkflowDefinition"/>

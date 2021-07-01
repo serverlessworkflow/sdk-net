@@ -45,14 +45,52 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// </summary>
         /// <param name="operation">The <see cref="FunctionDefinition"/>'s operation expression</param>
         /// <returns>The configured <see cref="IFunctionBuilder"/></returns>
-        IFunctionBuilder SetOperationExpression(string operation);
+        IFunctionBuilder ForOperation(string operation);
 
         /// <summary>
         /// Sets the <see cref="FunctionDefinition"/>'s operation <see cref="Uri"/>. Sets the <see cref="FunctionDefinition"/>'s <see cref="FunctionDefinition.Type"/> to <see cref="FunctionType.Rest"/>
         /// </summary>
         /// <param name="operation">The <see cref="FunctionDefinition"/>'s operation <see cref="Uri"/></param>
         /// <returns>The configured <see cref="IFunctionBuilder"/></returns>
-        IFunctionBuilder SetOperationUri(Uri operation);
+        IFunctionBuilder ForOperation(Uri operation);
+
+        /// <summary>
+        /// Configures the <see cref="FunctionDefinition"/> to use the specified <see cref="AuthenticationDefinition"/>
+        /// </summary>
+        /// <param name="authentication">The name of the <see cref="AuthenticationDefinition"/> to use</param>
+        /// <returns>The configured <see cref="IFunctionBuilder"/></returns>
+        IFunctionBuilder UseAuthentication(string authentication);
+
+        /// <summary>
+        /// Configures the <see cref="FunctionDefinition"/> to use the specified <see cref="AuthenticationDefinition"/>
+        /// </summary>
+        /// <param name="authenticationDefinition">The <see cref="AuthenticationDefinition"/> to use</param>
+        /// <returns>The configured <see cref="IFunctionBuilder"/></returns>
+        IFunctionBuilder UseAuthentication(AuthenticationDefinition authenticationDefinition);
+
+        /// <summary>
+        /// Configures the <see cref="FunctionDefinition"/> to use an <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.Basic"/>
+        /// </summary>
+        /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to use</param>
+        /// <param name="configurationAction">An <see cref="Action{T}"/> to setup the <see cref="AuthenticationDefinition"/> to use</param>
+        /// <returns>The configured <see cref="IFunctionBuilder"/></returns>
+        IFunctionBuilder UseBasicAuthentication(string name, Action<IBasicAuthenticationBuilder> configurationAction);
+
+        /// <summary>
+        /// Configures the <see cref="FunctionDefinition"/> to use an <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.Bearer"/>
+        /// </summary>
+        /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to use</param>
+        /// <param name="configurationAction">An <see cref="Action{T}"/> to setup the <see cref="AuthenticationDefinition"/> to use</param>
+        /// <returns>The configured <see cref="IFunctionBuilder"/></returns>
+        IFunctionBuilder UseBearerAuthentication(string name, Action<IBearerAuthenticationBuilder> configurationAction);
+
+        /// <summary>
+        /// Configures the <see cref="FunctionDefinition"/> to use an <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.OAuth2"/>
+        /// </summary>
+        /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to use</param>
+        /// <param name="configurationAction">An <see cref="Action{T}"/> to setup the <see cref="AuthenticationDefinition"/> to use</param>
+        /// <returns>The configured <see cref="IFunctionBuilder"/></returns>
+        IFunctionBuilder UseOAuth2Authentication(string name, Action<IOAuth2AuthenticationBuilder> configurationAction);
 
         /// <summary>
         /// Builds the <see cref="FunctionDefinition"/>

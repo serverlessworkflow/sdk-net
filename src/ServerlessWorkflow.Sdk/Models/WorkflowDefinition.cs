@@ -731,6 +731,32 @@ namespace ServerlessWorkflow.Sdk.Models
             return function != null;
         }
 
+        /// <summary>
+        /// Gets the <see cref="AuthenticationDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to get</param>
+        /// <returns>The <see cref="AuthenticationDefinition"/> with the specified name, if any</returns>
+        public virtual AuthenticationDefinition GetAuthentication(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            return this.Auth?.FirstOrDefault(e => e.Name == name);
+        }
+
+        /// <summary>
+        /// Attempts to retrieve the <see cref="AuthenticationDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to retrieve</param>
+        /// <param name="authentication">The <see cref="AuthenticationDefinition"/> with the specified name, if any</param>
+        /// <returns>A boolean indicating whether or not a <see cref="AuthenticationDefinition"/> with the specified name could be found</returns>
+        public virtual bool TryGetAuthentication(string name, out AuthenticationDefinition authentication)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            authentication = this.GetAuthentication(name);
+            return authentication != null;
+        }
+
         /// <inheritdoc/>
         public override string ToString()
         {
