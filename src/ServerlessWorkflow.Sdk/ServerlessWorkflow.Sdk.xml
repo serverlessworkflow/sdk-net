@@ -1536,6 +1536,21 @@
             <param name="function">The <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> with the specified name, if any</param>
             <returns>A boolean indicating whether or not a <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> with the specified name could be found</returns>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.GetAuthentication(System.String)">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to get</param>
+            <returns>The <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with the specified name, if any</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.TryGetAuthentication(System.String,ServerlessWorkflow.Sdk.Models.AuthenticationDefinition@)">
+            <summary>
+            Attempts to retrieve the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to retrieve</param>
+            <param name="authentication">The <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with the specified name, if any</param>
+            <returns>A boolean indicating whether or not a <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with the specified name could be found</returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ToString">
             <inheritdoc/>
         </member>
@@ -2393,6 +2408,17 @@
             Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/> interface
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.#ctor(ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder"/>
+            </summary>
+            <param name="workflow">The service used to build the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to build belongs to</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.Workflow">
+            <summary>
+            Gets the service used to build the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to build belongs to
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.Function">
             <summary>
             Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to configure
@@ -2407,10 +2433,25 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.OfType(ServerlessWorkflow.Sdk.FunctionType)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.SetOperationExpression(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.ForOperation(System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.SetOperationUri(System.Uri)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.ForOperation(System.Uri)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.UseAuthentication(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.UseAuthentication(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.UseBasicAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.UseBearerAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IBearerAuthenticationBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.UseOAuth2Authentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder})">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.Build">
@@ -3141,18 +3182,56 @@
             <param name="type">The type of the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to build</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.SetOperationExpression(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.ForOperation(System.String)">
             <summary>
             Sets the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>'s operation expression. Sets the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>'s <see cref="P:ServerlessWorkflow.Sdk.Models.FunctionDefinition.Type"/> to <see cref="F:ServerlessWorkflow.Sdk.FunctionType.Expression"/>
             </summary>
             <param name="operation">The <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>'s operation expression</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.SetOperationUri(System.Uri)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.ForOperation(System.Uri)">
             <summary>
             Sets the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>'s operation <see cref="T:System.Uri"/>. Sets the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>'s <see cref="P:ServerlessWorkflow.Sdk.Models.FunctionDefinition.Type"/> to <see cref="F:ServerlessWorkflow.Sdk.FunctionType.Rest"/>
             </summary>
             <param name="operation">The <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>'s operation <see cref="T:System.Uri"/></param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.UseAuthentication(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to use the specified <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>
+            </summary>
+            <param name="authentication">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.UseAuthentication(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to use the specified <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>
+            </summary>
+            <param name="authenticationDefinition">The <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.UseBasicAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder})">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to use an <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.Basic"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use</param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.UseBearerAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IBearerAuthenticationBuilder})">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to use an <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.Bearer"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use</param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.UseOAuth2Authentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder})">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to use an <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.OAuth2"/>
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use</param>
+            <param name="configurationAction">An <see cref="T:System.Action`1"/> to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.Build">
@@ -3827,7 +3906,7 @@
             <param name="authenticationDefinitions">An array that contains the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>s</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddAuthenticationDefinition(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AddAuthentication(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition)">
             <summary>
             Adds the specified <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
             </summary>
@@ -4512,7 +4591,7 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.UseAuthenticationDefinitions(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition[])">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddAuthenticationDefinition(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddAuthentication(ServerlessWorkflow.Sdk.Models.AuthenticationDefinition)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AddBasicAuthentication(System.String,System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IBasicAuthenticationBuilder})">
@@ -5358,15 +5437,36 @@
             </summary>
             <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionCollectionValidator">
+            <summary>
+            Represents the <see cref="T:FluentValidation.Validators.PropertyValidator"/> used to validate a <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> collection
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionCollectionValidator.IsValid(FluentValidation.Validators.PropertyValidatorContext)">
+            <inheritdoc/>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionValidator">
             <summary>
             Represents the service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>s
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionValidator.#ctor">
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition)">
             <summary>
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionValidator"/>
             </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>s to validate belong to</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionValidator.Workflow">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>s to validate belong to
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionValidator.ReferenceExistingAuthentication(System.String)">
+            <summary>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> exists
+            </summary>
+            <param name="authenticationName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to check</param>
+            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> exists</returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.FunctionReferenceValidator">
             <summary>

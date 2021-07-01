@@ -43,7 +43,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
                     {
                         action.Invoke(function =>
                             function.WithName("fakeFunction")
-                                .SetOperationUri(new Uri("https://fake.com/swagger.json#fake")))
+                                .ForOperation(new Uri("https://fake.com/swagger.json#fake")))
                             .WithArgument("username", "${ .username }")
                             .WithArgument("password", "${ .password }");
                     })

@@ -67,7 +67,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .When(w => w.Functions != null)
                 .WithMessage("Duplicate FunctionDefinition name(s) found");
             this.RuleFor(w => w.Functions)
-                .SetValidator(new CollectionPropertyValidator<FunctionDefinition>(this.ServiceProvider))
+                .SetValidator(new FunctionDefinitionCollectionValidator())
                 .When(w => w.Functions != null);
             this.RuleFor(w => w.Retries)
                 .Must(retries => retries.Select(s => s.Name).Distinct().Count() == retries.Count)

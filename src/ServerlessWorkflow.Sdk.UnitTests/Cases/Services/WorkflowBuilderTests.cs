@@ -55,7 +55,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
                     flow.Execute(action => 
                         action.Invoke(function => 
                             function.WithName("login")
-                                .SetOperationUri(new Uri("http://fakehost/api/doc/swagger.json#test")))
+                                .ForOperation(new Uri("http://fakehost/api/doc/swagger.json#test")))
                             .WithArgument("username", "${ .username }")))
                 .Then(state =>
                     state.ExecuteInParallel()
@@ -66,11 +66,11 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
                                 .Execute(action =>
                                     action.Invoke(function =>
                                         function.WithName("login1")
-                                            .SetOperationExpression("some workflow expression")))
+                                            .ForOperation("some workflow expression")))
                                 .Execute(action =>
                                     action.Invoke(function =>
                                         function.WithName("login2")
-                                            .SetOperationExpression("some workflow expression"))))
+                                            .ForOperation("some workflow expression"))))
                         .Branch(branch =>
                             branch.WithName("second")
                                 .Execute(action => 

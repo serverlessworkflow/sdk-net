@@ -76,7 +76,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (functionSetup == null)
                 throw new ArgumentNullException(nameof(functionSetup));
-            IFunctionBuilder builder = new FunctionBuilder();
+            IFunctionBuilder builder = new FunctionBuilder(this.Workflow);
             functionSetup(builder);
             return this.AddFunction(builder.Build());
         }
