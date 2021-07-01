@@ -41,6 +41,11 @@ namespace ServerlessWorkflow.Sdk
         [EnumMember(Value = "graphql")]
         GraphQL,
         /// <summary>
+        /// Indicates an OData function
+        /// </summary>
+        [EnumMember(Value = "odata")]
+        OData,
+        /// <summary>
         /// Indicates an expression function
         /// </summary>
         [EnumMember(Value = "expression")]
