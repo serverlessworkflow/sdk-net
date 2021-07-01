@@ -106,6 +106,51 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IWorkflowBuilder UseJq();
 
         /// <summary>
+        /// Adds the <see cref="WorkflowDefinition"/> <see cref="AuthenticationDefinition"/>s defined in the specified file
+        /// </summary>
+        /// <param name="uri">The <see cref="Uri"/> of the file that defines the <see cref="AuthenticationDefinition"/>s</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder ImportAuthenticationDefinitionsFrom(Uri uri);
+
+        /// <summary>
+        /// Uses the specified <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/>s
+        /// </summary>
+        /// <param name="authenticationDefinitions">An array that contains the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/>s</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder UseAuthenticationDefinitions(params AuthenticationDefinition[] authenticationDefinitions);
+
+        /// <summary>
+        /// Adds the specified <see cref="AuthenticationDefinition"/> to the <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="authenticationDefinition">The <see cref="AuthenticationDefinition"/> to add</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder AddAuthenticationDefinition(AuthenticationDefinition authenticationDefinition);
+
+        /// <summary>
+        /// Adds a new <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.Basic"/> to the <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to add</param>
+        /// <param name="configurationAction">An <see cref="Action{T}"/> used to configure the service used to build <see cref="AuthenticationDefinition"/> to add</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder AddBasicAuthentication(string name, Action<IBasicAuthenticationBuilder> configurationAction);
+
+        /// <summary>
+        /// Adds a new <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.Bearer"/> to the <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to add</param>
+        /// <param name="configurationAction">An <see cref="Action{T}"/> used to configure the service used to build <see cref="AuthenticationDefinition"/> to add</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder AddBearerAuthentication(string name, Action<IBearerAuthenticationBuilder> configurationAction);
+
+        /// <summary>
+        /// Adds a new <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.OAuth2"/> to the <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to add</param>
+        /// <param name="configurationAction">An <see cref="Action{T}"/> used to configure the service used to build <see cref="AuthenticationDefinition"/> to add</param>
+        /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
+        IWorkflowBuilder AddOAuth2Authentication(string name, Action<IOAuth2AuthenticationBuilder> configurationAction);
+
+        /// <summary>
         /// Adds the <see cref="WorkflowDefinition"/> constants defined in the specified file
         /// </summary>
         /// <param name="uri">The <see cref="Uri"/> of the file that defines the constants</param>

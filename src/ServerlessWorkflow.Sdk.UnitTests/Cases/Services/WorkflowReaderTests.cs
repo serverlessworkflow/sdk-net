@@ -97,6 +97,9 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
             workflow.Constants
                 .Should()
                 .NotBeEmpty();
+            workflow.Secrets
+                .Should()
+                .NotBeEmpty();
             workflow.DataInputSchema
                 .Should()
                 .NotBeNull();

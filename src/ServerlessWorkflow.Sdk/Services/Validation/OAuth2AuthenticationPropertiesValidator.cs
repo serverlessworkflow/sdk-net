@@ -21,23 +21,27 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
 {
 
     /// <summary>
-    /// Represents the service used to validate <see cref="FunctionDefinition"/>s
+    /// Represents the service used to validate <see cref="OAuth2AuthenticationProperties"/>s
     /// </summary>
-    public class FunctionDefinitionValidator
-        : AbstractValidator<FunctionDefinition>
+    public class OAuth2AuthenticationPropertiesValidator
+        : AbstractValidator<OAuth2AuthenticationProperties>
     {
 
         /// <summary>
-        /// Initializes a new <see cref="FunctionDefinitionValidator"/>
+        /// Initializes a new <see cref="OAuth2AuthenticationPropertiesValidator"/>
         /// </summary>
-        public FunctionDefinitionValidator()
+        public OAuth2AuthenticationPropertiesValidator()
         {
-            this.RuleFor(f => f.Name)
+            this.RuleFor(a => a.Authority)
+                .NotNull();
+            this.RuleFor(a => a.ClientId)
+                .NotEmpty();
+            this.RuleFor(a => a.Username)
                 .NotEmpty()
-                .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.Name)}");
-            this.RuleFor(f => f.Operation)
+                .When(a => a.GrantType == OAuth2GrantType.Password);
+            this.RuleFor(a => a.Password)
                 .NotEmpty()
-                .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.Operation)}");
+                .When(a => a.GrantType == OAuth2GrantType.Password);
         }
 
     }

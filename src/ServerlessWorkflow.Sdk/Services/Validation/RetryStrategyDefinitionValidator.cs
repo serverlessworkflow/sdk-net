@@ -19,25 +19,21 @@ using ServerlessWorkflow.Sdk.Models;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
-
     /// <summary>
-    /// Represents the service used to validate <see cref="FunctionDefinition"/>s
+    /// Represents the service used to validate <see cref="RetryStrategyDefinition"/>s
     /// </summary>
-    public class FunctionDefinitionValidator
-        : AbstractValidator<FunctionDefinition>
+    public class RetryStrategyDefinitionValidator
+        : AbstractValidator<RetryStrategyDefinition>
     {
 
         /// <summary>
-        /// Initializes a new <see cref="FunctionDefinitionValidator"/>
+        /// Initializes a new <see cref="RetryStrategyDefinitionValidator"/>
         /// </summary>
-        public FunctionDefinitionValidator()
+        public RetryStrategyDefinitionValidator()
         {
-            this.RuleFor(f => f.Name)
+            this.RuleFor(r => r.Name)
                 .NotEmpty()
-                .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.Name)}");
-            this.RuleFor(f => f.Operation)
-                .NotEmpty()
-                .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.Operation)}");
+                .WithErrorCode($"{nameof(RetryStrategyDefinition)}.{nameof(RetryStrategyDefinition.Name)}");
         }
 
     }

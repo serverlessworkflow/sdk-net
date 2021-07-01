@@ -14,31 +14,23 @@
  * limitations under the License.
  *
  */
-using FluentValidation;
 using ServerlessWorkflow.Sdk.Models;
 
-namespace ServerlessWorkflow.Sdk.Services.Validation
+namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
-
     /// <summary>
-    /// Represents the service used to validate <see cref="FunctionDefinition"/>s
+    /// Defines the fundamentals of a service used to build a <see cref="AuthenticationDefinition"/> with scheme <see cref="AuthenticationScheme.Bearer"/>
     /// </summary>
-    public class FunctionDefinitionValidator
-        : AbstractValidator<FunctionDefinition>
+    public interface IBearerAuthenticationBuilder
+        : IAuthenticationDefinitionBuilder
     {
 
         /// <summary>
-        /// Initializes a new <see cref="FunctionDefinitionValidator"/>
+        /// Configures the <see cref="AuthenticationDefinition"/> to use the specified token to authenticate
         /// </summary>
-        public FunctionDefinitionValidator()
-        {
-            this.RuleFor(f => f.Name)
-                .NotEmpty()
-                .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.Name)}");
-            this.RuleFor(f => f.Operation)
-                .NotEmpty()
-                .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.Operation)}");
-        }
+        /// <param name="token">The token to use</param>
+        /// <returns>The configured <see cref="IBasicAuthenticationBuilder"/></returns>
+        IBearerAuthenticationBuilder WithToken(string token);
 
     }
 

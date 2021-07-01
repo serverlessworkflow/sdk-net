@@ -1,11 +1,13 @@
 ﻿id: ExternalRef
 name: ExternalRef
 version: "0.1.0"
-dataInputSchema: file://resources/schemas/externalref.yaml
-constants: file://resources/constants/petstore.yaml
-events: file://resources/events/petstore.yaml
-functions: file://resources/functions/petstore.yaml
-retries: file://resources/retries/default.yaml
+dataInputSchema: file:///resources/schemas/externalref.yaml
+constants: file:///resources/constants/petstore.yaml
+events: file:///resources/events/petstore.yaml
+functions: file:///resources/functions/petstore.yaml
+retries: file:///resources/retries/default.yaml
+secrets: file:///resources/secrets/default.yaml
+auth: file:///resources/auths/default.yaml
 states:
   - name: CreatePet
     type: operation

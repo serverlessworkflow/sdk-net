@@ -15,41 +15,32 @@
  *
  */
 using System.Runtime.Serialization;
+
 namespace ServerlessWorkflow.Sdk
 {
 
     /// <summary>
-    /// Enumerates all types of functions
+    /// Enumerates all supported authentication schemes
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.StringEnumConverterFactory))]
-    public enum FunctionType
+    public enum AuthenticationScheme
     {
         /// <summary>
-        /// Indicates a REST function
+        /// Indicates the basic (username/password) authentication scheme
         /// </summary>
-        [EnumMember(Value = "rest")]
-        Rest,
+        [EnumMember(Value = "basic")]
+        Basic,
         /// <summary>
-        /// Indicates an Remote Procedure Call (RPC)
+        /// Indicates the bearer (JwT) authentication scheme
         /// </summary>
-        [EnumMember(Value = "rpc")]
-        Rpc,
+        [EnumMember(Value = "bearer")]
+        Bearer,
         /// <summary>
-        /// Indicates a GraphQL function
+        /// Indicates the OAuth 2 authentication scheme
         /// </summary>
-        [EnumMember(Value = "graphql")]
-        GraphQL,
-        /// <summary>
-        /// Indicates an OData function
-        /// </summary>
-        [EnumMember(Value = "odata")]
-        OData,
-        /// <summary>
-        /// Indicates an expression function
-        /// </summary>
-        [EnumMember(Value = "expression")]
-        Expression
+        [EnumMember(Value = "oauth")]
+        OAuth2
     }
 
 }
