@@ -24,9 +24,9 @@ namespace ServerlessWorkflow.Sdk.Models
 {
 
     /// <summary>
-    /// Represents the options used to configure an OData operation call
+    /// Represents the options used to configure an OData command
     /// </summary>
-    public class ODataOperationOptions
+    public class ODataCommandOptions
     {
 
         /// <summary>
