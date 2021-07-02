@@ -825,6 +825,86 @@
             Gets/sets the issuer that must generate a new token in return for the exchanged one
             </summary>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.ODataCommandOptions">
+            <summary>
+            Represents the options used to configure an OData command
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataCommandOptions.Id">
+            <summary>
+            Gets the unique identifier of the single entry to query
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataCommandOptions.QueryOptions">
+            <summary>
+            Gets the options used to configure the OData query
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.ODataQueryOptions">
+            <summary>
+            Represents the options used to configure an OData query
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Filter">
+            <summary>
+            Gets the $filter system query option, which allows clients to filter the set of resources that are addressed by a request URL. $filter specifies conditions that MUST be met by a resource for it to be returned in the set of matching resources
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Expand">
+            <summary>
+            Gets the $expand system query option, which allows clients to request related resources when a resource that satifies a particular request is retrieved
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Select">
+            <summary>
+            Gets the $select system query option, which allows clients to requests a limited set of information for each entity or complex type identified by the ResourcePath and other System Query Options like $filter, $top, $skip etc. The $select query option is often used in conjunction with the $expand query option, to first increase the scope of the resource graph returned ($expand) and then selectively prune that resource graph ($select)
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.OrderBy">
+            <summary>
+            Gets the $orderby system query option, which allows clients to request resource in a particular order
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Top">
+            <summary>
+            Gets the $top system query option, which allows clients a required number of resources. Usually used in conjunction with the $skip query options
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Skip">
+            <summary>
+            Gets the $skip system query option, which allows clients to skip a given number of resources. Usually used in conjunction with the $top query options
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Count">
+            <summary>
+            Gets the $count system query option, which allows clients to request a count of the matching resources included with the resources in the response
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Search">
+            <summary>
+            Gets the $search system query option, which allows clients to request items within a collection matching a free-text search expression
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Format">
+            <summary>
+            Gets the $format system query option, if supported, which allows clients to request a response in a particular format
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Compute">
+            <summary>
+            Gets the $compute system query option, which allows clients to define computed properties that can be used in a $select or within a $filter or $orderby expression
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.Index">
+            <summary>
+            Gets the $index system query option, which allows clients to do a positional insert into a collection annotated with using the Core.PositionalInsert term (see http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#VocCore)
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataQueryOptions.SchemaVersion">
+            <summary>
+            Gets the $schemaversion system query option, which allows clients to specify the version of the schema against which the request is made. The semantics of $schemaversion is covered in the OData-Protocol (http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#odata) document
+            </summary>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.OperationStateDefinition">
             <summary>
             Represents a workflow state that defines a set of actions to be performed in sequence or in parallel. Once all actions have been performed, a transition to another state can occur.
