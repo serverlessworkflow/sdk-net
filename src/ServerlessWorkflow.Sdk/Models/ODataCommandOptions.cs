@@ -32,7 +32,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets the unique identifier of the single entry to query
         /// </summary>
-        public virtual string Id { get; set; }
+        public virtual string Key { get; set; }
 
         /// <summary>
         /// Gets the options used to configure the OData query
