@@ -243,7 +243,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
 
             //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(WorkflowDefinition.States));

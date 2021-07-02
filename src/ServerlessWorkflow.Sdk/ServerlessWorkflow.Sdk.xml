@@ -830,7 +830,7 @@
             Represents the options used to configure an OData command
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.ODataCommandOptions.Id">
+        <member name="P:ServerlessWorkflow.Sdk.Models.ODataCommandOptions.Key">
             <summary>
             Gets the unique identifier of the single entry to query
             </summary>

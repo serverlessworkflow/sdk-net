@@ -47,12 +47,12 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets the $top system query option, which allows clients a required number of resources. Usually used in conjunction with the $skip query options
         /// </summary>
-        public virtual int Top { get; set; }
+        public virtual int? Top { get; set; }
 
         /// <summary>
         /// Gets the $skip system query option, which allows clients to skip a given number of resources. Usually used in conjunction with the $top query options
         /// </summary>
-        public virtual int Skip { get; set; }
+        public virtual int? Skip { get; set; }
 
         /// <summary>
         /// Gets the $count system query option, which allows clients to request a count of the matching resources included with the resources in the response
