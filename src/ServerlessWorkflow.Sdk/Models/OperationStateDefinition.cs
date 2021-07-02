@@ -17,6 +17,7 @@
 using ServerlessWorkflow.Sdk.Serialization;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -49,6 +50,46 @@ namespace ServerlessWorkflow.Sdk.Models
         [Required]
         [Newtonsoft.Json.JsonRequired]
         public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
+
+        /// <summary>
+        /// Gets the <see cref="ActionDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="ActionDefinition"/> to get</param>
+        /// <returns>The <see cref="ActionDefinition"/> with the specified name</returns>
+        public virtual ActionDefinition GetAction(string name)
+        {
+            return this.Actions.FirstOrDefault(s => s.Name == name);
+        }
+
+        /// <summary>
+        /// Attempts to get the <see cref="ActionDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="ActionDefinition"/> to get</param>
+        /// <param name="action">The <see cref="ActionDefinition"/> with the specified name</param>
+        /// <returns>A boolean indicating whether or not a <see cref="ActionDefinition"/> with the specified name could be found</returns>
+        public virtual bool TryGetAction(string name, out ActionDefinition action)
+        {
+            action = this.GetAction(name);
+            return action != null;
+        }
+
+        /// <summary>
+        /// Attempts to get the next <see cref="ActionDefinition"/> in the pipeline
+        /// </summary>
+        /// <param name="previousActionName">The name of the <see cref="ActionDefinition"/> to get the next <see cref="ActionDefinition"/> for</param>
+        /// <param name="action">The next <see cref="ActionDefinition"/>, if any</param>
+        /// <returns>A boolean indicating whether or not there is a next <see cref="ActionDefinition"/> in the pipeline</returns>
+        public virtual bool TryGetNextAction(string previousActionName, out ActionDefinition action)
+        {
+            action = null;
+            ActionDefinition previousAction = this.Actions.FirstOrDefault(a => a.Name == previousActionName);
+            int previousActionIndex = this.Actions.ToList().IndexOf(previousAction);
+            int nextIndex = previousActionIndex + 1;
+            if (nextIndex >= this.Actions.Count)
+                return false;
+            action = this.Actions.ElementAt(nextIndex);
+            return true;
+        }
 
     }
 

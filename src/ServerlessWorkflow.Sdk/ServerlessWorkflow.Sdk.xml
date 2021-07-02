@@ -492,6 +492,21 @@
             Gets/sets the duration to wait for incoming events
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.EventStateDefinition.GetTrigger(System.Int32)">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> with the specified id
+            </summary>
+            <param name="id">The id of the <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> to get</param>
+            <returns>The <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> with the specified id</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.EventStateDefinition.TryGetTrigger(System.Int32,ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition@)">
+            <summary>
+            Attempts to get the <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> with the specified id
+            </summary>
+            <param name="id">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> to get</param>
+            <param name="trigger">The <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> with the specified id</param>
+            <returns>A boolean indicating whether or not a <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition"/> with the specified id could be found</returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition">
             <summary>
             Represents the definition of an <see cref="T:ServerlessWorkflow.Sdk.Models.EventStateDefinition"/>'s trigger
@@ -516,6 +531,29 @@
             <summary>
             Gets/sets an object used to filter the event data 
             </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition.GetAction(System.String)">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get</param>
+            <returns>The <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition.TryGetAction(System.String,ServerlessWorkflow.Sdk.Models.ActionDefinition@)">
+            <summary>
+            Attempts to get the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get</param>
+            <param name="action">The <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name</param>
+            <returns>A boolean indicating whether or not a <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name could be found</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.EventStateTriggerDefinition.TryGetNextAction(System.String,ServerlessWorkflow.Sdk.Models.ActionDefinition@)">
+            <summary>
+            Attempts to get the next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> in the pipeline
+            </summary>
+            <param name="previousActionName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get the next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> for</param>
+            <param name="action">The next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>, if any</param>
+            <returns>A boolean indicating whether or not there is a next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> in the pipeline</returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.ExecutionTimeoutDefinition">
             <summary>
@@ -692,6 +730,29 @@
             <summary>
             Gets/sets the unique Id of a workflow to be executed for each of the elements of <see cref="P:ServerlessWorkflow.Sdk.Models.ForEachStateDefinition.InputCollection"/>
             </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.ForEachStateDefinition.GetAction(System.String)">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get</param>
+            <returns>The <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.ForEachStateDefinition.TryGetAction(System.String,ServerlessWorkflow.Sdk.Models.ActionDefinition@)">
+            <summary>
+            Attempts to get the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get</param>
+            <param name="action">The <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name</param>
+            <returns>A boolean indicating whether or not a <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name could be found</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.ForEachStateDefinition.TryGetNextAction(System.String,ServerlessWorkflow.Sdk.Models.ActionDefinition@)">
+            <summary>
+            Attempts to get the next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> in the pipeline
+            </summary>
+            <param name="previousActionName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get the next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> for</param>
+            <param name="action">The next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>, if any</param>
+            <returns>A boolean indicating whether or not there is a next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> in the pipeline</returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition">
             <summary>
@@ -925,6 +986,29 @@
             Gets/sets an <see cref="T:System.Collections.Generic.List`1"/> of actions to be performed if expression matches
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OperationStateDefinition.GetAction(System.String)">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get</param>
+            <returns>The <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OperationStateDefinition.TryGetAction(System.String,ServerlessWorkflow.Sdk.Models.ActionDefinition@)">
+            <summary>
+            Attempts to get the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get</param>
+            <param name="action">The <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name</param>
+            <returns>A boolean indicating whether or not a <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name could be found</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OperationStateDefinition.TryGetNextAction(System.String,ServerlessWorkflow.Sdk.Models.ActionDefinition@)">
+            <summary>
+            Attempts to get the next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> in the pipeline
+            </summary>
+            <param name="previousActionName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get the next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> for</param>
+            <param name="action">The next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>, if any</param>
+            <returns>A boolean indicating whether or not there is a next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> in the pipeline</returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.ParallelStateDefinition">
             <summary>
             Represents a workflow state that executes <see cref="T:ServerlessWorkflow.Sdk.Models.BranchDefinition"/>es in parallel
@@ -949,6 +1033,21 @@
             <summary>
             Gets/sets a value that represents the amount of <see cref="T:ServerlessWorkflow.Sdk.Models.BranchDefinition"/>es to complete for completing the state, when <see cref="P:ServerlessWorkflow.Sdk.Models.ParallelStateDefinition.CompletionType"/> is set to <see cref="F:ServerlessWorkflow.Sdk.ParallelCompletionType.N"/>
             </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.ParallelStateDefinition.GetBranch(System.String)">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.BranchDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.BranchDefinition"/> to get</param>
+            <returns>The <see cref="T:ServerlessWorkflow.Sdk.Models.BranchDefinition"/> with the specified name</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.ParallelStateDefinition.TryGetBranch(System.String,ServerlessWorkflow.Sdk.Models.BranchDefinition@)">
+            <summary>
+            Attempts to get the <see cref="T:ServerlessWorkflow.Sdk.Models.BranchDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.BranchDefinition"/> to get</param>
+            <param name="branch">The <see cref="T:ServerlessWorkflow.Sdk.Models.BranchDefinition"/> with the specified name</param>
+            <returns>A boolean indicating whether or not a <see cref="T:ServerlessWorkflow.Sdk.Models.BranchDefinition"/> with the specified name could be found</returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.ProduceEventDefinition">
             <summary>

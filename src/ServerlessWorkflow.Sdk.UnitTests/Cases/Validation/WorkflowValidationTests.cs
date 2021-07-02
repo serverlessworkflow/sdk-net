@@ -146,11 +146,13 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         public void Validate_Workflow_NoEnd_ShouldFail()
         {
             //arrange
-            var workflow = new WorkflowDefinition();
-            workflow.Id = "fake";
-            workflow.Name = "fake";
-            workflow.Version = "fake";
-            workflow.States = new() { new InjectStateDefinition() { Name = "fake" } };
+            var workflow = new WorkflowDefinition
+            {
+                Id = "fake",
+                Name = "fake",
+                Version = "fake",
+                States = new() { new InjectStateDefinition() { Name = "fake" } }
+            };
 
             //act
             var result = this.WorkflowDefinitionValidator.Validate(workflow);
@@ -190,11 +192,13 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         public void Validate_Workflow_DuplicateEventNames_ShouldFail()
         {
             //arrange
-            var workflow = new WorkflowDefinition();
-            workflow.Id = "fake";
-            workflow.Name = "fake";
-            workflow.Version = "fake";
-            workflow.Events = new() { new() { Name = "fake", Source = "fake", Type = "fake" }, new() { Name = "fake", Source = "fake", Type = "fake" } };
+            var workflow = new WorkflowDefinition
+            {
+                Id = "fake",
+                Name = "fake",
+                Version = "fake",
+                Events = new() { new() { Name = "fake", Source = "fake", Type = "fake" }, new() { Name = "fake", Source = "fake", Type = "fake" } }
+            };
 
             //act
             var result = this.WorkflowDefinitionValidator.Validate(workflow);
@@ -211,11 +215,13 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         public void Validate_Workflow_DuplicateFunctionNames_ShouldFail()
         {
             //arrange
-            var workflow = new WorkflowDefinition();
-            workflow.Id = "fake";
-            workflow.Name = "fake";
-            workflow.Version = "fake";
-            workflow.Functions = new() { new() { Name = "fake", Operation = "fake" }, new() { Name = "fake", Operation = "fake" } };
+            var workflow = new WorkflowDefinition
+            {
+                Id = "fake",
+                Name = "fake",
+                Version = "fake",
+                Functions = new() { new() { Name = "fake", Operation = "fake" }, new() { Name = "fake", Operation = "fake" } }
+            };
 
             //act
             var result = this.WorkflowDefinitionValidator.Validate(workflow);
@@ -232,11 +238,13 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         public void Validate_Workflow_DuplicateStateNames_ShouldFail()
         {
             //arrange
-            var workflow = new WorkflowDefinition();
-            workflow.Id = "fake";
-            workflow.Name = "fake";
-            workflow.Version = "fake";
-            workflow.States = new() { new InjectStateDefinition() { Name = "fake" }, new InjectStateDefinition() { Name = "fake" } };
+            var workflow = new WorkflowDefinition
+            {
+                Id = "fake",
+                Name = "fake",
+                Version = "fake",
+                States = new() { new InjectStateDefinition() { Name = "fake" }, new InjectStateDefinition() { Name = "fake" } }
+            };
 
             //act
             var result = this.WorkflowDefinitionValidator.Validate(workflow);
@@ -253,11 +261,13 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         public void Validate_Workflow_DuplicateRetryPolicyNames_ShouldFail()
         {
             //arrange
-            var workflow = new WorkflowDefinition();
-            workflow.Id = "fake";
-            workflow.Name = "fake";
-            workflow.Version = "fake";
-            workflow.Retries = new() { new () { Name = "fake" }, new () { Name = "fake" } };
+            var workflow = new WorkflowDefinition
+            {
+                Id = "fake",
+                Name = "fake",
+                Version = "fake",
+                Retries = new() { new() { Name = "fake" }, new() { Name = "fake" } }
+            };
 
             //act
             var result = this.WorkflowDefinitionValidator.Validate(workflow);

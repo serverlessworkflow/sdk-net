@@ -16,6 +16,7 @@
  */
 using ServerlessWorkflow.Sdk.Serialization;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -50,6 +51,28 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Gets/sets a value that represents the amount of <see cref="BranchDefinition"/>es to complete for completing the state, when <see cref="CompletionType"/> is set to <see cref="ParallelCompletionType.N"/>
         /// </summary>
         public virtual uint? N { get; set; }
+
+        /// <summary>
+        /// Gets the <see cref="BranchDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="BranchDefinition"/> to get</param>
+        /// <returns>The <see cref="BranchDefinition"/> with the specified name</returns>
+        public virtual BranchDefinition GetBranch(string name)
+        {
+            return this.Branches.FirstOrDefault(b => b.Name == name);
+        }
+
+        /// <summary>
+        /// Attempts to get the <see cref="BranchDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="name">The name of the <see cref="BranchDefinition"/> to get</param>
+        /// <param name="branch">The <see cref="BranchDefinition"/> with the specified name</param>
+        /// <returns>A boolean indicating whether or not a <see cref="BranchDefinition"/> with the specified name could be found</returns>
+        public virtual bool TryGetBranch(string name, out BranchDefinition branch)
+        {
+            branch = this.GetBranch(name);
+            return branch != null;
+        }
 
     }
 
