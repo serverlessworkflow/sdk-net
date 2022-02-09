@@ -20,17 +20,17 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
 {
 
     /// <summary>
-    /// Represents a service used to validate <see cref="DelayStateDefinition"/>s
+    /// Represents a service used to validate <see cref="SleepStateDefinition"/>s
     /// </summary>
-    public class DelayStateValidator
-        : StateDefinitionValidator<DelayStateDefinition>
+    public class SleepStateValidator
+        : StateDefinitionValidator<SleepStateDefinition>
     {
 
         /// <summary>
-        /// Initializes a new <see cref="DelayStateValidator"/>
+        /// Initializes a new <see cref="SleepStateValidator"/>
         /// </summary>
         /// <param name="workflow">The <see cref="WorkflowDefinition"/> to validate</param>
-        public DelayStateValidator(WorkflowDefinition workflow)
+        public SleepStateValidator(WorkflowDefinition workflow)
             : base(workflow)
         {
             

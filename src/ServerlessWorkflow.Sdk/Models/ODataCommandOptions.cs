@@ -14,11 +14,6 @@
  * limitations under the License.
  *
  */
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -26,17 +21,23 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents the options used to configure an OData command
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class ODataCommandOptions
     {
 
         /// <summary>
         /// Gets the unique identifier of the single entry to query
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Key { get; set; }
 
         /// <summary>
         /// Gets the options used to configure the OData query
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual ODataQueryOptions QueryOptions { get; set; }
 
     }

@@ -14,46 +14,47 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
-using System.ComponentModel.DataAnnotations;
+using Neuroglia.Serialization;
+using System.Collections.Generic;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
-
     /// <summary>
-    /// Represents a reference to a <see cref="FunctionDefinition"/>
+    /// Represents an object of any type
     /// </summary>
     [ProtoContract]
     [DataContract]
-    public class FunctionReference
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.AnyConverter))]
+    public class Any
+        : ProtoObject
     {
 
         /// <summary>
-        /// Gets/sets the referenced function's name
+        /// Initializes a new <see cref="Any"/>
         /// </summary>
-        [Required]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string RefName { get; set; }
+        public Any()
+        {
+
+        }
 
         /// <summary>
-        /// Gets/sets a <see cref="Any"/> that contains the parameters of the function to invoke
+        /// Innitializes a new <see cref="Any"/>
         /// </summary>
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual Any Arguments { get; set; }
-
-        /// <summary>
-        /// Gets/sets a <see href="https://spec.graphql.org/June2018/#sec-Selection-Sets">GraphQL selection set</see>
-        /// </summary>
-        [ProtoMember(3)]
-        [DataMember(Order = 3)]
-        public virtual string SelectionSet { get; set; }
+        /// <param name="properties">An <see cref="IDictionary{TKey, TValue}"/> containing the <see cref="Any"/>'s name/value property mappings</param>
+        public Any(IDictionary<string, object> properties)
+        {
+            foreach (var property in properties)
+            {
+                this.Set(property.Key, property.Value);
+            }
+        }
 
         /// <inheritdoc/>
-        public override string ToString()
+        [ProtoMember(1)]
+        protected new List<ProtoField> Fields
         {
-            return this.RefName;
+            get => base.Fields;
+            set => base.Fields = value;
         }
 
     }

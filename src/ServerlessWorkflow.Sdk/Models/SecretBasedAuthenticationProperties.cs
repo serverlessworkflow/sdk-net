@@ -19,9 +19,12 @@ using System;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents <see cref="AuthenticationProperties"/> loaded from a specific secret
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class SecretBasedAuthenticationProperties
         : AuthenticationProperties
     {
@@ -48,6 +51,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets the name of the secret to load the <see cref="SecretBasedAuthenticationProperties"/> from
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Secret { get; set; }
 
     }

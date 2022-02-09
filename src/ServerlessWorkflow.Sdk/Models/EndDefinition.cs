@@ -22,6 +22,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents an object used to explicitly define execution completion of a workflow instance or workflow execution path.
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class EndDefinition
         : StateOutcomeDefinition
     {
@@ -29,16 +31,22 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to terminate the executing workflow. If true, completes all execution flows in the given workflow instance. Defaults to false.
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual bool Terminate { get; set; } = false;
 
         /// <summary>
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the events that should be produced
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual IEnumerable<ProduceEventDefinition> ProduceEvents { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not the state should trigger compensation. Default is false.
         /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual bool Compensate { get; set; } = false;
 
     }

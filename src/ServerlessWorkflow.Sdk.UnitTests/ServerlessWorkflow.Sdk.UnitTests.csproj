@@ -41,6 +41,9 @@
     <None Update="Resources\secrets\default.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\workflows\operation.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\workflows\operation.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -14,11 +14,11 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using ServerlessWorkflow.Sdk.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents a workflow state that injects static data into state data input
     /// </summary>
@@ -37,9 +37,11 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> which can be set as state's data input and can be manipulated via filter
+        /// Gets/sets the <see cref="Any"/> which can be set as state's data input and can be manipulated via filter
         /// </summary>
-        public virtual JToken Data { get; set; }
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
+        public virtual Any Data { get; set; }
 
     }
 

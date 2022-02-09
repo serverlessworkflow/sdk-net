@@ -25,6 +25,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents the definition of an <see cref="EventStateDefinition"/>'s trigger
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class EventStateTriggerDefinition
     {
 
@@ -35,16 +37,22 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "eventRefs"), Newtonsoft.Json.JsonRequired]
         [System.Text.Json.Serialization.JsonPropertyName("eventRefs")]
         [YamlMember(Alias = "eventRefs")]
+        [ProtoMember(1, Name = "eventRefs")]
+        [DataMember(Order = 1, Name = "eventRefs")]
         public virtual List<string> Events { get; set; } = new List<string>();
 
         /// <summary>
         /// Gets/sets a value that specifies how actions are to be performed (in sequence of parallel)
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual ActionExecutionMode ActionMode { get; set; }
 
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> containing the actions to be performed if expression matches
         /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
         /// <summary>
@@ -53,6 +61,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "eventDataFilter")]
         [System.Text.Json.Serialization.JsonPropertyName("eventDataFilter")]
         [YamlMember(Alias = "eventDataFilter")]
+        [ProtoMember(4, Name = "eventDataFilter")]
+        [DataMember(Order = 4, Name = "eventDataFilter")]
         public virtual EventDataFilterDefinition DataFilter { get; set; } = new EventDataFilterDefinition();
 
         /// <summary>

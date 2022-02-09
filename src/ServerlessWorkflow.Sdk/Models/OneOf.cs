@@ -14,13 +14,6 @@
  * limitations under the License.
  *
  */
-using Neuroglia.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using ProtoBuf;
-using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -33,7 +26,7 @@ namespace ServerlessWorkflow.Sdk.Models
     [ProtoContract]
     [DataContract]
     public class OneOf<T1, T2>
-        : IExtensible
+        : IExtensible, IOneOf
     {
 
         private IExtension _Extension;
@@ -103,6 +96,14 @@ namespace ServerlessWorkflow.Sdk.Models
 
         void ResetT2() => DiscriminatedUnionObject.Reset(ref this._DicriminatorUnionObject, 2);
 
+        object IOneOf.GetValue()
+        {
+            if (this.Value1 == null)
+                return this.Value2;
+            else
+                return this.Value1;
+        }
+
         /// <summary>
         /// Implicitly convert the specified value into a new <see cref="OneOf{T1, T2}"/>
         /// </summary>
@@ -137,66 +138,6 @@ namespace ServerlessWorkflow.Sdk.Models
         public static implicit operator T2(OneOf<T1, T2> value)
         {
             return value.Value2;
-        }
-
-    }
-
-    /// <summary>
-    /// Represents an object of any type
-    /// </summary>
-    [ProtoContract]
-    [DataContract]
-    [Newtonsoft.Json.JsonConverter(typeof(AnyConverter))]
-    public class Any
-        : ProtoObject
-    {
-
-        public Any()
-        {
-
-        }
-
-        public Any(IDictionary<string, object> properties)
-        {
-            foreach (var property in properties)
-            {
-                this.Set(property.Key, property.Value);
-            }
-        }
-
-        /// <inheritdoc/>
-        [ProtoMember(1)]
-        protected new List<ProtoField> Fields
-        {
-            get => base.Fields;
-            set => base.Fields = value;
-        }
-
-    }
-
-    /// <summary>
-    /// Represents the <see cref="Newtonsoft.Json.JsonConverter"/> used to convert from and to <see cref="Any"/> instances
-    /// </summary>
-    public class AnyConverter
-        : Newtonsoft.Json.JsonConverter<Any>
-    {
-
-        /// <inheritdoc/>
-        public override Any ReadJson(JsonReader reader, Type objectType, Any existingValue, bool hasExistingValue, JsonSerializer serializer)
-        {
-            var jobject = (JObject)JObject.ReadFrom(reader);
-            var any = new Any();
-            foreach(var property in jobject.Properties())
-            {
-                any.Set(property.Name, property.Value<object>());
-            }
-            return any;
-        }
-
-        /// <inheritdoc/>
-        public override void WriteJson(JsonWriter writer, Any value, JsonSerializer serializer)
-        {
-            serializer.Serialize(writer, value.ToObject());
         }
 
     }

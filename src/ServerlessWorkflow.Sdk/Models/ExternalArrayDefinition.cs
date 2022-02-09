@@ -18,9 +18,12 @@ using Newtonsoft.Json.Linq;
 using System;
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents an external definition reference
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class ExternalArrayDefinition
         : JArray
     {
@@ -48,11 +51,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets the <see cref="Uri"/> used to reference the file that defines the element described by the <see cref="ExternalArrayDefinition"/>
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual Uri DefinitionUri { get; private set; }
 
         /// <summary>
         /// Gets a boolean indicating whether or not the <see cref="ExternalArrayDefinition"/> has been loaded
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual bool Loaded { get; }
 
     }

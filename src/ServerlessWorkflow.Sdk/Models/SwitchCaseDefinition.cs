@@ -25,6 +25,10 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents the base class for all <see cref="SwitchStateDefinition"/> case implementations
     /// </summary>
+    [ProtoContract]
+    [DataContract]
+    [ProtoInclude(100, typeof(DataCaseDefinition))]
+    [ProtoInclude(200, typeof(EventCaseDefinition))]
     public abstract class SwitchCaseDefinition
     {
 
@@ -34,6 +38,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
         public ConditionType Type
         {
             get
@@ -48,6 +54,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="SwitchCaseDefinition"/>'s name
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Name { get; set; }
 
         /// <summary>
@@ -56,7 +64,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "transition")]
         [System.Text.Json.Serialization.JsonPropertyName("transition")]
         [YamlMember(Alias = "transition")]
-        protected virtual JToken TransitionToken { get; set; }
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
+        protected virtual OneOf<TransitionDefinition, string> TransitionToken { get; set; }
 
         private TransitionDefinition _Transition;
         /// <summary>
@@ -65,6 +77,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
         public virtual TransitionDefinition Transition
         {
             get
@@ -72,17 +86,23 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Transition == null
                     && this.TransitionToken != null)
                 {
-                    if (this.TransitionToken.Type == JTokenType.String)
-                        this._Transition = new TransitionDefinition() { To = this.TransitionToken.ToString() };
+                    if (this.TransitionToken.Value1 == null)
+                        this._Transition = new TransitionDefinition() { To = this.TransitionToken.Value2 };
                     else
-                        this._Transition = this.TransitionToken.ToObject<TransitionDefinition>();
+                        this._Transition = this.TransitionToken.Value1;
                 }
                 return this._Transition;
             }
             set
             {
-                this._Transition = value ?? throw new ArgumentNullException(nameof(value));
-                this.TransitionToken = JToken.FromObject(value);
+                if (value == null)
+                {
+                    this._Transition = null;
+                    this.TransitionToken = null;
+                    return;
+                }
+                this._Transition = value;
+                this.TransitionToken = new(value);
             }
         }
 
@@ -92,7 +112,9 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "end")]
         [System.Text.Json.Serialization.JsonPropertyName("end")]
         [YamlMember(Alias = "end")]
-        protected virtual JToken EndToken { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
+        protected virtual OneOf<EndDefinition, bool> EndToken { get; set; }
 
         private EndDefinition _End;
         /// <summary>
@@ -101,6 +123,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
         public virtual EndDefinition End
         {
             get
@@ -108,11 +132,11 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._End == null
                     && this.EndToken != null)
                 {
-                    if (this.EndToken.Type == JTokenType.Boolean || this.EndToken.Type == JTokenType.String
-                        && this.EndToken.ToObject<bool>())
-                        this._End = new EndDefinition();
+                    if (this.EndToken.Value1 == null
+                        && this.EndToken.Value2)
+                        this._End = new();
                     else
-                        this._End = this.EndToken.ToObject<EndDefinition>();
+                        this._End = this.EndToken.Value1;
                 }
                 return this._End;
             }
@@ -125,7 +149,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._End = value;
-                this.EndToken = JToken.FromObject(value);
+                this.EndToken = new(value);
             }
         }
 

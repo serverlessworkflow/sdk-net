@@ -17,9 +17,12 @@
 using System.ComponentModel.DataAnnotations;
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents the object used to configure a <see cref="WorkflowDefinition"/>'s data input schema
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class DataInputSchemaDefinition
     {
 
@@ -28,11 +31,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Schema { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to terminate the <see cref="WorkflowDefinition"/>'s execution whenever the validation of the input data fails. Defaults to true.
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual bool FailOnValidationError { get; set; } = true;
 
     }

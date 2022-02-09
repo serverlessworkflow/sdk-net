@@ -48,17 +48,9 @@ namespace YamlDotNet.Serialization
             value = null;
             if (!typeof(Any).IsAssignableFrom(expectedType))
                 return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value);
-            try
-            {
-                value = Yaml.Deserialize(reader, typeof(Dictionary<string, object>));
-                value = new Any((Dictionary<string, object>)value);
-                return true;
-            }
-            catch(Exception ex)
-            {
-
-                return false;
-            }
+            value = Yaml.Deserialize(reader, typeof(Dictionary<string, object>));
+            value = new Any((Dictionary<string, object>)value);
+            return true;
         }
 
     }
