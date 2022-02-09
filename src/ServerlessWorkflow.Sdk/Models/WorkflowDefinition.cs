@@ -243,7 +243,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(13)]
         [DataMember(Order = 13)]
-        public virtual JObject Metadata { get; set; } = new JObject();
+        public virtual Any Metadata { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/> collection
@@ -486,7 +486,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Uri, Any>))]
         protected virtual OneOf<Uri, Any> ConstantsToken { get; set; }
 
-        private JObject _Constants;
+        private object _Constants;
         /// <summary>
         /// Gets/sets an <see cref="JObject"/> containing the <see cref="WorkflowDefinition"/>'s constants, which are globally accessible, read-only variables
         /// </summary>
@@ -494,7 +494,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
         [IgnoreDataMember]
-        public virtual Any Constants
+        public virtual object Constants
         {
             get
             {
@@ -506,8 +506,6 @@ namespace ServerlessWorkflow.Sdk.Models
                     else
                         this._Constants = this.ConstantsToken.Value2;
                 }
-                if (this._Constants == null)
-                    this._Constants = new JObject();
                 return this._Constants;
             }
             set
@@ -519,7 +517,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._Constants = value;
-                this.ConstantsToken = new(value);
+                this.ConstantsToken = new((Any)Any.FromObject(value)); //todo: URGENT: create static method to create an Any (vs ProtoObject)
             }
         }
 
@@ -605,7 +603,6 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [IgnoreDataMember]
         public virtual Uri SecretshUri
-
         {
             get
             {
@@ -619,7 +616,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Secrets = new ExternalDefinitionCollection<string>(value);
-                this.AuthToken = JToken.FromObject(value);
+                this.AuthToken = new(value);
             }
         }
 
@@ -694,7 +691,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(value);
-                this.AuthToken = JToken.FromObject(value);
+                this.AuthToken = new(value);
             }
         }
 

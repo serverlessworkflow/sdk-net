@@ -13,6 +13,8 @@ events:
 functions:
   - name: Function
     operation: http://fake.address
+metadata:
+  podSize: small
 start: Operation
 states:
   - name: Operation

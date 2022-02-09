@@ -78,7 +78,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected IPipelineBuilder Pipeline { get; }
 
         /// <inheritdoc/>
-        public override JObject Metadata
+        public override Any Metadata
         {
             get
             {
@@ -216,8 +216,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
             if (this.Workflow.Constants == null)
-                this.Workflow.Constants = new JObject();
-            this.Workflow.Constants.Add(name, JToken.FromObject(value));
+                this.Workflow.Constants = new();
+            //this.Workflow.Constants.Set(name, value); //todo: URGENT
             return this;
         }
 

@@ -15,6 +15,7 @@
  *
  */
 using Newtonsoft.Json.Linq;
+using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Collections.Generic;
 
@@ -31,17 +32,14 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     {
 
         /// <inheritdoc/>
-        public abstract JObject Metadata { get; }
+        public abstract Any Metadata { get; }
 
         /// <inheritdoc/>
         public virtual TContainer WithMetadata(string key, object value)
         {
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException(nameof(key));
-            JToken token = null;
-            if (value != null)
-                token = JToken.FromObject(value);
-            this.Metadata.Add(key, token);
+            this.Metadata.Set(key, value);
             return (TContainer)(object)this;
         }
 

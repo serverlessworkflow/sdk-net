@@ -64,7 +64,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="EventDefinition"/>'s metadata
         /// </summary>
-        public virtual JObject Metadata { get; set; } = new JObject();
+        public virtual Any Metadata { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

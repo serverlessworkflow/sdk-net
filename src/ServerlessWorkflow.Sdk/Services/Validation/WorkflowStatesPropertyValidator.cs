@@ -30,7 +30,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// Represents the service used to validate a workflow's <see cref="StateDefinition"/>s
     /// </summary>
     public class WorkflowStatesPropertyValidator
-        : PropertyValidator
+        : PropertyValidator<WorkflowDefinition, List<StateDefinition>>
     {
 
         private static Dictionary<Type, IEnumerable<Type>> StateValidatorTypes = typeof(WorkflowDefinitionValidator).Assembly.GetTypes()
@@ -47,17 +47,18 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.ServiceProvider = serviceProvider;
         }
 
+        public override string Name => throw new NotImplementedException();
+
         /// <summary>
         /// Gets the current <see cref="IServiceProvider"/>
         /// </summary>
         protected IServiceProvider ServiceProvider { get; }
 
         /// <inheritdoc/>
-        protected override bool IsValid(PropertyValidatorContext context)
+        public override bool IsValid(ValidationContext<WorkflowDefinition> context, List<StateDefinition> value)
         {
-            List<StateDefinition> states = (List<StateDefinition>)context.PropertyValue;
             int index = 0;
-            foreach (StateDefinition state in states)
+            foreach (StateDefinition state in value)
             {
                 if (!StateValidatorTypes.TryGetValue(state.GetType(), out IEnumerable<Type> validatorTypes))
                     continue;
@@ -69,8 +70,10 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                     ValidationResult validationResult = (ValidationResult)validationMethod.Invoke(validator, args);
                     if (validationResult.IsValid)
                         continue;
-                    this.ErrorCode = $"{nameof(WorkflowDefinition.States)}[{index}]";
-                    this.SetErrorMessage(string.Join(Environment.NewLine, validationResult.Errors.Select(e => $"{e.ErrorCode}: {e.ErrorMessage}")));
+                    foreach (var failure in validationResult.Errors)
+                    {
+                        context.AddFailure(failure);
+                    }
                     return false;
                 }
                 index++;

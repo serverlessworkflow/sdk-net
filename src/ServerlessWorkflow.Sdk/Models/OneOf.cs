@@ -146,10 +146,23 @@ namespace ServerlessWorkflow.Sdk.Models
     /// </summary>
     [ProtoContract]
     [DataContract]
-    [Newtonsoft.Json.JsonConverter(typeof(Any))]
+    [Newtonsoft.Json.JsonConverter(typeof(AnyConverter))]
     public class Any
         : ProtoObject
     {
+
+        public Any()
+        {
+
+        }
+
+        public Any(IDictionary<string, object> properties)
+        {
+            foreach (var property in properties)
+            {
+                this.Set(property.Key, property.Value);
+            }
+        }
 
         /// <inheritdoc/>
         [ProtoMember(1)]
@@ -171,9 +184,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <inheritdoc/>
         public override Any ReadJson(JsonReader reader, Type objectType, Any existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            var jobject = JObject.ReadFrom(reader);
+            var jobject = (JObject)JObject.ReadFrom(reader);
             var any = new Any();
-            foreach(var property in jobject)
+            foreach(var property in jobject.Properties())
             {
                 any.Set(property.Name, property.Value<object>());
             }

@@ -14,25 +14,25 @@
  * limitations under the License.
  *
  */
-using ServerlessWorkflow.Sdk;
 using ServerlessWorkflow.Sdk.Models;
 using System;
+using System.Collections.Generic;
 using YamlDotNet.Core;
 
 namespace YamlDotNet.Serialization
 {
     /// <summary>
-    /// Represents an <see cref="INodeDeserializer"/> used to deserialize <see cref="OneOf{T1, T2}"/> instances
+    /// Represents an <see cref="INodeDeserializer"/> used to deserialize <see cref="Any"/> instances
     /// </summary>
-    public class OneOfDeserializer
+    public class AnyDeserializer
         : INodeDeserializer
     {
 
         /// <summary>
-        /// Initializes a new <see cref="OneOfDeserializer"/>
+        /// Initializes a new <see cref="AnyDeserializer"/>
         /// </summary>
         /// <param name="inner">The inner <see cref="INodeDeserializer"/></param>
-        public OneOfDeserializer(INodeDeserializer inner)
+        public AnyDeserializer(INodeDeserializer inner)
         {
             this.Inner = inner;
         }
@@ -46,21 +46,19 @@ namespace YamlDotNet.Serialization
         public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object> nestedObjectDeserializer, out object value)
         {
             value = null;
-            var anyOfType = expectedType.GetGenericType(typeof(OneOf<,>));
-            if(anyOfType == null || !anyOfType.IsAssignableFrom(expectedType))
+            if (!typeof(Any).IsAssignableFrom(expectedType))
                 return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value);
-            var t1 = anyOfType.GetGenericArguments()[0];
-            var t2 = anyOfType.GetGenericArguments()[1];
             try
             {
-                value = Yaml.Deserialize(reader, t1);
+                value = Yaml.Deserialize(reader, typeof(Dictionary<string, object>));
+                value = new Any((Dictionary<string, object>)value);
+                return true;
             }
-            catch
+            catch(Exception ex)
             {
-                value = Yaml.Deserialize(reader, t2);
+
+                return false;
             }
-            value = Activator.CreateInstance(anyOfType, new object[] { value });
-            return true;
         }
 
     }

@@ -21,19 +21,19 @@ using Microsoft.Extensions.DependencyInjection;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
+
     /// <summary>
-    /// Represents the service used to validate a workflow's <see cref="RetryStrategyDefinition"/>s
+    /// Represents the service used to validate a workflow's <see cref="ICollection{T}"/>s
     /// </summary>
-    public class CollectionPropertyValidator<T>
-        : PropertyValidator
+    public class CollectionPropertyValidator<TElement>
+        : PropertyValidator<WorkflowDefinition, IEnumerable<TElement>>
     {
 
         /// <summary>
-        /// Initializes a new <see cref="CollectionPropertyValidator{T}"/>
+        /// Initializes a new <see cref="CollectionPropertyValidator{TElement}"/>
         /// </summary>
         /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
         public CollectionPropertyValidator(IServiceProvider serviceProvider)
@@ -41,26 +41,30 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.ServiceProvider = serviceProvider;
         }
 
+        /// <inheritdoc/>
+        public override string Name => "CollectionValidator";
+
         /// <summary>
         /// Gets the current <see cref="IServiceProvider"/>
         /// </summary>
         protected IServiceProvider ServiceProvider { get; }
 
         /// <inheritdoc/>
-        protected override bool IsValid(PropertyValidatorContext context)
+        public override bool IsValid(ValidationContext<WorkflowDefinition> context, IEnumerable<TElement> value)
         {
-            IEnumerable<T> elements = (IEnumerable<T>)context.PropertyValue;
             int index = 0;
-            foreach (T elem in elements)
+            foreach (TElement elem in value)
             {
-                IEnumerable<IValidator<T>> validators = this.ServiceProvider.GetServices<IValidator<T>>();
-                foreach (IValidator<T> validator in validators)
+                IEnumerable<IValidator<TElement>> validators = this.ServiceProvider.GetServices<IValidator<TElement>>();
+                foreach (IValidator<TElement> validator in validators)
                 {
                     ValidationResult validationResult = validator.Validate(elem);
                     if (validationResult.IsValid)
                         continue;
-                    this.ErrorCode = $"{context.PropertyName}[{index}]";
-                    this.SetErrorMessage(string.Join(Environment.NewLine, validationResult.Errors.Select(e => $"{e.ErrorCode}: {e.ErrorMessage}")));
+                    foreach (var failure in validationResult.Errors)
+                    {
+                        context.AddFailure(failure);
+                    }
                     return false;
                 }
                 index++;

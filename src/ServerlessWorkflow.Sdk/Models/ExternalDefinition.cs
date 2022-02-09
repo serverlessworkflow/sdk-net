@@ -18,6 +18,7 @@ using Newtonsoft.Json.Linq;
 using System;
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents an external definition reference
     /// </summary>

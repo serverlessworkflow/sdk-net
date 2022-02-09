@@ -15,6 +15,7 @@
  *
  */
 using Newtonsoft.Json.Linq;
+using ServerlessWorkflow.Sdk.Models;
 using System.Collections.Generic;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
@@ -30,7 +31,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <summary>
         /// Gets the container's metadata
         /// </summary>
-        JObject Metadata { get; }
+        Any Metadata { get; }
 
         /// <summary>
         /// Adds the specified metadata

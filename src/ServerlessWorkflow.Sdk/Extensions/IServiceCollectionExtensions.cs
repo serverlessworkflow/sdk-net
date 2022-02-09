@@ -160,6 +160,7 @@ namespace ServerlessWorkflow.Sdk
                     .WithTypeConverter(new Iso8601TimeSpanSerializer())
                     .WithTypeConverter(new StringEnumSerializer())
                     .WithTypeConverter(new OneOfConverter())
+                    .WithTypeConverter(new AnyConverter())
                     .WithEmissionPhaseObjectGraphVisitor(args => new ChainedObjectGraphVisitor(args.InnerVisitor)),
                 deserializer => deserializer
                     .WithNodeDeserializer(
@@ -167,7 +168,10 @@ namespace ServerlessWorkflow.Sdk
                         syntax => syntax.InsteadOf<ScalarNodeDeserializer>())
                     .WithNodeDeserializer(
                         inner => new OneOfDeserializer(inner),
-                        syntax => syntax.InsteadOf<Iso8601TimeSpanConverter>()));
+                        syntax => syntax.InsteadOf<Iso8601TimeSpanConverter>())
+                    .WithNodeDeserializer(
+                        inner => new AnyDeserializer(inner),
+                        syntax => syntax.InsteadOf<OneOfDeserializer>()));
             services.AddHttpClient();
             services.AddSingleton<IWorkflowReader, WorkflowReader>();
             services.AddSingleton<IWorkflowWriter, WorkflowWriter>();
