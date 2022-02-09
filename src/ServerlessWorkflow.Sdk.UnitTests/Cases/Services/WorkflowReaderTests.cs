@@ -61,6 +61,13 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
             workflow.States
                 .Should()
                 .NotBeEmpty();
+            workflow.Metadata
+                .Should()
+                .NotBeNull();
+            workflow.Metadata
+                .Get("podSize")
+                .Should()
+                .Be("small");
         }
 
         [Fact]
@@ -96,7 +103,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
                 .NotBeNull();
             workflow.Constants
                 .Should()
-                .NotBeEmpty();
+                .NotBeNull();
             workflow.Secrets
                 .Should()
                 .NotBeEmpty();

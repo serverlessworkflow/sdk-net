@@ -20,7 +20,6 @@ using FluentValidation.Validators;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
@@ -28,28 +27,31 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// Represents the <see cref="PropertyValidator"/> used to validate a <see cref="FunctionDefinition"/> collection
     /// </summary>
     public class FunctionDefinitionCollectionValidator
-        : PropertyValidator
+        : PropertyValidator<WorkflowDefinition, IEnumerable<FunctionDefinition>>
     {
 
+        /// <inheritdoc/>
+        public override string Name => throw new NotImplementedException();
 
         /// <inheritdoc/>
-        protected override bool IsValid(PropertyValidatorContext context)
+        public override bool IsValid(ValidationContext<WorkflowDefinition> context, IEnumerable<FunctionDefinition> value)
         {
-            WorkflowDefinition workflow = (WorkflowDefinition)context.InstanceToValidate;
-            IEnumerable<FunctionDefinition> functions = (IEnumerable<FunctionDefinition>)context.PropertyValue;
+            WorkflowDefinition workflow = context.InstanceToValidate;
             int index = 0;
             IValidator<FunctionDefinition> validator = new FunctionDefinitionValidator(workflow);
-            foreach (FunctionDefinition function in functions)
+            foreach (FunctionDefinition function in value)
             {
-                
+
                 ValidationResult validationResult = validator.Validate(function);
                 if (validationResult.IsValid)
                 {
                     index++;
                     continue;
                 }
-                this.ErrorCode = $"{context.PropertyName}[{index}]";
-                this.SetErrorMessage(string.Join(Environment.NewLine, validationResult.Errors.Select(e => $"{e.ErrorCode}: {e.ErrorMessage}")));
+                foreach(var failure in validationResult.Errors)
+                {
+                    context.AddFailure(failure);
+                }
                 return false;
             }
             return true;

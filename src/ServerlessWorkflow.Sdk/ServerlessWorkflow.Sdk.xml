@@ -1023,6 +1023,49 @@
             Gets the second possible value
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OneOf`2.op_Implicit(`0)~ServerlessWorkflow.Sdk.Models.OneOf{`0,`1}">
+            <summary>
+            Implicitly convert the specified value into a new <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/>
+            </summary>
+            <param name="value">The value to convert</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OneOf`2.op_Implicit(`1)~ServerlessWorkflow.Sdk.Models.OneOf{`0,`1}">
+            <summary>
+            Implicitly convert the specified value into a new <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/>
+            </summary>
+            <param name="value">The value to convert</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OneOf`2.op_Implicit(ServerlessWorkflow.Sdk.Models.OneOf{`0,`1})~`0">
+            <summary>
+            Implicitly convert the specified <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> into a new value
+            </summary>
+            <param name="value">The <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> to convert</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OneOf`2.op_Implicit(ServerlessWorkflow.Sdk.Models.OneOf{`0,`1})~`1">
+            <summary>
+            Implicitly convert the specified <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> into a new value
+            </summary>
+            <param name="value">The <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> to convert</param>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.Any">
+            <summary>
+            Represents an object of any type
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.Any.Fields">
+            <inheritdoc/>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.AnyConverter">
+            <summary>
+            Represents the <see cref="T:Newtonsoft.Json.JsonConverter"/> used to convert from and to <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> instances
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.AnyConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,ServerlessWorkflow.Sdk.Models.Any,System.Boolean,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.AnyConverter.WriteJson(Newtonsoft.Json.JsonWriter,ServerlessWorkflow.Sdk.Models.Any,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.OperationStateDefinition">
             <summary>
             Represents a workflow state that defines a set of actions to be performed in sequence or in parallel. Once all actions have been performed, a transition to another state can occur.
@@ -5529,7 +5572,7 @@
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.CollectionPropertyValidator`1">
             <summary>
-            Represents the service used to validate a workflow's <see cref="T:ServerlessWorkflow.Sdk.Models.RetryStrategyDefinition"/>s
+            Represents the service used to validate a workflow's <see cref="T:System.Collections.Generic.ICollection`1"/>s
             </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.Validation.CollectionPropertyValidator`1.#ctor(System.IServiceProvider)">
@@ -5538,12 +5581,15 @@
             </summary>
             <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.CollectionPropertyValidator`1.Name">
+            <inheritdoc/>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.Validation.CollectionPropertyValidator`1.ServiceProvider">
             <summary>
             Gets the current <see cref="T:System.IServiceProvider"/>
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.CollectionPropertyValidator`1.IsValid(FluentValidation.Validators.PropertyValidatorContext)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.CollectionPropertyValidator`1.IsValid(FluentValidation.ValidationContext{ServerlessWorkflow.Sdk.Models.WorkflowDefinition},System.Collections.Generic.IEnumerable{`0})">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.DataCaseDefinitionValidator">
@@ -5710,7 +5756,10 @@
             Represents the <see cref="T:FluentValidation.Validators.PropertyValidator"/> used to validate a <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> collection
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionCollectionValidator.IsValid(FluentValidation.Validators.PropertyValidatorContext)">
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionCollectionValidator.Name">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionCollectionValidator.IsValid(FluentValidation.ValidationContext{ServerlessWorkflow.Sdk.Models.WorkflowDefinition},System.Collections.Generic.IEnumerable{ServerlessWorkflow.Sdk.Models.FunctionDefinition})">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionValidator">
@@ -5986,7 +6035,7 @@
             Gets the current <see cref="T:System.IServiceProvider"/>
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator.IsValid(FluentValidation.Validators.PropertyValidatorContext)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator.IsValid(FluentValidation.ValidationContext{ServerlessWorkflow.Sdk.Models.WorkflowDefinition},System.Collections.Generic.List{ServerlessWorkflow.Sdk.Models.StateDefinition})">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.StateType">
@@ -6473,6 +6522,39 @@
             <param name="stream">The <see cref="T:YamlDotNet.Serialization.ParsingEventStream"/> to use to resolve the implementation type</param>
             <param name="implementationType">The resulting implementation type</param>
             <returns>A boolean indicating whether or not the implementation type could be resolved thanks to the specified <see cref="T:YamlDotNet.Serialization.ParsingEventStream"/></returns>
+        </member>
+        <member name="T:YamlDotNet.Serialization.AnyConverter">
+            <summary>
+            Represents the <see cref="T:YamlDotNet.Serialization.IYamlTypeConverter"/> used to serialize and deserialize <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> instances
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.AnyConverter.Accepts(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:YamlDotNet.Serialization.AnyConverter.ReadYaml(YamlDotNet.Core.IParser,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:YamlDotNet.Serialization.AnyConverter.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:YamlDotNet.Serialization.AnyDeserializer">
+            <summary>
+            Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> instances
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.AnyDeserializer.#ctor(YamlDotNet.Serialization.INodeDeserializer)">
+            <summary>
+            Initializes a new <see cref="T:YamlDotNet.Serialization.AnyDeserializer"/>
+            </summary>
+            <param name="inner">The inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/></param>
+        </member>
+        <member name="P:YamlDotNet.Serialization.AnyDeserializer.Inner">
+            <summary>
+            Gets the inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/>
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.AnyDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
+            <inheritdoc/>
         </member>
         <member name="T:YamlDotNet.Serialization.ChainedObjectGraphVisitor">
             <summary>
