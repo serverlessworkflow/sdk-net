@@ -55,9 +55,9 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .WithMessage(state => $"The '{nameof(StateDefinition.CompensatedBy)}' property of the state '{state.Name}' must be set when enabling its compensation (in both Transition and End definitions)");
             this.RuleForEach(s => s.Errors)
                 .SetValidator((s, e) => new ErrorHandlerDefinitionValidator(this.Workflow, s));
-            this.RuleFor(s => s.UseForCompensation)
+            this.RuleFor(s => s.UsedForCompensation)
                 .Must(BeAvailableForCompensation)
-                .When(state => state.UseForCompensation)
+                .When(state => state.UsedForCompensation)
                 .WithMessage(state => $"The state with name '{state.Name}' must not be part of the main control flow to be used as a compensation state");
         }
 

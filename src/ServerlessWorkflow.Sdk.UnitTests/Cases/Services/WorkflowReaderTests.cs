@@ -39,7 +39,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
 
         protected IWorkflowReader Reader { get; } = WorkflowReader.Create();
 
-        [Fact(Skip = "Does not work on GIT")]
+        [Fact]
         public async Task Read_LocalExamples()
         {
             //arrange
@@ -81,7 +81,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
             }
         }
 
-        [Fact(Skip = "Does not work on GIT")]
+        [Fact]
         public async Task Read_ExternalDefinitions()
         {
             //arrange

@@ -14,11 +14,15 @@
  * limitations under the License.
  *
  */
+using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ServerlessWorkflow.Sdk.Services.IO
 {
+
     /// <summary>
     /// Defines the fundamentals of a service used to validate <see cref="WorkflowDefinition"/>s
     /// </summary>
@@ -26,12 +30,21 @@ namespace ServerlessWorkflow.Sdk.Services.IO
     {
 
         /// <summary>
+        /// Validates the specified <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="workflow">The input to validate</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>An <see cref="IList{T}"/> containing the <see cref="ValidationError"/>s that have occured</returns>
+        Task<IList<ValidationError>> ValidateAsync(WorkflowDefinition workflow, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Validates the specified JSON input
         /// </summary>
         /// <param name="json">The input to validate</param>
-        /// <param name="errors">An <see cref="IList{T}"/> containing the validation errors key/value pairs</param>
-        /// <returns>A boolean indicating whether or not the specified JSON input is a valid <see cref="WorkflowDefinition"/></returns>
-        bool Validate(string json, out IList<string> errors);
+        /// <param name="specVersion">The Serverless Workflow spec version to evaluate the <see cref="WorkflowDefinition"/> against</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>An <see cref="IList{T}"/> containing the <see cref="ValidationError"/>s that have occured</returns>
+        Task<IList<ValidationError>> ValidateAsync(string json, string specVersion, CancellationToken cancellationToken = default);
 
     }
 

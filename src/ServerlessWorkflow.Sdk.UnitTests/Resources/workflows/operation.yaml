@@ -13,6 +13,7 @@ events:
 functions:
   - name: Function
     operation: http://fake.address
+start: Operation
 states:
   - name: Operation
     type: operation
