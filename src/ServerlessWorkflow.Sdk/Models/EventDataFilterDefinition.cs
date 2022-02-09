@@ -20,17 +20,23 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents an object used to configure how event data is to be filtered and added to or merged with the state data
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class EventDataFilterDefinition
     {
 
         /// <summary>
         /// Gets/sets an expression that filters the event data (payload)
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Data { get; set; }
 
         /// <summary>
         /// Gets/sets an expression that selects a state data element to which the action results should be added/merged into. If not specified denotes the top-level state data element
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string ToStateData { get; set; }
 
     }

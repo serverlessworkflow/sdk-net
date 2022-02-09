@@ -249,6 +249,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
+            if (this.Workflow.Events == null)
+                this.Workflow.Events = new();
             if (this.Workflow.Events.Any(ed => ed.Name == e.Name))
                 throw new ArgumentException($"The workflow already defines an event with the specified name '{e.Name}'", nameof(e));
             this.Workflow.Events.Add(e);
@@ -277,6 +279,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
+            if(this.Workflow.Functions == null)
+                this.Workflow.Functions = new();
             if (this.Workflow.Functions.Any(fd => fd.Name == function.Name))
                 throw new ArgumentException($"The workflow already defines a function with the specified name '{function.Name}'", nameof(function));
             this.Workflow.Functions.Add(function);
@@ -305,6 +309,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (strategy == null)
                 throw new ArgumentNullException(nameof(strategy));
+            if(this.Workflow.Retries == null)
+                this.Workflow.Retries = new();
             if (this.Workflow.Retries.Any(rs => rs.Name == strategy.Name))
                 throw new ArgumentException($"The workflow already defines a function with the specified name '{strategy.Name}'", nameof(strategy));
             this.Workflow.Retries.Add(strategy);

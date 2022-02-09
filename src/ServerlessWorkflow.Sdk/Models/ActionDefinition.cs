@@ -17,6 +17,7 @@
 using Newtonsoft.Json.Linq;
 using YamlDotNet.Serialization;
 using System;
+using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -24,6 +25,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents the object used to define a workflow action
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class ActionDefinition
     {
 
@@ -51,6 +54,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the unique action definition name
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Name { get; set; }
 
         /// <summary>
@@ -59,7 +64,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "functionRef")]
         [System.Text.Json.Serialization.JsonPropertyName("functionRef")]
         [YamlMember(Alias = "functionRef")]
-        protected virtual JToken FunctionToken { get; set; }
+        [ProtoMember(2, Name = "functionRef")]
+        [DataMember(Order = 2, Name = "functionRef")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<FunctionReference, string>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<FunctionReference, string>))]
+        protected virtual OneOf<FunctionReference, string> FunctionToken { get; set; }
 
         private FunctionReference _Function;
         /// <summary>
@@ -68,13 +77,21 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
         public FunctionReference Function
         {
             get
             {
                 if (this._Function == null
-                    && this.FunctionToken?.Type == JTokenType.Object)
-                    this._Function = this.FunctionToken.ToObject<FunctionReference>();
+                    && this.FunctionToken != null)
+                {
+                    if (this.FunctionToken.Value1 == null)
+                        this._Function = new FunctionReference() { RefName = this.FunctionToken.Value2 };
+                    else
+                        this._Function = this.FunctionToken.Value1;
+                }
+                  
                 return this._Function;
             }
             set
@@ -83,43 +100,19 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Function == null)
                     this.FunctionToken = null;
                 else
-                    this.FunctionToken = JToken.FromObject(this._Function);
+                    this.FunctionToken = new(this._Function);
             }
         }
 
         /// <summary>
-        /// Gets/sets a <see cref="JToken"/> that references a 'trigger' and 'result' reusable event definitions
+        /// Gets the object used to configure the reference of the event to produce or consume
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = "eventRef")]
         [System.Text.Json.Serialization.JsonPropertyName("eventRef")]
         [YamlMember(Alias = "eventRef")]
-        protected virtual JToken EventToken { get; set; }
-
-        private EventReference _Event;
-        /// <summary>
-        /// Gets the object used to configure the reference of the event to produce or consume
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        public EventReference Event
-        {
-            get
-            {
-                if (this._Event == null
-                    && this.EventToken?.Type == JTokenType.Object)
-                    this._Event = this.EventToken.ToObject<EventReference>();
-                return this._Event;
-            }
-            set
-            {
-                this._Event = value;
-                if (this._Event == null)
-                    this.EventToken = null;
-                else
-                    this.EventToken = JToken.FromObject(this._Event);
-            }
-        }
+        [ProtoMember(3, Name = "eventRef")]
+        [DataMember(Order = 3, Name = "eventRef")]
+        public EventReference Event { get; set; }
 
         /// <summary>
         /// Gets/sets a <see cref="JToken"/> that references a subflow to run
@@ -127,7 +120,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "subflowRef")]
         [System.Text.Json.Serialization.JsonPropertyName("subflowRef")]
         [YamlMember(Alias = "subflowRef")]
-        protected virtual JToken SubflowToken { get; set; }
+        [ProtoMember(4, Name = "subflowRef")]
+        [DataMember(Order = 4, Name = "subflowRef")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<SubflowReference, string>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<SubflowReference, string>))]
+        protected virtual OneOf<SubflowReference, string> SubflowToken { get; set; }
 
         private SubflowReference _Subflow;
         /// <summary>
@@ -136,6 +133,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
         public SubflowReference Subflow
         {
             get
@@ -143,10 +142,20 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Subflow == null
                     && this.SubflowToken != null)
                 {
-                    if (this.SubflowToken?.Type == JTokenType.Object)
-                        this._Subflow = this.SubflowToken.ToObject<SubflowReference>();
-                    else if (this.SubflowToken?.Type == JTokenType.String)
-                        this._Subflow = SubflowReference.Parse(this.SubflowToken.ToObject<string>());
+                    if (this.SubflowToken.Value1 == null)
+                    {
+                        var components = this.SubflowToken.Value2.Split(':', StringSplitOptions.RemoveEmptyEntries);
+                        var id = components.First();
+                        var version = (string)null;
+                        if(components.Length > 1)
+                        {
+                            version = components.Last();
+                            id = this.SubflowToken.Value2[..^(version.Length + 1)];
+                        }
+                        this._Subflow = new() { WorkflowId = id, Version = version };
+                    }
+                    else
+                        this._Subflow = this.SubflowToken.Value1;
                 }
                 return this._Subflow;
             }
@@ -156,7 +165,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Subflow == null)
                     this.SubflowToken = null;
                 else
-                    this.SubflowToken = JToken.FromObject(this._Subflow);
+                    this.SubflowToken = new(this._Subflow);
             }
         }
 
@@ -165,6 +174,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [System.Text.Json.Serialization.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
+        [ProtoMember(5)]
+        [DataMember(Order = 5)]
         public virtual TimeSpan? Timeout { get; set; }
 
         /// <summary>
@@ -173,6 +184,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "actionDataFilter")]
         [System.Text.Json.Serialization.JsonPropertyName("actionDataFilter")]
         [YamlMember(Alias = "actionDataFilter")]
+        [ProtoMember(6, Name = "actionDataFilter")]
+        [DataMember(Order = 6, Name = "actionDataFilter")]
         public ActionDataFilterDefinition DataFilter { get; set; }
 
         /// <inheritdoc/>

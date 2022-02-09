@@ -20,9 +20,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents a CRON expression definition
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class CronDefinition
     {
 
@@ -31,11 +34,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [JsonRequired]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Expression { get; set; }
 
         /// <summary>
         /// Gets/sets the date and time when the cron expression invocation is no longer valid
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual DateTime? ValidUntil { get; set; }
 
     }

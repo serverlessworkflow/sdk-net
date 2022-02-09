@@ -22,6 +22,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents an external definition reference
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class ExternalDefinition
         : JObject
     {
@@ -49,11 +51,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets the <see cref="Uri"/> used to reference the file that defines the element described by the <see cref="ExternalDefinition"/>
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual Uri DefinitionUri { get; private set; }
 
         /// <summary>
         /// Gets a boolean indicating whether or not the <see cref="ExternalDefinition"/> has been loaded
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual bool Loaded { get; }
 
     }

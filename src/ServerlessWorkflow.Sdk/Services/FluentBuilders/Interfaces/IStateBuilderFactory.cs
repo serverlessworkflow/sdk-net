@@ -34,14 +34,14 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         ICallbackStateBuilder Callback();
 
         /// <summary>
-        /// Creates and configures a new <see cref="DelayStateDefinition"/>
+        /// Creates and configures a new <see cref="SleepStateDefinition"/>
         /// </summary>
         /// <param name="duration">The delay's duration</param>
         /// <returns>A new <see cref="IDelayStateBuilder"/></returns>
         IDelayStateBuilder Delay(TimeSpan duration);
 
         /// <summary>
-        /// Creates and configures a new <see cref="DelayStateDefinition"/>
+        /// Creates and configures a new <see cref="SleepStateDefinition"/>
         /// </summary>
         /// <returns>A new <see cref="IDelayStateBuilder"/></returns>
         IDelayStateBuilder Delay();

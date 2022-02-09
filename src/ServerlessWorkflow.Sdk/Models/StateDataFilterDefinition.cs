@@ -16,20 +16,27 @@
  */
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents the object used to configure how to filter the states data input and output
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class StateDataFilterDefinition
     {
 
         /// <summary>
         /// Gets/sets an expression to filter the states data input
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Input { get; set; }
 
         /// <summary>
         /// Gets/sets an expression that filters the states data output
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string Output { get; set; }
 
     }

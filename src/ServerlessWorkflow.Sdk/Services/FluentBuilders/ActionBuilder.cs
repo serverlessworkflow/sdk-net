@@ -14,10 +14,10 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
@@ -110,14 +110,16 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IFunctionActionBuilder WithArgument(string name, string value)
         {
-            this.Action.Function.Arguments.Add(name, value);
+            if (this.Action.Function.Arguments == null)
+                this.Action.Function.Arguments = new();
+            this.Action.Function.Arguments.Set(name, value);
             return this;
         }
 
         /// <inheritdoc/>
         public virtual IFunctionActionBuilder WithArguments(IDictionary<string, string> args)
         {
-            this.Action.Function.Arguments = JObject.FromObject(args);
+            this.Action.Function.Arguments = new(args.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value));
             return this;
         }
 
@@ -167,16 +169,24 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IEventTriggerActionBuilder ThenProduce(Action<IEventBuilder> eventSetup)
+        {
+            EventDefinition e = this.Pipeline.AddEvent(eventSetup);
+            this.Action.Event.ResultEvent = e.Name;
+            return this;
+        }
+
+        /// <inheritdoc/>
         public virtual IEventTriggerActionBuilder WithContextAttribute(string name, string value)
         {
-            this.Action.Event.ContextAttributes.Add(name, value);
+            this.Action.Event.ContextAttributes.Set(name, value);
             return this;
         }
 
         /// <inheritdoc/>
         public virtual IEventTriggerActionBuilder WithContextAttribute(IDictionary<string, string> contextAttributes)
         {
-            this.Action.Event.ContextAttributes = JObject.FromObject(contextAttributes);
+            this.Action.Event.ContextAttributes = new(contextAttributes.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value));
             return this;
         }
 

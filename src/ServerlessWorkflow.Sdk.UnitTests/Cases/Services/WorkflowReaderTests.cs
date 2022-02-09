@@ -40,38 +40,69 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
         protected IWorkflowReader Reader { get; } = WorkflowReader.Create();
 
         [Fact]
-        public async Task Read_LocalExamples()
+        public async Task Read_Yaml_ShouldWork()
         {
             //arrange
             var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "operation.yaml"));
 
             //act
-            var workflow = await this.Reader.ParseAsync(yaml);
+            var parsedWorkflow = await this.Reader.ParseAsync(yaml);
 
             //assert
-            workflow
+            parsedWorkflow
                 .Should()
                 .NotBeNull();
-            workflow.Events
+            parsedWorkflow.Events
                 .Should()
                 .NotBeEmpty();
-            workflow.Functions
+            parsedWorkflow.Functions
                 .Should()
                 .NotBeEmpty();
-            workflow.States
+            parsedWorkflow.States
                 .Should()
                 .NotBeEmpty();
-            workflow.Metadata
+            parsedWorkflow.Metadata
                 .Should()
                 .NotBeNull();
-            workflow.Metadata
+            parsedWorkflow.Metadata
                 .Get("podSize")
                 .Should()
                 .Be("small");
         }
 
         [Fact]
-        public async Task Read_OfficialExamples()
+        public async Task Read_Json_ShouldWork()
+        {
+            //arrange
+            var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "operation.json"));
+
+            //act
+            var parsedWorkflow = await this.Reader.ParseAsync(yaml);
+
+            //assert
+            parsedWorkflow
+                .Should()
+                .NotBeNull();
+            parsedWorkflow.Events
+                .Should()
+                .NotBeEmpty();
+            parsedWorkflow.Functions
+                .Should()
+                .NotBeEmpty();
+            parsedWorkflow.States
+                .Should()
+                .NotBeEmpty();
+            parsedWorkflow.Metadata
+                .Should()
+                .NotBeNull();
+            parsedWorkflow.Metadata
+                .Get("podSize")
+                .Should()
+                .Be("small");
+        }
+
+        [Fact]
+        public async Task Read_OfficialExamples_ShouldWork()
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
             await foreach(Example example in GetOfficialExamplesAsync())
@@ -89,7 +120,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
         }
 
         [Fact]
-        public async Task Read_ExternalDefinitions()
+        public async Task Read_ExternalDefinitions_ShouldWork()
         {
             //arrange
             var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "externalref.yaml"));

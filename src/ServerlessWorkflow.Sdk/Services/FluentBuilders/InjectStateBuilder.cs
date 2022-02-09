@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
+using Neuroglia;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 
@@ -42,7 +42,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            this.State.Data = JObject.FromObject(data);
+            this.State.Data = data is Any any ? any : new(data.ToDictionary());
             return this;
         }
 

@@ -17,14 +17,16 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Xml;
 using YamlDotNet.Serialization;
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents an object that defines workflow states retry policy strategy. This is an explicit definition and can be reused across multiple defined workflow state errors.
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class RetryStrategyDefinition
     {
 
@@ -33,11 +35,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets/sets delay between retry attempts
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
         public virtual TimeSpan? Delay { get; set; }
@@ -45,11 +51,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the maximum amount of retries allowed
         /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual uint? MaxAttempts { get; set; }
 
         /// <summary>
         /// Gets/sets the maximum delay between retries
         /// </summary>
+        [ProtoMember(4)]
+        [DataMember(Order = 4)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
         public virtual TimeSpan? MaxDelay { get; set; }
@@ -57,6 +67,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the duration which will be added to the delay between successive retries
         /// </summary>
+        [ProtoMember(5)]
+        [DataMember(Order = 5)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
         public virtual TimeSpan? Increment { get; set; }
@@ -65,6 +77,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Gets/sets a value by which the delay is multiplied before each attempt. For example: "1.2" meaning that each successive delay is 20% longer than the previous delay. 
         /// For example, if delay is 'PT10S', then the delay between the first and second attempts will be 10 seconds, and the delay before the third attempt will be 12 seconds.
         /// </summary>
+        [ProtoMember(6)]
+        [DataMember(Order = 6)]
         public virtual float? Multiplier { get; set; }
 
         /// <summary>
@@ -73,7 +87,9 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "jitter")]
         [System.Text.Json.Serialization.JsonPropertyName("jitter")]
         [YamlMember(Alias = "jitter")]
-        protected virtual JToken JitterToken { get; set; }
+        [ProtoMember(7, Name = "jitter")]
+        [DataMember(Order = 7, Name = "jitter")]
+        protected virtual OneOf<float?, string> JitterToken { get; set; }
 
         /// <summary>
         /// Gets/sets the maximum amount of random time added or subtracted from the delay between each retry relative to total delay
@@ -82,10 +98,7 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             get
             {
-                if (this.JitterToken?.Type != JTokenType.Float
-                    || (this.JitterToken?.Type == JTokenType.String && !float.TryParse(this.JitterToken.Value<string>(), NumberStyles.Float, CultureInfo.InvariantCulture, out _)))
-                    return null;
-                return this.JitterToken.ToObject<float>();
+                return this.JitterToken?.Value1;
             }
             set
             {
@@ -94,7 +107,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     this.JitterToken = null;
                     return;
                 }
-                this.JitterToken = JToken.FromObject(value);
+                this.JitterToken = new(value);
             }
         }
 
@@ -105,10 +118,10 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             get
             {
-                if (this.JitterToken?.Type != JTokenType.String
-                    || float.TryParse(this.JitterToken.Value<string>(), NumberStyles.Any, CultureInfo.InvariantCulture, out _))
+                if (this.JitterToken == null
+                    || string.IsNullOrWhiteSpace(this.JitterToken.Value2))
                     return null;
-                return XmlConvert.ToTimeSpan(this.JitterToken.ToString());
+                return XmlConvert.ToTimeSpan(this.JitterToken.Value2);
             }
             set
             {
@@ -117,7 +130,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     this.JitterToken = null;
                     return;
                 }
-                this.JitterToken = XmlConvert.ToString(value.Value);
+                this.JitterToken = new(XmlConvert.ToString(value.Value));
             }
         }
 

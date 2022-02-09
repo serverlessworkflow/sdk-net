@@ -44,7 +44,10 @@ namespace YamlDotNet.Serialization
         /// <inheritdoc/>
         public virtual void WriteYaml(IEmitter emitter, object value, Type type)
         {
-            var token = JToken.FromObject(value);
+            var toSerialize = value;
+            if (value is IOneOf oneOf)
+                toSerialize = oneOf.GetValue();
+            var token = JToken.FromObject(toSerialize);
             new JTokenSerializer().WriteYaml(emitter, token, typeof(JToken));
         }
 

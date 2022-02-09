@@ -20,10 +20,10 @@ using System;
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
     /// <summary>
-    /// Defines the fundamentals of a service used to build <see cref="DelayStateDefinition"/>s
+    /// Defines the fundamentals of a service used to build <see cref="SleepStateDefinition"/>s
     /// </summary>
     public interface IDelayStateBuilder
-        : IStateBuilder<DelayStateDefinition>
+        : IStateBuilder<SleepStateDefinition>
     {
 
         /// <summary>

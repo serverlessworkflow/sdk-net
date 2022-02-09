@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using ProtoBuf;
 using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.IO;
 using System;
@@ -37,7 +38,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
                 .WithExecutionTimeout(timeout =>
                     timeout.After(new TimeSpan(30, 2, 0, 0)))
                 .StartsWith("inject", flow =>
-                    flow.Inject(new { username = "test", password = "123456", scopes = new string[] { "api", "test" } }))
+                    flow.Inject(new { username = "test", password = "123456"/*, scopes = new string[] { "api", "test" }*/ }))
                 .Then("operation", flow =>
                     flow.Execute("fakeApiFunctionCall", action =>
                     {
@@ -52,6 +53,10 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
                             action.Consume(e =>
                                 e.WithName("fakeEvent")
                                     .WithSource(new Uri("https://fakesource.com"))
+                                    .WithType("fakeType"))
+                                  .ThenProduce(e =>
+                                e.WithName("otherEvent")
+                                    .WithSource(new Uri("https://fakesource.com"))
                                     .WithType("fakeType"));
                         }))
                 .End()
@@ -59,7 +64,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
         }
 
         [Fact]
-        public async Task WriteYaml()
+        public async Task Write_Yaml_ShouldWork()
         {
             var workflow = BuildWorkflow();
             using Stream stream = new MemoryStream();
@@ -74,18 +79,29 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
         }
 
         [Fact]
-        public async Task WriteJson()
+        public async Task Write_Json_ShoudlWork()
         {
-            var workflow = BuildWorkflow();
+            var toSerialize = BuildWorkflow();
             using Stream stream = new MemoryStream();
-            this.Writer.Write(workflow, stream, WorkflowDefinitionFormat.Json);
+            this.Writer.Write(toSerialize, stream, WorkflowDefinitionFormat.Json);
             stream.Flush();
             stream.Position = 0;
             using StreamReader reader = new(stream);
             string json = reader.ReadToEnd();
             stream.Position = 0;
-            workflow = await this.Reader.ReadAsync(stream);
-            Assert.NotNull(workflow);
+            var deserialized = await this.Reader.ReadAsync(stream);
+            Assert.NotNull(deserialized);
+        }
+
+        [Fact]
+        public void Write_Proto_ShouldWork()
+        {
+            var toSerialize = BuildWorkflow();
+            using var stream = new MemoryStream();
+            Serializer.Serialize(stream, toSerialize);
+            stream.Position = 0;
+            var deserialized = Serializer.Deserialize<WorkflowDefinition>(stream);
+            Assert.NotNull(deserialized);
         }
 
     }

@@ -23,6 +23,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents an object used to define the execution timeout for a workflow instance
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class ExecutionTimeoutDefinition
     {
 
@@ -33,16 +35,22 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual TimeSpan Duration { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to terminate the workflow execution.
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual bool Interrupt { get; set; } = false;
 
         /// <summary>
         /// Gets/sets the name of a workflow state to be executed before workflow instance is terminated
         /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual string RunBefore { get; set; }
 
     }

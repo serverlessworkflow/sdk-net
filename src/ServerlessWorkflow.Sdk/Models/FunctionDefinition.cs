@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -22,6 +21,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents an object used to define a reusable function
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class FunctionDefinition
     {
 
@@ -30,6 +31,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Name { get; set; }
 
         /// <summary>
@@ -38,21 +41,29 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string Operation { get; set; }
 
         /// <summary>
         /// Gets/sets the type of the defined function. Defaults to '<see cref="FunctionType.Rest"/>'
         /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual FunctionType Type { get; set; } = FunctionType.Rest;
 
         /// <summary>
         /// Gets/sets the reference to the <see cref="AuthenticationDefinition"/> to use when invoking the function. Ignored when <see cref="Type"/> has been set to <see cref="FunctionType.Expression"/>
         /// </summary>
+        [ProtoMember(4)]
+        [DataMember(Order = 4)]
         public virtual string AuthRef { get; set; }
 
         /// <summary>
         /// Gets/sets the function's metadata
         /// </summary>
+        [ProtoMember(5)]
+        [DataMember(Order = 5)]
         public virtual Any Metadata { get; set; }
 
         /// <inheritdoc/>

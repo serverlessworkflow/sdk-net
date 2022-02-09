@@ -24,6 +24,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// Represents a workflow state that executes <see cref="BranchDefinition"/>es in parallel
     /// </summary>
     [DiscriminatorValue(StateType.Parallel)]
+    [ProtoContract]
+    [DataContract]
     public class ParallelStateDefinition
         : StateDefinition
     {
@@ -40,16 +42,22 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> containing the <see cref="BranchDefinition"/>es executed by the <see cref="ParallelStateDefinition"/>
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual List<BranchDefinition> Branches { get; set; } = new List<BranchDefinition>();
 
         /// <summary>
         /// Gets/sets a value that configures the way the <see cref="ParallelStateDefinition"/> completes. Defaults to 'And'
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual ParallelCompletionType CompletionType { get; set; } = ParallelCompletionType.And;
 
         /// <summary>
         /// Gets/sets a value that represents the amount of <see cref="BranchDefinition"/>es to complete for completing the state, when <see cref="CompletionType"/> is set to <see cref="ParallelCompletionType.N"/>
         /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual uint? N { get; set; }
 
         /// <summary>

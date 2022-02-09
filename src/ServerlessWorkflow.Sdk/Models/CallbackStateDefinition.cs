@@ -25,6 +25,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// Represents a workflow state that performs an action, then waits for the callback event that denotes completion of the action
     /// </summary>
     [DiscriminatorValue(StateType.Callback)]
+    [ProtoContract]
+    [DataContract]
     public class CallbackStateDefinition
         : StateDefinition
     {
@@ -41,6 +43,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the action to be executed
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual ActionDefinition Action { get; set; }
 
         /// <summary>
@@ -49,6 +53,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "eventRef")]
         [System.Text.Json.Serialization.JsonPropertyName("eventRef")]
         [YamlMember(Alias = "eventRef")]
+        [ProtoMember(2, Name = "eventRef")]
+        [DataMember(Order = 2, Name = "eventRef")]
         public virtual string Event { get; set; }
 
         /// <summary>
@@ -56,6 +62,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual TimeSpan? Timeout { get; set; }
 
         /// <summary>

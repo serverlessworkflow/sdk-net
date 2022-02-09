@@ -15,13 +15,14 @@
  *
  */
 
-using YamlDotNet.Serialization;
-
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents an object used to configure a 'Basic' authentication scheme
     /// </summary>
+    [DataContract]
+    [ProtoContract]
     public class BasicAuthenticationProperties
         : AuthenticationProperties
     {
@@ -29,14 +30,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the username to use when authenticating
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Username { get; set; }
 
         /// <summary>
         /// Gets/sets the password to use when authenticating
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "password")]
-        [System.Text.Json.Serialization.JsonPropertyName("password")]
-        [YamlMember(Alias = "password")]
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string Password { get; set; }
 
     }

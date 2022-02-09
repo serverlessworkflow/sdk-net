@@ -14,13 +14,14 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 namespace ServerlessWorkflow.Sdk.Models
 {
     /// <summary>
     /// Represents the object used to configure an event o produce
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class ProduceEventDefinition
     {
 
@@ -29,12 +30,16 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public string EventReference { get; set; }
 
         /// <summary>
         /// Gets/sets the data to pass to the cloud event to produce. If String, expression which selects parts of the states data output to become the data of the produced event. If object a custom object to become the data of produced event.
         /// </summary>
-        public JToken Data { get; set; }
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
+        public Any Data { get; set; }
 
     }
 

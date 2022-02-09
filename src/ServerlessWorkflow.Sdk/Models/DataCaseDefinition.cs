@@ -21,6 +21,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents a data-based <see cref="SwitchCaseDefinition"/>
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class DataCaseDefinition
         : SwitchCaseDefinition
     {
@@ -28,6 +30,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets an expression evaluated against state data. True if results are not empty
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Condition { get; set; }
 
     }

@@ -24,33 +24,45 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents the definition of a subflow's loop
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class SubFlowLoopDefinition
     {
 
         /// <summary>
         /// Gets/sets the expression evaluated against subflow data. Subflow will repeat execution as long as this expression is true or until the max property count is reached
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Expression { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to perform a check before looping. If true, the expression is evaluated before each repeat execution, if false the expression is evaluated after each repeat execution. Defaults to True.
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual bool CheckBefore { get; set; } = true;
 
         /// <summary>
         /// Gets/sets the maximum amount of repeat executions
         /// </summary>
         [Range(0, int.MaxValue)]
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual int? Max { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to continue on error. If true, repeats executions in a case unhandled errors propagate from the sub-workflow to this state. Defaults to false.
         /// </summary>
+        [ProtoMember(4)]
+        [DataMember(Order = 4)]
         public virtual bool ContinueOnError { get; set; } = false;
 
         /// <summary>
         /// Gets a <see cref="List{T}"/> containing the names of all the <see cref="EventDefinition"/>s to stop looping upon consumption of
         /// </summary>
+        [ProtoMember(5)]
+        [DataMember(Order = 5)]
         public virtual List<string> StopOnEvents { get; set; } = new List<string>();
 
     }

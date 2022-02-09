@@ -14,28 +14,37 @@
  * limitations under the License.
  *
  */
+
 namespace ServerlessWorkflow.Sdk.Models
 {
 
     /// <summary>
     /// Represents the object used to configure how actions filter the state data for both input and output
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class ActionDataFilterDefinition
     {
 
         /// <summary>
         /// Gets/sets an expression that filters state data that can be used by the action
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string FromStateData { get; set; }
 
         /// <summary>
         /// Gets/sets an expression that filters the actions data results
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string Results { get; set; }
 
         /// <summary>
         /// Gets/sets an expression that selects a state data element to which the action results should be added/merged into. If not specified denotes the top-level state data element
         /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual string ToStateData { get; set; }
 
     }

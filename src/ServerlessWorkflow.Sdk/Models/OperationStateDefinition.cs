@@ -26,6 +26,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// Represents a workflow state that defines a set of actions to be performed in sequence or in parallel. Once all actions have been performed, a transition to another state can occur.
     /// </summary>
     [DiscriminatorValue(StateType.Operation)]
+    [ProtoContract]
+    [DataContract]
     public class OperationStateDefinition
         : StateDefinition
     {
@@ -42,6 +44,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a value that specifies how actions are to be performed (in sequence of parallel). Defaults to sequential
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual ActionExecutionMode ActionMode { get; set; } = ActionExecutionMode.Sequential;
 
         /// <summary>
@@ -49,6 +53,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
         /// <summary>
