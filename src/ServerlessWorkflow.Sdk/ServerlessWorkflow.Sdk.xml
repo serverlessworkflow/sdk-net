@@ -185,6 +185,29 @@
             Gets/sets an <see cref="T:System.Collections.Generic.List`1"/> containing the actions to be executed in this branch
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.BranchDefinition.GetAction(System.String)">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get</param>
+            <returns>The <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.BranchDefinition.TryGetAction(System.String,ServerlessWorkflow.Sdk.Models.ActionDefinition@)">
+            <summary>
+            Attempts to get the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name
+            </summary>
+            <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get</param>
+            <param name="action">The <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name</param>
+            <returns>A boolean indicating whether or not a <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> with the specified name could be found</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.BranchDefinition.TryGetNextAction(System.String,ServerlessWorkflow.Sdk.Models.ActionDefinition@)">
+            <summary>
+            Attempts to get the next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> in the pipeline
+            </summary>
+            <param name="previousActionName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to get the next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> for</param>
+            <param name="action">The next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>, if any</param>
+            <returns>A boolean indicating whether or not there is a next <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> in the pipeline</returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.BranchDefinition.ToString">
             <inheritdoc/>
         </member>
@@ -966,6 +989,40 @@
             Gets the $schemaversion system query option, which allows clients to specify the version of the schema against which the request is made. The semantics of $schemaversion is covered in the OData-Protocol (http://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html#odata) document
             </summary>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.OneOf`2">
+            <summary>
+            Gets an object that is one of the specified types
+            </summary>
+            <typeparam name="T1">A first type alternative</typeparam>
+            <typeparam name="T2">A second type alternative</typeparam>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OneOf`2.#ctor">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OneOf`2.#ctor(`0)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/>
+            </summary>
+            <param name="value">The value of the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/></param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.OneOf`2.#ctor(`1)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/>
+            </summary>
+            <param name="value">The value of the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/></param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OneOf`2.Value1">
+            <summary>
+            Gets the first possible value
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OneOf`2.Value2">
+            <summary>
+            Gets the second possible value
+            </summary>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.OperationStateDefinition">
             <summary>
             Represents a workflow state that defines a set of actions to be performed in sequence or in parallel. Once all actions have been performed, a transition to another state can occur.
@@ -1285,7 +1342,7 @@
             Gets/sets the id of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> used to compensate the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.UseForCompensation">
+        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.UsedForCompensation">
             <summary>
             Gets/sets a boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> is used for compensating another <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
             </summary>
@@ -2057,6 +2114,26 @@
         <member name="P:ServerlessWorkflow.Sdk.Serialization.DiscriminatorValueAttribute.Value">
             <summary>
             Gets the value used to discriminate the derived type marked by the <see cref="T:ServerlessWorkflow.Sdk.Serialization.DiscriminatorValueAttribute"/>
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.ServerlessWorkflowSpecVersion">
+            <summary>
+            Exposes all supported Serverless Workflow spec versions
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.ServerlessWorkflowSpecVersion.Latest">
+            <summary>
+            Gets the latest supported spec version
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.ServerlessWorkflowSpecVersion.V0_6">
+            <summary>
+            Gets the v0.6.x version
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.ServerlessWorkflowSpecVersion.V0_7">
+            <summary>
+            Gets the v0.7.x version
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder">
@@ -4821,13 +4898,22 @@
             Defines the fundamentals of a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowSchemaValidator.Validate(System.String,System.Collections.Generic.IList{System.String}@)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowSchemaValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Threading.CancellationToken)">
+            <summary>
+            Validates the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="workflow">The input to validate</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>An <see cref="T:System.Collections.Generic.IList`1"/> containing the <see cref="T:Newtonsoft.Json.Schema.ValidationError"/>s that have occured</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowSchemaValidator.ValidateAsync(System.String,System.String,System.Threading.CancellationToken)">
             <summary>
             Validates the specified JSON input
             </summary>
             <param name="json">The input to validate</param>
-            <param name="errors">An <see cref="T:System.Collections.Generic.IList`1"/> containing the validation errors key/value pairs</param>
-            <returns>A boolean indicating whether or not the specified JSON input is a valid <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+            <param name="specVersion">The Serverless Workflow spec version to evaluate the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> against</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>An <see cref="T:System.Collections.Generic.IList`1"/> containing the <see cref="T:Newtonsoft.Json.Schema.ValidationError"/>s that have occured</returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowWriter">
             <summary>
@@ -4947,15 +5033,18 @@
             Gets the <see cref="T:System.Net.Http.HttpClient"/> used to fetch the Serverless Workflow schema
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.Schema">
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.Schemas">
             <summary>
-            Gets the <see cref="T:Newtonsoft.Json.Schema.JSchema"/> used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the loaded Serverless Workflow spec <see cref="T:Newtonsoft.Json.Schema.JSchema"/>s
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.Validate(System.String,System.Collections.Generic.IList{System.String}@)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.ValidateAsync(System.String,System.String,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.LoadSchemaAsync">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.LoadSchemaAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Loads the Serverless Workflow <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
             </summary>
@@ -6091,6 +6180,19 @@
         <member name="M:System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter.Write(System.Text.Json.Utf8JsonWriter,System.Nullable{System.TimeSpan},System.Text.Json.JsonSerializerOptions)">
             <inheritdoc/>
         </member>
+        <member name="T:System.Text.Json.Serialization.Converters.OneOfConverter`2">
+            <summary>
+            Represents the service used to convert <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/>
+            </summary>
+            <typeparam name="T1">The first type alternative</typeparam>
+            <typeparam name="T2">The second type alternative</typeparam>
+        </member>
+        <member name="M:System.Text.Json.Serialization.Converters.OneOfConverter`2.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Text.Json.Serialization.Converters.OneOfConverter`2.Write(System.Text.Json.Utf8JsonWriter,ServerlessWorkflow.Sdk.Models.OneOf{`0,`1},System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
         <member name="T:System.Text.Json.Serialization.Converters.StringEnumConverter`1">
             <summary>
             Represents the <see cref="T:System.Text.Json.Serialization.JsonConverter`1"/> used to convert from and to <see cref="T:System.Enum"/>s
@@ -6206,6 +6308,27 @@
         <member name="M:System.Text.Json.Serialization.Converters.StringEnumConverterFactory.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
             <inheritdoc/>
         </member>
+        <member name="T:System.Text.Json.Serialization.JsonElementExtensions">
+            <summary>
+            Defines extensions for <see cref="T:System.Text.Json.JsonElement"/>s
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.JsonElementExtensions.ToObject``1(System.Text.Json.JsonElement)">
+            <summary>
+            Converts the <see cref="T:System.Text.Json.JsonElement"/> into a new object of the specified type
+            </summary>
+            <typeparam name="T">The type of object to convert the <see cref="T:System.Text.Json.JsonElement"/> into</typeparam>
+            <param name="element">The <see cref="T:System.Text.Json.JsonElement"/> to convert</param>
+            <returns>A new object of the specified type</returns>
+        </member>
+        <member name="M:System.Text.Json.Serialization.JsonElementExtensions.ToObject``1(System.Text.Json.JsonDocument)">
+            <summary>
+            Converts the <see cref="T:System.Text.Json.JsonDocument"/> into a new object of the specified type
+            </summary>
+            <typeparam name="T">The type of object to convert the <see cref="T:System.Text.Json.JsonDocument"/> into</typeparam>
+            <param name="document">The <see cref="T:System.Text.Json.JsonDocument"/> to convert</param>
+            <returns>A new object of the specified type</returns>
+        </member>
         <member name="T:Newtonsoft.Json.Converters.AbstractClassConverter`1">
             <summary>
             Represents a <see cref="T:Newtonsoft.Json.JsonConverter"/> used to deserialize implementations of the specified abstract class
@@ -6270,6 +6393,19 @@
             <inheritdoc/>
         </member>
         <member name="M:Newtonsoft.Json.Converters.Iso8601TimeSpanConverter.WriteJson(Newtonsoft.Json.JsonWriter,System.TimeSpan,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Newtonsoft.Json.Converters.OneOfConverter`2">
+            <summary>
+            Represents the service used to convert <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/>
+            </summary>
+            <typeparam name="T1">The first type alternative</typeparam>
+            <typeparam name="T2">The second type alternative</typeparam>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.OneOfConverter`2.ReadJson(Newtonsoft.Json.JsonReader,System.Type,ServerlessWorkflow.Sdk.Models.OneOf{`0,`1},System.Boolean,Newtonsoft.Json.JsonSerializer)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Newtonsoft.Json.Converters.OneOfConverter`2.WriteJson(Newtonsoft.Json.JsonWriter,ServerlessWorkflow.Sdk.Models.OneOf{`0,`1},Newtonsoft.Json.JsonSerializer)">
             <inheritdoc/>
         </member>
         <member name="T:Newtonsoft.Json.IgnoreEmptyEnumerableContractResolver">
@@ -6497,6 +6633,39 @@
             </summary>
         </member>
         <member name="M:YamlDotNet.Serialization.NonPublicConstructorObjectFactory.Create(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:YamlDotNet.Serialization.OneOfConverter">
+            <summary>
+            Represents the <see cref="T:YamlDotNet.Serialization.IYamlTypeConverter"/> used to serialize and deserialize <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> instances
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.OneOfConverter.Accepts(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:YamlDotNet.Serialization.OneOfConverter.ReadYaml(YamlDotNet.Core.IParser,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:YamlDotNet.Serialization.OneOfConverter.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:YamlDotNet.Serialization.OneOfDeserializer">
+            <summary>
+            Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> instances
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.OneOfDeserializer.#ctor(YamlDotNet.Serialization.INodeDeserializer)">
+            <summary>
+            Initializes a new <see cref="T:YamlDotNet.Serialization.OneOfDeserializer"/>
+            </summary>
+            <param name="inner">The inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/></param>
+        </member>
+        <member name="P:YamlDotNet.Serialization.OneOfDeserializer.Inner">
+            <summary>
+            Gets the inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/>
+            </summary>
+        </member>
+        <member name="M:YamlDotNet.Serialization.OneOfDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
             <inheritdoc/>
         </member>
         <member name="T:YamlDotNet.Serialization.ParsingEventStream">

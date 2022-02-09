@@ -65,7 +65,9 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "end")]
         [System.Text.Json.Serialization.JsonPropertyName("end")]
         [YamlMember(Alias = "end")]
-        protected virtual JToken EndToken { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<bool, EndDefinition>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<bool, EndDefinition>))]
+        protected virtual OneOf<bool, EndDefinition> EndToken { get; set; }
 
         private EndDefinition _End;
         /// <summary>
@@ -81,11 +83,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._End == null
                     && this.EndToken != null)
                 {
-                    if (this.EndToken.Type == JTokenType.Boolean || this.EndToken.Type == JTokenType.String
-                        && this.EndToken.ToObject<bool>())
+                    if (this.EndToken.Value2 == null)
                         this._End = new EndDefinition();
                     else
-                        this._End = this.EndToken.ToObject<EndDefinition>();
+                        this._End = this.EndToken.Value2;
                 }
                 return this._End;
             }
@@ -98,7 +99,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._End = value;
-                this.EndToken = JToken.FromObject(value);
+                this.EndToken = new(value);
             }
         }
 
@@ -179,7 +180,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     if (this.DataInputSchemaToken.Type == JTokenType.String)
                         this._DataInputSchema = new DataInputSchemaDefinition() { Schema = this.DataInputSchemaToken.Value<string>() };
                     else
-                        this._DataInputSchema = this.EndToken.ToObject<DataInputSchemaDefinition>();
+                        this._DataInputSchema = this.DataInputSchemaToken.ToObject<DataInputSchemaDefinition>();
                 }
                 return this._DataInputSchema;
             }
@@ -204,7 +205,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a boolean indicating whether or not the <see cref="StateDefinition"/> is used for compensating another <see cref="StateDefinition"/>
         /// </summary>
-        public virtual bool UseForCompensation { get; set; }
+        public virtual bool UsedForCompensation { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="StateDefinition"/>'s metadata

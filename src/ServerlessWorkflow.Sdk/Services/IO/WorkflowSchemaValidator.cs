@@ -18,8 +18,11 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.Serialization;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ServerlessWorkflow.Sdk.Services.IO
@@ -53,37 +56,45 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// </summary>
         protected HttpClient HttpClient { get; }
 
-        private JSchema _Schema;
         /// <summary>
-        /// Gets the <see cref="JSchema"/> used to validate <see cref="WorkflowDefinition"/>s
+        /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the loaded Serverless Workflow spec <see cref="JSchema"/>s
         /// </summary>
-        protected JSchema Schema
+        protected ConcurrentDictionary<string, JSchema> Schemas { get;  } = new();
+
+        /// <inheritdoc/>
+        public virtual async Task<IList<ValidationError>> ValidateAsync(string workflowJson, string specVersion, CancellationToken cancellationToken = default)
         {
-            get
-            {
-                if (this._Schema == null)
-                    this._Schema = this.LoadSchemaAsync().GetAwaiter().GetResult();
-                return this._Schema;
-            }
+            var workflow = this.Serializer.Deserialize<JObject>(workflowJson);
+            var schema = await this.LoadSchemaAsync(specVersion);
+            workflow.IsValid(schema, out IList<ValidationError> validationErrors);
+            return validationErrors;
         }
 
         /// <inheritdoc/>
-        public virtual bool Validate(string workflowJson, out IList<string> validationErrors)
+        public virtual async Task<IList<ValidationError>> ValidateAsync(WorkflowDefinition workflow, CancellationToken cancellationToken = default)
         {
-            JObject workflow = this.Serializer.Deserialize<JObject>(workflowJson);
-            return workflow.IsValid(this.Schema, out validationErrors);
+            if (workflow == null)
+                throw new ArgumentNullException(nameof(workflow));
+            var obj = JObject.FromObject(workflow);
+            var schema = await this.LoadSchemaAsync(workflow.SpecVersion);
+            obj.IsValid(schema, out IList<ValidationError> validationErrors);
+            return validationErrors;
         }
 
         /// <summary>
         /// Loads the Serverless Workflow <see cref="JSchema"/>
         /// </summary>
         /// <returns>The Serverless Workflow <see cref="JSchema"/></returns>
-        protected virtual async Task<JSchema> LoadSchemaAsync()
+        protected virtual async Task<JSchema> LoadSchemaAsync(string specVersion, CancellationToken cancellationToken = default)
         {
-            using HttpResponseMessage response = await this.HttpClient.GetAsync("https://raw.githubusercontent.com/serverlessworkflow/specification/main/schema/workflow.json");
-            string json = await response.Content?.ReadAsStringAsync();
+            if (this.Schemas.TryGetValue(specVersion, out var schema))
+                return schema;
+            using HttpResponseMessage response = await this.HttpClient.GetAsync($"https://raw.githubusercontent.com/serverlessworkflow/specification/{(specVersion[..3] + ".x")}/schema/workflow.json", cancellationToken);
+            string json = await response.Content?.ReadAsStringAsync(cancellationToken);
             response.EnsureSuccessStatusCode();
-            return JSchema.Parse(json, new JSchemaUrlResolver());
+            schema = JSchema.Parse(json, new JSchemaUrlResolver());
+            this.Schemas.TryAdd(specVersion, schema);
+            return schema;
         }
 
     }

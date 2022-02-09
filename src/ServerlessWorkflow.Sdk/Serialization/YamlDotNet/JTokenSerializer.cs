@@ -22,6 +22,7 @@ using YamlDotNet.Core.Events;
 
 namespace YamlDotNet.Serialization
 {
+
     /// <summary>
     /// Represents the <see cref="IYamlTypeConverter"/> used to serialize <see cref="JToken"/>s
     /// </summary>
