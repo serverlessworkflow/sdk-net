@@ -300,24 +300,14 @@
             Represents an object used to define the transition of the workflow if there is no matching data conditions or event timeout is reached
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.TransitionToken">
+        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.Transition">
             <summary>
             Gets/sets a <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the next transition of the workflow if there is valid matches
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.Transition">
-            <summary>
-            Gets/sets an object used to define the next transition of the workflow if there is valid matches
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.EndToken">
-            <summary>
-            Gets/sets a <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the object used to configure the end of the workflow
-            </summary>
-        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.End">
             <summary>
-            Gets/sets an object used to configure the end of the workflow
+            Gets/sets a <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the object used to configure the end of the workflow
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.EndDefinition">
@@ -360,24 +350,14 @@
             Gets/sets a reference to the <see cref="T:ServerlessWorkflow.Sdk.Models.RetryStrategyDefinition"/> to use 
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition.TransitionToken">
+        <member name="P:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition.Transition">
             <summary>
             Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/>
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition.Transition">
-            <summary>
-            Gets/sets the object used to configre the transition to execute on error.
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition.EndToken">
-            <summary>
-            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
-            </summary>
-        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition.End">
             <summary>
-            Gets/sets the object used to configre the way the workflow ends on error
+            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
             </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition.ToString">
@@ -1266,7 +1246,7 @@
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StartDefinition.StateName">
             <summary>
-            Gets/sets the name of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            Gets/sets the name of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>. If not defined, defaults to the first defined state
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StartDefinition.Schedule">
@@ -1330,14 +1310,9 @@
             Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s id
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.EndToken">
-            <summary>
-            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
-            </summary>
-        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.End">
             <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.DataFilter">
@@ -1350,14 +1325,9 @@
             Gets/sets the configuration of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s error handling
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.TransitionToken">
-            <summary>
-            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/>
-            </summary>
-        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.Transition">
             <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/>
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.DataInputSchemaToken">
@@ -1485,24 +1455,14 @@
             Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/>'s name
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition.TransitionToken">
+        <member name="P:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition.Transition">
             <summary>
             Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/>
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition.Transition">
-            <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/> that should be performed when the condition is met
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition.EndToken">
-            <summary>
-            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
-            </summary>
-        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition.End">
             <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/> that should be performed when the condition is met
+            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
             </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition.ToString">
@@ -1636,6 +1596,11 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Start">
             <summary>
             Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StartDefinition"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.StartState">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>. If not set, defaults to the first defined <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.KeepActive">
@@ -5892,6 +5857,13 @@
             Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.StateDefinitionValidator`1.ReferenceExistingState(ServerlessWorkflow.Sdk.Models.OneOf{ServerlessWorkflow.Sdk.Models.TransitionDefinition,System.String})">
+            <summary>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists
+            </summary>
+            <param name="oneOf">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
+            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists</returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.Validation.StateDefinitionValidator`1.ReferenceExistingState(System.String)">
             <summary>
             Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists
@@ -5906,27 +5878,20 @@
             <param name="eventName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> to check</param>
             <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> exists</returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.StateDefinitionValidator`1.ReferenceExistingState(ServerlessWorkflow.Sdk.Models.TransitionDefinition)">
-            <summary>
-            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists
-            </summary>
-            <param name="transition">The <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/> that references the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
-            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists</returns>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.StateDefinitionValidator`1.DefineCompensationState(`0,ServerlessWorkflow.Sdk.Models.EndDefinition)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.StateDefinitionValidator`1.DefineCompensationState(`0,ServerlessWorkflow.Sdk.Models.OneOf{ServerlessWorkflow.Sdk.Models.TransitionDefinition,System.String})">
             <summary>
             Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> defines a compensation state
             </summary>
             <param name="state">The <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
-            <param name="endDefinition">The <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/> that references the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
+            <param name="oneOf">The <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/> that references the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
             <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> defines a compensation state</returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.StateDefinitionValidator`1.DefineCompensationState(`0,ServerlessWorkflow.Sdk.Models.TransitionDefinition)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.StateDefinitionValidator`1.DefineCompensationState(`0,ServerlessWorkflow.Sdk.Models.OneOf{ServerlessWorkflow.Sdk.Models.EndDefinition,System.Boolean})">
             <summary>
             Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> defines a compensation state
             </summary>
             <param name="state">The <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
-            <param name="transitionDefinition">The <see cref="T:ServerlessWorkflow.Sdk.Models.TransitionDefinition"/> that references the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
+            <param name="oneOf">The <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/> that references the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
             <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> defines a compensation state</returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.Validation.StateDefinitionValidator`1.BeAvailableForCompensation(`0,System.Boolean)">

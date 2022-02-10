@@ -28,7 +28,7 @@ namespace ServerlessWorkflow.Sdk.Models
     {
 
         /// <summary>
-        /// Gets/sets the name of the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/>
+        /// Gets/sets the name of the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/>. If not defined, defaults to the first defined state
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]

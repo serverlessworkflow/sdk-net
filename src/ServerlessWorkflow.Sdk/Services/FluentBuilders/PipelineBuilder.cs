@@ -117,7 +117,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
             var nextState = this.AddState(stateSetup);
-            this.CurrentState.Transition = new() { To = nextState.Name };
+            this.CurrentState.Transition = nextState.Name;
             this.CurrentState = nextState;
             return this;
         }
@@ -151,7 +151,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IWorkflowBuilder End()
         {
-            this.CurrentState.End = new EndDefinition() {  };
+            this.CurrentState.End = true;
             return this.Workflow;
         }
 

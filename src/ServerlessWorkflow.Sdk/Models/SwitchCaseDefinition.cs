@@ -61,97 +61,20 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="SwitchCaseDefinition"/>'s <see cref="TransitionDefinition"/>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "transition")]
-        [System.Text.Json.Serialization.JsonPropertyName("transition")]
-        [YamlMember(Alias = "transition")]
         [ProtoMember(2)]
         [DataMember(Order = 2)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
-        protected virtual OneOf<TransitionDefinition, string> TransitionToken { get; set; }
-
-        private TransitionDefinition _Transition;
-        /// <summary>
-        /// Gets/sets the <see cref="TransitionDefinition"/> that should be performed when the condition is met
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual TransitionDefinition Transition
-        {
-            get
-            {
-                if (this._Transition == null
-                    && this.TransitionToken != null)
-                {
-                    if (this.TransitionToken.Value1 == null)
-                        this._Transition = new TransitionDefinition() { To = this.TransitionToken.Value2 };
-                    else
-                        this._Transition = this.TransitionToken.Value1;
-                }
-                return this._Transition;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    this._Transition = null;
-                    this.TransitionToken = null;
-                    return;
-                }
-                this._Transition = value;
-                this.TransitionToken = new(value);
-            }
-        }
+        public virtual OneOf<TransitionDefinition, string> Transition { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="SwitchCaseDefinition"/>'s <see cref="EndDefinition"/>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "end")]
-        [System.Text.Json.Serialization.JsonPropertyName("end")]
-        [YamlMember(Alias = "end")]
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
-        protected virtual OneOf<EndDefinition, bool> EndToken { get; set; }
-
-        private EndDefinition _End;
-        /// <summary>
-        /// Gets/sets the <see cref="EndDefinition"/> that should be performed when the condition is met
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual EndDefinition End
-        {
-            get
-            {
-                if (this._End == null
-                    && this.EndToken != null)
-                {
-                    if (this.EndToken.Value1 == null
-                        && this.EndToken.Value2)
-                        this._End = new();
-                    else
-                        this._End = this.EndToken.Value1;
-                }
-                return this._End;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    this._End = null;
-                    this.EndToken = null;
-                    return;
-                }
-                this._End = value;
-                this.EndToken = new(value);
-            }
-        }
+        public virtual OneOf<EndDefinition, bool> End { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

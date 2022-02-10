@@ -21,6 +21,7 @@ using YamlDotNet.Core;
 
 namespace YamlDotNet.Serialization
 {
+
     /// <summary>
     /// Represents an <see cref="INodeDeserializer"/> used to deserialize <see cref="OneOf{T1, T2}"/> instances
     /// </summary>
@@ -46,20 +47,20 @@ namespace YamlDotNet.Serialization
         public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object> nestedObjectDeserializer, out object value)
         {
             value = null;
-            var anyOfType = expectedType.GetGenericType(typeof(OneOf<,>));
-            if(anyOfType == null || !anyOfType.IsAssignableFrom(expectedType))
+            var oneOfType = expectedType.GetGenericType(typeof(OneOf<,>));
+            if(oneOfType == null || !oneOfType.IsAssignableFrom(expectedType))
                 return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value);
-            var t1 = anyOfType.GetGenericArguments()[0];
-            var t2 = anyOfType.GetGenericArguments()[1];
+            var t1 = oneOfType.GetGenericArguments()[0];
+            var t2 = oneOfType.GetGenericArguments()[1];
             try
             {
-                value = Yaml.Deserialize(reader, t1);
+                value = nestedObjectDeserializer(reader, t1);
             }
             catch
             {
-                value = Yaml.Deserialize(reader, t2);
+                value = nestedObjectDeserializer(reader, t2);
             }
-            value = Activator.CreateInstance(anyOfType, new object[] { value });
+            value = Activator.CreateInstance(oneOfType, new object[] { value });
             return true;
         }
 

@@ -196,39 +196,43 @@ namespace ServerlessWorkflow.Sdk.Models
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<StartDefinition, string>))]
         protected virtual OneOf<StartDefinition, string> StartToken { get; set; }
 
-        private StartDefinition _Start;
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s <see cref="StartDefinition"/>
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
         public virtual StartDefinition Start
         {
             get
             {
-                if (this._Start == null
-                    && this.StartToken != null)
-                {
-                    if (this.StartToken.Value1 == null
-                        && !string.IsNullOrWhiteSpace(this.StartToken.Value2))
-                        this._Start = new StartDefinition() { StateName = this.StartToken.Value2 };
-                    else
-                        this._Start = this.StartToken.Value1;
-                }
-                return this._Start;
+                return this.StartToken;
             }
             set
             {
-                if (value == null)
-                {
-                    this._Start = null;
-                    this.StartToken = null;
-                    return;
-                }
-                this._Start = value;
-                this.StartToken = new(value);
+                    this.StartToken = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/>. If not set, defaults to the first defined <see cref="StateDefinition"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual string StartState
+        {
+            get
+            {
+                return this.StartToken;
+            }
+            set
+            {
+                this.StartToken = value;
             }
         }
 
