@@ -47,11 +47,11 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .When(s => s.Transition != null)
                 .WithMessage((state, stateName) => $"Failed to find the state '{stateName}' to transition to")
                 .Must(DefineCompensationState)
-                .When(s => s.Transition?.Value1 != null && s.Transition.Value1.Compensate)
+                .When(s => s.Transition?.T1Value != null && s.Transition.T1Value.Compensate)
                 .WithMessage(state => $"The '{nameof(StateDefinition.CompensatedBy)}' property of the state '{state.Name}' must be set when enabling its compensation (in both Transition and End definitions)");
             this.RuleFor(s => s.End)
                 .Must(DefineCompensationState)
-                .When(s => s.End?.Value1 != null && s.End.Value1.Compensate)
+                .When(s => s.End?.T1Value != null && s.End.T1Value.Compensate)
                 .WithMessage(state => $"The '{nameof(StateDefinition.CompensatedBy)}' property of the state '{state.Name}' must be set when enabling its compensation (in both Transition and End definitions)");
             this.RuleForEach(s => s.Errors)
                 .SetValidator((s, e) => new ErrorHandlerDefinitionValidator(this.Workflow, s));
@@ -74,10 +74,10 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         protected virtual bool ReferenceExistingState(OneOf<TransitionDefinition, string> oneOf)
         {
             string stateName = null;
-            if (oneOf.Value1 == null)
-                stateName = oneOf.Value2;
+            if (oneOf.T1Value == null)
+                stateName = oneOf.T2Value;
             else
-                stateName = oneOf.Value1.To;
+                stateName = oneOf.T1Value.To;
             return this.Workflow.TryGetState(stateName, out _);
         }
 

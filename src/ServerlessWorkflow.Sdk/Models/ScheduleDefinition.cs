@@ -63,10 +63,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Cron == null
                    && this.CronToken != null)
                 {
-                    if (this.CronToken.Value1 == null)
-                        this._Cron = new() { Expression = this.CronToken.Value2 };
+                    if (this.CronToken.T1Value == null)
+                        this._Cron = new() { Expression = this.CronToken.T2Value };
                     else
-                        this._Cron = this.CronToken.Value1;
+                        this._Cron = this.CronToken.T1Value;
                 }
                 return this._Cron;
             }

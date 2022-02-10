@@ -387,7 +387,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             this.Pipeline.AddState(state);
-            this.Workflow.StartState = state.Name;
+            this.Workflow.Start = state.Name;
             return this.Pipeline;
         }
 
@@ -397,7 +397,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
             StateDefinition state = this.Pipeline.AddState(stateSetup);
-            this.Workflow.StartState = state.Name;
+            this.Workflow.Start = state.Name;
             return this.Pipeline;
         }
 

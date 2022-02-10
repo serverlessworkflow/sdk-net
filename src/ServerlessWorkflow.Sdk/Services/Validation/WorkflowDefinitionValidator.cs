@@ -54,10 +54,10 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.RuleFor(w => w.Start)
                 .Must(ReferenceExistingState)
                 .When(w => w.Start != null)
-                .WithMessage((workflow, start) => $"Failed to find the state with name '{start.StateName}' specified by the workflow's start definition");
+                .WithMessage((workflow, start) => $"Failed to find the state with name '{(start.T1Value != null ? start.T1Value.StateName : start.T2Value)}' specified by the workflow's start definition");
             this.RuleFor(w => w.Events)
                 .Must(events => events.Select(s => s.Name).Distinct().Count() == events.Count)
-                .When(w => w.Functions != null)
+                .When(w => w.Events != null)
                 .WithMessage("Duplicate EventDefinition name(s) found");
             this.RuleFor(w => w.Events)
                 .SetValidator(new CollectionPropertyValidator<EventDefinition>(this.ServiceProvider))
@@ -75,7 +75,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .WithMessage("Duplicate RetryPolicyDefinition name(s) found");
             this.RuleFor(w => w.Retries)
                 .SetValidator(new CollectionPropertyValidator<RetryStrategyDefinition>(this.ServiceProvider))
-                .When(w => w.Functions != null);
+                .When(w => w.Retries != null);
             this.RuleFor(w => w.Auth)
                 .Must(auths => auths.Select(s => s.Name).Distinct().Count() == auths.Count)
                 .When(w => w.Auth != null)
@@ -110,14 +110,19 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         }
 
         /// <summary>
-        /// Determines whether or not the specified <see cref="StartDefinition"/> defines an existing <see cref="StateDefinition"/>
+        /// Determines whether or not the specified <see cref="StartDefinition"/> references an existing <see cref="StateDefinition"/>
         /// </summary>
         /// <param name="workflow">The <see cref="WorkflowDefinition"/> to validate</param>
-        /// <param name="start">The <see cref="StartDefinition"/> to validate</param>
-        /// <returns>A boolean indicating whether or not the specified <see cref="StartDefinition"/> defines an existing <see cref="StateDefinition"/></returns>
-        protected virtual bool ReferenceExistingState(WorkflowDefinition workflow, StartDefinition start)
+        /// <param name="oneOf">The <see cref="StartDefinition"/> to check</param>
+        /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> exists</returns>
+        protected virtual bool ReferenceExistingState(WorkflowDefinition workflow, OneOf<StartDefinition, string> oneOf)
         {
-            return workflow.TryGetState(start.StateName, out _);
+            string stateName = null;
+            if (oneOf.T1Value == null)
+                stateName = oneOf.T2Value;
+            else
+                stateName = oneOf.T1Value.StateName;
+            return workflow.TryGetState(stateName, out _);
         }
 
     }

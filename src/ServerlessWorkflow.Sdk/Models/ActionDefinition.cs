@@ -86,10 +86,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Function == null
                     && this.FunctionToken != null)
                 {
-                    if (this.FunctionToken.Value1 == null)
-                        this._Function = new FunctionReference() { RefName = this.FunctionToken.Value2 };
+                    if (this.FunctionToken.T1Value == null)
+                        this._Function = new FunctionReference() { RefName = this.FunctionToken.T2Value };
                     else
-                        this._Function = this.FunctionToken.Value1;
+                        this._Function = this.FunctionToken.T1Value;
                 }
                   
                 return this._Function;
@@ -142,20 +142,20 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Subflow == null
                     && this.SubflowToken != null)
                 {
-                    if (this.SubflowToken.Value1 == null)
+                    if (this.SubflowToken.T1Value == null)
                     {
-                        var components = this.SubflowToken.Value2.Split(':', StringSplitOptions.RemoveEmptyEntries);
+                        var components = this.SubflowToken.T2Value.Split(':', StringSplitOptions.RemoveEmptyEntries);
                         var id = components.First();
                         var version = (string)null;
                         if(components.Length > 1)
                         {
                             version = components.Last();
-                            id = this.SubflowToken.Value2[..^(version.Length + 1)];
+                            id = this.SubflowToken.T2Value[..^(version.Length + 1)];
                         }
                         this._Subflow = new() { WorkflowId = id, Version = version };
                     }
                     else
-                        this._Subflow = this.SubflowToken.Value1;
+                        this._Subflow = this.SubflowToken.T1Value;
                 }
                 return this._Subflow;
             }

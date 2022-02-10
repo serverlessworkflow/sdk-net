@@ -47,10 +47,10 @@ namespace Newtonsoft.Json.Converters
         /// <inheritdoc/>
         public override void WriteJson(JsonWriter writer, OneOf<T1, T2> value, JsonSerializer serializer)
         {
-            if (value.Value1 != null)
-                serializer.Serialize(writer, value.Value1);
+            if (value.T1Value != null)
+                serializer.Serialize(writer, value.T1Value);
             else
-                serializer.Serialize(writer, value.Value2);
+                serializer.Serialize(writer, value.T2Value);
         }
 
     }

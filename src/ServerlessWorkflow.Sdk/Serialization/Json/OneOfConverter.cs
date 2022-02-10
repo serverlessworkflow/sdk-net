@@ -47,10 +47,10 @@ namespace System.Text.Json.Serialization.Converters
         public override void Write(Utf8JsonWriter writer, OneOf<T1, T2> value, JsonSerializerOptions options)
         {
             var json = string.Empty;
-            if (value.Value1 != null)
-                json = JsonSerializer.Serialize(value.Value1);
+            if (value.T1Value != null)
+                json = JsonSerializer.Serialize(value.T1Value);
             else
-                json = JsonSerializer.Serialize(value.Value2);
+                json = JsonSerializer.Serialize(value.T2Value);
             writer.WriteStringValue(json);
         }
 

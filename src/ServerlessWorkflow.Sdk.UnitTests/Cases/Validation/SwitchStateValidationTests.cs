@@ -39,8 +39,8 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.ErrorCode == "States[0]" && e.ErrorMessage.Contains($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DataConditions)}"))
-                .And.Contain(e => e.ErrorCode == "States[0]" && e.ErrorMessage.Contains($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.EventConditions)}"));
+                .And.Contain(e => e.ErrorCode.Contains($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DataConditions)}"))
+                .And.Contain(e => e.ErrorCode.Contains($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.EventConditions)}"));
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.ErrorCode == "States[0]" && e.ErrorMessage.Contains($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DefaultCondition)}"));
+                .And.Contain(e => e.ErrorCode.Contains($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DefaultCondition)}"));
         }
 
     }
