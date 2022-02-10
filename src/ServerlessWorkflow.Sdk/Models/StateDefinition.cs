@@ -141,10 +141,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._DataInputSchema == null
                     && this.DataInputSchemaToken != null)
                 {
-                    if (this.DataInputSchemaToken.Value1 == null)
-                        this._DataInputSchema = new DataInputSchemaDefinition() { Schema = this.DataInputSchemaToken.Value2 };
+                    if (this.DataInputSchemaToken.T1Value == null)
+                        this._DataInputSchema = new DataInputSchemaDefinition() { Schema = this.DataInputSchemaToken.T2Value };
                     else
-                        this._DataInputSchema = this.DataInputSchemaToken.Value1;
+                        this._DataInputSchema = this.DataInputSchemaToken.T1Value;
                 }
                 return this._DataInputSchema;
             }

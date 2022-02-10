@@ -48,7 +48,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <param name="value">The value of the <see cref="OneOf{T1, T2}"/></param>
         public OneOf(T1 value)
         {
-            this.Value1 = value;
+            this.T1Value = value;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <param name="value">The value of the <see cref="OneOf{T1, T2}"/></param>
         public OneOf(T2 value)
         {
-            this.Value2 = value;
+            this.T2Value = value;
         }
 
         /// <summary>
@@ -68,15 +68,15 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlDotNet.Serialization.YamlIgnore]
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public T1 Value1
+        public T1 T1Value
         {
             get => _DicriminatorUnionObject.Is(1) ? ((T1)_DicriminatorUnionObject.Object) : default;
             set => _DicriminatorUnionObject = new(1, value);
         }
 
-        bool ShouldSerializeT1() => this._DicriminatorUnionObject.Is(1);
+        bool ShouldSerializeT1Value() => this._DicriminatorUnionObject.Is(1);
 
-        void ResetT1() => DiscriminatedUnionObject.Reset(ref this._DicriminatorUnionObject, 1);
+        void ResetT1Value() => DiscriminatedUnionObject.Reset(ref this._DicriminatorUnionObject, 1);
 
         /// <summary>
         /// Gets the second possible value
@@ -86,22 +86,22 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlDotNet.Serialization.YamlIgnore]
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public T2 Value2
+        public T2 T2Value
         {
             get => _DicriminatorUnionObject.Is(2) ? ((T2)_DicriminatorUnionObject.Object) : default;
             set => _DicriminatorUnionObject = new(2, value);
         }
 
-        bool ShouldSerializeT2() => this._DicriminatorUnionObject.Is(2);
+        bool ShouldSerializeT2Value() => this._DicriminatorUnionObject.Is(2);
 
-        void ResetT2() => DiscriminatedUnionObject.Reset(ref this._DicriminatorUnionObject, 2);
+        void ResetT2Value() => DiscriminatedUnionObject.Reset(ref this._DicriminatorUnionObject, 2);
 
         object IOneOf.GetValue()
         {
-            if (this.Value1 == null)
-                return this.Value2;
+            if (this.T1Value == null)
+                return this.T2Value;
             else
-                return this.Value1;
+                return this.T1Value;
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <param name="value">The <see cref="OneOf{T1, T2}"/> to convert</param>
         public static implicit operator T1(OneOf<T1, T2> value)
         {
-            return value.Value1;
+            return value.T1Value;
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <param name="value">The <see cref="OneOf{T1, T2}"/> to convert</param>
         public static implicit operator T2(OneOf<T1, T2> value)
         {
-            return value.Value2;
+            return value.T2Value;
         }
 
     }

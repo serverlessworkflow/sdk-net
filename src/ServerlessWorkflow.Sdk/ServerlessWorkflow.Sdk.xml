@@ -1588,19 +1588,9 @@
             Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s execution timeout
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.StartToken">
-            <summary>
-            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start
-            </summary>
-        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Start">
             <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StartDefinition"/>
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.StartState">
-            <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>. If not set, defaults to the first defined <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.KeepActive">
@@ -5987,13 +5977,13 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowDefinitionValidator.Validate(FluentValidation.ValidationContext{ServerlessWorkflow.Sdk.Models.WorkflowDefinition})">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowDefinitionValidator.ReferenceExistingState(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Models.StartDefinition)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowDefinitionValidator.ReferenceExistingState(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Models.OneOf{ServerlessWorkflow.Sdk.Models.StartDefinition,System.String})">
             <summary>
-            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StartDefinition"/> defines an existing <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StartDefinition"/> references an existing <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
             </summary>
             <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
-            <param name="start">The <see cref="T:ServerlessWorkflow.Sdk.Models.StartDefinition"/> to validate</param>
-            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StartDefinition"/> defines an existing <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></returns>
+            <param name="oneOf">The <see cref="T:ServerlessWorkflow.Sdk.Models.StartDefinition"/> to check</param>
+            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists</returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator">
             <summary>
@@ -6005,6 +5995,9 @@
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator"/>
             </summary>
             <param name="serviceProvider">The current <see cref="T:System.IServiceProvider"/></param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator.Name">
+            <inheritdoc/>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator.ServiceProvider">
             <summary>

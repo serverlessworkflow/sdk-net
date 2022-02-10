@@ -98,7 +98,7 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             get
             {
-                return this.JitterToken?.Value1;
+                return this.JitterToken?.T1Value;
             }
             set
             {
@@ -119,9 +119,9 @@ namespace ServerlessWorkflow.Sdk.Models
             get
             {
                 if (this.JitterToken == null
-                    || string.IsNullOrWhiteSpace(this.JitterToken.Value2))
+                    || string.IsNullOrWhiteSpace(this.JitterToken.T2Value))
                     return null;
-                return XmlConvert.ToTimeSpan(this.JitterToken.Value2);
+                return XmlConvert.ToTimeSpan(this.JitterToken.T2Value);
             }
             set
             {

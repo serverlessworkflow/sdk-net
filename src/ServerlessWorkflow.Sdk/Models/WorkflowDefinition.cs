@@ -111,10 +111,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._DataInputSchema == null
                     && this.DataInputSchemaToken != null)
                 {
-                    if (this.DataInputSchemaToken.Value2 != null)
-                        this._DataInputSchema = new ExternalJSchema(this.DataInputSchemaToken.Value2);
+                    if (this.DataInputSchemaToken.T2Value != null)
+                        this._DataInputSchema = new ExternalJSchema(this.DataInputSchemaToken.T2Value);
                     else
-                        this._DataInputSchema = this.DataInputSchemaToken.Value1;
+                        this._DataInputSchema = this.DataInputSchemaToken.T1Value;
                 }
                 return this._DataInputSchema;
             }
@@ -187,54 +187,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that defines the <see cref="WorkflowDefinition"/>'s start
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "start")]
-        [System.Text.Json.Serialization.JsonPropertyName("start")]
-        [YamlMember(Alias = "start")]
-        [ProtoMember(11, Name = "start")]
-        [DataMember(Order = 11, Name = "start")]
+        [ProtoMember(11)]
+        [DataMember(Order = 11)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<StartDefinition, string>))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<StartDefinition, string>))]
-        protected virtual OneOf<StartDefinition, string> StartToken { get; set; }
-
-        /// <summary>
-        /// Gets/sets the <see cref="WorkflowDefinition"/>'s <see cref="StartDefinition"/>
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual StartDefinition Start
-        {
-            get
-            {
-                return this.StartToken;
-            }
-            set
-            {
-                    this.StartToken = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets/sets the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/>. If not set, defaults to the first defined <see cref="StateDefinition"/>
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual string StartState
-        {
-            get
-            {
-                return this.StartToken;
-            }
-            set
-            {
-                this.StartToken = value;
-            }
-        }
+        public virtual OneOf<StartDefinition, string> Start { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to keep instances of the <see cref="WorkflowDefinition"/> active event if there are no active execution paths. Instance can be terminated via 'terminate end definition' or reaching defined 'execTimeout'
@@ -277,10 +234,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Events == null
                     && this.EventsToken != null)
                 {
-                    if (this.EventsToken.Value1 == null)
-                        this._Events = new ExternalDefinitionCollection<EventDefinition>(this.EventsToken.Value2);
+                    if (this.EventsToken.T1Value == null)
+                        this._Events = new ExternalDefinitionCollection<EventDefinition>(this.EventsToken.T2Value);
                     else
-                        this._Events = this.EventsToken.Value1;
+                        this._Events = this.EventsToken.T1Value;
                 }
                 return this._Events;
             }
@@ -349,10 +306,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Functions == null
                     && this.FunctionsToken != null)
                 {
-                    if (this.FunctionsToken.Value1 == null)
-                        this._Functions = new ExternalDefinitionCollection<FunctionDefinition>(this.FunctionsToken.Value2);
+                    if (this.FunctionsToken.T1Value == null)
+                        this._Functions = new ExternalDefinitionCollection<FunctionDefinition>(this.FunctionsToken.T2Value);
                     else
-                        this._Functions = this.FunctionsToken.Value1;
+                        this._Functions = this.FunctionsToken.T1Value;
                 }
                 return this._Functions;
             }
@@ -421,10 +378,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Retries == null
                     && this.RetriesToken != null)
                 {
-                    if (this.RetriesToken.Value1 == null)
-                        this._Retries = new ExternalDefinitionCollection<RetryStrategyDefinition>(this.RetriesToken.Value2);
+                    if (this.RetriesToken.T1Value == null)
+                        this._Retries = new ExternalDefinitionCollection<RetryStrategyDefinition>(this.RetriesToken.T2Value);
                     else
-                        this._Retries = this.RetriesToken.Value1;
+                        this._Retries = this.RetriesToken.T1Value;
                 }
                 return this._Retries;
             }
@@ -500,10 +457,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Constants == null
                     && this.ConstantsToken != null)
                 {
-                    if (this.ConstantsToken.Value2 == null)
-                        this._Constants = new ExternalDefinition(this.ConstantsToken.Value1);
+                    if (this.ConstantsToken.T2Value == null)
+                        this._Constants = new ExternalDefinition(this.ConstantsToken.T1Value);
                     else
-                        this._Constants = this.ConstantsToken.Value2;
+                        this._Constants = this.ConstantsToken.T2Value;
                 }
                 return this._Constants;
             }
@@ -572,10 +529,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Secrets == null
                     && this.SecretsToken != null)
                 {
-                    if (this.SecretsToken.Value1 == null)
-                        this._Secrets = new ExternalDefinitionCollection<string>(this.SecretsToken.Value2);
+                    if (this.SecretsToken.T1Value == null)
+                        this._Secrets = new ExternalDefinitionCollection<string>(this.SecretsToken.T2Value);
                     else
-                        this._Secrets = this.SecretsToken.Value1;
+                        this._Secrets = this.SecretsToken.T1Value;
                 }
                 return this._Secrets;
             }
@@ -644,10 +601,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Auth == null
                     && this.AuthToken != null)
                 {
-                    if (this.AuthToken.Value1 == null)
-                        this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(this.AuthToken.Value2);
+                    if (this.AuthToken.T1Value == null)
+                        this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(this.AuthToken.T2Value);
                     else
-                        this._Auth = this.AuthToken.Value1;
+                        this._Auth = this.AuthToken.T1Value;
                 }
                 return this._Auth;
             }

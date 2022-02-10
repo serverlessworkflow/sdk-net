@@ -47,7 +47,8 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.ServiceProvider = serviceProvider;
         }
 
-        public override string Name => throw new NotImplementedException();
+        /// <inheritdoc/>
+        public override string Name => typeof(WorkflowStatesPropertyValidator).Name;
 
         /// <summary>
         /// Gets the current <see cref="IServiceProvider"/>

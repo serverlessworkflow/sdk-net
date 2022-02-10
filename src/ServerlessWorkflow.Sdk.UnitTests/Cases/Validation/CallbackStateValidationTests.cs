@@ -40,7 +40,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.ErrorCode == "States[0]" && e.ErrorMessage.StartsWith($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Action)}"));
+                .And.Contain(e => e.ErrorCode.StartsWith($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Action)}"));
         }
 
         [Fact]
@@ -60,7 +60,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.ErrorCode == "States[0]" && e.ErrorMessage.Contains($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Event)}"));
+                .And.Contain(e => e.ErrorCode.Contains($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Event)}"));
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.ErrorCode == "States[0]" && e.ErrorMessage.Contains($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Event)}"));
+                .And.Contain(e => e.ErrorCode.Contains($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Event)}"));
         }
 
     }
