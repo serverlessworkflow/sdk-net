@@ -50,7 +50,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected TState State { get; } = new TState();
 
         /// <inheritdoc/>
-        public override JObject Metadata
+        public override Any Metadata
         {
             get
             {
@@ -101,7 +101,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
             StateDefinition compensatedBy = this.Pipeline.AddState(stateSetup);
-            compensatedBy.UseForCompensation = true;
+            compensatedBy.UsedForCompensation = true;
             this.State.CompensatedBy = compensatedBy.Name;
             return this;
         }
@@ -111,7 +111,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
-            state.UseForCompensation = true;
+            state.UsedForCompensation = true;
             this.State.CompensatedBy = this.Pipeline.AddState(state).Name;
             return this;
         }

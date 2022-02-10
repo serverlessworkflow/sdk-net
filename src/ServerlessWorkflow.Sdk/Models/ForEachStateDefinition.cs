@@ -25,6 +25,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// Represents a workflow state that executes a set of defined actions or workflows for each element of a data array
     /// </summary>
     [DiscriminatorValue(StateType.ForEach)]
+    [ProtoContract]
+    [DataContract]
     public class ForEachStateDefinition
         : StateDefinition
     {
@@ -41,11 +43,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// gets/sets an expression selecting an array element of the states data
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string InputCollection { get; set; }
 
         /// <summary>
         /// Gets/sets an expression specifying an array element of the states data to add the results of each iteration
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string OutputCollection { get; set; }
 
         /// <summary>
@@ -54,26 +60,36 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "iterationParam")]
         [System.Text.Json.Serialization.JsonPropertyName("iterationParam")]
         [YamlMember(Alias = "iterationParam")]
+        [ProtoMember(3, Name = "iterationParam")]
+        [DataMember(Order = 3, Name = "iterationParam")]
         public virtual string IterationParameter { get; set; }
 
         /// <summary>
         /// Gets/sets a uint that specifies how upper bound on how many iterations may run in parallel
         /// </summary>
+        [ProtoMember(4)]
+        [DataMember(Order = 4)]
         public virtual uint? Max { get; set; }
 
         /// <summary>
         /// Gets/sets a value used to configure the way the actions of each iterations should be executed
         /// </summary>
+        [ProtoMember(5)]
+        [DataMember(Order = 5)]
         public virtual ActionExecutionMode ActionMode { get; set; }
 
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> of actions to be executed for each of the elements of the <see cref="InputCollection"/>
         /// </summary>
+        [ProtoMember(6)]
+        [DataMember(Order = 6)]
         public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
         /// <summary>
         /// Gets/sets the unique Id of a workflow to be executed for each of the elements of <see cref="InputCollection"/>
         /// </summary>
+        [ProtoMember(7)]
+        [DataMember(Order = 7)]
         public virtual string WorkflowId { get; set; }
 
         /// <summary>

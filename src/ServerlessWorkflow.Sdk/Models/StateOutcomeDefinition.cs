@@ -21,6 +21,10 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents the base class for all <see cref="StateDefinition"/>'s outcomes
     /// </summary>
+    [ProtoContract]
+    [DataContract]
+    [ProtoInclude(100, typeof(EndDefinition))]
+    [ProtoInclude(200, typeof(TransitionDefinition))]
     public abstract class StateOutcomeDefinition
     {
 

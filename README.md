@@ -3,7 +3,7 @@
 
 # Serverless Workflow Specification - .NET SDK
 
-Provides .NET 5.0 API/SPI and Model Validation for the [Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
+Provides .NET 6.0 API/SPI and Model Validation for the [Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
 
 With the SDK, you can:
 
@@ -46,10 +46,15 @@ var workflow = WorkflowDefinition.Create("MyWorkflow", "MyWorkflow", "1.0")
       })      
           .Execute("fakeEventTrigger", action =>
           {
-              action.Consume(e =>
-                  e.WithName("fakeEvent")
-                      .WithSource(new Uri("https://fakesource.com"))
-                      .WithType("fakeType"));
+               action
+                    .Consume(e =>
+                        e.WithName("fakeEvent")
+                            .WithSource(new Uri("https://fakesource.com"))
+                            .WithType("fakeType"))
+                    .ThenProduce(e =>
+                        e.WithName("otherEvent")
+                            .WithSource(new Uri("https://fakesource.com"))
+                            .WithType("fakeType"));
           }))
   .End()
   .Build();

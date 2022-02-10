@@ -24,6 +24,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents a reusable definition of a workflow authentication mechanism
     /// </summary>
+    [DataContract]
+    [ProtoContract]
     public class AuthenticationDefinition
     {
 
@@ -33,6 +35,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "name")]
         [System.Text.Json.Serialization.JsonPropertyName("name")]
         [YamlMember(Alias = "name")]
+        [ProtoMember(1, Name = "name")]
+        [DataMember(Order = 1, Name = "name")]
         public virtual string Name { get; set; }
 
         /// <summary>
@@ -41,6 +45,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "scheme")]
         [System.Text.Json.Serialization.JsonPropertyName("scheme")]
         [YamlMember(Alias = "scheme")]
+        [ProtoMember(2, Name = "scheme")]
+        [DataMember(Order = 2, Name = "scheme")]
         public virtual AuthenticationScheme Scheme { get; set; }
 
         /// <summary>
@@ -49,6 +55,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "properties")]
         [System.Text.Json.Serialization.JsonPropertyName("properties")]
         [YamlMember(Alias = "properties")]
+        [ProtoMember(3, Name = "properties")]
+        [DataMember(Order = 3, Name = "properties")]
         protected virtual JToken PropertiesToken { get; set; }
 
         private AuthenticationProperties _Properties;
@@ -58,6 +66,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
         public virtual AuthenticationProperties Properties
         {
             get
@@ -109,6 +119,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
         public virtual string SecretRef
         {
             get

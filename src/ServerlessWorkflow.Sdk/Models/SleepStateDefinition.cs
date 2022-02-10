@@ -20,19 +20,22 @@ using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents a workflow state that waits for a certain amount of time before transitioning to a next state
     /// </summary>
-    [DiscriminatorValue(StateType.Delay)]
-    public class DelayStateDefinition
+    [DiscriminatorValue(StateType.Sleep)]
+    [ProtoContract]
+    [DataContract]
+    public class SleepStateDefinition
        : StateDefinition
     {
 
         /// <summary>
-        /// Initializes a new <see cref="DelayStateDefinition"/>
+        /// Initializes a new <see cref="SleepStateDefinition"/>
         /// </summary>
-        public DelayStateDefinition()
-            : base(StateType.Delay)
+        public SleepStateDefinition()
+            : base(StateType.Sleep)
         {
 
         }
@@ -43,6 +46,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "timeDelay"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [System.Text.Json.Serialization.JsonPropertyName("timeDelay"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
         [YamlMember(Alias = "timeDelay")]
+        [ProtoMember(1, Name = "timeDelay")]
+        [DataMember(Order = 1, Name = "timeDelay")]
         public virtual TimeSpan Delay { get; set; }
 
     }

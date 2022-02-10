@@ -15,7 +15,6 @@
  *
  */
 using System.ComponentModel.DataAnnotations;
-using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -23,16 +22,18 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents an object used to explicitly define how/when workflow instances should be created
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class StartDefinition
     {
 
         /// <summary>
-        /// Gets/sets the name of the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/>
+        /// Gets/sets the name of the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/>. If not defined, defaults to the first defined state
         /// </summary>
         [Required]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "stateName")]
-        [System.Text.Json.Serialization.JsonPropertyName("stateName")]
-        [YamlMember(Alias = "stateName")]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string StateName { get; set; }
 
         /// <summary>
@@ -40,10 +41,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "schedule")]
-        [System.Text.Json.Serialization.JsonPropertyName("schedule")]
-        [YamlMember(Alias = "schedule")]
-        public virtual ScheduleDefinition Schedule { get; set; } = new ScheduleDefinition();
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
+        public virtual ScheduleDefinition Schedule { get; set; } = new();
 
     }
 

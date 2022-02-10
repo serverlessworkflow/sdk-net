@@ -19,30 +19,41 @@ using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents a workflow execution branch
     /// </summary>
+    [DataContract]
+    [ProtoContract]
     public class BranchDefinition
     {
 
         /// <summary>
         /// gets/sets the branch's name
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets/sets the unique id of a workflow to be executed in this branch
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string WorkflowId { get; set; }
 
         /// <summary>
         /// Gets/sets a value that specifies how actions are to be performed (in sequence of parallel)
         /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual ActionExecutionMode ActionMode { get; set; }
 
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> containing the actions to be executed in this branch
         /// </summary>
+        [ProtoMember(4)]
+        [DataMember(Order = 4)]
         public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
         /// <summary>

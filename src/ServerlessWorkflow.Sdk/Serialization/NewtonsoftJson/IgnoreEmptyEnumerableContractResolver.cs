@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections;
@@ -34,18 +35,26 @@ namespace Newtonsoft.Json
         /// <inheritdoc/>
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
-            JsonProperty property = base.CreateProperty(member, memberSerialization);
-            if (property.PropertyType != typeof(string))
+            JsonProperty result = base.CreateProperty(member, memberSerialization);
+            switch (member)
             {
-                if (property.PropertyType.GetInterface(nameof(IEnumerable)) != null)
-                    property.ShouldSerialize =
+                case PropertyInfo property:
+                    result.Writable |= property.CanWrite;
+                    result.Ignored |= !property.CanRead;
+                    break;
+            }
+            if (result.PropertyType != typeof(string)
+                && result.PropertyType != typeof(JToken))
+            {
+                if (result.PropertyType.GetInterface(nameof(IEnumerable)) != null)
+                    result.ShouldSerialize =
                         instance => (instance?.GetType().GetProperties(BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
-                            .First(p => string.Equals(p.Name, property.PropertyName, StringComparison.InvariantCultureIgnoreCase) 
-                                || string.Equals(p.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName, property.PropertyName, StringComparison.InvariantCultureIgnoreCase)).GetValue(instance) 
+                            .First(p => string.Equals(p.Name, result.PropertyName, StringComparison.InvariantCultureIgnoreCase) 
+                                || string.Equals(p.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName, result.PropertyName, StringComparison.InvariantCultureIgnoreCase)).GetValue(instance) 
                                 as IEnumerable<object>)?
                             .Count() > 0;
             }
-            return property;
+            return result;
         }
     }
 

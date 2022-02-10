@@ -74,7 +74,7 @@ namespace YamlDotNet.Serialization
         /// <returns>A new <see cref="ParsingEventStream"/></returns>
         public static ParsingEventStream Create(IParser parser)
         {
-            LinkedList<ParsingEvent> events = new LinkedList<ParsingEvent>();
+            LinkedList<ParsingEvent> events = new();
             events.AddLast(parser.Consume<MappingStart>());
             var depth = 0;
             do

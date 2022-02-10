@@ -21,9 +21,12 @@ using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents a reference to a sub <see cref="WorkflowDefinition"/>
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class SubflowReference
     {
 
@@ -66,25 +69,23 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Gets/sets the id of the <see cref="WorkflowDefinition"/> to run
         /// </summary>
         [Required]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "workflowId"), Newtonsoft.Json.JsonRequired]
-        [System.Text.Json.Serialization.JsonPropertyName("workflowId")]
-        [YamlMember(Alias = "workflowId")]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string WorkflowId { get; set; }
 
         /// <summary>
         /// Gets/sets the version of the <see cref="WorkflowDefinition"/> to run. Defaults to 'latest'
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "version")]
-        [System.Text.Json.Serialization.JsonPropertyName("version")]
-        [YamlMember(Alias = "version")]
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string Version { get; set; } = "latest";
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to wait for the completion of the <see cref="WorkflowDefinition"/> to run. Defaults to true
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "waitForCompletion")]
-        [System.Text.Json.Serialization.JsonPropertyName("waitForCompletion")]
-        [YamlMember(Alias = "waitForCompletion")]
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual bool WaitForCompletion { get; set; } = true;
 
         /// <summary>

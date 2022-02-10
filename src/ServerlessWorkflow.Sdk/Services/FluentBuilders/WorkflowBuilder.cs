@@ -78,7 +78,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected IPipelineBuilder Pipeline { get; }
 
         /// <inheritdoc/>
-        public override JObject Metadata
+        public override Any Metadata
         {
             get
             {
@@ -216,8 +216,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
             if (this.Workflow.Constants == null)
-                this.Workflow.Constants = new JObject();
-            this.Workflow.Constants.Add(name, JToken.FromObject(value));
+                this.Workflow.Constants = new();
+            //this.Workflow.Constants.Set(name, value); //todo: URGENT
             return this;
         }
 
@@ -249,6 +249,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
+            if (this.Workflow.Events == null)
+                this.Workflow.Events = new();
             if (this.Workflow.Events.Any(ed => ed.Name == e.Name))
                 throw new ArgumentException($"The workflow already defines an event with the specified name '{e.Name}'", nameof(e));
             this.Workflow.Events.Add(e);
@@ -277,6 +279,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (function == null)
                 throw new ArgumentNullException(nameof(function));
+            if(this.Workflow.Functions == null)
+                this.Workflow.Functions = new();
             if (this.Workflow.Functions.Any(fd => fd.Name == function.Name))
                 throw new ArgumentException($"The workflow already defines a function with the specified name '{function.Name}'", nameof(function));
             this.Workflow.Functions.Add(function);
@@ -305,6 +309,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (strategy == null)
                 throw new ArgumentNullException(nameof(strategy));
+            if(this.Workflow.Retries == null)
+                this.Workflow.Retries = new();
             if (this.Workflow.Retries.Any(rs => rs.Name == strategy.Name))
                 throw new ArgumentException($"The workflow already defines a function with the specified name '{strategy.Name}'", nameof(strategy));
             this.Workflow.Retries.Add(strategy);
@@ -381,7 +387,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             this.Pipeline.AddState(state);
-            this.Workflow.Start = new StartDefinition() { StateName = state.Name };
+            this.Workflow.Start = state.Name;
             return this.Pipeline;
         }
 
@@ -391,7 +397,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
             StateDefinition state = this.Pipeline.AddState(stateSetup);
-            this.Workflow.Start = new StartDefinition() { StateName = state.Name };
+            this.Workflow.Start = state.Name;
             return this.Pipeline;
         }
 

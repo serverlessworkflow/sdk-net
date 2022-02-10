@@ -16,12 +16,14 @@
  */
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using ProtoBuf;
 using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using YamlDotNet.Serialization;
@@ -31,17 +33,23 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents the definition of a Serverless Workflow
     /// </summary>
+    [DataContract]
+    [ProtoContract]
     public class WorkflowDefinition
     {
 
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s unique identifier
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Id { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s domain-specific workflow identifier
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string Key { get; set; }
 
         /// <summary>
@@ -49,11 +57,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Newtonsoft.Json.JsonRequired]
         [Required]
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual string Name { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s description
         /// </summary>
+        [ProtoMember(4)]
+        [DataMember(Order = 4)]
         public virtual string Description { get; set; }
 
         /// <summary>
@@ -61,11 +73,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Newtonsoft.Json.JsonRequired]
         [Required]
+        [ProtoMember(5)]
+        [DataMember(Order = 5)]
         public virtual string Version { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="System.Version"/> of the Serverless Workflow schema to use
         /// </summary>
+        [ProtoMember(6)]
+        [DataMember(Order = 6)]
         public virtual string SpecVersion { get; set; } = typeof(WorkflowDefinition).Assembly.GetName().Version.ToString(2);
 
         /// <summary>
@@ -74,7 +90,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema")]
         [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema")]
         [YamlMember(Alias = "dataInputSchema")]
-        protected virtual JToken DataInputSchemaToken { get; set; }
+        [ProtoMember(7, Name = "dataInputSchema")]
+        [DataMember(Order = 7, Name = "dataInputSchema")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<JSchema, Uri>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<JSchema, Uri>))]
+        protected virtual OneOf<JSchema, Uri> DataInputSchemaToken { get; set; }
 
         private JSchema _DataInputSchema;
         /// <summary>
@@ -83,6 +103,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual JSchema DataInputSchema
         {
             get
@@ -90,10 +111,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._DataInputSchema == null
                     && this.DataInputSchemaToken != null)
                 {
-                    if (this.DataInputSchemaToken.Type == JTokenType.String)
-                        this._DataInputSchema = new ExternalJSchema(this.DataInputSchemaToken.ToObject<Uri>());
+                    if (this.DataInputSchemaToken.T2Value != null)
+                        this._DataInputSchema = new ExternalJSchema(this.DataInputSchemaToken.T2Value);
                     else
-                        this._DataInputSchema = this.DataInputSchemaToken.ToObject<JSchema>();
+                        this._DataInputSchema = this.DataInputSchemaToken.T1Value;
                 }
                 return this._DataInputSchema;
             }
@@ -106,7 +127,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._DataInputSchema = value;
-                this.DataInputSchemaToken = JToken.FromObject(value);
+                this.DataInputSchemaToken = new(value);
             }
         }
 
@@ -116,6 +137,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual Uri DataInputSchemaUri
         {
             get
@@ -130,7 +152,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._DataInputSchema = new ExternalJSchema(value);
-                this.DataInputSchemaToken = JToken.FromObject(value);
+                this.DataInputSchemaToken = new(value);
             }
         }
 
@@ -141,11 +163,15 @@ namespace ServerlessWorkflow.Sdk.Models
         [System.Text.Json.Serialization.JsonPropertyName("expressionLang")]
         [YamlMember(Alias = "expressionLang")]
         [Required]
+        [ProtoMember(8, Name = "expressionLang")]
+        [DataMember(Order = 8, Name = "expressionLang")]
         public virtual string ExpressionLanguage { get; set; } = "jq";
 
         /// <summary>
         /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s annotations
         /// </summary>
+        [ProtoMember(9)]
+        [DataMember(Order = 9)]
         public virtual List<string> Annotations { get; set; } = new List<string>();
 
         /// <summary>
@@ -154,59 +180,32 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "execTimeout")]
         [System.Text.Json.Serialization.JsonPropertyName("execTimeout")]
         [YamlMember(Alias = "execTimeout")]
+        [ProtoMember(10, Name = "execTimeout")]
+        [DataMember(Order = 10, Name = "execTimeout")]
         public virtual ExecutionTimeoutDefinition ExecutionTimeout { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that defines the <see cref="WorkflowDefinition"/>'s start
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "start")]
-        [System.Text.Json.Serialization.JsonPropertyName("start")]
-        [YamlMember(Alias = "start")]
-        protected virtual JToken StartToken { get; set; }
-
-        private StartDefinition _Start;
-        /// <summary>
-        /// Gets/sets the <see cref="WorkflowDefinition"/>'s <see cref="StartDefinition"/>
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        public virtual StartDefinition Start
-        {
-            get
-            {
-                if (this._Start == null
-                    && this.StartToken != null)
-                {
-                    if (this.StartToken.Type == JTokenType.String)
-                        this._Start = new StartDefinition() { StateName = this.StartToken.ToObject<string>() };
-                    else
-                        this._Start = this.StartToken.ToObject<StartDefinition>();
-                }
-                return this._Start;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    this._Start = null;
-                    this.StartToken = null;
-                    return;
-                }
-                this._Start = value;
-                this.StartToken = JToken.FromObject(value);
-            }
-        }
+        [ProtoMember(11)]
+        [DataMember(Order = 11)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<StartDefinition, string>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<StartDefinition, string>))]
+        public virtual OneOf<StartDefinition, string> Start { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to keep instances of the <see cref="WorkflowDefinition"/> active event if there are no active execution paths. Instance can be terminated via 'terminate end definition' or reaching defined 'execTimeout'
         /// </summary>
+        [ProtoMember(12)]
+        [DataMember(Order = 12)]
         public virtual bool KeepActive { get; set; } = false;
 
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s metadata
         /// </summary>
-        public virtual JObject Metadata { get; set; } = new JObject();
+        [ProtoMember(13)]
+        [DataMember(Order = 13)]
+        public virtual Any Metadata { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/> collection
@@ -214,7 +213,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "events")]
         [System.Text.Json.Serialization.JsonPropertyName("events")]
         [YamlMember(Alias = "events")]
-        protected virtual JToken EventsToken { get; set; }
+        [ProtoMember(14, Name = "events")]
+        [DataMember(Order = 14, Name = "events")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<EventDefinition>, Uri>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<EventDefinition>, Uri>))]
+        protected virtual OneOf<List<EventDefinition>, Uri> EventsToken { get; set; }
 
         private List<EventDefinition> _Events;
         /// <summary>
@@ -223,6 +226,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual List<EventDefinition> Events
         {
             get
@@ -230,13 +234,11 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Events == null
                     && this.EventsToken != null)
                 {
-                    if (this.EventsToken.Type == JTokenType.String)
-                        this._Events = new ExternalDefinitionCollection<EventDefinition>(this.EventsToken.ToObject<Uri>());
+                    if (this.EventsToken.T1Value == null)
+                        this._Events = new ExternalDefinitionCollection<EventDefinition>(this.EventsToken.T2Value);
                     else
-                        this._Events = this.EventsToken.ToObject<List<EventDefinition>>();
+                        this._Events = this.EventsToken.T1Value;
                 }
-                if (this._Events == null)
-                    this._Events = new List<EventDefinition>();
                 return this._Events;
             }
             set
@@ -248,7 +250,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._Events = value;
-                this.EventsToken = JToken.FromObject(value);
+                this.EventsToken = new(value);
             }
         }
 
@@ -258,6 +260,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual Uri EventsUri
         {
             get
@@ -272,7 +275,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Events = new ExternalDefinitionCollection<EventDefinition>(value);
-                this.EventsToken = JToken.FromObject(value);
+                this.EventsToken = new(value);
             }
         }
 
@@ -282,7 +285,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "functions")]
         [System.Text.Json.Serialization.JsonPropertyName("functions")]
         [YamlMember(Alias = "functions")]
-        protected virtual JToken FunctionsToken { get; set; }
+        [ProtoMember(15, Name = "functions")]
+        [DataMember(Order = 15, Name = "functions")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<FunctionDefinition>, Uri>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<FunctionDefinition>, Uri>))]
+        protected virtual OneOf<List<FunctionDefinition>, Uri> FunctionsToken { get; set; }
 
         private List<FunctionDefinition> _Functions;
         /// <summary>
@@ -291,6 +298,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual List<FunctionDefinition> Functions
         {
             get
@@ -298,13 +306,11 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Functions == null
                     && this.FunctionsToken != null)
                 {
-                    if (this.FunctionsToken.Type == JTokenType.String)
-                        this._Functions = new ExternalDefinitionCollection<FunctionDefinition>(this.FunctionsToken.ToObject<Uri>());
+                    if (this.FunctionsToken.T1Value == null)
+                        this._Functions = new ExternalDefinitionCollection<FunctionDefinition>(this.FunctionsToken.T2Value);
                     else
-                        this._Functions = this.FunctionsToken.ToObject<List<FunctionDefinition>>();
+                        this._Functions = this.FunctionsToken.T1Value;
                 }
-                if (this._Functions == null)
-                    this._Functions = new List<FunctionDefinition>();
                 return this._Functions;
             }
             set
@@ -316,7 +322,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._Functions = value;
-                this.FunctionsToken = JToken.FromObject(value);
+                this.FunctionsToken = new(value);
             }
         }
 
@@ -326,6 +332,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual Uri FunctionsUri
         {
             get
@@ -340,7 +347,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Functions = new ExternalDefinitionCollection<FunctionDefinition>(value);
-                this.FunctionsToken = JToken.FromObject(value);
+                this.FunctionsToken = new(value);
             }
         }
 
@@ -350,7 +357,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "retries")]
         [System.Text.Json.Serialization.JsonPropertyName("retries")]
         [YamlMember(Alias = "retries")]
-        protected virtual JToken RetriesToken { get; set; }
+        [ProtoMember(16, Name = "retries")]
+        [DataMember(Order = 16, Name = "retries")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<RetryStrategyDefinition>, Uri>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<RetryStrategyDefinition>, Uri>))]
+        protected virtual OneOf<List<RetryStrategyDefinition>, Uri> RetriesToken { get; set; }
 
         private List<RetryStrategyDefinition> _Retries;
         /// <summary>
@@ -359,6 +370,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual List<RetryStrategyDefinition> Retries
         {
             get
@@ -366,13 +378,11 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Retries == null
                     && this.RetriesToken != null)
                 {
-                    if (this.RetriesToken.Type == JTokenType.String)
-                        this._Retries = new ExternalDefinitionCollection<RetryStrategyDefinition>(this.RetriesToken.ToObject<Uri>());
+                    if (this.RetriesToken.T1Value == null)
+                        this._Retries = new ExternalDefinitionCollection<RetryStrategyDefinition>(this.RetriesToken.T2Value);
                     else
-                        this._Retries = this.RetriesToken.ToObject<List<RetryStrategyDefinition>>();
+                        this._Retries = this.RetriesToken.T1Value;
                 }
-                if (this._Retries == null)
-                    this._Retries = new List<RetryStrategyDefinition>();
                 return this._Retries;
             }
             set
@@ -384,7 +394,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._Retries = value;
-                this.RetriesToken = JToken.FromObject(value);
+                this.RetriesToken = new(value);
             }
         }
 
@@ -394,6 +404,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual Uri RetriesUri
         {
             get
@@ -408,13 +419,15 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Retries = new ExternalDefinitionCollection<RetryStrategyDefinition>(value);
-                this.RetriesToken = JToken.FromObject(value);
+                this.RetriesToken = new(value);
             }
         }
 
         /// <summary>
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="StateDefinition"/>s
         /// </summary>
+        [ProtoMember(17)]
+        [DataMember(Order = 17)]
         public virtual List<StateDefinition> States { get; set; } = new List<StateDefinition>();
 
         /// <summary>
@@ -423,29 +436,32 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "constants")]
         [System.Text.Json.Serialization.JsonPropertyName("constants")]
         [YamlMember(Alias = "constants")]
-        protected virtual JToken ConstantsToken { get; set; }
+        [ProtoMember(18, Name = "constants")]
+        [DataMember(Order = 18, Name = "constants")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Uri, Any>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Uri, Any>))]
+        protected virtual OneOf<Uri, Any> ConstantsToken { get; set; }
 
-        private JObject _Constants;
+        private object _Constants;
         /// <summary>
         /// Gets/sets an <see cref="JObject"/> containing the <see cref="WorkflowDefinition"/>'s constants, which are globally accessible, read-only variables
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
-        public virtual JObject Constants
+        [IgnoreDataMember]
+        public virtual object Constants
         {
             get
             {
                 if (this._Constants == null
                     && this.ConstantsToken != null)
                 {
-                    if (this.ConstantsToken.Type == JTokenType.String)
-                        this._Constants = new ExternalDefinition(this.ConstantsToken.ToObject<Uri>());
+                    if (this.ConstantsToken.T2Value == null)
+                        this._Constants = new ExternalDefinition(this.ConstantsToken.T1Value);
                     else
-                        this._Constants = (JObject)this.ConstantsToken;
+                        this._Constants = this.ConstantsToken.T2Value;
                 }
-                if (this._Constants == null)
-                    this._Constants = new JObject();
                 return this._Constants;
             }
             set
@@ -457,7 +473,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._Constants = value;
-                this.ConstantsToken = value;
+                this.ConstantsToken = new((Any)Any.FromObject(value)); //todo: URGENT: create static method to create an Any (vs ProtoObject)
             }
         }
 
@@ -467,6 +483,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual Uri ConstantsUri
         {
             get
@@ -481,7 +498,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Constants = new ExternalDefinition(value);
-                this.ConstantsToken = JToken.FromObject(value);
+                this.ConstantsToken = new(value);
             }
         }
 
@@ -491,7 +508,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "secrets")]
         [System.Text.Json.Serialization.JsonPropertyName("secrets")]
         [YamlMember(Alias = "secrets")]
-        protected virtual JToken SecretsToken { get; set; }
+        [ProtoMember(19, Name = "secrets")]
+        [DataMember(Order = 19, Name = "secrets")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<string>, Uri>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<string>, Uri>))]
+        protected virtual OneOf<List<string>, Uri> SecretsToken { get; set; }
 
         private List<string> _Secrets;
         /// <summary>
@@ -500,6 +521,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual List<string> Secrets
         {
             get
@@ -507,13 +529,11 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Secrets == null
                     && this.SecretsToken != null)
                 {
-                    if (this.SecretsToken.Type == JTokenType.String)
-                        this._Secrets = new ExternalDefinitionCollection<string>(this.SecretsToken.ToObject<Uri>());
+                    if (this.SecretsToken.T1Value == null)
+                        this._Secrets = new ExternalDefinitionCollection<string>(this.SecretsToken.T2Value);
                     else
-                        this._Secrets = this.SecretsToken.ToObject<List<string>>();
+                        this._Secrets = this.SecretsToken.T1Value;
                 }
-                if (this._Secrets == null)
-                    this._Secrets = new List<string>();
                 return this._Secrets;
             }
             set
@@ -525,7 +545,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._Secrets = value;
-                this.SecretsToken = JToken.FromObject(value);
+                this.SecretsToken = new(value);
             }
         }
 
@@ -535,8 +555,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual Uri SecretshUri
-
         {
             get
             {
@@ -550,7 +570,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Secrets = new ExternalDefinitionCollection<string>(value);
-                this.AuthToken = JToken.FromObject(value);
+                this.AuthToken = new(value);
             }
         }
 
@@ -560,7 +580,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "auth")]
         [System.Text.Json.Serialization.JsonPropertyName("auth")]
         [YamlMember(Alias = "auth")]
-        protected virtual JToken AuthToken { get; set; }
+        [ProtoMember(20, Name = "auth")]
+        [DataMember(Order = 20, Name = "auth")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
+        protected virtual OneOf<List<AuthenticationDefinition>, Uri> AuthToken { get; set; }
 
         private List<AuthenticationDefinition> _Auth;
         /// <summary>
@@ -569,6 +593,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual List<AuthenticationDefinition> Auth
         {
             get
@@ -576,13 +601,11 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Auth == null
                     && this.AuthToken != null)
                 {
-                    if (this.AuthToken.Type == JTokenType.String)
-                        this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(this.AuthToken.ToObject<Uri>());
+                    if (this.AuthToken.T1Value == null)
+                        this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(this.AuthToken.T2Value);
                     else
-                        this._Auth = this.AuthToken.ToObject<List<AuthenticationDefinition>>();
+                        this._Auth = this.AuthToken.T1Value;
                 }
-                if (this._Auth == null)
-                    this._Auth = new List<AuthenticationDefinition>();
                 return this._Auth;
             }
             set
@@ -594,7 +617,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._Auth = value;
-                this.AuthToken = JToken.FromObject(value);
+                this.AuthToken = new(value);
             }
         }
 
@@ -604,6 +627,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [IgnoreDataMember]
         public virtual Uri AuthUri
 
         {
@@ -619,7 +643,7 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
                 this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(value);
-                this.AuthToken = JToken.FromObject(value);
+                this.AuthToken = new(value);
             }
         }
 

@@ -39,7 +39,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.ErrorCode == "States[0]" && e.ErrorMessage.StartsWith($"{nameof(InjectStateDefinition)}.{nameof(InjectStateDefinition.Data)}"));
+                .And.Contain(e => e.ErrorCode.StartsWith($"{nameof(InjectStateDefinition)}.{nameof(InjectStateDefinition.Data)}"));
         }
 
     }

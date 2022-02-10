@@ -23,7 +23,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     /// Represents the default implementation of the <see cref="IDelayStateBuilder"/> interface
     /// </summary>
     public class DelayStateBuilder
-        : StateBuilder<DelayStateDefinition>, IDelayStateBuilder
+        : StateBuilder<SleepStateDefinition>, IDelayStateBuilder
     {
 
         /// <summary>

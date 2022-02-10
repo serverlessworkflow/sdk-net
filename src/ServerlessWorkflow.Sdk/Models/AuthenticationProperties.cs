@@ -17,9 +17,16 @@
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents an object used to configure an authentication mechanism
     /// </summary>
+    [DataContract]
+    [ProtoContract]
+    [ProtoInclude(100, typeof(BasicAuthenticationProperties))]
+    [ProtoInclude(200, typeof(BearerAuthenticationProperties))]
+    [ProtoInclude(300, typeof(OAuth2AuthenticationProperties))]
+    [ProtoInclude(400, typeof(SecretBasedAuthenticationProperties))]
     public abstract class AuthenticationProperties
     {
 

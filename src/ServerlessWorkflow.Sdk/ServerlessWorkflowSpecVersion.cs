@@ -14,27 +14,30 @@
  * limitations under the License.
  *
  */
-using ServerlessWorkflow.Sdk.Models;
 
-namespace ServerlessWorkflow.Sdk.Services.Validation
+namespace ServerlessWorkflow.Sdk
 {
 
     /// <summary>
-    /// Represents a service used to validate <see cref="DelayStateDefinition"/>s
+    /// Exposes all supported Serverless Workflow spec versions
     /// </summary>
-    public class DelayStateValidator
-        : StateDefinitionValidator<DelayStateDefinition>
+    public static class ServerlessWorkflowSpecVersion
     {
 
         /// <summary>
-        /// Initializes a new <see cref="DelayStateValidator"/>
+        /// Gets the latest supported spec version
         /// </summary>
-        /// <param name="workflow">The <see cref="WorkflowDefinition"/> to validate</param>
-        public DelayStateValidator(WorkflowDefinition workflow)
-            : base(workflow)
-        {
-            
-        }
+        public const string Latest = V0_7;
+
+        /// <summary>
+        /// Gets the v0.6.x version
+        /// </summary>
+        public const string V0_6 = "0.6.x";
+
+        /// <summary>
+        /// Gets the v0.7.x version
+        /// </summary>
+        public const string V0_7 = "0.7.x";
 
     }
 

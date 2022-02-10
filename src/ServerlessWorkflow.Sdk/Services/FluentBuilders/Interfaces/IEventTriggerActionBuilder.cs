@@ -16,6 +16,7 @@
  */
 using CloudNative.CloudEvents;
 using ServerlessWorkflow.Sdk.Models;
+using System;
 using System.Collections.Generic;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
@@ -32,6 +33,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <param name="e">The reference name of the <see cref="EventDefinition"/> to produce. Requires the referenced <see cref="EventDefinition"/> to have been previously defined.</param>
         /// <returns>The configured <see cref="IEventTriggerActionBuilder"/></returns>
         IEventTriggerActionBuilder ThenProduce(string e);
+
+        /// <summary>
+        /// Configures the <see cref="ActionDefinition"/> to produce the specified <see cref="EventDefinition"/> when triggered
+        /// </summary>
+        /// <param name="eventSetup">The <see cref="Action{T}"/> used to create the <see cref="EventDefinition"/> to produce</param>
+        /// <returns>The configured <see cref="IActionBuilder"/></returns>
+        IEventTriggerActionBuilder ThenProduce(Action<IEventBuilder> eventSetup);
 
         /// <summary>
         /// Adds the specified context attribute to the <see cref="CloudEvent"/> produced as a result of the trigger

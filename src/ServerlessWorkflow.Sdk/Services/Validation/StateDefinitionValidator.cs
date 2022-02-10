@@ -47,17 +47,17 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .When(s => s.Transition != null)
                 .WithMessage((state, stateName) => $"Failed to find the state '{stateName}' to transition to")
                 .Must(DefineCompensationState)
-                .When(s => s.Transition != null && s.Transition.Compensate)
+                .When(s => s.Transition?.T1Value != null && s.Transition.T1Value.Compensate)
                 .WithMessage(state => $"The '{nameof(StateDefinition.CompensatedBy)}' property of the state '{state.Name}' must be set when enabling its compensation (in both Transition and End definitions)");
             this.RuleFor(s => s.End)
                 .Must(DefineCompensationState)
-                .When(s => s.End != null && s.End.Compensate)
+                .When(s => s.End?.T1Value != null && s.End.T1Value.Compensate)
                 .WithMessage(state => $"The '{nameof(StateDefinition.CompensatedBy)}' property of the state '{state.Name}' must be set when enabling its compensation (in both Transition and End definitions)");
             this.RuleForEach(s => s.Errors)
                 .SetValidator((s, e) => new ErrorHandlerDefinitionValidator(this.Workflow, s));
-            this.RuleFor(s => s.UseForCompensation)
+            this.RuleFor(s => s.UsedForCompensation)
                 .Must(BeAvailableForCompensation)
-                .When(state => state.UseForCompensation)
+                .When(state => state.UsedForCompensation)
                 .WithMessage(state => $"The state with name '{state.Name}' must not be part of the main control flow to be used as a compensation state");
         }
 
@@ -65,6 +65,21 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// Gets the <see cref="WorkflowDefinition"/> to validate
         /// </summary>
         protected WorkflowDefinition Workflow { get; }
+
+        /// <summary>
+        /// Determines whether or not the specified <see cref="StateDefinition"/> exists
+        /// </summary>
+        /// <param name="oneOf">The name of the <see cref="StateDefinition"/> to check</param>
+        /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> exists</returns>
+        protected virtual bool ReferenceExistingState(OneOf<TransitionDefinition, string> oneOf)
+        {
+            string stateName = null;
+            if (oneOf.T1Value == null)
+                stateName = oneOf.T2Value;
+            else
+                stateName = oneOf.T1Value.To;
+            return this.Workflow.TryGetState(stateName, out _);
+        }
 
         /// <summary>
         /// Determines whether or not the specified <see cref="StateDefinition"/> exists
@@ -87,22 +102,12 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         }
 
         /// <summary>
-        /// Determines whether or not the specified <see cref="StateDefinition"/> exists
-        /// </summary>
-        /// <param name="transition">The <see cref="TransitionDefinition"/> that references the <see cref="StateDefinition"/> to check</param>
-        /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> exists</returns>
-        protected virtual bool ReferenceExistingState(TransitionDefinition transition)
-        {
-            return this.ReferenceExistingState(transition.To);
-        }
-
-        /// <summary>
         /// Determines whether or not the specified <see cref="StateDefinition"/> defines a compensation state
         /// </summary>
         /// <param name="state">The <see cref="StateDefinition"/> to check</param>
-        /// <param name="endDefinition">The <see cref="EndDefinition"/> that references the <see cref="StateDefinition"/> to check</param>
+        /// <param name="oneOf">The <see cref="TransitionDefinition"/> that references the <see cref="StateDefinition"/> to check</param>
         /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> defines a compensation state</returns>
-        protected virtual bool DefineCompensationState(TState state, EndDefinition endDefinition)
+        protected virtual bool DefineCompensationState(TState state, OneOf<TransitionDefinition, string> oneOf)
         {
             return !string.IsNullOrWhiteSpace(state.CompensatedBy);
         }
@@ -111,9 +116,9 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// Determines whether or not the specified <see cref="StateDefinition"/> defines a compensation state
         /// </summary>
         /// <param name="state">The <see cref="StateDefinition"/> to check</param>
-        /// <param name="transitionDefinition">The <see cref="TransitionDefinition"/> that references the <see cref="StateDefinition"/> to check</param>
+        /// <param name="oneOf">The <see cref="EndDefinition"/> that references the <see cref="StateDefinition"/> to check</param>
         /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> defines a compensation state</returns>
-        protected virtual bool DefineCompensationState(TState state, TransitionDefinition transitionDefinition)
+        protected virtual bool DefineCompensationState(TState state, OneOf<EndDefinition, bool> oneOf)
         {
             return !string.IsNullOrWhiteSpace(state.CompensatedBy);
         }

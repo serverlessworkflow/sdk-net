@@ -33,10 +33,10 @@ namespace ServerlessWorkflow.Sdk
         [EnumMember(Value = "operation")]
         Operation,
         /// <summary>
-        /// Indicates a delay state
+        /// Indicates a sleep state
         /// </summary>
-        [EnumMember(Value = "delay")]
-        Delay,
+        [EnumMember(Value = "sleep")]
+        Sleep,
         /// <summary>
         /// Indicates an event state
         /// </summary>

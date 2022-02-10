@@ -18,9 +18,12 @@ using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents the definition of an event-based <see cref="SwitchStateDefinition"/>
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class EventCaseDefinition
         : SwitchCaseDefinition
     {
@@ -31,6 +34,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "eventRef")]
         [System.Text.Json.Serialization.JsonPropertyName("eventRef")]
         [YamlMember(Alias = "eventRef")]
+        [ProtoMember(1, Name = "eventRef")]
+        [DataMember(Order = 1, Name = "eventRef")]
         public string Event { get; set; }
 
     }

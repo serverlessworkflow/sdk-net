@@ -15,7 +15,6 @@
  *
  */
 using Newtonsoft.Json.Linq;
-using YamlDotNet.Serialization;
 using System.ComponentModel.DataAnnotations;
 
 namespace ServerlessWorkflow.Sdk.Models
@@ -24,6 +23,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents a reference to a <see cref="FunctionDefinition"/>
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class FunctionReference
     {
 
@@ -31,25 +32,22 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Gets/sets the referenced function's name
         /// </summary>
         [Required]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "refName"), Newtonsoft.Json.JsonRequired]
-        [System.Text.Json.Serialization.JsonPropertyName("refName")]
-        [YamlMember(Alias = "refName")]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string RefName { get; set; }
 
         /// <summary>
-        /// Gets/sets a <see cref="JObject"/> that contains the parameters of the function to invoke
+        /// Gets/sets a <see cref="Any"/> that contains the parameters of the function to invoke
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "arguments"), Newtonsoft.Json.JsonRequired]
-        [System.Text.Json.Serialization.JsonPropertyName("arguments")]
-        [YamlMember(Alias = "arguments")]
-        public virtual JObject Arguments { get; set; } = new JObject();
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
+        public virtual Any Arguments { get; set; }
 
         /// <summary>
         /// Gets/sets a <see href="https://spec.graphql.org/June2018/#sec-Selection-Sets">GraphQL selection set</see>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "selectionSet")]
-        [System.Text.Json.Serialization.JsonPropertyName("selectionSet")]
-        [YamlMember(Alias = "selectionSet")]
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual string SelectionSet { get; set; }
 
         /// <inheritdoc/>

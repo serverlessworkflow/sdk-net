@@ -23,12 +23,16 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents an object used to define the time/repeating intervals at which workflow instances can/should be started 
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class ScheduleDefinition
     {
 
         /// <summary>
         /// Gets/sets the time interval (ISO 8601 format) describing when workflow instances can be created.
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Interval { get; set; }
 
         /// <summary>
@@ -37,7 +41,11 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "cron")]
         [System.Text.Json.Serialization.JsonPropertyName("cron")]
         [YamlMember(Alias = "cron")]
-        public virtual JToken CronToken { get; set; }
+        [ProtoMember(2, Name = "cron")]
+        [DataMember(Order = 2, Name = "cron")]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<CronDefinition, string>))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<CronDefinition, string>))]
+        public virtual OneOf<CronDefinition, string> CronToken { get; set; }
 
         private CronDefinition _Cron;
         /// <summary>
@@ -46,6 +54,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
         public virtual CronDefinition Cron
         {
             get
@@ -53,10 +63,10 @@ namespace ServerlessWorkflow.Sdk.Models
                 if (this._Cron == null
                    && this.CronToken != null)
                 {
-                    if (this.CronToken.Type == JTokenType.String)
-                        this._Cron = new CronDefinition() { Expression = this.CronToken.ToObject<string>() };
+                    if (this.CronToken.T1Value == null)
+                        this._Cron = new() { Expression = this.CronToken.T2Value };
                     else
-                        this._Cron = this.CronToken.ToObject<CronDefinition>();
+                        this._Cron = this.CronToken.T1Value;
                 }
                 return this._Cron;
             }
@@ -69,24 +79,15 @@ namespace ServerlessWorkflow.Sdk.Models
                     return;
                 }
                 this._Cron = value;
-                this.CronToken = JToken.FromObject(value);
+                this.CronToken = new(value);
             }
         }
 
         /// <summary>
-        /// Gets/sets a boolean indicating whether or not workflow instances can be created outside of the defined interval/cron. Defaults to false.
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "directInvoke")]
-        [System.Text.Json.Serialization.JsonPropertyName("directInvoke")]
-        [YamlMember(Alias = "directInvoke")]
-        public virtual bool DirectInvoke { get; set; } = false;
-
-        /// <summary>
         /// Gets/sets the timezone name used to evaluate the cron expression. Not used for interval as timezone can be specified there directly. If not specified, should default to local machine timezone.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "timezone")]
-        [System.Text.Json.Serialization.JsonPropertyName("timezone")]
-        [YamlMember(Alias = "timezone")]
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual string Timezone { get; set; }
 
     }

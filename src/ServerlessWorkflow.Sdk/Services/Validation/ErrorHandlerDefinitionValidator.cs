@@ -44,9 +44,9 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.RuleFor(h => h.End)
                 .NotNull()
                 .When(h => h.Transition == null);
-            this.RuleFor(h => h.Transition)
+            this.RuleFor(h => h.Transition.T1Value)
                 .NotNull()
-                    .When(h => h.End == null)
+                .When(h => h.End == null)
                 .SetValidator(new TransitionDefinitionValidator(workflow));
         }
 

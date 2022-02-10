@@ -15,13 +15,14 @@
  *
  */
 
-using YamlDotNet.Serialization;
-
 namespace ServerlessWorkflow.Sdk.Models
 {
     /// <summary>
     /// Represents an object used to configure a 'Bearer' authentication scheme
     /// </summary>
+
+    [DataContract]
+    [ProtoContract]
     public class BearerAuthenticationProperties
         : AuthenticationProperties
     {
@@ -29,9 +30,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the token used to authenticate
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "token")]
-        [System.Text.Json.Serialization.JsonPropertyName("token")]
-        [YamlMember(Alias = "token")]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Token { get; set; }
 
     }

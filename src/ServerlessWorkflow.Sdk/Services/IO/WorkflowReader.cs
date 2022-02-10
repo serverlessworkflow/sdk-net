@@ -23,7 +23,9 @@ using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.Serialization;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -96,11 +98,9 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             else
                 serializer = this.YamlSerializer;
             WorkflowDefinition workflowDefinition = await this.LoadExternalDefinitionsForAsync(await serializer.DeserializeAsync<WorkflowDefinition>(stream, cancellationToken), cancellationToken);
-            string json = Encoding.UTF8.GetString(await this.JsonSerializer.SerializeAsync(workflowDefinition, cancellationToken));
-            if (!this.SchemaValidator.Validate(json, out IList<string> validationErrors))
-            {
-
-            }
+            IList<ValidationError> validationErrors = await this.SchemaValidator.ValidateAsync(workflowDefinition, cancellationToken);
+            if (validationErrors.Any())
+                throw new ValidationException($"Failed to validate the specified workflow definition:{Environment.NewLine}{string.Join(Environment.NewLine, validationErrors.Select(e => $"Message: {e.Message}{Environment.NewLine}Schema path: {e.Path}{Environment.NewLine}Line: {e.LineNumber}, Position: {e.LinePosition}"))}");
             return workflowDefinition;
         }
 

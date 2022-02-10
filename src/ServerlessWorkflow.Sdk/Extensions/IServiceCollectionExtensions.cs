@@ -15,7 +15,6 @@
  *
  */
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
@@ -88,17 +87,10 @@ namespace ServerlessWorkflow.Sdk
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddYamlDotNet(this IServiceCollection services, Action<SerializerBuilder> serializerConfiguration = null, Action<DeserializerBuilder> deserializerConfiguration = null)
         {
-            services.TryAddSingleton(provider =>
-            {
-                SerializerBuilder builder = new SerializerBuilder()
-                    .WithNamingConvention(CamelCaseNamingConvention.Instance);
-                serializerConfiguration?.Invoke(builder);
-                return builder.Build();
-            });
-            services.TryAddSingleton(provider =>
-            {
-                DeserializerBuilder builder = new DeserializerBuilder()
-                    .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            Action<SerializerBuilder> defaultSerializerConfiguration = builder => 
+                builder.WithNamingConvention(CamelCaseNamingConvention.Instance);
+            Action<DeserializerBuilder> defaultDeserializerConfiguration = builder =>
+                builder.WithNamingConvention(CamelCaseNamingConvention.Instance)
                     .WithNodeDeserializer(
                         inner => new JArrayDeserializer(inner),
                         syntax => syntax.InsteadOf<ArrayNodeDeserializer>())
@@ -110,6 +102,27 @@ namespace ServerlessWorkflow.Sdk
                         syntax => syntax.InsteadOf<DictionaryNodeDeserializer>())
                     .WithObjectFactory(new NonPublicConstructorObjectFactory())
                     .IncludeNonPublicProperties();
+            Yaml.SerializerConfiguration = builder =>
+            {
+                defaultSerializerConfiguration(builder);
+                serializerConfiguration?.Invoke(builder);
+            };
+            Yaml.DeserializerConfiguration = builder =>
+            {
+                defaultDeserializerConfiguration(builder);
+                deserializerConfiguration?.Invoke(builder);
+            };
+            services.TryAddSingleton(provider =>
+            {
+                SerializerBuilder builder = new SerializerBuilder();
+                defaultSerializerConfiguration(builder);
+                serializerConfiguration?.Invoke(builder);
+                return builder.Build();
+            });
+            services.TryAddSingleton(provider =>
+            {
+                DeserializerBuilder builder = new DeserializerBuilder();
+                defaultDeserializerConfiguration(builder);
                 deserializerConfiguration?.Invoke(builder);
                 return builder.Build();
             });
@@ -146,11 +159,19 @@ namespace ServerlessWorkflow.Sdk
                     .WithTypeConverter(new JTokenSerializer())
                     .WithTypeConverter(new Iso8601TimeSpanSerializer())
                     .WithTypeConverter(new StringEnumSerializer())
+                    .WithTypeConverter(new OneOfConverter())
+                    .WithTypeConverter(new AnyConverter())
                     .WithEmissionPhaseObjectGraphVisitor(args => new ChainedObjectGraphVisitor(args.InnerVisitor)),
                 deserializer => deserializer
                     .WithNodeDeserializer(
                         inner => new Iso8601TimeSpanConverter(inner),
-                        syntax => syntax.InsteadOf<ScalarNodeDeserializer>()));
+                        syntax => syntax.InsteadOf<ScalarNodeDeserializer>())
+                    .WithNodeDeserializer(
+                        inner => new OneOfDeserializer(inner),
+                        syntax => syntax.InsteadOf<Iso8601TimeSpanConverter>())
+                    .WithNodeDeserializer(
+                        inner => new AnyDeserializer(inner),
+                        syntax => syntax.InsteadOf<OneOfDeserializer>()));
             services.AddHttpClient();
             services.AddSingleton<IWorkflowReader, WorkflowReader>();
             services.AddSingleton<IWorkflowWriter, WorkflowWriter>();

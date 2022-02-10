@@ -14,8 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using YamlDotNet.Serialization;
@@ -26,6 +24,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents an object used to define events and their correlations
     /// </summary>
+    [ProtoContract]
+    [DataContract]
     public class EventDefinition
     {
 
@@ -34,6 +34,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string Name { get; set; }
 
         /// <summary>
@@ -41,16 +43,22 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual string Source { get; set; }
 
         /// <summary>
         /// Gets/sets the cloud event type
         /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual string Type { get; set; }
 
         /// <summary>
         /// Gets/sets a value that defines the CloudEvent as either '<see cref="EventKind.Consumed"/>' or '<see cref="EventKind.Produced"/>' by the workflow. Default is '<see cref="EventKind.Consumed"/>'.
         /// </summary>
+        [ProtoMember(4)]
+        [DataMember(Order = 4)]
         public virtual EventKind Kind { get; set; } = EventKind.Consumed;
 
         /// <summary>
@@ -59,12 +67,16 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty(PropertyName = "correlation"), MinLength(1)]
         [System.Text.Json.Serialization.JsonPropertyName("correlation")]
         [YamlMember(Alias = "correlation")]
+        [ProtoMember(5, Name = "correlation")]
+        [DataMember(Order = 5, Name = "correlation")]
         public virtual List<EventCorrelationDefinition> Correlations { get; set; } = new List<EventCorrelationDefinition>();
 
         /// <summary>
         /// Gets/sets the <see cref="EventDefinition"/>'s metadata
         /// </summary>
-        public virtual JObject Metadata { get; set; } = new JObject();
+        [ProtoMember(6)]
+        [DataMember(Order = 6)]
+        public virtual Any Metadata { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()
