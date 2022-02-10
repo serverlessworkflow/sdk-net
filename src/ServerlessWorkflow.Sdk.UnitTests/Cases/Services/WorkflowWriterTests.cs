@@ -50,14 +50,15 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
                     })
                         .Execute("fakeEventTrigger", action =>
                         {
-                            action.Consume(e =>
-                                e.WithName("fakeEvent")
-                                    .WithSource(new Uri("https://fakesource.com"))
-                                    .WithType("fakeType"))
-                                  .ThenProduce(e =>
-                                e.WithName("otherEvent")
-                                    .WithSource(new Uri("https://fakesource.com"))
-                                    .WithType("fakeType"));
+                            action
+                                .Consume(e =>
+                                    e.WithName("fakeEvent")
+                                        .WithSource(new Uri("https://fakesource.com"))
+                                        .WithType("fakeType"))
+                                .ThenProduce(e =>
+                                    e.WithName("otherEvent")
+                                        .WithSource(new Uri("https://fakesource.com"))
+                                        .WithType("fakeType"));
                         }))
                 .End()
                 .Build();
