@@ -39,6 +39,13 @@ namespace ServerlessWorkflow.Sdk.Models
         [DataMember(Order = 2)]
         public virtual string ToStateData { get; set; }
 
+        /// <summary>
+        /// Gets/sets a boolean indicating whether or not to merge the event's data into state data.<para></para> If set to false, action data results are not added/merged to state data. In this case 'data' and 'toStateData' should be ignored. Defaults to true.
+        /// </summary>
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
+        public virtual bool UseData { get; set; } = true;
+
     }
 
 }

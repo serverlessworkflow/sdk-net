@@ -25,7 +25,7 @@ namespace ServerlessWorkflow.Sdk.Models
     /// </summary>
     [ProtoContract]
     [DataContract]
-    public class ExecutionTimeoutDefinition
+    public class WorkflowExecutionTimeoutDefinition
     {
 
         /// <summary>

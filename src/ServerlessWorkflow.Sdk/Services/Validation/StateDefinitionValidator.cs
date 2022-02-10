@@ -77,7 +77,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             if (oneOf.T1Value == null)
                 stateName = oneOf.T2Value;
             else
-                stateName = oneOf.T1Value.To;
+                stateName = oneOf.T1Value.NextState;
             return this.Workflow.TryGetState(stateName, out _);
         }
 

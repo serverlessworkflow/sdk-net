@@ -187,9 +187,9 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IWorkflowBuilder AddSecret(string secret);
 
         /// <summary>
-        /// Configures the <see cref="WorkflowDefinition"/>'s <see cref="ExecutionTimeoutDefinition"/>
+        /// Configures the <see cref="WorkflowDefinition"/>'s <see cref="WorkflowExecutionTimeoutDefinition"/>
         /// </summary>
-        /// <param name="timeoutSetup">An <see cref="Action{T}"/> used to setup the <see cref="WorkflowDefinition"/>'s <see cref="ExecutionTimeoutDefinition"/></param>
+        /// <param name="timeoutSetup">An <see cref="Action{T}"/> used to setup the <see cref="WorkflowDefinition"/>'s <see cref="WorkflowExecutionTimeoutDefinition"/></param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
         IWorkflowBuilder WithExecutionTimeout(Action<IExecutionTimeoutBuilder> timeoutSetup);
 

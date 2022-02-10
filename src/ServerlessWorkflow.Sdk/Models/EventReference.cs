@@ -14,12 +14,13 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
-using YamlDotNet.Serialization;
+using System;
 using System.ComponentModel.DataAnnotations;
+using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents a reference to an <see cref="EventDefinition"/>
     /// </summary>
@@ -29,26 +30,26 @@ namespace ServerlessWorkflow.Sdk.Models
     {
 
         /// <summary>
-        /// Gets the name of the 'produced' event that triggers the action
+        /// Gets the name of the event to produce
         /// </summary>
         [Required]
-        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "triggerEventRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("triggerEventRef")]
-        [YamlMember(Alias = "triggerEventRef")]
+        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "produceEventRef")]
+        [System.Text.Json.Serialization.JsonPropertyName("produceEventRef")]
+        [YamlMember(Alias = "produceEventRef")]
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string TriggerEvent { get; set; }
+        public virtual string ProduceEvent { get; set; }
 
         /// <summary>
-        /// Gets the name of the 'consumed' event that triggers the action
+        /// Gets the name of the event to consume
         /// </summary>
         [Required]
-        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "resultEventRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("resultEventRef")]
-        [YamlMember(Alias = "resultEventRef")]
+        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "consumeEventRef")]
+        [System.Text.Json.Serialization.JsonPropertyName("consumeEventRef")]
+        [YamlMember(Alias = "consumeEventRef")]
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string ResultEvent { get; set; }
+        public virtual string ConsumeEvent { get; set; }
 
         /// <summary>
         /// Gets/sets the data to become the cloud event's payload. 
@@ -67,6 +68,30 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(4)]
         [DataMember(Order = 4)]
         public virtual Any ContextAttributes { get; set; }
+
+        /// <summary>
+        /// Gets the maximum amount of time to wait for the result event. If not defined it be set to the actionExecutionTimeout
+        /// </summary>
+        [ProtoMember(5)]
+        [DataMember(Order = 5)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        public virtual TimeSpan? ConsumeEventTimeout { get; set; }
+
+        /// <summary>
+        /// Gets/sets the reference event's <see cref="Sdk.InvocationMode"/>. Default is <see cref="InvocationMode.Synchronous"/>.
+        /// </summary>
+        /// <remarks>
+        /// Default value of this property is sync, meaning that workflow execution should wait until the function completes (the result event is received).<para></para>
+        /// If set to async, workflow execution should just produce the trigger event and should not wait for the result event
+        /// </remarks>
+        [Newtonsoft.Json.JsonProperty(PropertyName = "invoke")]
+        [System.Text.Json.Serialization.JsonPropertyName("invoke")]
+        [YamlMember(Alias = "invoke")]
+        [ProtoMember(6, Name = "invoke")]
+        [DataMember(Order = 6, Name = "invoke")]
+        public virtual InvocationMode InvocationMode { get; set; } = InvocationMode.Synchronous;
+
 
     }
 

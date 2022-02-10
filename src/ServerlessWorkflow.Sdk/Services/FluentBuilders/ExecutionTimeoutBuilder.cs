@@ -41,9 +41,9 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected IPipelineBuilder Pipeline { get; }
 
         /// <summary>
-        /// Gets the <see cref="ExecutionTimeoutDefinition"/> to configure
+        /// Gets the <see cref="WorkflowExecutionTimeoutDefinition"/> to configure
         /// </summary>
-        protected ExecutionTimeoutDefinition Timeout { get; } = new ExecutionTimeoutDefinition();
+        protected WorkflowExecutionTimeoutDefinition Timeout { get; } = new WorkflowExecutionTimeoutDefinition();
 
         /// <inheritdoc/>
         public virtual IExecutionTimeoutBuilder After(TimeSpan duration)
@@ -85,7 +85,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual ExecutionTimeoutDefinition Build()
+        public virtual WorkflowExecutionTimeoutDefinition Build()
         {
             return this.Timeout;
         }

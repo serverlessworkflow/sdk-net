@@ -34,32 +34,32 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         public EventReferenceValidator(WorkflowDefinition workflow)
         {
             this.Workflow = workflow;
-            this.RuleFor(e => e.TriggerEvent)
+            this.RuleFor(e => e.ProduceEvent)
                 .NotEmpty()
-                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.TriggerEvent)}");
-            this.RuleFor(e => e.TriggerEvent)
+                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ProduceEvent)}");
+            this.RuleFor(e => e.ProduceEvent)
                 .Must(ReferenceExistingEvent)
-                .When(e => !string.IsNullOrWhiteSpace(e.TriggerEvent))
-                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.TriggerEvent)}")
-                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef.TriggerEvent}'");
-            this.RuleFor(e => e.TriggerEvent)
+                .When(e => !string.IsNullOrWhiteSpace(e.ProduceEvent))
+                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ProduceEvent)}")
+                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef.ProduceEvent}'");
+            this.RuleFor(e => e.ProduceEvent)
                 .Must(BeProduced)
-                .When(e => !string.IsNullOrWhiteSpace(e.TriggerEvent))
-                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.TriggerEvent)}")
-                .WithMessage(eventRef => $"The event with name '{eventRef.TriggerEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Produced)}'");
-            this.RuleFor(e => e.ResultEvent)
+                .When(e => !string.IsNullOrWhiteSpace(e.ProduceEvent))
+                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ProduceEvent)}")
+                .WithMessage(eventRef => $"The event with name '{eventRef.ProduceEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Produced)}'");
+            this.RuleFor(e => e.ConsumeEvent)
                 .NotEmpty()
-                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ResultEvent)}");
-            this.RuleFor(e => e.ResultEvent)
+                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ConsumeEvent)}");
+            this.RuleFor(e => e.ConsumeEvent)
                 .Must(ReferenceExistingEvent)
-                .When(e => !string.IsNullOrWhiteSpace(e.ResultEvent))
-                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ResultEvent)}")
-                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef.ResultEvent}'");
-            this.RuleFor(e => e.ResultEvent)
+                .When(e => !string.IsNullOrWhiteSpace(e.ConsumeEvent))
+                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ConsumeEvent)}")
+                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef.ConsumeEvent}'");
+            this.RuleFor(e => e.ConsumeEvent)
                 .Must(BeConsumed)
-                .When(e => !string.IsNullOrWhiteSpace(e.ResultEvent))
-                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ResultEvent)}")
-                .WithMessage(eventRef => $"The event with name '{eventRef.ResultEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Consumed)}'");
+                .When(e => !string.IsNullOrWhiteSpace(e.ConsumeEvent))
+                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ConsumeEvent)}")
+                .WithMessage(eventRef => $"The event with name '{eventRef.ConsumeEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Consumed)}'");
         }
 
         /// <summary>

@@ -137,7 +137,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (string.IsNullOrWhiteSpace(e))
                 throw new ArgumentNullException(nameof(e));
-            this.Action.Event = new EventReference() { TriggerEvent = e, ResultEvent = string.Empty };
+            this.Action.Event = new EventReference() { ProduceEvent = e, ConsumeEvent = string.Empty };
             return this;
         }
 
@@ -147,7 +147,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (eventSetup == null)
                 throw new ArgumentNullException(nameof(eventSetup));
             EventDefinition e = this.Pipeline.AddEvent(eventSetup);
-            this.Action.Event = new EventReference() { TriggerEvent = e.Name, ResultEvent = string.Empty };
+            this.Action.Event = new EventReference() { ProduceEvent = e.Name, ConsumeEvent = string.Empty };
             return this;
         }
 
@@ -157,14 +157,14 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (e == null)
                 throw new ArgumentNullException(nameof(e));
             this.Pipeline.AddEvent(e);
-            this.Action.Event = new EventReference() { TriggerEvent = e.Name, ResultEvent = string.Empty };
+            this.Action.Event = new EventReference() { ProduceEvent = e.Name, ConsumeEvent = string.Empty };
             return this;
         }
 
         /// <inheritdoc/>
         public virtual IEventTriggerActionBuilder ThenProduce(string e)
         {
-            this.Action.Event.ResultEvent = e;
+            this.Action.Event.ConsumeEvent = e;
             return this;
         }
 
@@ -172,7 +172,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         public virtual IEventTriggerActionBuilder ThenProduce(Action<IEventBuilder> eventSetup)
         {
             EventDefinition e = this.Pipeline.AddEvent(eventSetup);
-            this.Action.Event.ResultEvent = e.Name;
+            this.Action.Event.ConsumeEvent = e.Name;
             return this;
         }
 

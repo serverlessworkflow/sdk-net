@@ -84,55 +84,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="RetryStrategyDefinition"/>'s jitter.
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "jitter")]
-        [System.Text.Json.Serialization.JsonPropertyName("jitter")]
-        [YamlMember(Alias = "jitter")]
-        [ProtoMember(7, Name = "jitter")]
-        [DataMember(Order = 7, Name = "jitter")]
-        protected virtual OneOf<float?, string> JitterToken { get; set; }
-
-        /// <summary>
-        /// Gets/sets the maximum amount of random time added or subtracted from the delay between each retry relative to total delay
-        /// </summary>
-        public virtual float? JitterMultiplier
-        {
-            get
-            {
-                return this.JitterToken?.T1Value;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    this.JitterToken = null;
-                    return;
-                }
-                this.JitterToken = new(value);
-            }
-        }
-
-        /// <summary>
-        /// Gets/sets the absolute maximum amount of random time added or subtracted from the delay between each retry
-        /// </summary>
-        public virtual TimeSpan? JitterDuration
-        {
-            get
-            {
-                if (this.JitterToken == null
-                    || string.IsNullOrWhiteSpace(this.JitterToken.T2Value))
-                    return null;
-                return XmlConvert.ToTimeSpan(this.JitterToken.T2Value);
-            }
-            set
-            {
-                if (value == null)
-                {
-                    this.JitterToken = null;
-                    return;
-                }
-                this.JitterToken = new(XmlConvert.ToString(value.Value));
-            }
-        }
+        [ProtoMember(7)]
+        [DataMember(Order = 7)]
+        protected virtual OneOf<float?, string> Jitter{ get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

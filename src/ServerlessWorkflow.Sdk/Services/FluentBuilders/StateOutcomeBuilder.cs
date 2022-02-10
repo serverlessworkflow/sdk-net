@@ -50,7 +50,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             //TODO: configure transition
             StateDefinition state = this.Pipeline.AddState(stateSetup);
-            this.Outcome = new TransitionDefinition() { To = state.Name };
+            this.Outcome = new TransitionDefinition() { NextState = state.Name };
         }
 
         /// <inheritdoc/>

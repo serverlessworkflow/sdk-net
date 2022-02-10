@@ -16,39 +16,23 @@
  */
 namespace ServerlessWorkflow.Sdk
 {
-
     /// <summary>
-    /// Enumerates all types of functions
+    /// Enumerates all invocation modes
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.StringEnumConverterFactory))]
-    public enum FunctionType
+    public enum InvocationMode
     {
         /// <summary>
-        /// Indicates a REST function
+        /// Indicates a synchronous invocation mode
         /// </summary>
-        [EnumMember(Value = "rest")]
-        Rest,
+        [EnumMember(Value = "sync")]
+        Synchronous,
         /// <summary>
-        /// Indicates an Remote Procedure Call (RPC)
+        /// Indicates an asynchronous invocation mode
         /// </summary>
-        [EnumMember(Value = "rpc")]
-        Rpc,
-        /// <summary>
-        /// Indicates a GraphQL function
-        /// </summary>
-        [EnumMember(Value = "graphql")]
-        GraphQL,
-        /// <summary>
-        /// Indicates an OData function
-        /// </summary>
-        [EnumMember(Value = "odata")]
-        OData,
-        /// <summary>
-        /// Indicates an expression function
-        /// </summary>
-        [EnumMember(Value = "expression")]
-        Expression
+        [EnumMember(Value = "async")]
+        Asynchronous
     }
 
 }

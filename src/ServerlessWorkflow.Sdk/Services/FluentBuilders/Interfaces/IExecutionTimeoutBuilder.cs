@@ -20,7 +20,7 @@ using System;
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
     /// <summary>
-    /// Defines the fundamentals of a service used to build <see cref="ExecutionTimeoutDefinition"/>s
+    /// Defines the fundamentals of a service used to build <see cref="WorkflowExecutionTimeoutDefinition"/>s
     /// </summary>
     public interface IExecutionTimeoutBuilder
     {
@@ -61,10 +61,10 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IExecutionTimeoutBuilder Run(StateDefinition state);
 
         /// <summary>
-        /// Builds the <see cref="ExecutionTimeoutDefinition"/>
+        /// Builds the <see cref="WorkflowExecutionTimeoutDefinition"/>
         /// </summary>
-        /// <returns>A new <see cref="ExecutionTimeoutDefinition"/></returns>
-        ExecutionTimeoutDefinition Build();
+        /// <returns>A new <see cref="WorkflowExecutionTimeoutDefinition"/></returns>
+        WorkflowExecutionTimeoutDefinition Build();
 
     }
 

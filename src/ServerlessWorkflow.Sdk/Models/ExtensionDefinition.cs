@@ -14,42 +14,35 @@
  * limitations under the License.
  *
  */
-using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations;
-
 namespace ServerlessWorkflow.Sdk.Models
 {
-
     /// <summary>
-    /// Represents an object used to define a state transition
+    /// Represents the definition of a Serverless Workflow extension
     /// </summary>
     [ProtoContract]
     [DataContract]
-    public class TransitionDefinition
-        : StateOutcomeDefinition
+    public class ExtensionDefinition
     {
 
         /// <summary>
-        /// Gets/sets the name of state to transition to
+        /// Gets/sets the extension's unique id
         /// </summary>
         [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [DataMember(Order = 1, IsRequired = true)]
         [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string NextState { get; set; }
+        public virtual string ExtensionId { get; set; }
 
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> containing the events to be produced before the transition happens
+        /// Gets/sets an <see cref="Uri"/> to a resource containing the workflow extension definition (json or yaml)
         /// </summary>
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [DataMember(Order = 2, IsRequired = true)]
         [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual IEnumerable<ProduceEventDefinition> ProduceEvents { get; set; } = new List<ProduceEventDefinition>();
-
-        /// <summary>
-        /// Gets/sets a boolean indicating whether or not to trigger workflow compensation before the transition is taken. Default is false
-        /// </summary>
-        [ProtoMember(3)]
-        [DataMember(Order = 3)]
-        public virtual bool Compensate { get; set; } = false;
+        public virtual Uri Resource { get; set; }
 
     }
 

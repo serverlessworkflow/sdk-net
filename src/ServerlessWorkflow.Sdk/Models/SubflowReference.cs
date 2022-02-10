@@ -71,7 +71,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Required]
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(1)]
-        [DataMember(Order = 1)]
+        [DataMember(Order = 1, IsRequired = true)]
         public virtual string WorkflowId { get; set; }
 
         /// <summary>
@@ -82,11 +82,20 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual string Version { get; set; } = "latest";
 
         /// <summary>
-        /// Gets/sets a boolean indicating whether or not to wait for the completion of the <see cref="WorkflowDefinition"/> to run. Defaults to true
+        /// Gets/sets the subflow's <see cref="Sdk.InvocationMode"/>. Default is <see cref="InvocationMode.Synchronous"/>.
         /// </summary>
-        [ProtoMember(3)]
-        [DataMember(Order = 3)]
-        public virtual bool WaitForCompletion { get; set; } = true;
+        /// <remarks>
+        /// Default value of this property is sync, meaning that workflow execution should wait until the subflow completes.<para></para>
+        /// If set to async, workflow execution should just invoke the subflow and not wait for its results. Note that in this case the action does not produce any results, and the associated actions actionDataFilter as well as its retry definition, if defined, should be ignored.<para></para>
+        /// Subflows that are invoked async do not propagate their errors to the associated action definition and the workflow state, meaning that any errors that happen during their execution cannot be handled in the workflow states onErrors definition.<para></para>
+        /// Note that errors raised during subflows that are invoked async should not fail workflow execution.
+        /// </remarks>
+        [Newtonsoft.Json.JsonProperty(PropertyName = "invoke")]
+        [System.Text.Json.Serialization.JsonPropertyName("invoke")]
+        [YamlMember(Alias = "invoke")]
+        [ProtoMember(3, Name = "invoke")]
+        [DataMember(Order = 3, Name = "invoke")]
+        public virtual InvocationMode InvocationMode { get; set; } = InvocationMode.Synchronous;
 
         /// <summary>
         /// Parses the specified input into a new <see cref="SubflowReference"/>
