@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using System.ComponentModel.DataAnnotations;
 
 namespace ServerlessWorkflow.Sdk.Models
@@ -32,23 +31,24 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Gets/sets the referenced function's name
         /// </summary>
         [Required]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string RefName { get; set; }
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual string RefName { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets a <see cref="Any"/> that contains the parameters of the function to invoke
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual Any Arguments { get; set; }
+        public virtual Any? Arguments { get; set; }
 
         /// <summary>
         /// Gets/sets a <see href="https://spec.graphql.org/June2018/#sec-Selection-Sets">GraphQL selection set</see>
         /// </summary>
         [ProtoMember(3)]
         [DataMember(Order = 3)]
-        public virtual string SelectionSet { get; set; }
+        public virtual string? SelectionSet { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

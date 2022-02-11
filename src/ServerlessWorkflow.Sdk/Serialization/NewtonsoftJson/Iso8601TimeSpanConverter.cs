@@ -31,7 +31,7 @@ namespace Newtonsoft.Json.Converters
         /// <inheritdoc/>
         public override TimeSpan ReadJson(JsonReader reader, Type objectType, TimeSpan existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            string expression = reader.Value?.ToString();
+            var expression = reader.Value?.ToString();
             if (string.IsNullOrWhiteSpace(expression))
                 return default;
             return Iso8601TimeSpan.Parse(expression);

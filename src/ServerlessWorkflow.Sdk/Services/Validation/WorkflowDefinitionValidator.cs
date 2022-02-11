@@ -78,11 +78,11 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.RuleFor(w => w.Retries)
                 .SetValidator(new CollectionPropertyValidator<RetryDefinition>(this.ServiceProvider))
                 .When(w => w.Retries != null);
-            this.RuleFor(w => w.Auth)
+            this.RuleFor(w => w.Auth!)
                 .Must(auths => auths.Select(s => s.Name).Distinct().Count() == auths.Count)
                 .When(w => w.Auth != null)
                 .WithMessage("Duplicate AuthenticationDefinition name(s) found");
-            this.RuleFor(w => w.Auth)
+            this.RuleFor(w => w.Auth!)
                 .SetValidator(new CollectionPropertyValidator<AuthenticationDefinition>(this.ServiceProvider))
                 .When(w => w.Auth != null);
             this.RuleFor(w => w.States)

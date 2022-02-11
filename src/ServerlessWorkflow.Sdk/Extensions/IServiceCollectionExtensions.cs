@@ -16,17 +16,10 @@
  */
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 using ServerlessWorkflow.Sdk.Services.IO;
-using ServerlessWorkflow.Sdk.Services.Serialization;
 using ServerlessWorkflow.Sdk.Services.Validation;
-using System;
 using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.Converters;
-using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization.NodeDeserializers;
 
 namespace ServerlessWorkflow.Sdk
@@ -39,114 +32,7 @@ namespace ServerlessWorkflow.Sdk
     {
 
         /// <summary>
-        /// Adds and configures a <see cref="NewtonsoftJsonSerializer"/> service
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-        /// <param name="configurationAction">The <see cref="Action{T}"/> used to configure the <see cref="JsonSerializerSettings"/> used by the <see cref="NewtonsoftJsonSerializer"/></param>
-        /// <returns>The configured <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddNewtonsoftJsonSerializer(this IServiceCollection services, Action<JsonSerializerSettings> configurationAction)
-        {
-            services.Configure(configurationAction);
-            JsonConvert.DefaultSettings = () => 
-            {
-                JsonSerializerSettings settings = new();
-                configurationAction(settings);
-                return settings;
-            };
-            services.TryAddSingleton<NewtonsoftJsonSerializer>();
-            services.AddSingleton<Services.Serialization.ISerializer>(provider => provider.GetRequiredService<NewtonsoftJsonSerializer>());
-            services.AddSingleton<IJsonSerializer>(provider => provider.GetRequiredService<NewtonsoftJsonSerializer>());
-            return services;
-        }
-
-        /// <summary>
-        /// Adds and configures a <see cref="NewtonsoftJsonSerializer"/> service
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-        /// <returns>The configured <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddNewtonsoftJsonSerializer(this IServiceCollection services)
-        {
-            services.AddNewtonsoftJsonSerializer(settings => 
-            {
-                settings.NullValueHandling = NullValueHandling.Ignore;
-                settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                settings.ContractResolver = new IgnoreEmptyEnumerableContractResolver
-                {
-                    NamingStrategy = new CamelCaseNamingStrategy(true, true, true)
-                };
-            });
-            return services;
-        }
-
-        /// <summary>
-        /// Adds and configures an YamlDotNet <see cref="ISerializer"/> and <see cref="IDeserializer"/>
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-        /// <param name="serializerConfiguration">The <see cref="Action{T}"/> used to configure the <see cref="ISerializer"/> to add</param>
-        /// <param name="deserializerConfiguration">The <see cref="Action{T}"/> used to configure the <see cref="IDeserializer"/> to add</param>
-        /// <returns>The configured <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddYamlDotNet(this IServiceCollection services, Action<SerializerBuilder>? serializerConfiguration = null, Action<DeserializerBuilder>? deserializerConfiguration = null)
-        {
-            Action<SerializerBuilder> defaultSerializerConfiguration = builder => 
-                builder.WithNamingConvention(CamelCaseNamingConvention.Instance);
-            Action<DeserializerBuilder> defaultDeserializerConfiguration = builder =>
-                builder.WithNamingConvention(CamelCaseNamingConvention.Instance)
-                    .WithNodeDeserializer(
-                        inner => new JArrayDeserializer(inner),
-                        syntax => syntax.InsteadOf<ArrayNodeDeserializer>())
-                    .WithNodeDeserializer(
-                        inner => new AbstractTypeDeserializer(inner),
-                        syntax => syntax.InsteadOf<ObjectNodeDeserializer>())
-                    .WithNodeDeserializer(
-                        inner => new JTokenDeserializer(inner),
-                        syntax => syntax.InsteadOf<DictionaryNodeDeserializer>())
-                    .WithObjectFactory(new NonPublicConstructorObjectFactory())
-                    .IncludeNonPublicProperties();
-            Yaml.SerializerConfiguration = builder =>
-            {
-                defaultSerializerConfiguration(builder);
-                serializerConfiguration?.Invoke(builder);
-            };
-            Yaml.DeserializerConfiguration = builder =>
-            {
-                defaultDeserializerConfiguration(builder);
-                deserializerConfiguration?.Invoke(builder);
-            };
-            services.TryAddSingleton(provider =>
-            {
-                SerializerBuilder builder = new SerializerBuilder();
-                defaultSerializerConfiguration(builder);
-                serializerConfiguration?.Invoke(builder);
-                return builder.Build();
-            });
-            services.TryAddSingleton(provider =>
-            {
-                DeserializerBuilder builder = new DeserializerBuilder();
-                defaultDeserializerConfiguration(builder);
-                deserializerConfiguration?.Invoke(builder);
-                return builder.Build();
-            });
-            return services;
-        }
-
-        /// <summary>
-        /// Adds and configures a <see cref="YamlDotNetSerializer"/>
-        /// </summary>
-        /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
-        /// <param name="serializerConfiguration">The <see cref="Action{T}"/> used to configure the <see cref="ISerializer"/> to add</param>
-        /// <param name="deserializerConfiguration">The <see cref="Action{T}"/> used to configure the <see cref="IDeserializer"/> to add</param>
-        /// <returns>The configured <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddYamlDotNetSerializer(this IServiceCollection services, Action<SerializerBuilder>? serializerConfiguration = null, Action<DeserializerBuilder>? deserializerConfiguration = null)
-        {
-            services.AddYamlDotNet(serializerConfiguration, deserializerConfiguration);
-            services.TryAddSingleton<YamlDotNetSerializer>();
-            services.AddSingleton<Services.Serialization.ISerializer>(provider => provider.GetRequiredService<YamlDotNetSerializer>());
-            services.AddSingleton<IYamlSerializer>(provider => provider.GetRequiredService<YamlDotNetSerializer>());
-            return services;
-        }
-
-        /// <summary>
-        /// Adds and configures Serverless Workflow services (<see cref="ISerializer"/>s, <see cref="IWorkflowReader"/>, <see cref="IWorkflowWriter"/>, ...)
+        /// Adds and configures Serverless Workflow services (<see cref="Neuroglia.Serialization.ISerializer"/>s, <see cref="IWorkflowReader"/>, <see cref="IWorkflowWriter"/>, ...)
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
         /// <returns>The configured <see cref="IServiceCollection"/></returns>

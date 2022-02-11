@@ -219,7 +219,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [DataMember(Order = 11, Name = "start")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "start"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<StartDefinition, string>))]
         [System.Text.Json.Serialization.JsonPropertyName("start"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<StartDefinition, string>))]
-        public virtual OneOf<StartDefinition, string>? StartValue { get; set; }
+        protected virtual OneOf<StartDefinition, string>? StartValue { get; set; }
 
         /// <summary>
         /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s <see cref="StartDefinition"/>
@@ -570,7 +570,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [DataMember(Order = 20, Name = "auth")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "auth"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("auth"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
-        public virtual OneOf<List<AuthenticationDefinition>, Uri>? AuthValue { get; set; }
+        protected virtual OneOf<List<AuthenticationDefinition>, Uri>? AuthValue { get; set; }
 
         /// <summary>
         /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/> collection

@@ -31,14 +31,14 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Key { get; set; }
+        public virtual string? Key { get; set; }
 
         /// <summary>
         /// Gets the options used to configure the OData query
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual ODataQueryOptions QueryOptions { get; set; }
+        public virtual ODataQueryOptions? QueryOptions { get; set; }
 
     }
 

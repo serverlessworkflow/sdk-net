@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using ServerlessWorkflow.Sdk.Serialization;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -65,7 +64,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         /// <param name="name">The name of the <see cref="BranchDefinition"/> to get</param>
         /// <returns>The <see cref="BranchDefinition"/> with the specified name</returns>
-        public virtual BranchDefinition GetBranch(string name)
+        public virtual BranchDefinition? GetBranch(string name)
         {
             return this.Branches.FirstOrDefault(b => b.Name == name);
         }
@@ -78,7 +77,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <returns>A boolean indicating whether or not a <see cref="BranchDefinition"/> with the specified name could be found</returns>
         public virtual bool TryGetBranch(string name, out BranchDefinition branch)
         {
-            branch = this.GetBranch(name);
+            branch = this.GetBranch(name)!;
             return branch != null;
         }
 

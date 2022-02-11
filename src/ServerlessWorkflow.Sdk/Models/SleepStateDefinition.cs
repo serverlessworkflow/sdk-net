@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using ServerlessWorkflow.Sdk.Serialization;
 using System;
 using YamlDotNet.Serialization;
 

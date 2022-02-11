@@ -24,8 +24,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     /// </summary>
     public interface IForEachStateBuilder
         : IStateBuilder<ForEachStateDefinition>,
-        IActionCollectionBuilder<IForEachStateBuilder>,
-        ISubflowRunnerBuilder
+        IActionCollectionBuilder<IForEachStateBuilder>
     {
 
         /// <summary>
@@ -50,11 +49,11 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IForEachStateBuilder UseOutputCollection(string expression);
 
         /// <summary>
-        /// Configures the maximum amount of iterations allowed
+        /// Configures how many iterations may run in parallel at the same time. Used if '<see cref="ActionExecutionMode"/>' has been set to '<see cref="ActionExecutionMode.Parallel"/>'
         /// </summary>
-        /// <param name="max">The maximum amount of iterations allowed</param>
+        /// <param name="batchSize">The maximum amount of iterations allowed</param>
         /// <returns>The configured <see cref="IForEachStateBuilder"/></returns>
-        IForEachStateBuilder WithMaxIterations(uint? max);
+        IForEachStateBuilder WithBatchSize(int? batchSize);
 
     }
 

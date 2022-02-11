@@ -28,7 +28,7 @@ namespace System.Text.Json.Serialization.Converters
         /// <inheritdoc/>
         public override TimeSpan? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            string iso8601Input = reader.GetString();
+            var iso8601Input = reader.GetString();
             if (string.IsNullOrWhiteSpace(iso8601Input))
                 return null;
             return Iso8601TimeSpan.Parse(iso8601Input);

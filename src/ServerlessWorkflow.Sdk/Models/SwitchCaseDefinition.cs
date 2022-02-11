@@ -56,7 +56,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Name { get; set; }
+        public virtual string? Name { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="SwitchCaseDefinition"/>'s <see cref="TransitionDefinition"/>
@@ -65,7 +65,57 @@ namespace ServerlessWorkflow.Sdk.Models
         [DataMember(Order = 2)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
-        public virtual OneOf<TransitionDefinition, string> Transition { get; set; }
+        protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
+
+        /// <summary>
+        /// Gets/sets the object used to configure the <see cref="StateDefinition"/>'s transition to another <see cref="StateDefinition"/> upon completion
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual TransitionDefinition? Transition
+        {
+            get
+            {
+                if (this.TransitionValue?.T1Value == null
+                    && !string.IsNullOrWhiteSpace(this.TransitionValue?.T2Value))
+                    return new() { NextState = this.TransitionValue.T2Value };
+                else
+                    return this.TransitionValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.TransitionValue = null;
+                else
+                    this.TransitionValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the name of the <see cref="StateDefinition"/> to transition to upon completion
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual string? TransitionToStateName
+        {
+            get
+            {
+                return this.TransitionValue?.T2Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.TransitionValue = null;
+                else
+                    this.TransitionValue = value;
+            }
+        }
 
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="SwitchCaseDefinition"/>'s <see cref="EndDefinition"/>
@@ -74,12 +124,65 @@ namespace ServerlessWorkflow.Sdk.Models
         [DataMember(Order = 3)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
-        public virtual OneOf<EndDefinition, bool> End { get; set; }
+        protected virtual OneOf<EndDefinition, bool>? EndValue { get; set; }
+
+        /// <summary>
+        /// Gets/sets the object used to configure the <see cref="StateDefinition"/>'s transition to another <see cref="StateDefinition"/> upon completion
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual EndDefinition? End
+        {
+            get
+            {
+                if (this.EndValue?.T1Value == null
+                    && !string.IsNullOrWhiteSpace(this.TransitionValue?.T2Value))
+                    return new() { };
+                else
+                    return this.EndValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.EndValue = null;
+                else
+                    this.EndValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets a boolean indicating whether or not the <see cref="StateDefinition"/> is the end of a logicial workflow path
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual bool IsEnd
+        {
+            get
+            {
+                if (this.EndValue == null)
+                    return false;
+                else
+                    return this.EndValue.T2Value;
+            }
+            set
+            {
+                this.EndValue = value;
+            }
+        }
 
         /// <inheritdoc/>
-        public override string ToString()
+        public override string? ToString()
         {
-            return this.Name;
+            if(string.IsNullOrWhiteSpace(this.Name))
+                return base.ToString();
+            else
+                return this.Name;
         }
 
     }

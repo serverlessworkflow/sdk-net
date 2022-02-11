@@ -18,6 +18,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents an object used to define the way to correlate a cloud event
     /// </summary>
@@ -31,16 +32,16 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string ContextAttributeName { get; set; }
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual string ContextAttributeName { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the cloud event Extension Context Attribute value
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string ContextAttributeValue { get; set; }
+        public virtual string? ContextAttributeValue { get; set; }
 
     }
 

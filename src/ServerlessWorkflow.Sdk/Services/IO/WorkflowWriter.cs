@@ -16,7 +16,6 @@
  */
 using Microsoft.Extensions.DependencyInjection;
 using ServerlessWorkflow.Sdk.Models;
-using ServerlessWorkflow.Sdk.Services.Serialization;
 using System;
 using System.IO;
 

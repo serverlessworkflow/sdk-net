@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using System;
 using System.ComponentModel.DataAnnotations;
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -33,7 +34,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Schema { get; set; }
+        public virtual Uri Schema { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to terminate the <see cref="WorkflowDefinition"/>'s execution whenever the validation of the input data fails. Defaults to true.

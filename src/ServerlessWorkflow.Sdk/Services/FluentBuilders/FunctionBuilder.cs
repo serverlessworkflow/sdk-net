@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 
@@ -47,7 +46,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected FunctionDefinition Function { get; } = new FunctionDefinition();
 
         /// <inheritdoc/>
-        public override Any Metadata
+        public override Any? Metadata
         {
             get
             {

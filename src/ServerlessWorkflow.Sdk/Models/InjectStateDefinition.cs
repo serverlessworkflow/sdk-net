@@ -14,7 +14,8 @@
  * limitations under the License.
  *
  */
-using ServerlessWorkflow.Sdk.Serialization;
+
+using System.ComponentModel.DataAnnotations;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -39,9 +40,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="Any"/> which can be set as state's data input and can be manipulated via filter
         /// </summary>
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual Any Data { get; set; }
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual Any Data { get; set; } = null!;
 
     }
 

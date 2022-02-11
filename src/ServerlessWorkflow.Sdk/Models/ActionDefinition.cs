@@ -198,9 +198,12 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual string? Condition { get; set; }
 
         /// <inheritdoc/>
-        public override string ToString()
+        public override string? ToString()
         {
-            return this.Name;
+            if (string.IsNullOrWhiteSpace(this.Name))
+                return base.ToString();
+            else
+                return this.Name;
         }
 
     }

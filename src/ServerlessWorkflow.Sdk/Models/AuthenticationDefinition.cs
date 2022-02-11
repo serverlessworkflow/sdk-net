@@ -16,6 +16,7 @@
  */
 using Newtonsoft.Json.Linq;
 using System;
+using System.ComponentModel.DataAnnotations;
 using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
@@ -32,12 +33,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="AuthenticationDefinition"/>'s name
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "name")]
-        [System.Text.Json.Serialization.JsonPropertyName("name")]
-        [YamlMember(Alias = "name")]
-        [ProtoMember(1, Name = "name")]
-        [DataMember(Order = 1, Name = "name")]
-        public virtual string Name { get; set; }
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual string Name { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the <see cref="AuthenticationDefinition"/>'s scheme
@@ -57,9 +57,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "properties")]
         [ProtoMember(3, Name = "properties")]
         [DataMember(Order = 3, Name = "properties")]
-        protected virtual JToken PropertiesToken { get; set; }
+        protected virtual OneOf<AuthenticationProperties, string> PropertiesValue { get; set; } = null!;
 
-        private AuthenticationProperties _Properties;
         /// <summary>
         /// Gets/sets the <see cref="AuthenticationDefinition"/>'s info
         /// </summary>
@@ -72,21 +71,10 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             get
             {
-                if (this._Properties == null
-                    && this.PropertiesToken != null)
-                {
-                    if (this.PropertiesToken.Type == JTokenType.String)
-                        this._Properties = new SecretBasedAuthenticationProperties(this.PropertiesToken.ToObject<string>());
-                    else
-                        this._Properties = this.Scheme switch
-                        {
-                            AuthenticationScheme.Basic => this.PropertiesToken.ToObject<BasicAuthenticationProperties>(),
-                            AuthenticationScheme.Bearer => this.PropertiesToken.ToObject<BearerAuthenticationProperties>(),
-                            AuthenticationScheme.OAuth2 => this.PropertiesToken.ToObject<OAuth2AuthenticationProperties>(),
-                            _ => throw new NotSupportedException($"The specified authentication scheme '{EnumHelper.Stringify(this.Scheme)}' is not supported"),
-                        };
-                }
-                return this._Properties;
+                if (!string.IsNullOrWhiteSpace(this.PropertiesValue.T2Value))
+                        return new SecretBasedAuthenticationProperties(this.PropertiesValue.T2Value);
+                else
+                    return this.PropertiesValue.T1Value!;
             }
             set
             {
@@ -108,8 +96,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     default:
                         throw new NotSupportedException($"The specified authentication info type '{value.GetType()}' is not supported");
                 }
-                this._Properties = value;
-                this.PropertiesToken = JToken.FromObject(value);
+                this.PropertiesValue = value;
             }
         }
 
@@ -121,7 +108,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual string SecretRef
+        public virtual string? SecretRef
         {
             get
             {
@@ -133,11 +120,10 @@ namespace ServerlessWorkflow.Sdk.Models
             {
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
-                if (this.Properties is SecretBasedAuthenticationProperties secret)
+                else if (this.Properties is SecretBasedAuthenticationProperties secret)
                     secret.Secret = value;
                 else
-                    this._Properties = new SecretBasedAuthenticationProperties(value);
-                this.PropertiesToken = JToken.FromObject(value);
+                    this.Properties = new SecretBasedAuthenticationProperties(value);
             }
         }
 

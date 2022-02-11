@@ -30,12 +30,12 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     {
 
         /// <summary>
-        /// Gets the <see cref="Models.EventDefinition"/> to configure
+        /// Gets the <see cref="EventDefinition"/> to configure
         /// </summary>
-        protected EventDefinition Event { get; } = new EventDefinition();
+        protected EventDefinition Event { get; } = new();
 
         /// <inheritdoc/>
-        public override Any Metadata
+        public override Any? Metadata
         {
             get
             {
@@ -73,10 +73,12 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (string.IsNullOrWhiteSpace(contextAttributeName))
                 throw new ArgumentNullException(nameof(contextAttributeName));
-            EventCorrelationDefinition correlation = this.Event.Correlations.FirstOrDefault(c => c.ContextAttributeName == contextAttributeName);
+            var correlation = this.Event.Correlations?.FirstOrDefault(c => c.ContextAttributeName == contextAttributeName);
+            if (this.Event.Correlations == null)
+                this.Event.Correlations = new();
             if(correlation != null)
-                this.Event.Correlations.Remove(correlation);
-            this.Event.Correlations.Add(new EventCorrelationDefinition() { ContextAttributeName = contextAttributeName });
+                this.Event.Correlations!.Remove(correlation);
+            this.Event.Correlations.Add(new() { ContextAttributeName = contextAttributeName });
             return this;
         }
 
@@ -85,14 +87,16 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (string.IsNullOrWhiteSpace(contextAttributeName))
                 throw new ArgumentNullException(nameof(contextAttributeName));
-            EventCorrelationDefinition correlation = this.Event.Correlations.FirstOrDefault(c => c.ContextAttributeName == contextAttributeName);
+            var correlation = this.Event.Correlations?.FirstOrDefault(c => c.ContextAttributeName == contextAttributeName);
+            if (this.Event.Correlations == null)
+                this.Event.Correlations = new();
             if (correlation != null)
             {
                 if (correlation.ContextAttributeValue == contextAttributeValue)
                     return this;
                 this.Event.Correlations.Remove(correlation);
             } 
-            this.Event.Correlations.Add(new EventCorrelationDefinition() { ContextAttributeName = contextAttributeName, ContextAttributeValue = contextAttributeValue });
+            this.Event.Correlations.Add(new() { ContextAttributeName = contextAttributeName, ContextAttributeValue = contextAttributeValue });
             return this;
         }
 

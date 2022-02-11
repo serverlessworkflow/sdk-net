@@ -34,7 +34,57 @@ namespace ServerlessWorkflow.Sdk.Models
         [DataMember(Order = 1, Name = "workflowExecTimeout")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "workflowExecTimeout"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<WorkflowExecutionTimeoutDefinition, string>))]
         [System.Text.Json.Serialization.JsonPropertyName("workflowExecTimeout"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<WorkflowExecutionTimeoutDefinition, string>))]
-        public OneOf<WorkflowExecutionTimeoutDefinition, string> WorkflowExecutionTimeout { get; set; }
+        protected virtual OneOf<WorkflowExecutionTimeoutDefinition, string>? WorkflowExecutionTimeoutValue { get; set; }
+
+        /// <summary>
+        /// Gets/sets the <see cref="WorkflowDefinition"/>'s execution timeout
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual WorkflowExecutionTimeoutDefinition? WorkflowExecutionTimeout
+        {
+            get
+            {
+                return this.WorkflowExecutionTimeoutValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.WorkflowExecutionTimeoutValue = null;
+                else
+                    this.WorkflowExecutionTimeoutValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets an <see cref="Uri"/> pointing at the <see cref="WorkflowDefinition"/>'s input data schema
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual TimeSpan? WorkflowExecutionTimeoutDuration
+        {
+            get
+            {
+                if (this.WorkflowExecutionTimeoutValue?.T1Value == null
+                    && !string.IsNullOrWhiteSpace(this.WorkflowExecutionTimeoutValue?.T2Value))
+                    return Iso8601TimeSpan.Parse(this.WorkflowExecutionTimeoutValue?.T2Value);
+                else
+                    return this.WorkflowExecutionTimeoutValue?.T1Value?.Duration;
+            }
+            set
+            {
+                if (value == null)
+                    this.WorkflowExecutionTimeoutValue = null;
+                else
+                    this.WorkflowExecutionTimeoutValue = Iso8601TimeSpan.Format(value.Value);
+            }
+        }
 
         /// <summary>
         /// Gets/sets the duration after which to timeout states by default

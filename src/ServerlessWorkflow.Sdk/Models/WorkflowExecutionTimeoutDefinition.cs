@@ -35,23 +35,23 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
         public virtual TimeSpan Duration { get; set; }
 
         /// <summary>
-        /// Gets/sets a boolean indicating whether or not to terminate the workflow execution.
+        /// Gets/sets a boolean indicating whether or not to terminate the workflow execution. Defaults to true.
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual bool Interrupt { get; set; } = false;
+        public virtual bool Interrupt { get; set; } = true;
 
         /// <summary>
         /// Gets/sets the name of a workflow state to be executed before workflow instance is terminated
         /// </summary>
         [ProtoMember(3)]
         [DataMember(Order = 3)]
-        public virtual string RunBefore { get; set; }
+        public virtual string? RunBefore { get; set; }
 
     }
 

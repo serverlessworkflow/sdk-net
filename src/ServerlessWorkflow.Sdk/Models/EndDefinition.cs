@@ -40,7 +40,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual IEnumerable<ProduceEventDefinition> ProduceEvents { get; set; }
+        public virtual IEnumerable<ProduceEventDefinition>? ProduceEvents { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not the state should trigger compensation. Default is false.

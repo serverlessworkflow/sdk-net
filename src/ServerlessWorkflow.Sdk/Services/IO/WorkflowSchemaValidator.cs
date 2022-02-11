@@ -17,7 +17,6 @@
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
-using ServerlessWorkflow.Sdk.Services.Serialization;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

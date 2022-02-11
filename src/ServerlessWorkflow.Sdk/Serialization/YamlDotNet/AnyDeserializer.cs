@@ -43,13 +43,14 @@ namespace YamlDotNet.Serialization
         protected INodeDeserializer Inner { get; }
 
         /// <inheritdoc/>
-        public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object> nestedObjectDeserializer, out object value)
+        public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value)
         {
             value = null;
             if (!typeof(Any).IsAssignableFrom(expectedType))
                 return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value);
-            value = Yaml.Deserialize(reader, typeof(Dictionary<string, object>));
-            value = new Any((Dictionary<string, object>)value);
+            value = nestedObjectDeserializer(reader, typeof(Dictionary<string, object>));
+            if(value != null)
+                value = new Any((Dictionary<string, object>)value);
             return true;
         }
 

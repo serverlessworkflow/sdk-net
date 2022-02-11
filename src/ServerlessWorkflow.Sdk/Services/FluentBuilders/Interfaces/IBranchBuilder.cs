@@ -22,8 +22,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     /// Defines the fundamentals of a service used to configure <see cref="BranchDefinition"/>s
     /// </summary>
     public interface IBranchBuilder
-        : IActionCollectionBuilder<IBranchBuilder>,
-        ISubflowRunnerBuilder
+        : IActionCollectionBuilder<IBranchBuilder>
     {
 
         /// <summary>

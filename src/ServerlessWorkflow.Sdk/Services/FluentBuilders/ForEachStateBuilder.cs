@@ -73,23 +73,15 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IForEachStateBuilder Concurrently()
         {
-            this.State.ActionMode = ActionExecutionMode.Parallel;
+            this.State.Mode = ActionExecutionMode.Parallel;
             return this;
         }
 
         /// <inheritdoc/>
         public virtual IForEachStateBuilder Sequentially()
         {
-            this.State.ActionMode = ActionExecutionMode.Sequential;
+            this.State.Mode = ActionExecutionMode.Sequential;
             return this;
-        }
-
-        /// <inheritdoc/>
-        public virtual void RunSubflow(string workflowId)
-        {
-            if (string.IsNullOrWhiteSpace(workflowId))
-                throw new ArgumentNullException(nameof(workflowId));
-            this.State.WorkflowId = workflowId;
         }
 
         /// <inheritdoc/>
@@ -120,9 +112,9 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IForEachStateBuilder WithMaxIterations(uint? max)
+        public virtual IForEachStateBuilder WithBatchSize(int? batchSize)
         {
-            this.State.Max = max;
+            this.State.BatchSize = batchSize;
             return this;
         }
 

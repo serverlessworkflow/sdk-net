@@ -44,7 +44,10 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="Neuroglia.Serialization.Json" Version="2.0.1.25" />
+    <PackageReference Include="Neuroglia.Serialization.NewtonsoftJson" Version="2.0.1.25" />
     <PackageReference Include="Neuroglia.Serialization.Protobuf" Version="2.0.1.25" />
+    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="2.0.1.25" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
     <PackageReference Include="protobuf-net.Core" Version="3.0.101" />

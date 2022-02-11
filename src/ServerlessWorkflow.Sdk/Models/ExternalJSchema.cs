@@ -32,6 +32,7 @@ namespace ServerlessWorkflow.Sdk.Models
         public ExternalJSchema()
             : base()
         {
+            this.DefinitionUri = null!;
             this.Loaded = true;
         }
 

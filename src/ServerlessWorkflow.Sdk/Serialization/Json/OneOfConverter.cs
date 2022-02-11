@@ -30,23 +30,29 @@ namespace System.Text.Json.Serialization.Converters
     {
 
         /// <inheritdoc/>
-        public override OneOf<T1, T2> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override OneOf<T1, T2>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var doc = JsonDocument.ParseValue(ref reader);
             try
             {
-                return new(doc.ToObject<T1>());
+                var value = doc.ToObject<T1>();
+                if (value == null)
+                    return null;
+                return new(value);
             }
             catch
             {
-                return new(doc.ToObject<T2>());
+                var value = doc.ToObject<T2>();
+                if (value == null)
+                    return null;
+                return new(value);
             }
         }
 
         /// <inheritdoc/>
         public override void Write(Utf8JsonWriter writer, OneOf<T1, T2> value, JsonSerializerOptions options)
         {
-            var json = string.Empty;
+            var json = null as string;
             if (value.T1Value != null)
                 json = JsonSerializer.Serialize(value.T1Value);
             else

@@ -38,20 +38,21 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.Workflow = workflow;
             this.RuleFor(s => s.Name)
                 .NotNull();
-            this.RuleFor(s => s.CompensatedBy)
+            this.RuleFor(s => s.CompensatedBy!)
                 .Must(ReferenceExistingState)
                 .When(s => !string.IsNullOrWhiteSpace(s.CompensatedBy))
                 .WithMessage((state, stateName) => $"Failed to find the state '{stateName}' to use for compensation");
-            this.RuleFor(s => s.Transition)
+            this.RuleFor(s => s.Transition!)
                 .Must(ReferenceExistingState)
                 .When(s => s.Transition != null)
-                .WithMessage((state, stateName) => $"Failed to find the state '{stateName}' to transition to")
+                .WithMessage((state, stateName) => $"Failed to find the state '{stateName}' to transition to");
+            this.RuleFor(s => s.Transition!)
                 .Must(DefineCompensationState)
-                .When(s => s.Transition?.T1Value != null && s.Transition.T1Value.Compensate)
+                .When(s => s.Transition != null && s.Transition.Compensate)
                 .WithMessage(state => $"The '{nameof(StateDefinition.CompensatedBy)}' property of the state '{state.Name}' must be set when enabling its compensation (in both Transition and End definitions)");
-            this.RuleFor(s => s.End)
+            this.RuleFor(s => s.End!)
                 .Must(DefineCompensationState)
-                .When(s => s.End?.T1Value != null && s.End.T1Value.Compensate)
+                .When(s => s.End != null && s.End.Compensate)
                 .WithMessage(state => $"The '{nameof(StateDefinition.CompensatedBy)}' property of the state '{state.Name}' must be set when enabling its compensation (in both Transition and End definitions)");
             this.RuleForEach(s => s.Errors)
                 .SetValidator((s, e) => new ErrorHandlerDefinitionValidator(this.Workflow, s));
@@ -69,16 +70,11 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <summary>
         /// Determines whether or not the specified <see cref="StateDefinition"/> exists
         /// </summary>
-        /// <param name="oneOf">The name of the <see cref="StateDefinition"/> to check</param>
+        /// <param name="transition">The name of the <see cref="StateDefinition"/> to check</param>
         /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> exists</returns>
-        protected virtual bool ReferenceExistingState(OneOf<TransitionDefinition, string> oneOf)
+        protected virtual bool ReferenceExistingState(TransitionDefinition transition)
         {
-            string stateName;
-            if (oneOf.T1Value == null)
-                stateName = oneOf.T2Value;
-            else
-                stateName = oneOf.T1Value.NextState;
-            return this.Workflow.TryGetState(stateName, out _);
+            return this.Workflow.TryGetState(transition.NextState, out _);
         }
 
         /// <summary>
@@ -107,7 +103,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <param name="state">The <see cref="StateDefinition"/> to check</param>
         /// <param name="oneOf">The <see cref="TransitionDefinition"/> that references the <see cref="StateDefinition"/> to check</param>
         /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> defines a compensation state</returns>
-        protected virtual bool DefineCompensationState(TState state, OneOf<TransitionDefinition, string> oneOf)
+        protected virtual bool DefineCompensationState(TState state, TransitionDefinition oneOf)
         {
             return !string.IsNullOrWhiteSpace(state.CompensatedBy);
         }
@@ -118,7 +114,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <param name="state">The <see cref="StateDefinition"/> to check</param>
         /// <param name="oneOf">The <see cref="EndDefinition"/> that references the <see cref="StateDefinition"/> to check</param>
         /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> defines a compensation state</returns>
-        protected virtual bool DefineCompensationState(TState state, OneOf<EndDefinition, bool> oneOf)
+        protected virtual bool DefineCompensationState(TState state, EndDefinition oneOf)
         {
             return !string.IsNullOrWhiteSpace(state.CompensatedBy);
         }

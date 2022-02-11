@@ -33,7 +33,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Name { get; set; }
+        public virtual string Name { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the operation. If type '<see cref="FunctionType.Rest"/>', combination of the function/service OpenAPI definition URI and the operationID of the operation that needs to be invoked, separated by a '#'. 
@@ -43,7 +43,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string Operation { get; set; }
+        public virtual string Operation { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the type of the defined function. Defaults to '<see cref="FunctionType.Rest"/>'
@@ -57,14 +57,14 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(4)]
         [DataMember(Order = 4)]
-        public virtual string AuthRef { get; set; }
+        public virtual string? AuthRef { get; set; }
 
         /// <summary>
         /// Gets/sets the function's metadata
         /// </summary>
         [ProtoMember(5)]
         [DataMember(Order = 5)]
-        public virtual Any Metadata { get; set; }
+        public virtual Any? Metadata { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

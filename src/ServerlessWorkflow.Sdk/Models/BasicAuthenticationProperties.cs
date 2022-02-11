@@ -15,6 +15,8 @@
  *
  */
 
+using System.ComponentModel.DataAnnotations;
+
 namespace ServerlessWorkflow.Sdk.Models
 {
 
@@ -30,16 +32,20 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the username to use when authenticating
         /// </summary>
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string Username { get; set; }
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual string Username { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the password to use when authenticating
         /// </summary>
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual string Password { get; set; }
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(2, IsRequired = true)]
+        [DataMember(Order = 2, IsRequired = true)]
+        public virtual string Password { get; set; } = null!;
 
     }
 

@@ -33,7 +33,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [DataMember(Order = 1, IsRequired = true)]
         [ProtoMember(1)]
-        public virtual string ExtensionId { get; set; }
+        public virtual string ExtensionId { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets an <see cref="Uri"/> to a resource containing the workflow extension definition (json or yaml)
@@ -42,7 +42,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [DataMember(Order = 2, IsRequired = true)]
         [ProtoMember(2)]
-        public virtual Uri Resource { get; set; }
+        public virtual Uri Resource { get; set; } = null!;
 
     }
 

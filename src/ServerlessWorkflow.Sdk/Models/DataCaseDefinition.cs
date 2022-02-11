@@ -15,6 +15,9 @@
  *
  */
 
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+
 namespace ServerlessWorkflow.Sdk.Models
 {
 
@@ -30,9 +33,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets an expression evaluated against state data. True if results are not empty
         /// </summary>
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string Condition { get; set; }
+        [Required]
+        [JsonRequired]
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual string Condition { get; set; } = null!;
 
     }
 

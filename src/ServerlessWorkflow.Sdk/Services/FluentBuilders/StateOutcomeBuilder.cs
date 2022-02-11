@@ -43,7 +43,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <summary>
         /// Gets the <see cref="StateOutcomeDefinition"/> to configure
         /// </summary>
-        protected StateOutcomeDefinition Outcome { get; set; }
+        protected StateOutcomeDefinition Outcome { get; set; } = null!;
 
         /// <inheritdoc/>
         public virtual void TransitionTo(Func<IStateBuilderFactory, IStateBuilder> stateSetup)

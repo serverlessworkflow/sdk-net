@@ -60,7 +60,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <param name="workflowId">The id of the <see cref="WorkflowDefinition"/> to run</param>
         /// <param name="invocationMode">The subflow's <see cref="Sdk.InvocationMode"/>. Defaults to <see cref="InvocationMode.Synchronous"/>.</param>
         public SubflowReference(string workflowId, InvocationMode invocationMode = InvocationMode.Synchronous)
-            : this(workflowId, null, invocationMode)
+            : this(workflowId, null!, invocationMode)
         {
 
         }
@@ -106,12 +106,12 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             if (string.IsNullOrWhiteSpace(input))
                 throw new ArgumentNullException(nameof(input));
-            string[] components = input.Split(":", StringSplitOptions.RemoveEmptyEntries);
-            string workflowId = components.First();
-            string version = null;
+            var components = input.Split(":", StringSplitOptions.RemoveEmptyEntries);
+            var workflowId = components.First();
+            var version = null as string;
             if (components.Length > 1)
                 version = components.Last();
-            return new SubflowReference(workflowId, version);
+            return new SubflowReference(workflowId, version!);
         }
 
     }

@@ -36,7 +36,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Name { get; set; }
+        public virtual string Name { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the cloud event source
@@ -45,14 +45,14 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string Source { get; set; }
+        public virtual string? Source { get; set; }
 
         /// <summary>
         /// Gets/sets the cloud event type
         /// </summary>
         [ProtoMember(3)]
         [DataMember(Order = 3)]
-        public virtual string Type { get; set; }
+        public virtual string Type { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets a value that defines the CloudEvent as either '<see cref="EventKind.Consumed"/>' or '<see cref="EventKind.Produced"/>' by the workflow. Default is '<see cref="EventKind.Consumed"/>'.
@@ -69,14 +69,14 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "correlation")]
         [ProtoMember(5, Name = "correlation")]
         [DataMember(Order = 5, Name = "correlation")]
-        public virtual List<EventCorrelationDefinition> Correlations { get; set; } = new List<EventCorrelationDefinition>();
+        public virtual List<EventCorrelationDefinition>? Correlations { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="EventDefinition"/>'s metadata
         /// </summary>
         [ProtoMember(6)]
         [DataMember(Order = 6)]
-        public virtual Any Metadata { get; set; }
+        public virtual Any? Metadata { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

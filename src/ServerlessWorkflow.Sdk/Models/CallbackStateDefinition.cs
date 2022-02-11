@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using ServerlessWorkflow.Sdk.Serialization;
 using System;
 using YamlDotNet.Serialization;
 
@@ -45,7 +44,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual ActionDefinition Action { get; set; }
+        public virtual ActionDefinition? Action { get; set; }
 
         /// <summary>
         /// Gets/sets a reference to the callback event to await
@@ -55,7 +54,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "eventRef")]
         [ProtoMember(2, Name = "eventRef")]
         [DataMember(Order = 2, Name = "eventRef")]
-        public virtual string Event { get; set; }
+        public virtual string? Event { get; set; }
 
         /// <summary>
         /// Gets/sets the time period to wait for incoming events

@@ -37,14 +37,14 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.RuleFor(s => s.Action)
                 .NotNull()
                 .WithErrorCode($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Action)}");
-            this.RuleFor(s => s.Action)
+            this.RuleFor(s => s.Action!)
                 .SetValidator(new ActionDefinitionValidator(workflow))
                 .When(s => s.Action != null)
                 .WithErrorCode($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Action)}");
             this.RuleFor(s => s.Event)
                 .NotEmpty()
                 .WithErrorCode($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Event)}");
-            this.RuleFor(s => s.Event)
+            this.RuleFor(s => s.Event!)
                 .Must(ReferenceExistingEvent)
                 .When(s => !string.IsNullOrWhiteSpace(s.Event))
                 .WithErrorCode($"{nameof(CallbackStateDefinition)}.{nameof(CallbackStateDefinition.Event)}")

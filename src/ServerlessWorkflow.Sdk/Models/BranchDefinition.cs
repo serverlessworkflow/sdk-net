@@ -15,6 +15,7 @@
  *
  */
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Models
@@ -31,29 +32,25 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// gets/sets the branch's name
         /// </summary>
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string Name { get; set; }
-
-        /// <summary>
-        /// Gets/sets the unique id of a workflow to be executed in this branch
-        /// </summary>
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual string WorkflowId { get; set; }
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual string Name { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets a value that specifies how actions are to be performed (in sequence of parallel)
         /// </summary>
-        [ProtoMember(3)]
-        [DataMember(Order = 3)]
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual ActionExecutionMode ActionMode { get; set; }
 
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> containing the actions to be executed in this branch
         /// </summary>
-        [ProtoMember(4)]
-        [DataMember(Order = 4)]
+        [MinLength(1)]
+        [ProtoMember(3)]
+        [DataMember(Order = 3)]
         public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
         /// <summary>
@@ -61,7 +58,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         /// <param name="name">The name of the <see cref="ActionDefinition"/> to get</param>
         /// <returns>The <see cref="ActionDefinition"/> with the specified name</returns>
-        public virtual ActionDefinition GetAction(string name)
+        public virtual ActionDefinition? GetAction(string name)
         {
             return this.Actions.FirstOrDefault(s => s.Name == name);
         }
@@ -74,7 +71,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <returns>A boolean indicating whether or not a <see cref="ActionDefinition"/> with the specified name could be found</returns>
         public virtual bool TryGetAction(string name, out ActionDefinition action)
         {
-            action = this.GetAction(name);
+            action = this.GetAction(name)!;
             return action != null;
         }
 
@@ -86,8 +83,10 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <returns>A boolean indicating whether or not there is a next <see cref="ActionDefinition"/> in the pipeline</returns>
         public virtual bool TryGetNextAction(string previousActionName, out ActionDefinition action)
         {
-            action = null;
-            ActionDefinition previousAction = this.Actions.FirstOrDefault(a => a.Name == previousActionName);
+            action = null!;
+            var previousAction = this.Actions.FirstOrDefault(a => a.Name == previousActionName);
+            if (previousAction == null)
+                return false;
             int previousActionIndex = this.Actions.ToList().IndexOf(previousAction);
             int nextIndex = previousActionIndex + 1;
             if (nextIndex >= this.Actions.Count())

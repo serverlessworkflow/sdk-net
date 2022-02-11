@@ -15,11 +15,10 @@
  *
  */
 using System;
-using System.ComponentModel.DataAnnotations;
-using YamlDotNet.Serialization;
 using System.Collections.Generic;
-using ServerlessWorkflow.Sdk.Serialization;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -88,7 +87,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <returns>A boolean indicating whether or not a <see cref="EventStateTriggerDefinition"/> with the specified id could be found</returns>
         public virtual bool TryGetTrigger(int id, out EventStateTriggerDefinition trigger)
         {
-            trigger = null;
+            trigger = null!;
             try
             {
                 trigger = this.GetTrigger(id);

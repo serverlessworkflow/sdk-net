@@ -39,7 +39,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         protected OneOf()
         {
-            
+            this._Extension = null!;
         }
 
         /// <summary>
@@ -47,6 +47,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         /// <param name="value">The value of the <see cref="OneOf{T1, T2}"/></param>
         public OneOf(T1 value)
+            : this()
         {
             this.T1Value = value;
         }
@@ -56,6 +57,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         /// <param name="value">The value of the <see cref="OneOf{T1, T2}"/></param>
         public OneOf(T2 value)
+             : this()
         {
             this.T2Value = value;
         }
@@ -96,7 +98,7 @@ namespace ServerlessWorkflow.Sdk.Models
 
         void ResetT2Value() => DiscriminatedUnionObject.Reset(ref this._DicriminatorUnionObject, 2);
 
-        object IOneOf.GetValue()
+        object? IOneOf.GetValue()
         {
             if (this.T1Value == null)
                 return this.T2Value;
@@ -126,7 +128,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Implicitly convert the specified <see cref="OneOf{T1, T2}"/> into a new value
         /// </summary>
         /// <param name="value">The <see cref="OneOf{T1, T2}"/> to convert</param>
-        public static implicit operator T1(OneOf<T1, T2> value)
+        public static implicit operator T1?(OneOf<T1, T2> value)
         {
             return value.T1Value;
         }
@@ -135,7 +137,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Implicitly convert the specified <see cref="OneOf{T1, T2}"/> into a new value
         /// </summary>
         /// <param name="value">The <see cref="OneOf{T1, T2}"/> to convert</param>
-        public static implicit operator T2(OneOf<T1, T2> value)
+        public static implicit operator T2?(OneOf<T1, T2> value)
         {
             return value.T2Value;
         }

@@ -32,18 +32,18 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string StateName { get; set; }
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual string StateName { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the object used to define the time/repeating intervals at which workflow instances can/should be started
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual ScheduleDefinition Schedule { get; set; } = new();
+        [ProtoMember(2, IsRequired = true)]
+        [DataMember(Order = 2, IsRequired = true)]
+        public virtual ScheduleDefinition? Schedule { get; set; }
 
     }
 
