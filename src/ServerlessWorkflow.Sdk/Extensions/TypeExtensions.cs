@@ -35,7 +35,7 @@ namespace ServerlessWorkflow.Sdk
         /// <returns>A boolean indicating whether or not the type is a nullable type</returns>
         public static bool IsNullable(this Type extended)
         {
-            Type type = extended;
+            var type = extended;
             do
             {
                 if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
@@ -56,7 +56,7 @@ namespace ServerlessWorkflow.Sdk
         public static bool TryGetCustomAttribute<TAttribute>(this Type extended, out TAttribute attribute)
             where TAttribute : Attribute
         {
-            attribute = extended.GetCustomAttribute<TAttribute>();
+            attribute = extended.GetCustomAttribute<TAttribute>()!;
             return attribute != null;
         }
 
@@ -65,7 +65,7 @@ namespace ServerlessWorkflow.Sdk
         /// </summary>
         /// <param name="extended">The extended type</param>
         /// <returns>The type's default value</returns>
-        public static object GetDefaultValue(this Type extended)
+        public static object? GetDefaultValue(this Type extended)
         {
             if (extended.IsValueType)
                 return Activator.CreateInstance(extended);
@@ -84,7 +84,7 @@ namespace ServerlessWorkflow.Sdk
             if (extended.IsGenericType
                 && extended.GetGenericTypeDefinition() == genericTypeDefinition)
                 return extended;
-            Type genericType = null;
+            var genericType = null as Type;
             if (!genericTypeDefinition.IsInterface
                 && extended.BaseType != null)
             {

@@ -60,21 +60,21 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IActionBuilder FromStateData(string expression)
         {
-            this.Action.DataFilter.FromStateData = expression;
+            this.Action.ActionDataFilter!.FromStateData = expression;
             return this;
         }
 
         /// <inheritdoc/>
         public virtual IActionBuilder FilterResults(string expression)
         {
-            this.Action.DataFilter.Results = expression;
+            this.Action.ActionDataFilter!.Results = expression;
             return this;
         }
 
         /// <inheritdoc/>
         public virtual IActionBuilder ToStateData(string expression)
         {
-            this.Action.DataFilter.ToStateData = expression;
+            this.Action.ActionDataFilter!.ToStateData = expression;
             return this;
         }
 
@@ -110,7 +110,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IFunctionActionBuilder WithArgument(string name, string value)
         {
-            if (this.Action.Function.Arguments == null)
+            if (this.Action.Function!.Arguments == null)
                 this.Action.Function.Arguments = new();
             this.Action.Function.Arguments.Set(name, value);
             return this;
@@ -119,7 +119,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IFunctionActionBuilder WithArguments(IDictionary<string, string> args)
         {
-            this.Action.Function.Arguments = new(args.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value));
+            this.Action.Function!.Arguments = new(args.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value));
             return this;
         }
 
@@ -128,7 +128,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (string.IsNullOrWhiteSpace(selectionSet))
                 throw new ArgumentNullException(nameof(selectionSet));
-            this.Action.Function.SelectionSet = selectionSet;
+            this.Action.Function!.SelectionSet = selectionSet;
             return this;
         }
 
@@ -164,7 +164,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IEventTriggerActionBuilder ThenProduce(string e)
         {
-            this.Action.Event.ConsumeEvent = e;
+            this.Action.Event!.ConsumeEvent = e;
             return this;
         }
 
@@ -172,39 +172,55 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         public virtual IEventTriggerActionBuilder ThenProduce(Action<IEventBuilder> eventSetup)
         {
             EventDefinition e = this.Pipeline.AddEvent(eventSetup);
-            this.Action.Event.ConsumeEvent = e.Name;
+            this.Action.Event!.ProduceEvent = e.Name;
             return this;
         }
 
         /// <inheritdoc/>
         public virtual IEventTriggerActionBuilder WithContextAttribute(string name, string value)
         {
+            if (this.Action.Event!.ContextAttributes == null)
+                this.Action.Event.ContextAttributes = new();
             this.Action.Event.ContextAttributes.Set(name, value);
             return this;
         }
 
         /// <inheritdoc/>
-        public virtual IEventTriggerActionBuilder WithContextAttribute(IDictionary<string, string> contextAttributes)
+        public virtual IEventTriggerActionBuilder WithContextAttributes(IDictionary<string, string> contextAttributes)
         {
-            this.Action.Event.ContextAttributes = new(contextAttributes.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value));
+            this.Action.Event!.ContextAttributes = new(contextAttributes.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value));
             return this;
         }
 
         /// <inheritdoc/>
-        public virtual ISubflowActionBuilder Run(string workflowId, string version, bool waitForCompletion = true)
+        public virtual ISubflowActionBuilder Run(string workflowId, string version, InvocationMode invocationMode = InvocationMode.Synchronous)
         {
             if (string.IsNullOrWhiteSpace(workflowId))
                 throw new ArgumentNullException(nameof(workflowId));
-            this.Action.Subflow = new SubflowReference(workflowId, version, waitForCompletion);
+            this.Action.Subflow = new SubflowReference(workflowId, version, invocationMode);
             return this;
         }
 
         /// <inheritdoc/>
-        public virtual ISubflowActionBuilder Run(string workflowId, bool waitForCompletion = true)
+        public virtual ISubflowActionBuilder Run(string workflowId, InvocationMode invocationMode = InvocationMode.Synchronous)
         {
             if (string.IsNullOrWhiteSpace(workflowId))
                 throw new ArgumentNullException(nameof(workflowId));
-            return this.Run(workflowId, null, waitForCompletion);
+            return this.Run(workflowId, null!, invocationMode);
+        }
+
+        /// <inheritdoc/>
+        public virtual ISubflowActionBuilder Synchronously()
+        {
+            this.Action.Subflow!.InvocationMode = InvocationMode.Synchronous;
+            return this;
+        }
+
+        /// <inheritdoc/>
+        public virtual ISubflowActionBuilder Asynchronously()
+        {
+            this.Action.Subflow!.InvocationMode = InvocationMode.Asynchronous;
+            return this;
         }
 
         /// <inheritdoc/>
@@ -218,14 +234,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (string.IsNullOrWhiteSpace(version))
                 throw new ArgumentNullException(nameof(version));
-            this.Action.Subflow.Version = version;
-            return this;
-        }
-
-        /// <inheritdoc/>
-        public virtual ISubflowActionBuilder WaitForCompletion(bool wait = true)
-        {
-            this.Action.Subflow.WaitForCompletion = wait;
+            this.Action.Subflow!.Version = version;
             return this;
         }
 

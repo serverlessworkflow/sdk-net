@@ -43,24 +43,24 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         /// <param name="workflowId">The id of the <see cref="WorkflowDefinition"/> to run</param>
         /// <param name="version">The version of the <see cref="WorkflowDefinition"/> to run. Defaults to 'latest'</param>
-        /// <param name="waitForCompletion">A boolean indicating whether or not to wait for the completion of the <see cref="WorkflowDefinition"/> to run. Defaults to true</param>
-        public SubflowReference(string workflowId, string version, bool waitForCompletion = true)
+        /// <param name="invocationMode">The subflow's <see cref="Sdk.InvocationMode"/>. Defaults to <see cref="InvocationMode.Synchronous"/>.</param>
+        public SubflowReference(string workflowId, string version, InvocationMode invocationMode = InvocationMode.Synchronous)
             : this()
         {
             if (string.IsNullOrWhiteSpace(workflowId))
                 throw new ArgumentNullException(nameof(workflowId));
             this.WorkflowId = workflowId;
             this.Version = version;
-            this.WaitForCompletion = waitForCompletion;
+            this.InvocationMode = invocationMode;
         }
 
         /// <summary>
         /// Initializes a new <see cref="SubflowReference"/>
         /// </summary>
         /// <param name="workflowId">The id of the <see cref="WorkflowDefinition"/> to run</param>
-        /// <param name="waitForCompletion">A boolean indicating whether or not to wait for the completion of the <see cref="WorkflowDefinition"/> to run. Defaults to true</param>
-        public SubflowReference(string workflowId, bool waitForCompletion = true)
-            : this(workflowId, null, waitForCompletion)
+        /// <param name="invocationMode">The subflow's <see cref="Sdk.InvocationMode"/>. Defaults to <see cref="InvocationMode.Synchronous"/>.</param>
+        public SubflowReference(string workflowId, InvocationMode invocationMode = InvocationMode.Synchronous)
+            : this(workflowId, null, invocationMode)
         {
 
         }
@@ -72,17 +72,17 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(1)]
         [DataMember(Order = 1, IsRequired = true)]
-        public virtual string WorkflowId { get; set; }
+        public virtual string WorkflowId { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the version of the <see cref="WorkflowDefinition"/> to run. Defaults to 'latest'
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string Version { get; set; } = "latest";
+        public virtual string? Version { get; set; } = "latest";
 
         /// <summary>
-        /// Gets/sets the subflow's <see cref="Sdk.InvocationMode"/>. Default is <see cref="InvocationMode.Synchronous"/>.
+        /// Gets/sets the subflow's <see cref="Sdk.InvocationMode"/>. Defaults to <see cref="InvocationMode.Synchronous"/>.
         /// </summary>
         /// <remarks>
         /// Default value of this property is sync, meaning that workflow execution should wait until the subflow completes.<para></para>

@@ -73,7 +73,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> exists</returns>
         protected virtual bool ReferenceExistingState(OneOf<TransitionDefinition, string> oneOf)
         {
-            string stateName = null;
+            string stateName;
             if (oneOf.T1Value == null)
                 stateName = oneOf.T2Value;
             else

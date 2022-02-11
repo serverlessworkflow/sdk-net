@@ -27,17 +27,17 @@ namespace ServerlessWorkflow.Sdk.Models
     /// </summary>
     [ProtoContract]
     [DataContract]
-    public class RetryStrategyDefinition
+    public class RetryDefinition
     {
 
         /// <summary>
-        /// Gets/sets the <see cref="RetryStrategyDefinition"/>'s name
+        /// Gets/sets the <see cref="RetryDefinition"/>'s name
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Name { get; set; }
+        public virtual string Name { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets delay between retry attempts
@@ -82,11 +82,61 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual float? Multiplier { get; set; }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="RetryStrategyDefinition"/>'s jitter.
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="RetryDefinition"/>'s jitter.<para></para>
+        /// If float type, maximum amount of random time added or subtracted from the delay between each retry relative to total delay (between 0.0 and 1.0).<para></para>
+        /// If string type, absolute maximum amount of random time added or subtracted from the delay between each retry (ISO 8601 duration format)
         /// </summary>
         [ProtoMember(7)]
         [DataMember(Order = 7)]
-        protected virtual OneOf<float?, string> Jitter{ get; set; }
+        protected virtual OneOf<float?, string>? JitterValue { get; set; }
+
+        /// <summary>
+        /// Gets/sets the maximum amount of random time added or subtracted from the delay between each retry relative to total delay (between 0.0 and 1.0)
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual float? JitterMultiplier
+        {
+            get
+            {
+                return this.JitterValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.JitterValue = null;
+                else
+                    this.JitterValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the absolute maximum amount of random time added or subtracted from the delay between each retry
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual TimeSpan? JitterDuration
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.JitterValue?.T2Value))
+                    return null;
+                return Iso8601TimeSpan.Parse(this.JitterValue.T2Value);
+            }
+            set
+            {
+                if (value == null)
+                    this.JitterValue = null;
+                else
+                    this.JitterValue = Iso8601TimeSpan.Format(value.Value);
+            }
+        }
 
         /// <inheritdoc/>
         public override string ToString()

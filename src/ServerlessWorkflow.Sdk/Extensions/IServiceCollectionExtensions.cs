@@ -85,7 +85,7 @@ namespace ServerlessWorkflow.Sdk
         /// <param name="serializerConfiguration">The <see cref="Action{T}"/> used to configure the <see cref="ISerializer"/> to add</param>
         /// <param name="deserializerConfiguration">The <see cref="Action{T}"/> used to configure the <see cref="IDeserializer"/> to add</param>
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddYamlDotNet(this IServiceCollection services, Action<SerializerBuilder> serializerConfiguration = null, Action<DeserializerBuilder> deserializerConfiguration = null)
+        public static IServiceCollection AddYamlDotNet(this IServiceCollection services, Action<SerializerBuilder>? serializerConfiguration = null, Action<DeserializerBuilder>? deserializerConfiguration = null)
         {
             Action<SerializerBuilder> defaultSerializerConfiguration = builder => 
                 builder.WithNamingConvention(CamelCaseNamingConvention.Instance);
@@ -136,7 +136,7 @@ namespace ServerlessWorkflow.Sdk
         /// <param name="serializerConfiguration">The <see cref="Action{T}"/> used to configure the <see cref="ISerializer"/> to add</param>
         /// <param name="deserializerConfiguration">The <see cref="Action{T}"/> used to configure the <see cref="IDeserializer"/> to add</param>
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
-        public static IServiceCollection AddYamlDotNetSerializer(this IServiceCollection services, Action<SerializerBuilder> serializerConfiguration = null, Action<DeserializerBuilder> deserializerConfiguration = null)
+        public static IServiceCollection AddYamlDotNetSerializer(this IServiceCollection services, Action<SerializerBuilder>? serializerConfiguration = null, Action<DeserializerBuilder>? deserializerConfiguration = null)
         {
             services.AddYamlDotNet(serializerConfiguration, deserializerConfiguration);
             services.TryAddSingleton<YamlDotNetSerializer>();

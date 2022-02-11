@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using System;
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -25,7 +24,7 @@ namespace ServerlessWorkflow.Sdk.Models
     [ProtoContract]
     [DataContract]
     public class ExternalDefinition
-        : JObject
+        : Any
     {
 
         /// <summary>
@@ -34,6 +33,7 @@ namespace ServerlessWorkflow.Sdk.Models
         public ExternalDefinition()
             : base()
         {
+            this.DefinitionUri = null!;
             this.Loaded = true;
         }
 

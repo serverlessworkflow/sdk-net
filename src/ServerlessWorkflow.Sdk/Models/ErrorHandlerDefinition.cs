@@ -46,7 +46,7 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual string Code { get; set; }
 
         /// <summary>
-        /// Gets/sets a reference to the <see cref="RetryStrategyDefinition"/> to use 
+        /// Gets/sets a reference to the <see cref="RetryDefinition"/> to use 
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = "retryRef")]
         [System.Text.Json.Serialization.JsonPropertyName("retryRef")]

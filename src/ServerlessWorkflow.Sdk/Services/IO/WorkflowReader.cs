@@ -27,7 +27,6 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -127,13 +126,13 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                 && !externalFunctionsDefinition.Loaded)
                 workflow.Functions = await this.LoadExternalDefinitionCollectionAsync<FunctionDefinition>(externalFunctionsDefinition.DefinitionUri, cancellationToken);
             if (workflow.Retries != null
-                && workflow.Retries is ExternalDefinitionCollection<RetryStrategyDefinition> externalRetriesDefinition
+                && workflow.Retries is ExternalDefinitionCollection<RetryDefinition> externalRetriesDefinition
                 && !externalRetriesDefinition.Loaded)
-                workflow.Retries = await this.LoadExternalDefinitionCollectionAsync<RetryStrategyDefinition>(externalRetriesDefinition.DefinitionUri, cancellationToken);
+                workflow.Retries = await this.LoadExternalDefinitionCollectionAsync<RetryDefinition>(externalRetriesDefinition.DefinitionUri, cancellationToken);
             if (workflow.Constants != null
                 && workflow.Constants is ExternalDefinition externalConstantsDefinition
                 && !externalConstantsDefinition.Loaded)
-                workflow.Constants = (JObject)await this.LoadExternalDefinitionAsync(externalConstantsDefinition.DefinitionUri, cancellationToken);
+                workflow.Constants = await this.LoadExternalDefinitionAsync(externalConstantsDefinition.DefinitionUri, cancellationToken);
             if (workflow.Secrets != null
                 && workflow.Secrets is ExternalDefinitionCollection<string> externalSecretsDefinition
                 && !externalSecretsDefinition.Loaded)
@@ -155,7 +154,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
-            string content;
+            string? content;
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
@@ -166,7 +165,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             else
             {
                 using HttpResponseMessage response = await this.HttpClient.GetAsync(uri, cancellationToken);
-                content = await response.Content?.ReadAsStringAsync(cancellationToken);
+                content = await response.Content?.ReadAsStringAsync(cancellationToken)!;
                 if (!response.IsSuccessStatusCode)
                     response.EnsureSuccessStatusCode();
             }
@@ -181,11 +180,11 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// <param name="uri">The <see cref="Uri"/> the external definition to load is located at</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="JToken"/> that represents the object defined in the loaded external definition</returns>
-        protected virtual async Task<JToken> LoadExternalDefinitionAsync(Uri uri, CancellationToken cancellationToken = default)
+        protected virtual async Task<Any> LoadExternalDefinitionAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
-            string content;
+            string? content;
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
@@ -196,14 +195,14 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             else
             {
                 using HttpResponseMessage response = await this.HttpClient.GetAsync(uri, cancellationToken);
-                content = await response.Content?.ReadAsStringAsync(cancellationToken);
+                content = await response.Content?.ReadAsStringAsync(cancellationToken)!;
                 if (!response.IsSuccessStatusCode)
                     response.EnsureSuccessStatusCode();
             }
             if (content.IsJson())
-                return await this.JsonSerializer.DeserializeAsync<JToken>(content, cancellationToken);
+                return await this.JsonSerializer.DeserializeAsync<Any>(content, cancellationToken);
             else
-                return await this.YamlSerializer.DeserializeAsync<JToken>(content, cancellationToken);
+                return await this.YamlSerializer.DeserializeAsync<Any>(content, cancellationToken);
         }
 
         /// <summary>
@@ -217,7 +216,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
-            string content;
+            string? content;
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
@@ -228,7 +227,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             else
             {
                 using HttpResponseMessage response = await this.HttpClient.GetAsync(uri, cancellationToken);
-                content = await response.Content?.ReadAsStringAsync(cancellationToken);
+                content = await response.Content?.ReadAsStringAsync(cancellationToken)!;
                 if (!response.IsSuccessStatusCode)
                     response.EnsureSuccessStatusCode();
             }

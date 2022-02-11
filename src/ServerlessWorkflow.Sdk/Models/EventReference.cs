@@ -38,7 +38,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "produceEventRef")]
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string ProduceEvent { get; set; }
+        public virtual string ProduceEvent { get; set; } = null!;
 
         /// <summary>
         /// Gets the name of the event to consume
@@ -49,25 +49,71 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "consumeEventRef")]
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string ConsumeEvent { get; set; }
+        public virtual string ConsumeEvent { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the data to become the cloud event's payload. 
-        /// If string type, an expression which selects parts of the states data output to become the data (payload) of the event referenced by 'triggerEventRef'. 
-        /// If object type, a custom object to become the data (payload) of the event referenced by 'triggerEventRef'.
+        /// If string type, an expression which selects parts of the states data output to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'. 
+        /// If object type, a custom object to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'.
         /// </summary>
         [ProtoMember(3)]
         [DataMember(Order = 3)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Any, string>))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Any, string>))]
-        public virtual OneOf<Any, string> Data { get; set; }
+        protected virtual OneOf<Any, string>? DataValue { get; set; }
+
+        /// <summary>
+        /// Gets/sets a custom object to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual Any? Data
+        {
+            get
+            {
+                return this.DataValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.DataValue = null;
+                else
+                    this.DataValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets an expression which selects parts of the states data output to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual string? DataExpression
+        {
+            get
+            {
+                return this.DataValue?.T2Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.DataValue = null;
+                else
+                    this.DataValue = value;
+            }
+        }
 
         /// <summary>
         /// Gets/sets additional extension context attributes to the produced event
         /// </summary>
         [ProtoMember(4)]
         [DataMember(Order = 4)]
-        public virtual Any ContextAttributes { get; set; }
+        public virtual Any? ContextAttributes { get; set; }
 
         /// <summary>
         /// Gets the maximum amount of time to wait for the result event. If not defined it be set to the actionExecutionTimeout

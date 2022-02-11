@@ -68,7 +68,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlDotNet.Serialization.YamlIgnore]
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public T1 T1Value
+        public T1? T1Value
         {
             get => _DicriminatorUnionObject.Is(1) ? ((T1)_DicriminatorUnionObject.Object) : default;
             set => _DicriminatorUnionObject = new(1, value);
@@ -86,7 +86,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlDotNet.Serialization.YamlIgnore]
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public T2 T2Value
+        public T2? T2Value
         {
             get => _DicriminatorUnionObject.Is(2) ? ((T2)_DicriminatorUnionObject.Object) : default;
             set => _DicriminatorUnionObject = new(2, value);

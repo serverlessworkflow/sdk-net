@@ -20,23 +20,23 @@ using System;
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
     /// <summary>
-    /// Represents the default implementation of the <see cref="ExecutionTimeoutBuilder"/> interface
+    /// Represents the default implementation of the <see cref="WorkflowExecutionTimeoutBuilder"/> interface
     /// </summary>
-    public class ExecutionTimeoutBuilder
-        : IExecutionTimeoutBuilder
+    public class WorkflowExecutionTimeoutBuilder
+        : IWorkflowExecutionTimeoutBuilder
     {
 
         /// <summary>
-        /// Initializes a new <see cref="ExecutionTimeoutBuilder"/>
+        /// Initializes a new <see cref="WorkflowExecutionTimeoutBuilder"/>
         /// </summary>
-        /// <param name="pipeline">The <see cref="IPipelineBuilder"/> the <see cref="ExecutionTimeoutBuilder"/> belongs to</param>
-        public ExecutionTimeoutBuilder(IPipelineBuilder pipeline)
+        /// <param name="pipeline">The <see cref="IPipelineBuilder"/> the <see cref="WorkflowExecutionTimeoutBuilder"/> belongs to</param>
+        public WorkflowExecutionTimeoutBuilder(IPipelineBuilder pipeline)
         {
             this.Pipeline = pipeline;
         }
 
         /// <summary>
-        /// Gets the <see cref="IPipelineBuilder"/> the <see cref="ExecutionTimeoutBuilder"/> belongs to
+        /// Gets the <see cref="IPipelineBuilder"/> the <see cref="WorkflowExecutionTimeoutBuilder"/> belongs to
         /// </summary>
         protected IPipelineBuilder Pipeline { get; }
 
@@ -46,21 +46,21 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected WorkflowExecutionTimeoutDefinition Timeout { get; } = new WorkflowExecutionTimeoutDefinition();
 
         /// <inheritdoc/>
-        public virtual IExecutionTimeoutBuilder After(TimeSpan duration)
+        public virtual IWorkflowExecutionTimeoutBuilder After(TimeSpan duration)
         {
             this.Timeout.Duration = duration;
             return this;
         }
 
         /// <inheritdoc/>
-        public virtual IExecutionTimeoutBuilder InterruptExecution(bool interrupts = true)
+        public virtual IWorkflowExecutionTimeoutBuilder InterruptExecution(bool interrupts = true)
         {
             this.Timeout.Interrupt = interrupts;
             return this;
         }
 
         /// <inheritdoc/>
-        public virtual IExecutionTimeoutBuilder Run(string state)
+        public virtual IWorkflowExecutionTimeoutBuilder Run(string state)
         {
             if (string.IsNullOrWhiteSpace(state))
                 throw new ArgumentNullException(nameof(state));
@@ -69,7 +69,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IExecutionTimeoutBuilder Run(Func<IStateBuilderFactory, IStateBuilder> stateSetup)
+        public virtual IWorkflowExecutionTimeoutBuilder Run(Func<IStateBuilderFactory, IStateBuilder> stateSetup)
         {
             if(stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
@@ -77,7 +77,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IExecutionTimeoutBuilder Run(StateDefinition state)
+        public virtual IWorkflowExecutionTimeoutBuilder Run(StateDefinition state)
         {
             if (state == null)
                 throw new ArgumentNullException(nameof(state));

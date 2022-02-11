@@ -14,37 +14,31 @@
  * limitations under the License.
  *
  */
+using System;
+
 namespace ServerlessWorkflow.Sdk.Models
 {
-
     /// <summary>
-    /// Represents an object used to configure how event data is to be filtered and added to or merged with the state data
+    /// Represents an object used to configure an <see cref="ActionDefinition"/>'s execution delay
     /// </summary>
     [ProtoContract]
     [DataContract]
-    public class EventDataFilterDefinition
+    public class ActionExecutionDelayDefinition
     {
 
         /// <summary>
-        /// Gets/sets an expression that filters the event data (payload)
+        /// Gets/sets the amount of time to wait before executing the configured <see cref="ActionDefinition"/>
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string? Data { get; set; }
+        public virtual TimeSpan? Before { get; set; }
 
         /// <summary>
-        /// Gets/sets an expression that selects a state data element to which the action results should be added/merged into. If not specified denotes the top-level state data element
+        /// Gets/sets the amount of time to wait after having executed the configured <see cref="ActionDefinition"/>
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string? ToStateData { get; set; }
-
-        /// <summary>
-        /// Gets/sets a boolean indicating whether or not to merge the event's data into state data.<para></para> If set to false, action data results are not added/merged to state data. In this case 'data' and 'toStateData' should be ignored. Defaults to true.
-        /// </summary>
-        [ProtoMember(3)]
-        [DataMember(Order = 3)]
-        public virtual bool UseData { get; set; } = true;
+        public virtual TimeSpan? After { get; set; }
 
     }
 

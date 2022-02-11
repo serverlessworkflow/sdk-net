@@ -20,10 +20,10 @@ using ServerlessWorkflow.Sdk.Models;
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
     /// <summary>
-    /// Represents the service used to validate <see cref="RetryStrategyDefinition"/>s
+    /// Represents the service used to validate <see cref="RetryDefinition"/>s
     /// </summary>
     public class RetryStrategyDefinitionValidator
-        : AbstractValidator<RetryStrategyDefinition>
+        : AbstractValidator<RetryDefinition>
     {
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         {
             this.RuleFor(r => r.Name)
                 .NotEmpty()
-                .WithErrorCode($"{nameof(RetryStrategyDefinition)}.{nameof(RetryStrategyDefinition.Name)}");
+                .WithErrorCode($"{nameof(RetryDefinition)}.{nameof(RetryDefinition.Name)}");
         }
 
     }

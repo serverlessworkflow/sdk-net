@@ -54,7 +54,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// </summary>
         /// <param name="contextAttributes">An <see cref="IDictionary{TKey, TValue}"/> containing the context attributes to add to the <see cref="CloudEvent"/>e produced as a result of the trigger</param>
         /// <returns>The configured <see cref="IEventTriggerActionBuilder"/></returns>
-        IEventTriggerActionBuilder WithContextAttribute(IDictionary<string, string> contextAttributes);
+        IEventTriggerActionBuilder WithContextAttributes(IDictionary<string, string> contextAttributes);
 
         /// <summary>
         /// Builds the <see cref="ActionDefinition"/>

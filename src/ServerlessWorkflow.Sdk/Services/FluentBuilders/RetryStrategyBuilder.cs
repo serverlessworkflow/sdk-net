@@ -27,9 +27,9 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     {
 
         /// <summary>
-        /// Gets the <see cref="RetryStrategyDefinition"/> to configure
+        /// Gets the <see cref="RetryDefinition"/> to configure
         /// </summary>
-        protected RetryStrategyDefinition Strategy { get; } = new RetryStrategyDefinition();
+        protected RetryDefinition Strategy { get; } = new RetryDefinition();
 
         /// <inheritdoc/>
         public virtual IRetryStrategyBuilder WithName(string name)
@@ -97,7 +97,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual RetryStrategyDefinition Build()
+        public virtual RetryDefinition Build()
         {
             return this.Strategy;
         }

@@ -42,12 +42,12 @@ namespace ServerlessWorkflow.Sdk
             {
                 if (value == name)
                     return Enum.Parse(enumType, value);
-                EnumMemberAttribute enumMemberAttribute = enumType.GetField(name).GetCustomAttribute<EnumMemberAttribute>();
+                EnumMemberAttribute enumMemberAttribute = enumType.GetField(name)!.GetCustomAttribute<EnumMemberAttribute>()!;
                 if (enumMemberAttribute != null)
-                    if (value.ToLower() == enumMemberAttribute.Value.ToLower())
+                    if (value.ToLower() == enumMemberAttribute.Value!.ToLower())
                         return Enum.Parse(enumType, name);
             }
-            return enumType.GetDefaultValue();
+            return enumType.GetDefaultValue()!;
         }
 
         /// <summary>
@@ -69,11 +69,11 @@ namespace ServerlessWorkflow.Sdk
         /// <returns>The string representation for the specified enum value</returns>
         public static string Stringify(object value, Type enumType)
         {
-            string name = Enum.GetName(enumType, value);
-            EnumMemberAttribute enumMemberAttribute = enumType.GetField(name).GetCustomAttribute<EnumMemberAttribute>();
+            var name = Enum.GetName(enumType, value)!;
+            var enumMemberAttribute = enumType.GetField(name)!.GetCustomAttribute<EnumMemberAttribute>();
             if (enumMemberAttribute != null)
                 name = enumMemberAttribute.Value;
-            return name;
+            return name!;
         }
 
         /// <summary>

@@ -46,7 +46,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         protected JsonSerializerSettings Settings { get; }
 
         /// <inheritdoc/>
-        public virtual T Deserialize<T>(Stream input)
+        public virtual T? Deserialize<T>(Stream input)
         {
             using StreamReader reader = new(input, leaveOpen: true);
             string json = reader.ReadToEnd();
@@ -54,7 +54,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         }
 
         /// <inheritdoc/>
-        public virtual async Task<T> DeserializeAsync<T>(Stream input, CancellationToken cancellationToken = default)
+        public virtual async Task<T?> DeserializeAsync<T>(Stream input, CancellationToken cancellationToken = default)
         {
             using StreamReader reader = new(input, leaveOpen: true);
             string json = await reader.ReadToEndAsync();
@@ -62,20 +62,20 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         }
 
         /// <inheritdoc/>
-        public virtual T Deserialize<T>(byte[] input)
+        public virtual T? Deserialize<T>(byte[] input)
         {
             string json = Encoding.UTF8.GetString(input);
             return JsonConvert.DeserializeObject<T>(json, this.Settings);
         }
 
         /// <inheritdoc/>
-        public virtual async Task<T> DeserializeAsync<T>(byte[] input, CancellationToken cancellationToken = default)
+        public virtual async Task<T?> DeserializeAsync<T>(byte[] input, CancellationToken cancellationToken = default)
         {
             return await Task.Run(() => this.Deserialize<T>(input), cancellationToken);
         }
 
         /// <inheritdoc/>
-        public virtual object Deserialize(Stream input, Type returnType)
+        public virtual object? Deserialize(Stream input, Type returnType)
         {
             using StreamReader reader = new(input, leaveOpen: true);
             string json = reader.ReadToEnd();
@@ -83,7 +83,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         }
 
         /// <inheritdoc/>
-        public virtual async Task<object> DeserializeAsync(Stream input, Type returnType, CancellationToken cancellationToken = default)
+        public virtual async Task<object?> DeserializeAsync(Stream input, Type returnType, CancellationToken cancellationToken = default)
         {
             using StreamReader reader = new(input, leaveOpen: true);
             string json = await reader.ReadToEndAsync();
@@ -91,38 +91,38 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         }
 
         /// <inheritdoc/>
-        public virtual object Deserialize(byte[] input, Type returnType)
+        public virtual object? Deserialize(byte[] input, Type returnType)
         {
             string json = Encoding.UTF8.GetString(input);
             return JsonConvert.DeserializeObject(json, returnType, this.Settings);
         }
 
         /// <inheritdoc/>
-        public virtual async Task<object> DeserializeAsync(byte[] input, Type returnType, CancellationToken cancellationToken = default)
+        public virtual async Task<object?> DeserializeAsync(byte[] input, Type returnType, CancellationToken cancellationToken = default)
         {
             return await Task.Run(() => this.Deserialize(input, returnType), cancellationToken);
         }
 
         /// <inheritdoc/>
-        public virtual object Deserialize(string json, Type returnType)
+        public virtual object? Deserialize(string json, Type returnType)
         {
             return JsonConvert.DeserializeObject(json, returnType, this.Settings);
         }
 
         /// <inheritdoc/>
-        public virtual async Task<object> DeserializeAsync(string json, Type returnType, CancellationToken cancellationToken = default)
+        public virtual async Task<object?> DeserializeAsync(string json, Type returnType, CancellationToken cancellationToken = default)
         {
             return await Task.Run(() => this.Deserialize(json, returnType), cancellationToken);
         }
 
         /// <inheritdoc/>
-        public virtual T Deserialize<T>(string json)
+        public virtual T? Deserialize<T>(string json)
         {
             return JsonConvert.DeserializeObject<T>(json, this.Settings);
         }
 
         /// <inheritdoc/>
-        public virtual async Task<T> DeserializeAsync<T>(string json, CancellationToken cancellationToken = default)
+        public virtual async Task<T?> DeserializeAsync<T>(string json, CancellationToken cancellationToken = default)
         {
             return await Task.Run(() => this.Deserialize<T>(json), cancellationToken);
         }

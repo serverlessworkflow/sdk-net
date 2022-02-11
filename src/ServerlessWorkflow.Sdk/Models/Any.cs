@@ -14,11 +14,13 @@
  * limitations under the License.
  *
  */
+using Neuroglia;
 using Neuroglia.Serialization;
 using System.Collections.Generic;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
+
     /// <summary>
     /// Represents an object of any type
     /// </summary>
@@ -55,6 +57,15 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             get => base.Fields;
             set => base.Fields = value;
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Any"/> from the specified object
+        /// </summary>
+        /// <returns>The object to create the new <see cref="Any"/> for</returns>
+        public static new Any FromObject(object source)
+        {
+            return new(source.ToDictionary());
         }
 
     }

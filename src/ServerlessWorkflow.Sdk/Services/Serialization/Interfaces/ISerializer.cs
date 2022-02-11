@@ -99,7 +99,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <typeparam name="T">The type of the value to deserialize</typeparam>
         /// <param name="input">The input <see cref="Stream"/> to deserialize the value from</param>
         /// <returns>The deserialized value</returns>
-        T Deserialize<T>(Stream input);
+        T? Deserialize<T>(Stream input);
 
         /// <summary>
         /// Deserialize a value from an input <see cref="Stream"/>
@@ -108,7 +108,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <param name="input">The input <see cref="Stream"/> to deserialize the value from</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>The deserialized value</returns>
-        Task<T> DeserializeAsync<T>(Stream input, CancellationToken cancellationToken = default);
+        Task<T?> DeserializeAsync<T>(Stream input, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deserialize a value from an input byte array
@@ -116,7 +116,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <typeparam name="T">The type of the value to deserialize</typeparam>
         /// <param name="input">The input byte array to deserialize the value from</param>
         /// <returns>The deserialized value</returns>
-        T Deserialize<T>(byte[] input);
+        T? Deserialize<T>(byte[] input);
 
         /// <summary>
         /// Deserialize a value from an input byte array
@@ -125,7 +125,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <param name="input">The input byte array to deserialize the value from</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>The deserialized value</returns>
-        Task<T> DeserializeAsync<T>(byte[] input, CancellationToken cancellationToken = default);
+        Task<T?> DeserializeAsync<T>(byte[] input, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deserialize a value from an input <see cref="Stream"/>
@@ -133,7 +133,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <param name="input">The input <see cref="Stream"/> to deserialize the value from</param>
         /// <param name="returnType">The type of the value to deserialize</param>
         /// <returns>The deserialized value</returns>
-        object Deserialize(Stream input, Type returnType);
+        object? Deserialize(Stream input, Type returnType);
 
         /// <summary>
         /// Deserialize a value from an input <see cref="Stream"/>
@@ -142,7 +142,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <param name="returnType">The type of the value to deserialize</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>The deserialized value</returns>
-        Task<object> DeserializeAsync(Stream input, Type returnType, CancellationToken cancellationToken = default);
+        Task<object?> DeserializeAsync(Stream input, Type returnType, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Deserialize a value from an input byte array
@@ -150,7 +150,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <param name="input">The input byte array to deserialize the value from</param>
         /// <param name="returnType">The type of the value to deserialize</param>
         /// <returns>The deserialized value</returns>
-        object Deserialize(byte[] input, Type returnType);
+        object? Deserialize(byte[] input, Type returnType);
 
         /// <summary>
         /// Deserialize a value from an input byte array
@@ -159,7 +159,7 @@ namespace ServerlessWorkflow.Sdk.Services.Serialization
         /// <param name="returnType">The type of the value to deserialize</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>The deserialized value</returns>
-        Task<object> DeserializeAsync(byte[] input, Type returnType, CancellationToken cancellationToken = default);
+        Task<object?> DeserializeAsync(byte[] input, Type returnType, CancellationToken cancellationToken = default);
 
     }
 

@@ -78,13 +78,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected IPipelineBuilder Pipeline { get; }
 
         /// <inheritdoc/>
-        public override Any Metadata
-        {
-            get
-            {
-                return this.Workflow.Metadata;
-            }
-        }
+        public override Any? Metadata => this.Workflow.Metadata;
 
         /// <inheritdoc/>
         public virtual IWorkflowBuilder WithKey(string key)
@@ -177,11 +171,11 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IWorkflowBuilder WithExecutionTimeout(Action<IExecutionTimeoutBuilder> timeoutSetup)
+        public virtual IWorkflowBuilder WithExecutionTimeout(Action<IWorkflowExecutionTimeoutBuilder> timeoutSetup)
         {
-            IExecutionTimeoutBuilder builder = new ExecutionTimeoutBuilder(this.Pipeline);
+            IWorkflowExecutionTimeoutBuilder builder = new WorkflowExecutionTimeoutBuilder(this.Pipeline);
             timeoutSetup(builder);
-            this.Workflow.ExecutionTimeout = builder.Build();
+            //todo: this.Workflow.ExecutionTimeout = builder.Build();
             return this;
         }
 
@@ -204,7 +198,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (constants == null)
                 throw new ArgumentNullException(nameof(constants));
-            this.Workflow.Constants = JObject.FromObject(constants);
+            this.Workflow.Constants = Any.FromObject(constants);
             return this;
         }
 
@@ -217,7 +211,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
                 throw new ArgumentNullException(nameof(value));
             if (this.Workflow.Constants == null)
                 this.Workflow.Constants = new();
-            //this.Workflow.Constants.Set(name, value); //todo: URGENT
+            this.Workflow.Constants.Set(name, value);
             return this;
         }
 
@@ -305,7 +299,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IWorkflowBuilder AddRetryStrategy(RetryStrategyDefinition strategy)
+        public virtual IWorkflowBuilder AddRetryStrategy(RetryDefinition strategy)
         {
             if (strategy == null)
                 throw new ArgumentNullException(nameof(strategy));
@@ -387,7 +381,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (state == null)
                 throw new ArgumentNullException(nameof(state));
             this.Pipeline.AddState(state);
-            this.Workflow.Start = state.Name;
+            this.Workflow.StartStateName = state.Name;
             return this.Pipeline;
         }
 
@@ -397,7 +391,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             if (stateSetup == null)
                 throw new ArgumentNullException(nameof(stateSetup));
             StateDefinition state = this.Pipeline.AddState(stateSetup);
-            this.Workflow.Start = state.Name;
+            this.Workflow.StartStateName = state.Name;
             return this.Pipeline;
         }
 

@@ -32,13 +32,15 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     {
 
         /// <inheritdoc/>
-        public abstract Any Metadata { get; }
+        public virtual Any? Metadata { get; protected set; }
 
         /// <inheritdoc/>
         public virtual TContainer WithMetadata(string key, object value)
         {
             if (string.IsNullOrWhiteSpace(key))
                 throw new ArgumentNullException(nameof(key));
+            if (this.Metadata == null)
+                this.Metadata = new();
             this.Metadata.Set(key, value);
             return (TContainer)(object)this;
         }
