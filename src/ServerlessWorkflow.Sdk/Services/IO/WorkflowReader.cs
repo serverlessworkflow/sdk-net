@@ -112,34 +112,20 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         {
             if (workflow == null)
                 throw new ArgumentNullException(nameof(workflow));
-            if (workflow.DataInputSchema != null
-                && workflow.DataInputSchema is ExternalJSchema externalJSchema
-                && !externalJSchema.Loaded)
-                workflow.DataInputSchema = await this.LoadJSchemaAsync(externalJSchema.DefinitionUri, cancellationToken);
-            if (workflow.Events != null
-                && workflow.Events is ExternalDefinitionCollection<EventDefinition> externalEventsDefinition
-                && !externalEventsDefinition.Loaded)
-                workflow.Events = await this.LoadExternalDefinitionCollectionAsync<EventDefinition>(externalEventsDefinition.DefinitionUri, cancellationToken);
-            if(workflow.Functions != null
-                && workflow.Functions is ExternalDefinitionCollection<FunctionDefinition> externalFunctionsDefinition
-                && !externalFunctionsDefinition.Loaded)
-                workflow.Functions = await this.LoadExternalDefinitionCollectionAsync<FunctionDefinition>(externalFunctionsDefinition.DefinitionUri, cancellationToken);
-            if (workflow.Retries != null
-                && workflow.Retries is ExternalDefinitionCollection<RetryDefinition> externalRetriesDefinition
-                && !externalRetriesDefinition.Loaded)
-                workflow.Retries = await this.LoadExternalDefinitionCollectionAsync<RetryDefinition>(externalRetriesDefinition.DefinitionUri, cancellationToken);
-            if (workflow.Constants != null
-                && workflow.Constants is ExternalDefinition externalConstantsDefinition
-                && !externalConstantsDefinition.Loaded)
-                workflow.Constants = await this.LoadExternalDefinitionAsync(externalConstantsDefinition.DefinitionUri, cancellationToken);
-            if (workflow.Secrets != null
-                && workflow.Secrets is ExternalDefinitionCollection<string> externalSecretsDefinition
-                && !externalSecretsDefinition.Loaded)
-                workflow.Secrets = await this.LoadExternalDefinitionCollectionAsync<string>(externalSecretsDefinition.DefinitionUri, cancellationToken);
-            if (workflow.Auth != null
-                && workflow.Auth is ExternalDefinitionCollection<AuthenticationDefinition> externalAuthDefinition
-                && !externalAuthDefinition.Loaded)
-                workflow.Auth = await this.LoadExternalDefinitionCollectionAsync<AuthenticationDefinition>(externalAuthDefinition.DefinitionUri, cancellationToken);
+            if (workflow.DataInputSchemaUri != null)
+                workflow.DataInputSchema = await this.LoadJSchemaAsync(workflow.DataInputSchemaUri, cancellationToken);
+            if (workflow.EventsUri != null)
+                workflow.Events = await this.LoadExternalDefinitionCollectionAsync<EventDefinition>(workflow.EventsUri, cancellationToken);
+            if(workflow.FunctionsUri != null)
+                workflow.Functions = await this.LoadExternalDefinitionCollectionAsync<FunctionDefinition>(workflow.FunctionsUri, cancellationToken);
+            if (workflow.RetriesUri != null)
+                workflow.Retries = await this.LoadExternalDefinitionCollectionAsync<RetryDefinition>(workflow.RetriesUri, cancellationToken);
+            if (workflow.ConstantsUri != null)
+                workflow.Constants = await this.LoadExternalDefinitionAsync(workflow.ConstantsUri, cancellationToken);
+            if (workflow.SecretsUri != null)
+                workflow.Secrets = await this.LoadExternalDefinitionCollectionAsync<string>(workflow.SecretsUri, cancellationToken);
+            if (workflow.AuthUri != null)
+                workflow.Auth = await this.LoadExternalDefinitionCollectionAsync<AuthenticationDefinition>(workflow.AuthUri, cancellationToken);
             return workflow;
         }
 

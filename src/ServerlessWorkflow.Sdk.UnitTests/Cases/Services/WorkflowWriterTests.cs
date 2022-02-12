@@ -83,10 +83,9 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
         public async Task Write_Json_ShoudlWork()
         {
             var toSerialize = BuildWorkflow();
-            using Stream stream = new MemoryStream();
+            using var stream = new MemoryStream();
             this.Writer.Write(toSerialize, stream, WorkflowDefinitionFormat.Json);
             stream.Flush();
-            stream.Position = 0;
             using StreamReader reader = new(stream);
             string json = reader.ReadToEnd();
             stream.Position = 0;

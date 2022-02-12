@@ -58,10 +58,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="ErrorHandlerDefinition"/>'s <see cref="TransitionDefinition"/>
         /// </summary>
-        [ProtoMember(4)]
-        [DataMember(Order = 4)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
+        [ProtoMember(4, Name = "transition")]
+        [DataMember(Order = 4, Name = "transition")]
+        [YamlMember(Alias = "transition")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "transition"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("transition"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
         protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
 
         /// <summary>
@@ -117,10 +118,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="JToken"/> that represents the <see cref="ErrorHandlerDefinition"/>'s <see cref="EndDefinition"/>
         /// </summary>
-        [ProtoMember(5)]
-        [DataMember(Order = 5)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
+        [ProtoMember(5, Name = "end")]
+        [DataMember(Order = 5, Name = "end")]
+        [YamlMember(Alias = "end")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "end"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
+        [System.Text.Json.Serialization.JsonPropertyName("end"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
         protected virtual OneOf<EndDefinition, bool>? EndValue { get; set; }
 
         /// <summary>

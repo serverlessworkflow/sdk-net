@@ -86,8 +86,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// If float type, maximum amount of random time added or subtracted from the delay between each retry relative to total delay (between 0.0 and 1.0).<para></para>
         /// If string type, absolute maximum amount of random time added or subtracted from the delay between each retry (ISO 8601 duration format)
         /// </summary>
-        [ProtoMember(7)]
-        [DataMember(Order = 7)]
+        [ProtoMember(7, Name = "jitter")]
+        [DataMember(Order = 7, Name = "jitter")]
+        [YamlMember(Alias = "jitter")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "jitter"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<float?, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("jitter"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<float?, string>))]
         protected virtual OneOf<float?, string>? JitterValue { get; set; }
 
         /// <summary>

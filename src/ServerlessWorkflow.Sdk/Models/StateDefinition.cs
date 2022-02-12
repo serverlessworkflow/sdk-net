@@ -90,8 +90,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "dataInputSchema")]
         [ProtoMember(8, Name = "dataInputSchema")]
         [DataMember(Order = 8, Name = "dataInputSchema")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DataInputSchemaDefinition, string>))]
-        [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DataInputSchemaDefinition, string>))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DataInputSchemaDefinition, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DataInputSchemaDefinition, Uri>))]
         protected virtual OneOf<DataInputSchemaDefinition, Uri>? DataInputSchemaValue { get; set; }
 
         /// <summary>
@@ -152,15 +152,16 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "onErrors")]
         [ProtoMember(6, Name = "onErrors")]
         [DataMember(Order = 6, Name = "onErrors")]
-        public virtual List<ErrorHandlerDefinition>? Errors { get; set; } = new List<ErrorHandlerDefinition>();
+        public virtual List<ErrorHandlerDefinition>? Errors { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="StateDefinition"/>'s <see cref="TransitionDefinition"/>
         /// </summary>
-        [ProtoMember(7)]
-        [DataMember(Order = 7)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
+        [ProtoMember(7, Name = "transition")]
+        [DataMember(Order = 7, Name = "transition")]
+        [YamlMember(Alias = "transition")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "transition"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("transition"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
         protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
 
         /// <summary>
@@ -216,10 +217,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="StateDefinition"/>'s <see cref="EndDefinition"/>
         /// </summary>
-        [ProtoMember(4)]
-        [DataMember(Order = 4)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
+        [ProtoMember(4, Name = "end")]
+        [DataMember(Order = 4, Name = "end")]
+        [YamlMember(Alias = "end")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "end"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
+        [System.Text.Json.Serialization.JsonPropertyName("end"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
         protected virtual OneOf<EndDefinition, bool>? EndValue { get; set; }
 
         /// <summary>

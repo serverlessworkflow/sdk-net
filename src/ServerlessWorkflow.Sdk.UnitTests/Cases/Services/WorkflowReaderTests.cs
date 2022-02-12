@@ -120,10 +120,43 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
         }
 
         [Fact]
-        public async Task Read_ExternalDefinitions_ShouldWork()
+        public async Task Read_Yaml_ExternalDefinitions_ShouldWork()
         {
             //arrange
             var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "externalref.yaml"));
+
+            //act
+            var workflow = await this.Reader.ParseAsync(yaml);
+
+            //assert
+            workflow
+                .Should()
+                .NotBeNull();
+            workflow.Constants
+                .Should()
+                .NotBeNull();
+            workflow.Secrets
+                .Should()
+                .NotBeEmpty();
+            workflow.DataInputSchema
+                .Should()
+                .NotBeNull();
+            workflow.Events
+                .Should()
+                .NotBeEmpty();
+            workflow.Functions
+                .Should()
+                .NotBeEmpty();
+            workflow.Retries
+                .Should()
+                .NotBeEmpty();
+        }
+
+        [Fact]
+        public async Task Read_Json_ExternalDefinitions_ShouldWork()
+        {
+            //arrange
+            var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "externalref.json"));
 
             //act
             var workflow = await this.Reader.ParseAsync(yaml);

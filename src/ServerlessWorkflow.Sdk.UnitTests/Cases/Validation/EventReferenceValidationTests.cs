@@ -90,7 +90,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.PropertyName == nameof(EventReference.ConsumeEvent));
+                .And.Contain(e => e.PropertyName == nameof(EventReference.ResultEvent));
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .StartsWith("fake", flow => flow.Callback())
                 .End()
                 .Build();
-            var eventRef = new EventReference() { ProduceEvent = "fakeTrigger", ConsumeEvent = "fakeResult" };
+            var eventRef = new EventReference() { ProduceEvent = "fakeTrigger", ResultEvent = "fakeResult" };
 
             //act
             var result = new EventReferenceValidator(workflow).Validate(eventRef);
@@ -111,7 +111,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.PropertyName == nameof(EventReference.ConsumeEvent));
+                .And.Contain(e => e.PropertyName == nameof(EventReference.ResultEvent));
         }
 
         [Fact]
@@ -123,7 +123,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .StartsWith("fake", flow => flow.Callback())
                 .End()
                 .Build();
-            var eventRef = new EventReference() { ProduceEvent = "fakeTrigger", ConsumeEvent = "fakeResult" };
+            var eventRef = new EventReference() { ProduceEvent = "fakeTrigger", ResultEvent = "fakeResult" };
 
             //act
             var result = new EventReferenceValidator(workflow).Validate(eventRef);
@@ -133,7 +133,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.PropertyName == nameof(EventReference.ConsumeEvent));
+                .And.Contain(e => e.PropertyName == nameof(EventReference.ResultEvent));
         }
 
     }

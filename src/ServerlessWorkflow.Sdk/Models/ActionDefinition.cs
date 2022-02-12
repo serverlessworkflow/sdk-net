@@ -110,13 +110,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a <see cref="OneOf{T1, T2}"/> that references a subflow to run
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "subflowRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("subflowRef")]
         [YamlMember(Alias = "subflowRef")]
         [ProtoMember(4, Name = "subflowRef")]
         [DataMember(Order = 4, Name = "subflowRef")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<SubflowReference, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<SubflowReference, string>))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "subflowRef"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<SubflowReference, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("subflowRef"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<SubflowReference, string>))]
         protected virtual OneOf<SubflowReference, string>? SubflowValue { get; set; }
 
         /// <summary>
@@ -163,14 +161,14 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual string? RetryRef { get; set; }
 
         /// <summary>
-        /// Gets/sets a <see cref="List{T}"/> containing references to defined <see cref="ErrorDefinition"/>s for which the action should not be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `true`
+        /// Gets/sets a <see cref="List{T}"/> containing references to defined <see cref="ErrorHandlerDefinition"/>s for which the action should not be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `true`
         /// </summary>
         [ProtoMember(6)]
         [DataMember(Order = 6)]
         public virtual List<string>? NonRetryableErrors { get; set; }
 
         /// <summary>
-        /// Gets/sets a <see cref="List{T}"/> containing references to defined <see cref="ErrorDefinition"/>s for which the action should be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `false`
+        /// Gets/sets a <see cref="List{T}"/> containing references to defined <see cref="ErrorHandlerDefinition"/>s for which the action should be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `false`
         /// </summary>
         [ProtoMember(7)]
         [DataMember(Order = 7)]

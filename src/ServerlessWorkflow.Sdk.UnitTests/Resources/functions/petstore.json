@@ -1,0 +1,10 @@
+﻿[
+  {
+    "name": "AddPet",
+    "operation": "https://petstore.swagger.io/v2/swagger.json#addPet"
+  },
+  {
+    "name": "GetPetById",
+    "operation": "https://petstore.swagger.io/v2/swagger.json#getPetById"
+  }
+]

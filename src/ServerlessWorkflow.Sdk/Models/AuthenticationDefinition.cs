@@ -50,17 +50,18 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual AuthenticationScheme Scheme { get; set; }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="AuthenticationDefinition"/>'s <see cref="AuthenticationProperties"/>
+        /// Gets/sets a <see cref="OneOf{T1, T2}"/> that represents the <see cref="AuthenticationDefinition"/>'s <see cref="AuthenticationProperties"/>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "properties")]
-        [System.Text.Json.Serialization.JsonPropertyName("properties")]
+        [Required]
         [YamlMember(Alias = "properties")]
-        [ProtoMember(3, Name = "properties")]
-        [DataMember(Order = 3, Name = "properties")]
-        protected virtual OneOf<AuthenticationProperties, string> PropertiesValue { get; set; } = null!;
+        [ProtoMember(3, IsRequired = true, Name = "properties")]
+        [DataMember(Order = 3, IsRequired = true, Name = "properties")]
+        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "properties"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Any, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("properties"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<AuthenticationProperties, string>))]
+        protected virtual OneOf<Any, string> PropertiesValue { get; set; } = null!;
 
         /// <summary>
-        /// Gets/sets the <see cref="AuthenticationDefinition"/>'s info
+        /// Gets/sets the <see cref="AuthenticationDefinition"/>'s properties
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
@@ -72,9 +73,16 @@ namespace ServerlessWorkflow.Sdk.Models
             get
             {
                 if (!string.IsNullOrWhiteSpace(this.PropertiesValue.T2Value))
-                        return new SecretBasedAuthenticationProperties(this.PropertiesValue.T2Value);
-                else
-                    return this.PropertiesValue.T1Value!;
+                    return new SecretBasedAuthenticationProperties(this.PropertiesValue.T2Value);
+                if (this.PropertiesValue?.T1Value == null)
+                    return null!;
+                return this.Scheme switch
+                {
+                    AuthenticationScheme.Basic => this.PropertiesValue.T1Value.ToObject<BasicAuthenticationProperties>(),
+                    AuthenticationScheme.Bearer => this.PropertiesValue.T1Value.ToObject<BearerAuthenticationProperties>(),
+                    AuthenticationScheme.OAuth2 => this.PropertiesValue.T1Value.ToObject<OAuth2AuthenticationProperties>(),
+                    _ => throw new NotSupportedException($"The specified authentication scheme '{EnumHelper.Stringify(this.Scheme)}' is not supported")
+                };
             }
             set
             {
@@ -96,7 +104,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     default:
                         throw new NotSupportedException($"The specified authentication info type '{value.GetType()}' is not supported");
                 }
-                this.PropertiesValue = value;
+                this.PropertiesValue = Any.FromObject(value);
             }
         }
 
@@ -112,18 +120,13 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             get
             {
-                if (this.Properties is SecretBasedAuthenticationProperties secret)
-                    return secret.Secret;
-                return null;
+                return this.PropertiesValue.T2Value;
             }
             set
             {
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
-                else if (this.Properties is SecretBasedAuthenticationProperties secret)
-                    secret.Secret = value;
-                else
-                    this.Properties = new SecretBasedAuthenticationProperties(value);
+                this.PropertiesValue.T2Value = value;
             }
         }
 

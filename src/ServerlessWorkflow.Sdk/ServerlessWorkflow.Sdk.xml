@@ -91,12 +91,12 @@
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.ActionDefinition.NonRetryableErrors">
             <summary>
-            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing references to defined <see cref="!:ErrorDefinition"/>s for which the action should not be retried. Used only when `<see cref="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AutoRetries"/>` is set to `true`
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing references to defined <see cref="T:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition"/>s for which the action should not be retried. Used only when `<see cref="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AutoRetries"/>` is set to `true`
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.ActionDefinition.RetryableErrors">
             <summary>
-            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing references to defined <see cref="!:ErrorDefinition"/>s for which the action should be retried. Used only when `<see cref="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AutoRetries"/>` is set to `false`
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing references to defined <see cref="T:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition"/>s for which the action should be retried. Used only when `<see cref="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AutoRetries"/>` is set to `false`
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.ActionDefinition.ActionDataFilter">
@@ -174,12 +174,12 @@
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition.PropertiesValue">
             <summary>
-            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationProperties"/>
+            Gets/sets a <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationProperties"/>
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition.Properties">
             <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>'s info
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/>'s properties
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition.SecretRef">
@@ -542,7 +542,7 @@
             Gets the name of the event to produce
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.EventReference.ConsumeEvent">
+        <member name="P:ServerlessWorkflow.Sdk.Models.EventReference.ResultEvent">
             <summary>
             Gets the name of the event to consume
             </summary>
@@ -2248,6 +2248,11 @@
         <member name="F:ServerlessWorkflow.Sdk.ServerlessWorkflowSpecVersion.V0_7">
             <summary>
             Gets the v0.7.x version
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.ServerlessWorkflowSpecVersion.V0_8">
+            <summary>
+            Gets the v0.8.x version
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder">

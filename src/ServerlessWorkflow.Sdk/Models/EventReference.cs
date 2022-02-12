@@ -33,33 +33,33 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Gets the name of the event to produce
         /// </summary>
         [Required]
-        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "produceEventRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("produceEventRef")]
-        [YamlMember(Alias = "produceEventRef")]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
+        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "triggerEventRef")]
+        [System.Text.Json.Serialization.JsonPropertyName("triggerEventRef")]
+        [YamlMember(Alias = "triggerEventRef")]
+        [ProtoMember(1, IsRequired = true, Name = "triggerEventRef")]
+        [DataMember(Order = 1, IsRequired = true, Name = "triggerEventRef")]
         public virtual string ProduceEvent { get; set; } = null!;
 
         /// <summary>
         /// Gets the name of the event to consume
         /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "consumeEventRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("consumeEventRef")]
-        [YamlMember(Alias = "consumeEventRef")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "resultEventRef")]
+        [System.Text.Json.Serialization.JsonPropertyName("resultEventRef")]
+        [YamlMember(Alias = "resultEventRef")]
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string ConsumeEvent { get; set; } = null!;
+        public virtual string ResultEvent { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the data to become the cloud event's payload. 
         /// If string type, an expression which selects parts of the states data output to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'. 
         /// If object type, a custom object to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'.
         /// </summary>
-        [ProtoMember(3)]
-        [DataMember(Order = 3)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Any, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Any, string>))]
+        [ProtoMember(3, Name = "data")]
+        [DataMember(Order = 3, Name = "data")]
+        [YamlMember(Alias = "data")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "data"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Any, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("data"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Any, string>))]
         protected virtual OneOf<Any, string>? DataValue { get; set; }
 
         /// <summary>

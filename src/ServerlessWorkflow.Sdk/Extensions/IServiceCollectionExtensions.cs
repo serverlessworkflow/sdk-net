@@ -16,6 +16,8 @@
  */
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 using ServerlessWorkflow.Sdk.Services.IO;
 using ServerlessWorkflow.Sdk.Services.Validation;
@@ -38,13 +40,27 @@ namespace ServerlessWorkflow.Sdk
         /// <returns>The configured <see cref="IServiceCollection"/></returns>
         public static IServiceCollection AddServerlessWorkflow(this IServiceCollection services)
         {
-            services.AddNewtonsoftJsonSerializer();
+            var newtonsoftJsonDefaultConfig = (JsonSerializerSettings settings) =>
+            {
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            };
+            var defaultSettings = JsonConvert.DefaultSettings;
+            JsonConvert.DefaultSettings = () =>
+            {
+                var settings = defaultSettings?.Invoke();
+                if (settings == null)
+                    settings = new();
+                newtonsoftJsonDefaultConfig(settings);
+                return settings;
+            };
+            services.AddNewtonsoftJsonSerializer(options =>
+            {
+                newtonsoftJsonDefaultConfig(options);
+            });
             services.AddYamlDotNetSerializer(
                 serializer => serializer
                     .IncludeNonPublicProperties()
-                    .WithTypeConverter(new JTokenSerializer())
-                    .WithTypeConverter(new Iso8601TimeSpanSerializer())
-                    .WithTypeConverter(new StringEnumSerializer())
                     .WithTypeConverter(new OneOfConverter())
                     .WithTypeConverter(new AnyConverter())
                     .WithEmissionPhaseObjectGraphVisitor(args => new ChainedObjectGraphVisitor(args.InnerVisitor)),

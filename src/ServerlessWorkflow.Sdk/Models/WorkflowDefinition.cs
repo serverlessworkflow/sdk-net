@@ -89,6 +89,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(7, Name = "dataInputSchema")]
         [DataMember(Order = 7, Name = "dataInputSchema")]
+        [YamlMember(Alias = "dataInputSchema")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<JSchema, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<JSchema, Uri>))]
         protected virtual OneOf<JSchema, Uri>? DataInputSchemaValue { get; set; }
@@ -155,13 +156,14 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(9)]
         [DataMember(Order = 9)]
-        public virtual List<string> Annotations { get; set; } = new List<string>();
+        public virtual List<string>? Annotations { get; set; }
 
         /// <summary>
         /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s execution timeouts
         /// </summary>
         [ProtoMember(10, Name = "timeouts")]
         [DataMember(Order = 10, Name = "timeouts")]
+        [YamlMember(Alias = "timeouts")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "timeouts"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<WorkflowTimeoutDefinition, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("timeouts"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<WorkflowTimeoutDefinition, Uri>))]
         protected virtual OneOf<WorkflowTimeoutDefinition, Uri>? TimeoutsValue { get; set; }
@@ -217,6 +219,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(11, Name = "start")]
         [DataMember(Order = 11, Name = "start")]
+        [YamlMember(Alias = "start")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "start"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<StartDefinition, string>))]
         [System.Text.Json.Serialization.JsonPropertyName("start"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<StartDefinition, string>))]
         protected virtual OneOf<StartDefinition, string>? StartValue { get; set; }
@@ -286,6 +289,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(14, Name = "events")]
         [DataMember(Order = 14, Name = "events")]
+        [YamlMember(Alias = "events")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "events"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<EventDefinition>, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("events"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<EventDefinition>, Uri>))]
         protected virtual OneOf<List<EventDefinition>, Uri>? EventsValue { get; set; }
@@ -341,6 +345,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(15, Name = "functions")]
         [DataMember(Order = 15, Name = "functions")]
+        [YamlMember(Alias = "functions")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "functions"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<FunctionDefinition>, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("functions"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<FunctionDefinition>, Uri>))]
         protected virtual OneOf<List<FunctionDefinition>, Uri>? FunctionsValue { get; set; }
@@ -396,6 +401,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(16, Name = "retries")]
         [DataMember(Order = 16, Name = "retries")]
+        [YamlMember(Alias = "retries")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "retries"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<RetryDefinition>, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("retries"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<RetryDefinition>, Uri>))]
         protected virtual OneOf<List<RetryDefinition>, Uri>? RetriesValue { get; set; }
@@ -458,6 +464,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(18, Name = "constants")]
         [DataMember(Order = 18, Name = "constants")]
+        [YamlMember(Alias = "constants")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "constants"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Any, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("constants"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Any, Uri>))]
         protected virtual OneOf<Any, Uri>? ConstantsValue { get; set; }
@@ -513,6 +520,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(19, Name = "secrets")]
         [DataMember(Order = 19, Name = "secrets")]
+        [YamlMember(Alias = "secrets")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "secrets"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<string>, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("secrets"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<string>, Uri>))]
         protected virtual OneOf<List<string>, Uri>? SecretsValue { get; set; }
@@ -568,6 +576,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(20, Name = "auth")]
         [DataMember(Order = 20, Name = "auth")]
+        [YamlMember(Alias = "auth")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "auth"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("auth"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
         protected virtual OneOf<List<AuthenticationDefinition>, Uri>? AuthValue { get; set; }
@@ -630,6 +639,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(22, Name = "extensions")]
         [DataMember(Order = 22, Name = "extensions")]
+        [YamlMember(Alias = "extensions")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "extensions"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<ExtensionDefinition>, Uri>))]
         [System.Text.Json.Serialization.JsonPropertyName("extensions"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<ExtensionDefinition>, Uri>))]
         protected virtual OneOf<List<ExtensionDefinition>, Uri>? ExtensionsValue { get; set; }

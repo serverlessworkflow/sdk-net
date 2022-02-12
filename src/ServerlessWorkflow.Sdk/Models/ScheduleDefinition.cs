@@ -38,13 +38,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a <see cref="JToken"/> that represents the CRON expression that defines when the workflow instance should be created
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "cron")]
-        [System.Text.Json.Serialization.JsonPropertyName("cron")]
         [YamlMember(Alias = "cron")]
         [ProtoMember(2, Name = "cron")]
         [DataMember(Order = 2, Name = "cron")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<CronDefinition, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<CronDefinition, string>))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "cron"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<CronDefinition, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("cron"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<CronDefinition, string>))]
         protected virtual OneOf<CronDefinition, string>? CronValue { get; set; }
 
         /// <summary>

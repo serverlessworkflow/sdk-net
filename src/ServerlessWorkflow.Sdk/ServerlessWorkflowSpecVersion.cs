@@ -27,7 +27,7 @@ namespace ServerlessWorkflow.Sdk
         /// <summary>
         /// Gets the latest supported spec version
         /// </summary>
-        public const string Latest = V0_7;
+        public const string Latest = V0_8;
 
         /// <summary>
         /// Gets the v0.6.x version
@@ -38,6 +38,11 @@ namespace ServerlessWorkflow.Sdk
         /// Gets the v0.7.x version
         /// </summary>
         public const string V0_7 = "0.7.x";
+
+        /// <summary>
+        /// Gets the v0.8.x version
+        /// </summary>
+        public const string V0_8 = "0.8.x";
 
     }
 

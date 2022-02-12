@@ -75,6 +75,9 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (workflow == null)
                 throw new ArgumentNullException(nameof(workflow));
             var obj = JObject.FromObject(workflow);
+
+            var json = obj.ToString();
+
             var schema = await this.LoadSchemaAsync(workflow.SpecVersion, cancellationToken);
             obj.IsValid(schema, out IList<ValidationError> validationErrors);
             return validationErrors;

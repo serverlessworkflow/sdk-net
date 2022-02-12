@@ -38,7 +38,7 @@ namespace ServerlessWorkflow.Sdk
         /// <summary>
         /// Indicates the OAuth 2 authentication scheme
         /// </summary>
-        [EnumMember(Value = "oauth")]
+        [EnumMember(Value = "oauth2")]
         OAuth2
     }
 
