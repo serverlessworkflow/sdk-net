@@ -33,21 +33,45 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Interval { get; set; }
+        public virtual string? Interval { get; set; }
 
         /// <summary>
         /// Gets/sets a <see cref="JToken"/> that represents the CRON expression that defines when the workflow instance should be created
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "cron")]
-        [System.Text.Json.Serialization.JsonPropertyName("cron")]
         [YamlMember(Alias = "cron")]
         [ProtoMember(2, Name = "cron")]
         [DataMember(Order = 2, Name = "cron")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<CronDefinition, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<CronDefinition, string>))]
-        public virtual OneOf<CronDefinition, string> CronToken { get; set; }
+        [Newtonsoft.Json.JsonProperty(PropertyName = "cron"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<CronDefinition, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("cron"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<CronDefinition, string>))]
+        protected virtual OneOf<CronDefinition, string>? CronValue { get; set; }
 
-        private CronDefinition _Cron;
+        /// <summary>
+        /// Gets/sets an object used to configure the schedule following which workflow instances should be created
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual CronDefinition? Cron
+        {
+            get
+            {
+                    if (this.CronValue?.T1Value == null
+                        && !string.IsNullOrWhiteSpace(this.CronValue?.T2Value))
+                        return new() { Expression = this.CronValue.T2Value };
+                    else
+                        return this.CronValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.CronValue = null;
+                else
+                    this.CronValue = value;
+            }
+        }
+
         /// <summary>
         /// Gets/sets a CRON expression that defines when the workflow instance should be created
         /// </summary>
@@ -56,30 +80,21 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual CronDefinition Cron
+        public virtual string? CronExpression
         {
             get
             {
-                if (this._Cron == null
-                   && this.CronToken != null)
-                {
-                    if (this.CronToken.T1Value == null)
-                        this._Cron = new() { Expression = this.CronToken.T2Value };
-                    else
-                        this._Cron = this.CronToken.T1Value;
-                }
-                return this._Cron;
+                if (this.CronValue?.T1Value == null)
+                    return this.CronValue?.T2Value;
+                else
+                    return this.CronValue?.T1Value?.Expression;
             }
             set
             {
                 if (value == null)
-                {
-                    this._Cron = null;
-                    this.CronToken = null;
-                    return;
-                }
-                this._Cron = value;
-                this.CronToken = new(value);
+                    this.CronValue = null;
+                else
+                    this.CronValue = value;
             }
         }
 
@@ -88,7 +103,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(3)]
         [DataMember(Order = 3)]
-        public virtual string Timezone { get; set; }
+        public virtual string? Timezone { get; set; }
 
     }
 

@@ -34,9 +34,9 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [JsonRequired]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string Expression { get; set; }
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual string Expression { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the date and time when the cron expression invocation is no longer valid

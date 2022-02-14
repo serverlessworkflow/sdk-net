@@ -29,7 +29,7 @@ namespace System.Text.Json.Serialization
         /// <typeparam name="T">The type of object to convert the <see cref="JsonElement"/> into</typeparam>
         /// <param name="element">The <see cref="JsonElement"/> to convert</param>
         /// <returns>A new object of the specified type</returns>
-        public static T ToObject<T>(this JsonElement element)
+        public static T? ToObject<T>(this JsonElement element)
         {
             var json = element.GetRawText();
             return JsonSerializer.Deserialize<T>(json);
@@ -41,7 +41,7 @@ namespace System.Text.Json.Serialization
         /// <typeparam name="T">The type of object to convert the <see cref="JsonDocument"/> into</typeparam>
         /// <param name="document">The <see cref="JsonDocument"/> to convert</param>
         /// <returns>A new object of the specified type</returns>
-        public static T ToObject<T>(this JsonDocument document)
+        public static T? ToObject<T>(this JsonDocument document)
         {
             var json = document.RootElement.GetRawText();
             return JsonSerializer.Deserialize<T>(json);

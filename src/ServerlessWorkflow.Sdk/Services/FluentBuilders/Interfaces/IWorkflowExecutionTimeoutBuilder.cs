@@ -20,51 +20,51 @@ using System;
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
     /// <summary>
-    /// Defines the fundamentals of a service used to build <see cref="ExecutionTimeoutDefinition"/>s
+    /// Defines the fundamentals of a service used to build <see cref="WorkflowExecutionTimeoutDefinition"/>s
     /// </summary>
-    public interface IExecutionTimeoutBuilder
+    public interface IWorkflowExecutionTimeoutBuilder
     {
 
         /// <summary>
         /// Configures the <see cref="WorkflowDefinition"/>'s execution to time out after the specified duration
         /// </summary>
         /// <param name="duration">The duration after which  to time out the <see cref="WorkflowDefinition"/>'s execution</param>
-        /// <returns>The configured <see cref="IExecutionTimeoutBuilder"/></returns>
-        IExecutionTimeoutBuilder After(TimeSpan duration);
+        /// <returns>The configured <see cref="IWorkflowExecutionTimeoutBuilder"/></returns>
+        IWorkflowExecutionTimeoutBuilder After(TimeSpan duration);
 
         /// <summary>
         /// Configures the <see cref="WorkflowDefinition"/> to interrupt its execution on timeout 
         /// </summary>
         /// <param name="interrupts">A boolean indicating whether or not interrupt the <see cref="WorkflowDefinition"/>'s execution</param>
-        /// <returns>The configured <see cref="IExecutionTimeoutBuilder"/></returns>
-        IExecutionTimeoutBuilder InterruptExecution(bool interrupts = true);
+        /// <returns>The configured <see cref="IWorkflowExecutionTimeoutBuilder"/></returns>
+        IWorkflowExecutionTimeoutBuilder InterruptExecution(bool interrupts = true);
 
         /// <summary>
         /// Configures the <see cref="WorkflowDefinition"/> to run the specified <see cref="StateDefinition"/> before terminating its execution
         /// </summary>
         /// <param name="state">The reference name of the <see cref="StateDefinition"/> to run before termination</param>
-        /// <returns>The configured <see cref="IExecutionTimeoutBuilder"/></returns>
-        IExecutionTimeoutBuilder Run(string state);
+        /// <returns>The configured <see cref="IWorkflowExecutionTimeoutBuilder"/></returns>
+        IWorkflowExecutionTimeoutBuilder Run(string state);
 
         /// <summary>
         /// Configures the <see cref="WorkflowDefinition"/> to run the specified <see cref="StateDefinition"/> before terminating its execution
         /// </summary>
         /// <param name="stateSetup">The <see cref="Func{T, TResult}"/> used to build the <see cref="StateDefinition"/> to run before termination</param>
-        /// <returns>The configured <see cref="IExecutionTimeoutBuilder"/></returns>
-        IExecutionTimeoutBuilder Run(Func<IStateBuilderFactory, IStateBuilder> stateSetup);
+        /// <returns>The configured <see cref="IWorkflowExecutionTimeoutBuilder"/></returns>
+        IWorkflowExecutionTimeoutBuilder Run(Func<IStateBuilderFactory, IStateBuilder> stateSetup);
 
         /// <summary>
         /// Configures the <see cref="WorkflowDefinition"/> to run the specified <see cref="StateDefinition"/> before terminating its execution
         /// </summary>
         /// <param name="state">The <see cref="StateDefinition"/> to run before termination</param>
-        /// <returns>The configured <see cref="IExecutionTimeoutBuilder"/></returns>
-        IExecutionTimeoutBuilder Run(StateDefinition state);
+        /// <returns>The configured <see cref="IWorkflowExecutionTimeoutBuilder"/></returns>
+        IWorkflowExecutionTimeoutBuilder Run(StateDefinition state);
 
         /// <summary>
-        /// Builds the <see cref="ExecutionTimeoutDefinition"/>
+        /// Builds the <see cref="WorkflowExecutionTimeoutDefinition"/>
         /// </summary>
-        /// <returns>A new <see cref="ExecutionTimeoutDefinition"/></returns>
-        ExecutionTimeoutDefinition Build();
+        /// <returns>A new <see cref="WorkflowExecutionTimeoutDefinition"/></returns>
+        WorkflowExecutionTimeoutDefinition Build();
 
     }
 

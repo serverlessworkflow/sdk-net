@@ -34,19 +34,19 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         public EventReferenceValidator(WorkflowDefinition workflow)
         {
             this.Workflow = workflow;
-            this.RuleFor(e => e.TriggerEvent)
+            this.RuleFor(e => e.ProduceEvent)
                 .NotEmpty()
-                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.TriggerEvent)}");
-            this.RuleFor(e => e.TriggerEvent)
+                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ProduceEvent)}");
+            this.RuleFor(e => e.ProduceEvent)
                 .Must(ReferenceExistingEvent)
-                .When(e => !string.IsNullOrWhiteSpace(e.TriggerEvent))
-                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.TriggerEvent)}")
-                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef.TriggerEvent}'");
-            this.RuleFor(e => e.TriggerEvent)
+                .When(e => !string.IsNullOrWhiteSpace(e.ProduceEvent))
+                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ProduceEvent)}")
+                .WithMessage(eventRef => $"Failed to find the event with name '{eventRef.ProduceEvent}'");
+            this.RuleFor(e => e.ProduceEvent)
                 .Must(BeProduced)
-                .When(e => !string.IsNullOrWhiteSpace(e.TriggerEvent))
-                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.TriggerEvent)}")
-                .WithMessage(eventRef => $"The event with name '{eventRef.TriggerEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Produced)}'");
+                .When(e => !string.IsNullOrWhiteSpace(e.ProduceEvent))
+                .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ProduceEvent)}")
+                .WithMessage(eventRef => $"The event with name '{eventRef.ProduceEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Produced)}'");
             this.RuleFor(e => e.ResultEvent)
                 .NotEmpty()
                 .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ResultEvent)}");

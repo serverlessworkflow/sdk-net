@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using ServerlessWorkflow.Sdk;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 using YamlDotNet.Core;
@@ -44,7 +43,7 @@ namespace YamlDotNet.Serialization
         protected INodeDeserializer Inner { get; }
 
         /// <inheritdoc/>
-        public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object> nestedObjectDeserializer, out object value)
+        public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value)
         {
             value = null;
             var oneOfType = expectedType.GetGenericType(typeof(OneOf<,>));
@@ -60,7 +59,7 @@ namespace YamlDotNet.Serialization
             {
                 value = nestedObjectDeserializer(reader, t2);
             }
-            value = Activator.CreateInstance(oneOfType, new object[] { value });
+            value = Activator.CreateInstance(oneOfType, new object[] { value! });
             return true;
         }
 

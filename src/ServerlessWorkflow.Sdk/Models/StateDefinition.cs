@@ -15,7 +15,6 @@
  *
  */
 using Newtonsoft.Json.Linq;
-using ServerlessWorkflow.Sdk.Serialization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,8 +25,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// <summary>
     /// Represents a <see href="https://github.com/serverlessworkflow/specification/blob/master/specification.md#State-Definition">serverless workflow state definition</see>
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.AbstractClassConverterFactory))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.AbstractClassConverterFactory))]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.AbstractClassConverterFactory))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.AbstractClassConverterFactory))]
     [Discriminator(nameof(Type))]
     [ProtoContract]
     [ProtoInclude(100, typeof(CallbackStateDefinition))]
@@ -64,7 +63,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string Id { get; set; }
+        public virtual string? Id { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="StateDefinition"/>'s id
@@ -73,16 +72,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(3)]
         [DataMember(Order = 3)]
-        public virtual string Name { get; set; }
-
-        /// <summary>
-        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="StateDefinition"/>'s <see cref="EndDefinition"/>
-        /// </summary>
-        [ProtoMember(4)]
-        [DataMember(Order = 4)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
-        public virtual OneOf<EndDefinition, bool> End { get; set; }
+        public virtual string Name { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the filter to apply to the <see cref="StateDefinition"/>'s input and output data
@@ -92,7 +82,67 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "stateDataFilter")]
         [ProtoMember(5, Name = "stateDataFilter")]
         [DataMember(Order = 5, Name = "stateDataFilter")]
-        public virtual StateDataFilterDefinition DataFilter { get; set; }
+        public virtual StateDataFilterDefinition? DataFilter { get; set; }
+
+        /// <summary>
+        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="StateDefinition"/>'s <see cref="EndDefinition"/>
+        /// </summary>
+        [YamlMember(Alias = "dataInputSchema")]
+        [ProtoMember(8, Name = "dataInputSchema")]
+        [DataMember(Order = 8, Name = "dataInputSchema")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DataInputSchemaDefinition, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DataInputSchemaDefinition, Uri>))]
+        protected virtual OneOf<DataInputSchemaDefinition, Uri>? DataInputSchemaValue { get; set; }
+
+        /// <summary>
+        /// Gets/sets the <see cref="StateDefinition"/>'s <see cref="DataInputSchemaDefinition"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual DataInputSchemaDefinition? DataInputSchema
+        {
+            get
+            {
+                if (this.DataInputSchemaValue?.T1Value == null
+                    && this.DataInputSchemaValue?.T2Value != null)
+                    return new() { SchemaUri = this.DataInputSchemaValue.T2Value };
+                else
+                    return this.DataInputSchemaValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.DataInputSchemaValue = null;
+                else
+                    this.DataInputSchemaValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="Uri"/> referencing the <see cref="StateDefinition"/>'s <see cref="DataInputSchemaDefinition"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual Uri? DataInputSchemaUri
+        {
+            get
+            {
+                return this.DataInputSchemaValue?.T2Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.DataInputSchemaValue = null;
+                else
+                    this.DataInputSchemaValue = value;
+            }
+        }
 
         /// <summary>
         /// Gets/sets the configuration of the <see cref="StateDefinition"/>'s error handling
@@ -102,62 +152,125 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "onErrors")]
         [ProtoMember(6, Name = "onErrors")]
         [DataMember(Order = 6, Name = "onErrors")]
-        public virtual List<ErrorHandlerDefinition> Errors { get; set; } = new List<ErrorHandlerDefinition>();
+        public virtual List<ErrorHandlerDefinition>? Errors { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="StateDefinition"/>'s <see cref="TransitionDefinition"/>
         /// </summary>
-        [ProtoMember(7)]
-        [DataMember(Order = 7)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
-        public virtual OneOf<TransitionDefinition, string> Transition { get; set; }
+        [ProtoMember(7, Name = "transition")]
+        [DataMember(Order = 7, Name = "transition")]
+        [YamlMember(Alias = "transition")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "transition"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("transition"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
+        protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="StateDefinition"/>'s <see cref="EndDefinition"/>
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = nameof(DataInputSchema))]
-        [System.Text.Json.Serialization.JsonPropertyName(nameof(DataInputSchema))]
-        [YamlMember(Alias = nameof(DataInputSchema))]
-        [ProtoMember(8, Name = nameof(DataInputSchema))]
-        [DataMember(Order = 8, Name = nameof(DataInputSchema))]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DataInputSchemaDefinition, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DataInputSchemaDefinition, string>))]
-        protected virtual OneOf<DataInputSchemaDefinition, string> DataInputSchemaToken { get; set; }
-
-        private DataInputSchemaDefinition _DataInputSchema;
-        /// <summary>
-        /// Gets/sets the <see cref="StateDefinition"/>'s <see cref="DataInputSchemaDefinition"/>
+        /// Gets/sets the object used to configure the <see cref="StateDefinition"/>'s transition to another <see cref="StateDefinition"/> upon completion
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual DataInputSchemaDefinition DataInputSchema
+        public virtual TransitionDefinition? Transition
         {
             get
             {
-                if (this._DataInputSchema == null
-                    && this.DataInputSchemaToken != null)
-                {
-                    if (this.DataInputSchemaToken.T1Value == null)
-                        this._DataInputSchema = new DataInputSchemaDefinition() { Schema = this.DataInputSchemaToken.T2Value };
-                    else
-                        this._DataInputSchema = this.DataInputSchemaToken.T1Value;
-                }
-                return this._DataInputSchema;
+                if (this.TransitionValue?.T1Value == null
+                    && !string.IsNullOrWhiteSpace(this.TransitionValue?.T2Value))
+                    return new() { NextState = this.TransitionValue.T2Value };
+                else
+                    return this.TransitionValue?.T1Value;
             }
             set
             {
                 if (value == null)
-                {
-                    this._DataInputSchema = null;
-                    this.DataInputSchemaToken = null;
-                    return;
-                }
-                this._DataInputSchema = value;
-                this.DataInputSchemaToken = new(value);
+                    this.TransitionValue = null;
+                else
+                    this.TransitionValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the name of the <see cref="StateDefinition"/> to transition to upon completion
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual string? TransitionToStateName
+        {
+            get
+            {
+                return this.TransitionValue?.T2Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.TransitionValue = null;
+                else
+                    this.TransitionValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="StateDefinition"/>'s <see cref="EndDefinition"/>
+        /// </summary>
+        [ProtoMember(4, Name = "end")]
+        [DataMember(Order = 4, Name = "end")]
+        [YamlMember(Alias = "end")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "end"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
+        [System.Text.Json.Serialization.JsonPropertyName("end"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
+        protected virtual OneOf<EndDefinition, bool>? EndValue { get; set; }
+
+        /// <summary>
+        /// Gets/sets the object used to configure the <see cref="StateDefinition"/>'s transition to another <see cref="StateDefinition"/> upon completion
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual EndDefinition? End
+        {
+            get
+            {
+                if (this.EndValue?.T1Value == null
+                    && !string.IsNullOrWhiteSpace(this.TransitionValue?.T2Value))
+                    return new() {  };
+                else
+                    return this.EndValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.EndValue = null;
+                else
+                    this.EndValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets a boolean indicating whether or not the <see cref="StateDefinition"/> is the end of a logicial workflow path
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual bool IsEnd
+        {
+            get
+            {
+                if (this.EndValue == null)
+                    return false;
+                else
+                    return this.EndValue.T2Value;
+            }
+            set
+            {
+                this.EndValue = value;
             }
         }
 
@@ -166,7 +279,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(9)]
         [DataMember(Order = 9)]
-        public virtual string CompensatedBy { get; set; }
+        public virtual string? CompensatedBy { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not the <see cref="StateDefinition"/> is used for compensating another <see cref="StateDefinition"/>
@@ -180,7 +293,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(11)]
         [DataMember(Order = 11)]
-        public virtual Any Metadata { get; set; }
+        public virtual Any? Metadata { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

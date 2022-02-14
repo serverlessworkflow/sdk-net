@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using System.Runtime.Serialization;
 namespace ServerlessWorkflow.Sdk
 {
 
@@ -22,7 +21,7 @@ namespace ServerlessWorkflow.Sdk
     /// Enumerates all types of functions
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.StringEnumConverterFactory))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
     public enum FunctionType
     {
         /// <summary>

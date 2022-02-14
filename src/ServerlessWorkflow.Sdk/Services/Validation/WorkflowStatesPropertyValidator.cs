@@ -33,7 +33,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         : PropertyValidator<WorkflowDefinition, List<StateDefinition>>
     {
 
-        private static Dictionary<Type, IEnumerable<Type>> StateValidatorTypes = typeof(WorkflowDefinitionValidator).Assembly.GetTypes()
+        private static readonly Dictionary<Type, IEnumerable<Type>> StateValidatorTypes = typeof(WorkflowDefinitionValidator).Assembly.GetTypes()
             .Where(t => !t.IsAbstract && !t.IsInterface && !t.IsGenericType && t.IsClass && t.GetGenericType(typeof(StateDefinitionValidator<>)) != null)
             .GroupBy(t => t.GetGenericType(typeof(StateDefinitionValidator<>)).GetGenericArguments().First())
             .ToDictionary(g => g.Key, g => g.AsEnumerable());
@@ -58,17 +58,22 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <inheritdoc/>
         public override bool IsValid(ValidationContext<WorkflowDefinition> context, List<StateDefinition> value)
         {
-            int index = 0;
-            foreach (StateDefinition state in value)
+            var index = 0;
+            foreach (var state in value)
             {
-                if (!StateValidatorTypes.TryGetValue(state.GetType(), out IEnumerable<Type> validatorTypes))
+                if (!StateValidatorTypes.TryGetValue(state.GetType(), out var validatorTypes))
                     continue;
-                IEnumerable<IValidator> validators = validatorTypes.Select(t => (IValidator)Activator.CreateInstance(t, (WorkflowDefinition)context.InstanceToValidate));
+                var validators = validatorTypes!.Select(t => (IValidator)Activator.CreateInstance(t, (WorkflowDefinition)context.InstanceToValidate)!);
                 foreach (IValidator validator in validators)
                 {
-                    object[] args = new object[] { state };
-                    MethodInfo validationMethod = typeof(IValidator<>).MakeGenericType(state.GetType()).GetMethods().Single(m => m.Name == nameof(IValidator.Validate) && m.GetParameters().Length == 1 && m.GetParameters().First().ParameterType != typeof(IValidationContext));
-                    ValidationResult validationResult = (ValidationResult)validationMethod.Invoke(validator, args);
+                    var args = new object[] { state };
+                    var validationMethod = typeof(IValidator<>).MakeGenericType(state.GetType())
+                        .GetMethods()
+                        .Single(m => 
+                            m.Name == nameof(IValidator.Validate) 
+                            && m.GetParameters().Length == 1 
+                            && m.GetParameters().First().ParameterType != typeof(IValidationContext));
+                    var validationResult = (ValidationResult)validationMethod.Invoke(validator, args)!;
                     if (validationResult.IsValid)
                         continue;
                     foreach (var failure in validationResult.Errors)

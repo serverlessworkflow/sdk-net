@@ -50,7 +50,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected TState State { get; } = new TState();
 
         /// <inheritdoc/>
-        public override Any Metadata
+        public override Any? Metadata
         {
             get
             {
@@ -75,6 +75,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IStateBuilder<TState> FilterInput(string expression)
         {
+            if (this.State.DataFilter == null)
+                this.State.DataFilter = new();
             this.State.DataFilter.Input = expression;
             return this;
         }
@@ -82,6 +84,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IStateBuilder<TState> FilterOutput(string expression)
         {
+            if (this.State.DataFilter == null)
+                this.State.DataFilter = new();
             this.State.DataFilter.Output = expression;
             return this;
         }
@@ -124,6 +128,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
             IErrorHandlerBuilder builder = new ErrorHandlerBuilder(this.Pipeline);
             setupAction(builder);
             ErrorHandlerDefinition errorHandler = builder.Build();
+            if (this.State.Errors == null)
+                this.State.Errors = new();
             this.State.Errors.Add(errorHandler);
             return this;
         }

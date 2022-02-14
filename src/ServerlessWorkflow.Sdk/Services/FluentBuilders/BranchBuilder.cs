@@ -103,14 +103,6 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual void RunSubflow(string workflowId)
-        {
-            if (string.IsNullOrWhiteSpace(workflowId))
-                throw new ArgumentNullException(nameof(workflowId));
-            this.Branch.WorkflowId = workflowId;
-        }
-
-        /// <inheritdoc/>
         public virtual BranchDefinition Build()
         {
             return this.Branch;

@@ -23,7 +23,7 @@ namespace ServerlessWorkflow.Sdk
     /// Enumerates all kinds of workflow events
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.StringEnumConverterFactory))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
     public enum EventKind
     {
         /// <summary>

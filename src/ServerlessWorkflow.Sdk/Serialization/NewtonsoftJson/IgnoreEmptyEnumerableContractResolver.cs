@@ -46,7 +46,7 @@ namespace Newtonsoft.Json
             if (result.PropertyType != typeof(string)
                 && result.PropertyType != typeof(JToken))
             {
-                if (result.PropertyType.GetInterface(nameof(IEnumerable)) != null)
+                if (result.PropertyType!.GetInterface(nameof(IEnumerable)) != null)
                     result.ShouldSerialize =
                         instance => (instance?.GetType().GetProperties(BindingFlags.Default | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic)
                             .First(p => string.Equals(p.Name, result.PropertyName, StringComparison.InvariantCultureIgnoreCase) 

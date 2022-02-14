@@ -18,6 +18,7 @@ using ServerlessWorkflow.Sdk.Models;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
+
     /// <summary>
     /// Defines the fundamentals of a service used to build <see cref="ActionDefinition"/>s of type <see cref="ActionType.Subflow"/>
     /// </summary>
@@ -38,11 +39,16 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         ISubflowActionBuilder Version(string version);
 
         /// <summary>
-        /// Configures the <see cref="SubflowReference"/> to wait for the referenced <see cref="WorkflowDefinition"/>'s execution
+        /// Configures the <see cref="SubflowReference"/> to run the referenced <see cref="WorkflowDefinition"/> synchronously, which is the default.
         /// </summary>
-        /// <param name="wait">A boolean indicating whether or not to wait for the referenced <see cref="WorkflowDefinition"/>'s execution</param>
         /// <returns>The configured <see cref="ISubflowActionBuilder"/></returns>
-        ISubflowActionBuilder WaitForCompletion(bool wait = true);
+        ISubflowActionBuilder Synchronously();
+
+        /// <summary>
+        /// Configures the <see cref="SubflowReference"/> to run the referenced <see cref="WorkflowDefinition"/> asynchronously
+        /// </summary>
+        /// <returns>The configured <see cref="ISubflowActionBuilder"/></returns>
+        ISubflowActionBuilder Asynchronously();
 
     }
 

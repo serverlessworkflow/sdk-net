@@ -122,7 +122,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         }
 
         [Fact]
-        public void Validate_Workflow_NoStart_ShouldFail()
+        public void Validate_Workflow_NoStart_ShouldSucceed()
         {
             //arrange
             var workflowMock = new Mock<WorkflowDefinition>();
@@ -138,8 +138,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             result.Should()
                 .NotBeNull();
             result.Errors.Should()
-                .NotBeNullOrEmpty()
-                .And.Contain(e => e.PropertyName == nameof(WorkflowDefinition.Start));
+                .NotBeNullOrEmpty();
         }
 
         [Fact]
@@ -151,7 +150,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 Id = "fake",
                 Name = "fake",
                 Version = "fake",
-                States = new() { new InjectStateDefinition() { Name = "fake" } }
+                States = new() { new InjectStateDefinition() { Name = "fake", Data = new() } }
             };
 
             //act
@@ -162,7 +161,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
-                .And.Contain(e => e.PropertyName == "End");
+                .And.Contain(e => e.PropertyName == nameof(StateDefinition.End));
         }
 
         [Fact]
@@ -198,8 +197,8 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 Name = "fake",
                 Version = "fake",
                 Events = new() { new() { Name = "fake", Source = "fake", Type = "fake" }, new() { Name = "fake", Source = "fake", Type = "fake" } },
-                Start = "sleep",
-                States = new() { new SleepStateDefinition() {Name = "sleep", Delay = TimeSpan.FromSeconds(2), End = true } }
+                StartStateName = "sleep",
+                States = new() { new SleepStateDefinition() {Name = "sleep", Delay = TimeSpan.FromSeconds(2), IsEnd = true } }
             };
 
             //act

@@ -30,14 +30,14 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Input { get; set; }
+        public virtual string? Input { get; set; }
 
         /// <summary>
         /// Gets/sets an expression that filters the states data output
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string Output { get; set; }
+        public virtual string? Output { get; set; }
 
     }
 

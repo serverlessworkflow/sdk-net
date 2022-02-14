@@ -187,11 +187,11 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IWorkflowBuilder AddSecret(string secret);
 
         /// <summary>
-        /// Configures the <see cref="WorkflowDefinition"/>'s <see cref="ExecutionTimeoutDefinition"/>
+        /// Configures the <see cref="WorkflowDefinition"/>'s <see cref="WorkflowExecutionTimeoutDefinition"/>
         /// </summary>
-        /// <param name="timeoutSetup">An <see cref="Action{T}"/> used to setup the <see cref="WorkflowDefinition"/>'s <see cref="ExecutionTimeoutDefinition"/></param>
+        /// <param name="timeoutSetup">An <see cref="Action{T}"/> used to setup the <see cref="WorkflowDefinition"/>'s <see cref="WorkflowExecutionTimeoutDefinition"/></param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
-        IWorkflowBuilder WithExecutionTimeout(Action<IExecutionTimeoutBuilder> timeoutSetup);
+        IWorkflowBuilder WithExecutionTimeout(Action<IWorkflowExecutionTimeoutBuilder> timeoutSetup);
 
         /// <summary>
         /// Configures the <see cref="WorkflowDefinition"/> to not terminate its execution when there are no active execution paths
@@ -258,23 +258,23 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IWorkflowBuilder AddFunction(FunctionDefinition function);
 
         /// <summary>
-        /// Adds the <see cref="RetryStrategyDefinition"/>s defined in the specified file
+        /// Adds the <see cref="RetryDefinition"/>s defined in the specified file
         /// </summary>
-        /// <param name="uri">The <see cref="Uri"/> of the file that defines the <see cref="RetryStrategyDefinition"/>s</param>
+        /// <param name="uri">The <see cref="Uri"/> of the file that defines the <see cref="RetryDefinition"/>s</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
         IWorkflowBuilder ImportRetryStrategiesFrom(Uri uri);
 
         /// <summary>
-        /// Adds the specified <see cref="RetryStrategyDefinition"/> to the <see cref="WorkflowDefinition"/> to create
+        /// Adds the specified <see cref="RetryDefinition"/> to the <see cref="WorkflowDefinition"/> to create
         /// </summary>
-        /// <param name="strategy">The <see cref="Action{T}"/> used to setup the <see cref="RetryStrategyDefinition"/> to add</param>
+        /// <param name="strategy">The <see cref="Action{T}"/> used to setup the <see cref="RetryDefinition"/> to add</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
-        IWorkflowBuilder AddRetryStrategy(RetryStrategyDefinition strategy);
+        IWorkflowBuilder AddRetryStrategy(RetryDefinition strategy);
 
         /// <summary>
-        /// Adds the specified <see cref="RetryStrategyDefinition"/> to the <see cref="WorkflowDefinition"/> to create
+        /// Adds the specified <see cref="RetryDefinition"/> to the <see cref="WorkflowDefinition"/> to create
         /// </summary>
-        /// <param name="retryStrategySetup">The <see cref="Action{T}"/> used to setup the <see cref="RetryStrategyDefinition"/> to add</param>
+        /// <param name="retryStrategySetup">The <see cref="Action{T}"/> used to setup the <see cref="RetryDefinition"/> to add</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
         IWorkflowBuilder AddRetryStrategy(Action<IRetryStrategyBuilder> retryStrategySetup);
 

@@ -100,17 +100,17 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// </summary>
         /// <param name="workflowId">The id of the <see cref="WorkflowDefinition"/> to run</param>
         /// <param name="version">The version of the <see cref="WorkflowDefinition"/> to run</param>
-        /// <param name="waitForCompletion">A boolean indicating whether or not to wait for the completion of the <see cref="WorkflowDefinition"/> to run</param>
+        /// <param name="invocationMode">The <see cref="ActionDefinition"/>'s <see cref="InvocationMode"/>. Defaults to <see cref="InvocationMode.Synchronous"/></param>
         /// <returns>The service used to build <see cref="SubflowReference"/>s</returns>
-        ISubflowActionBuilder Run(string workflowId, string version, bool waitForCompletion = true);
+        ISubflowActionBuilder Run(string workflowId, string version, InvocationMode invocationMode = InvocationMode.Synchronous);
 
         /// <summary>
         /// Configures the <see cref="ActionDefinition"/> to build to run the specified <see cref="WorkflowDefinition"/>
         /// </summary>
         /// <param name="workflowId">The id of the <see cref="WorkflowDefinition"/> to run</param>
-        /// <param name="waitForCompletion">A boolean indicating whether or not to wait for the completion of the <see cref="WorkflowDefinition"/> to run</param>
+        /// <param name="invocationMode">The <see cref="ActionDefinition"/>'s <see cref="InvocationMode"/>. Defaults to <see cref="InvocationMode.Synchronous"/></param>
         /// <returns>The service used to build <see cref="SubflowReference"/>s</returns>
-        ISubflowActionBuilder Run(string workflowId, bool waitForCompletion = true);
+        ISubflowActionBuilder Run(string workflowId, InvocationMode invocationMode = InvocationMode.Synchronous);
 
         /// <summary>
         /// Builds the <see cref="ActionDefinition"/>

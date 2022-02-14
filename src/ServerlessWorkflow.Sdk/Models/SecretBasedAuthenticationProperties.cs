@@ -34,7 +34,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         public SecretBasedAuthenticationProperties()
         {
-
+            this.Secret = null!;
         }
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Secret { get; set; }
+        public virtual string Secret { get; set; } = null!;
 
     }
 

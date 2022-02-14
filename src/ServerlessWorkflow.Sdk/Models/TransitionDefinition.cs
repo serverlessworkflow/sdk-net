@@ -16,7 +16,7 @@
  */
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using YamlDotNet.Serialization;
+
 namespace ServerlessWorkflow.Sdk.Models
 {
 
@@ -32,20 +32,18 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the name of state to transition to
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "nextState")]
-        [System.Text.Json.Serialization.JsonPropertyName("nextState")]
-        [YamlMember(Alias = "nextState")]
         [Required]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string To { get; set; }
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public virtual string NextState { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets an <see cref="IEnumerable{T}"/> containing the events to be produced before the transition happens
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual IEnumerable<ProduceEventDefinition> ProduceEvents { get; set; } = new List<ProduceEventDefinition>();
+        public virtual List<ProduceEventDefinition>? ProduceEvents { get; set; }
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to trigger workflow compensation before the transition is taken. Default is false

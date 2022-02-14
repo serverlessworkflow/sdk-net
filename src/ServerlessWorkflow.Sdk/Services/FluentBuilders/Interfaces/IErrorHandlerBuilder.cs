@@ -25,9 +25,9 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     {
 
         /// <summary>
-        /// Configures the <see cref="RetryStrategyDefinition"/> used by 
+        /// Configures the <see cref="RetryDefinition"/> used by 
         /// </summary>
-        /// <param name="strategy">The reference name of the <see cref="RetryStrategyDefinition"/> to use</param>
+        /// <param name="strategy">The reference name of the <see cref="RetryDefinition"/> to use</param>
         /// <returns></returns>
         IErrorHandlerBuilder UseRetryStrategy(string strategy);
 

@@ -33,7 +33,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         public TransitionDefinitionValidator(WorkflowDefinition workflow)
         {
             this.Workflow = workflow;
-            this.RuleFor(t => t.To)
+            this.RuleFor(t => t.NextState)
                 .NotEmpty();
         }
 

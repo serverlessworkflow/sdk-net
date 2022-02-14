@@ -23,7 +23,7 @@ namespace ServerlessWorkflow.Sdk.Models
     /// Enumerates all types of actions
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.StringEnumConverterFactory))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
     public enum ActionExecutionMode
     {
         /// <summary>

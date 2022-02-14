@@ -24,7 +24,7 @@ namespace ServerlessWorkflow.Sdk
     /// Enumerates all types of workflow states
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [JsonConverter(typeof(System.Text.Json.Serialization.Converters.StringEnumConverterFactory))]
+    [JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
     public enum StateType
     {
         /// <summary>

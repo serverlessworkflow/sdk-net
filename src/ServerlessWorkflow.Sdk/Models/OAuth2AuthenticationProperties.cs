@@ -16,6 +16,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -39,72 +40,76 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the uri of the OAuth2 authority to use to generate an access token
         /// </summary>
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual Uri Authority { get; set; }
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(2, IsRequired = true)]
+        [DataMember(Order = 2, IsRequired = true)]
+        public virtual Uri Authority { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the id of the OAuth2 client to use
         /// </summary>
-        [ProtoMember(3)]
-        [DataMember(Order = 3)]
-        public virtual string ClientId { get; set; }
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(3, IsRequired = true)]
+        [DataMember(Order = 3, IsRequired = true)]
+        public virtual string ClientId { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the secret of the non-public OAuth2 client to use. Required when <see cref="GrantType"/> has been set to <see cref="OAuth2GrantType.TokenExchange"/>
         /// </summary>
         [ProtoMember(4)]
         [DataMember(Order = 4)]
-        public virtual string ClientSecret { get; set; }
+        public virtual string? ClientSecret { get; set; }
 
         /// <summary>
         /// Gets/sets the username to use when authenticating
         /// </summary>
         [ProtoMember(5)]
         [DataMember(Order = 5)]
-        public virtual string Username { get; set; }
+        public virtual string? Username { get; set; }
 
         /// <summary>
         /// Gets/sets the password to use when authenticating
         /// </summary>
         [ProtoMember(6)]
         [DataMember(Order = 6)]
-        public virtual string Password { get; set; }
+        public virtual string? Password { get; set; }
 
         /// <summary>
         /// Gets/sets a <see cref="List{T}"/> containing the authorized scopes of the resulting token
         /// </summary>
         [ProtoMember(7)]
         [DataMember(Order = 7)]
-        public virtual List<string> Scopes { get; set; } = new List<string>();
+        public virtual List<string>? Scopes { get; set; }
 
         /// <summary>
         /// Gets/sets a <see cref="List{T}"/> containing the authorized audiences of the resulting token
         /// </summary>
         [ProtoMember(8)]
         [DataMember(Order = 8)]
-        public virtual List<string> Audiences { get; set; } = new List<string>();
+        public virtual List<string>? Audiences { get; set; }
 
         /// <summary>
         /// Gets/sets the token to exchange for Impersonation
         /// </summary>
         [ProtoMember(9)]
         [DataMember(Order = 9)]
-        public virtual string SubjectToken { get; set; }
+        public virtual string? SubjectToken { get; set; }
 
         /// <summary>
         /// Gets/sets the requested subject for Impersonation and Direct Naked Impersonation, which can be the id or the username of the user to impersonate
         /// </summary>
         [ProtoMember(10)]
         [DataMember(Order = 10)]
-        public virtual string RequestedSubject { get; set; }
+        public virtual string? RequestedSubject { get; set; }
 
         /// <summary>
         /// Gets/sets the issuer that must generate a new token in return for the exchanged one
         /// </summary>
         [ProtoMember(11)]
         [DataMember(Order = 11)]
-        public virtual string RequestedIssuer { get; set; }
+        public virtual string? RequestedIssuer { get; set; }
 
     }
 

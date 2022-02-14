@@ -39,7 +39,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .NotNull()
                 .When(a => a.Function == null && a.Subflow == null)
                 .WithErrorCode($"{nameof(ActionDefinition)}.{nameof(ActionDefinition.Event)}");
-            this.RuleFor(a => a.Event)
+            this.RuleFor(a => a.Event!)
                 .SetValidator(new EventReferenceValidator(this.Workflow))
                 .When(a => a.Event != null)
                 .WithErrorCode($"{nameof(ActionDefinition)}.{nameof(ActionDefinition.Event)}");
@@ -48,7 +48,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .NotNull()
                 .When(a => a.Event == null && a.Subflow == null)
                 .WithErrorCode($"{nameof(ActionDefinition)}.{nameof(ActionDefinition.Function)}");
-            this.RuleFor(a => a.Function)
+            this.RuleFor(a => a.Function!)
                 .SetValidator(new FunctionReferenceValidator(this.Workflow))
                 .When(a => a.Function != null)
                 .WithErrorCode($"{nameof(ActionDefinition)}.{nameof(ActionDefinition.Function)}");
@@ -57,7 +57,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .NotNull()
                 .When(a => a.Event == null && a.Function == null)
                 .WithErrorCode($"{nameof(ActionDefinition)}.{nameof(ActionDefinition.Subflow)}");
-            this.RuleFor(a => a.Subflow)
+            this.RuleFor(a => a.Subflow!)
                 .SetValidator(new SubflowReferenceValidator(this.Workflow))
                 .When(a => a.Subflow != null)
                 .WithErrorCode($"{nameof(ActionDefinition)}.{nameof(ActionDefinition.Subflow)}");

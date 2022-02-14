@@ -31,25 +31,29 @@ namespace Newtonsoft.Json.Converters
     {
 
         /// <inheritdoc/>
-        public override OneOf<T1, T2> ReadJson(JsonReader reader, Type objectType, OneOf<T1, T2> existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override OneOf<T1, T2>? ReadJson(JsonReader reader, Type objectType, OneOf<T1, T2>? existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             var token = JToken.ReadFrom(reader);
+            if (token == null)
+                return null;
             try
             {
-                return new(token.ToObject<T1>());
+                return new(token.ToObject<T1>()!);
             }
             catch
             {
-                return new(token.ToObject<T2>());
+                return new(token.ToObject<T2>()!);
             }
         }
 
         /// <inheritdoc/>
-        public override void WriteJson(JsonWriter writer, OneOf<T1, T2> value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, OneOf<T1, T2>? value, JsonSerializer serializer)
         {
+            if (value == null)
+                return;
             if (value.T1Value != null)
                 serializer.Serialize(writer, value.T1Value);
-            else
+            else if(value.T2Value != null)
                 serializer.Serialize(writer, value.T2Value);
         }
 

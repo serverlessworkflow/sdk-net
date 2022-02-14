@@ -43,14 +43,14 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Id { get; set; }
+        public virtual string? Id { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s domain-specific workflow identifier
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string Key { get; set; }
+        public virtual string? Key { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s name
@@ -59,14 +59,14 @@ namespace ServerlessWorkflow.Sdk.Models
         [Required]
         [ProtoMember(3)]
         [DataMember(Order = 3)]
-        public virtual string Name { get; set; }
+        public virtual string Name { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s description
         /// </summary>
         [ProtoMember(4)]
         [DataMember(Order = 4)]
-        public virtual string Description { get; set; }
+        public virtual string? Description { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="WorkflowDefinition"/>'s version
@@ -75,84 +75,68 @@ namespace ServerlessWorkflow.Sdk.Models
         [Required]
         [ProtoMember(5)]
         [DataMember(Order = 5)]
-        public virtual string Version { get; set; }
+        public virtual string Version { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the <see cref="System.Version"/> of the Serverless Workflow schema to use
         /// </summary>
         [ProtoMember(6)]
         [DataMember(Order = 6)]
-        public virtual string SpecVersion { get; set; } = typeof(WorkflowDefinition).Assembly.GetName().Version.ToString(2);
+        public virtual string SpecVersion { get; set; } = typeof(WorkflowDefinition).Assembly.GetName().Version!.ToString(2);
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/>
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/>
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema")]
-        [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema")]
-        [YamlMember(Alias = "dataInputSchema")]
         [ProtoMember(7, Name = "dataInputSchema")]
         [DataMember(Order = 7, Name = "dataInputSchema")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<JSchema, Uri>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<JSchema, Uri>))]
-        protected virtual OneOf<JSchema, Uri> DataInputSchemaToken { get; set; }
+        [YamlMember(Alias = "dataInputSchema")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DataInputSchemaDefinition, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DataInputSchemaDefinition, Uri>))]
+        protected virtual OneOf<DataInputSchemaDefinition, Uri>? DataInputSchemaValue { get; set; }
 
-        private JSchema _DataInputSchema;
         /// <summary>
-        /// Gets/sets the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/>
+        /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s data input schema
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual JSchema DataInputSchema
+        public virtual DataInputSchemaDefinition? DataInputSchema
         {
             get
             {
-                if (this._DataInputSchema == null
-                    && this.DataInputSchemaToken != null)
-                {
-                    if (this.DataInputSchemaToken.T2Value != null)
-                        this._DataInputSchema = new ExternalJSchema(this.DataInputSchemaToken.T2Value);
-                    else
-                        this._DataInputSchema = this.DataInputSchemaToken.T1Value;
-                }
-                return this._DataInputSchema;
+                return this.DataInputSchemaValue?.T1Value;
             }
             set
             {
                 if (value == null)
-                {
-                    this._DataInputSchema = null;
-                    this.DataInputSchemaToken = null;
-                    return;
-                }
-                this._DataInputSchema = value;
-                this.DataInputSchemaToken = new(value);
+                    this.DataInputSchemaValue = null;
+                else
+                    this.DataInputSchemaValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s data input <see cref="JSchema"/> 
+        /// Gets/sets an <see cref="Uri"/> pointing at the <see cref="WorkflowDefinition"/>'s input data schema
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual Uri DataInputSchemaUri
+        public virtual Uri? DataInputSchemaUri
         {
             get
             {
-                if (this.DataInputSchema == null
-                    || this._DataInputSchema is not ExternalJSchema externalSchema)
-                    return null;
-                return externalSchema.DefinitionUri;
+                return this.DataInputSchemaValue?.T2Value;
             }
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-                this._DataInputSchema = new ExternalJSchema(value);
-                this.DataInputSchemaToken = new(value);
+                    this.DataInputSchemaValue = null;
+                else
+                    this.DataInputSchemaValue = value;
             }
         }
 
@@ -172,29 +156,122 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(9)]
         [DataMember(Order = 9)]
-        public virtual List<string> Annotations { get; set; } = new List<string>();
+        public virtual List<string>? Annotations { get; set; }
 
         /// <summary>
-        /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s execution timeout
+        /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s execution timeouts
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "execTimeout")]
-        [System.Text.Json.Serialization.JsonPropertyName("execTimeout")]
-        [YamlMember(Alias = "execTimeout")]
-        [ProtoMember(10, Name = "execTimeout")]
-        [DataMember(Order = 10, Name = "execTimeout")]
-        public virtual ExecutionTimeoutDefinition ExecutionTimeout { get; set; }
+        [ProtoMember(10, Name = "timeouts")]
+        [DataMember(Order = 10, Name = "timeouts")]
+        [YamlMember(Alias = "timeouts")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "timeouts"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<WorkflowTimeoutDefinition, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("timeouts"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<WorkflowTimeoutDefinition, Uri>))]
+        protected virtual OneOf<WorkflowTimeoutDefinition, Uri>? TimeoutsValue { get; set; }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that defines the <see cref="WorkflowDefinition"/>'s start
+        /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s execution timeouts
         /// </summary>
-        [ProtoMember(11)]
-        [DataMember(Order = 11)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<StartDefinition, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<StartDefinition, string>))]
-        public virtual OneOf<StartDefinition, string> Start { get; set; }
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual WorkflowTimeoutDefinition? Timeouts
+        {
+            get
+            {
+                return this.TimeoutsValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.TimeoutsValue = null;
+                else
+                    this.TimeoutsValue = value;
+            }
+        }
 
         /// <summary>
-        /// Gets/sets a boolean indicating whether or not to keep instances of the <see cref="WorkflowDefinition"/> active event if there are no active execution paths. Instance can be terminated via 'terminate end definition' or reaching defined 'execTimeout'
+        /// Gets/sets an <see cref="Uri"/> pointing at the <see cref="WorkflowDefinition"/>'s <see cref="WorkflowTimeoutDefinition"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual Uri? TimeoutsUri
+        {
+            get
+            {
+                return this.TimeoutsValue?.T2Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.TimeoutsValue = null;
+                else
+                    this.TimeoutsValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that defines the <see cref="WorkflowDefinition"/>'s start
+        /// </summary>
+        [ProtoMember(11, Name = "start")]
+        [DataMember(Order = 11, Name = "start")]
+        [YamlMember(Alias = "start")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "start"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<StartDefinition, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("start"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<StartDefinition, string>))]
+        protected virtual OneOf<StartDefinition, string>? StartValue { get; set; }
+
+        /// <summary>
+        /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s <see cref="StartDefinition"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual StartDefinition? Start
+        {
+            get
+            {
+                return this.StartValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.StartValue = null;
+                else
+                    this.StartValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets the name of the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual string? StartStateName
+        {
+            get
+            {
+                return this.StartValue?.T2Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.StartValue = null;
+                else
+                    this.StartValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets a boolean indicating whether or not to keep instances of the <see cref="WorkflowDefinition"/> active even if there are no active execution paths. Instance can be terminated via 'terminate end definition' or reaching defined 'execTimeout'
         /// </summary>
         [ProtoMember(12)]
         [DataMember(Order = 12)]
@@ -205,221 +282,173 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(13)]
         [DataMember(Order = 13)]
-        public virtual Any Metadata { get; set; }
+        public virtual Any? Metadata { get; set; }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/> collection
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/> collection
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "events")]
-        [System.Text.Json.Serialization.JsonPropertyName("events")]
-        [YamlMember(Alias = "events")]
         [ProtoMember(14, Name = "events")]
         [DataMember(Order = 14, Name = "events")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<EventDefinition>, Uri>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<EventDefinition>, Uri>))]
-        protected virtual OneOf<List<EventDefinition>, Uri> EventsToken { get; set; }
+        [YamlMember(Alias = "events")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "events"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<EventDefinition>, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("events"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<EventDefinition>, Uri>))]
+        protected virtual OneOf<List<EventDefinition>, Uri>? EventsValue { get; set; }
 
-        private List<EventDefinition> _Events;
         /// <summary>
-        /// Gets/sets an <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
+        /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual List<EventDefinition> Events
+        public virtual List<EventDefinition>? Events
         {
             get
             {
-                if (this._Events == null
-                    && this.EventsToken != null)
-                {
-                    if (this.EventsToken.T1Value == null)
-                        this._Events = new ExternalDefinitionCollection<EventDefinition>(this.EventsToken.T2Value);
-                    else
-                        this._Events = this.EventsToken.T1Value;
-                }
-                return this._Events;
+                return this.EventsValue?.T1Value;
             }
             set
             {
                 if (value == null)
-                {
-                    this._Events = null;
-                    this.EventsToken = null;
-                    return;
-                }
-                this._Events = value;
-                this.EventsToken = new(value);
+                    this.EventsValue = null;
+                else
+                    this.EventsValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
+        /// Gets/sets an <see cref="Uri"/> pointing at a file containing the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/> collection
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual Uri EventsUri
+        public virtual Uri? EventsUri
         {
             get
             {
-                if (this.Events == null
-                    || this._Events is not ExternalDefinitionCollection<EventDefinition> events)
-                    return null;
-                return events.DefinitionUri;
+                return this.EventsValue?.T2Value;
             }
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-                this._Events = new ExternalDefinitionCollection<EventDefinition>(value);
-                this.EventsToken = new(value);
+                    this.EventsValue = null;
+                else
+                    this.EventsValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="FunctionDefinition"/> collection
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="FunctionDefinition"/> collection
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "functions")]
-        [System.Text.Json.Serialization.JsonPropertyName("functions")]
-        [YamlMember(Alias = "functions")]
         [ProtoMember(15, Name = "functions")]
         [DataMember(Order = 15, Name = "functions")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<FunctionDefinition>, Uri>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<FunctionDefinition>, Uri>))]
-        protected virtual OneOf<List<FunctionDefinition>, Uri> FunctionsToken { get; set; }
+        [YamlMember(Alias = "functions")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "functions"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<FunctionDefinition>, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("functions"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<FunctionDefinition>, Uri>))]
+        protected virtual OneOf<List<FunctionDefinition>, Uri>? FunctionsValue { get; set; }
 
-        private List<FunctionDefinition> _Functions;
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
+        /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="FunctionDefinition"/>s
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual List<FunctionDefinition> Functions
+        public virtual List<FunctionDefinition>? Functions
         {
             get
             {
-                if (this._Functions == null
-                    && this.FunctionsToken != null)
-                {
-                    if (this.FunctionsToken.T1Value == null)
-                        this._Functions = new ExternalDefinitionCollection<FunctionDefinition>(this.FunctionsToken.T2Value);
-                    else
-                        this._Functions = this.FunctionsToken.T1Value;
-                }
-                return this._Functions;
+                return this.FunctionsValue?.T1Value;
             }
             set
             {
                 if (value == null)
-                {
-                    this._Functions = null;
-                    this.FunctionsToken = null;
-                    return;
-                }
-                this._Functions = value;
-                this.FunctionsToken = new(value);
+                    this.FunctionsValue = null;
+                else
+                    this.FunctionsValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/>s
+        /// Gets/sets an <see cref="Uri"/> pointing at a file containing the <see cref="WorkflowDefinition"/>'s <see cref="FunctionDefinition"/> collection
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual Uri FunctionsUri
+        public virtual Uri? FunctionsUri
         {
             get
             {
-                if (this.Functions == null
-                    || this._Functions is not ExternalDefinitionCollection<FunctionDefinition> functions)
-                    return null;
-                return functions.DefinitionUri;
+                return this.FunctionsValue?.T2Value;
             }
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-                this._Functions = new ExternalDefinitionCollection<FunctionDefinition>(value);
-                this.FunctionsToken = new(value);
+                    this.FunctionsValue = null;
+                else
+                    this.FunctionsValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="RetryStrategyDefinition"/> collection
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="RetryDefinition"/> collection
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "retries")]
-        [System.Text.Json.Serialization.JsonPropertyName("retries")]
-        [YamlMember(Alias = "retries")]
         [ProtoMember(16, Name = "retries")]
         [DataMember(Order = 16, Name = "retries")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<RetryStrategyDefinition>, Uri>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<RetryStrategyDefinition>, Uri>))]
-        protected virtual OneOf<List<RetryStrategyDefinition>, Uri> RetriesToken { get; set; }
+        [YamlMember(Alias = "retries")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "retries"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<RetryDefinition>, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("retries"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<RetryDefinition>, Uri>))]
+        protected virtual OneOf<List<RetryDefinition>, Uri>? RetriesValue { get; set; }
 
-        private List<RetryStrategyDefinition> _Retries;
         /// <summary>
-        /// Gets/sets an <see cref="IEnumerable{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="RetryStrategyDefinition"/>s
+        /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="RetryDefinition"/>s
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual List<RetryStrategyDefinition> Retries
+        public virtual List<RetryDefinition>? Retries
         {
             get
             {
-                if (this._Retries == null
-                    && this.RetriesToken != null)
-                {
-                    if (this.RetriesToken.T1Value == null)
-                        this._Retries = new ExternalDefinitionCollection<RetryStrategyDefinition>(this.RetriesToken.T2Value);
-                    else
-                        this._Retries = this.RetriesToken.T1Value;
-                }
-                return this._Retries;
+                return this.RetriesValue?.T1Value;
             }
             set
             {
                 if (value == null)
-                {
-                    this._Retries = null;
-                    this.RetriesToken = null;
-                    return;
-                }
-                this._Retries = value;
-                this.RetriesToken = new(value);
+                    this.RetriesValue = null;
+                else
+                    this.RetriesValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s <see cref="RetryStrategyDefinition"/>s
+        /// Gets/sets an <see cref="Uri"/> pointing at a file containing the <see cref="WorkflowDefinition"/>'s <see cref="RetryDefinition"/> collection
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual Uri RetriesUri
+        public virtual Uri? RetriesUri
         {
             get
             {
-                if (this.Retries == null
-                    || this._Retries is not ExternalDefinitionCollection<RetryStrategyDefinition> retries)
-                    return null;
-                return retries.DefinitionUri;
+                return this.RetriesValue?.T2Value;
             }
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-                this._Retries = new ExternalDefinitionCollection<RetryStrategyDefinition>(value);
-                this.RetriesToken = new(value);
+                    this.RetriesValue = null;
+                else
+                    this.RetriesValue = value;
             }
         }
 
@@ -431,220 +460,250 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual List<StateDefinition> States { get; set; } = new List<StateDefinition>();
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s constants
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="WorkflowDefinition"/>'s constants
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "constants")]
-        [System.Text.Json.Serialization.JsonPropertyName("constants")]
-        [YamlMember(Alias = "constants")]
         [ProtoMember(18, Name = "constants")]
         [DataMember(Order = 18, Name = "constants")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Uri, Any>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Uri, Any>))]
-        protected virtual OneOf<Uri, Any> ConstantsToken { get; set; }
+        [YamlMember(Alias = "constants")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "constants"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Any, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("constants"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Any, Uri>))]
+        protected virtual OneOf<Any, Uri>? ConstantsValue { get; set; }
 
-        private object _Constants;
         /// <summary>
-        /// Gets/sets an <see cref="JObject"/> containing the <see cref="WorkflowDefinition"/>'s constants, which are globally accessible, read-only variables
+        /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s constants
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual object Constants
+        public virtual Any? Constants
         {
             get
             {
-                if (this._Constants == null
-                    && this.ConstantsToken != null)
-                {
-                    if (this.ConstantsToken.T2Value == null)
-                        this._Constants = new ExternalDefinition(this.ConstantsToken.T1Value);
-                    else
-                        this._Constants = this.ConstantsToken.T2Value;
-                }
-                return this._Constants;
+                return this.ConstantsValue?.T1Value;
             }
             set
             {
                 if (value == null)
-                {
-                    this._Constants = null;
-                    this.ConstantsToken = null;
-                    return;
-                }
-                this._Constants = value;
-                this.ConstantsToken = new((Any)Any.FromObject(value)); //todo: URGENT: create static method to create an Any (vs ProtoObject)
+                    this.ConstantsValue = null;
+                else
+                    this.ConstantsValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s constants
+        /// Gets/sets an <see cref="Uri"/> pointing at a file containing the <see cref="WorkflowDefinition"/>'s constants
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual Uri ConstantsUri
+        public virtual Uri? ConstantsUri
         {
             get
             {
-                if (this.Constants == null
-                    || this._Constants is not ExternalDefinition constants)
-                    return null;
-                return constants.DefinitionUri;
+                return this.ConstantsValue?.T2Value;
             }
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-                this._Constants = new ExternalDefinition(value);
-                this.ConstantsToken = new(value);
+                    this.ConstantsValue = null;
+                else
+                    this.ConstantsValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s secrets
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="WorkflowDefinition"/>'s secrets
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "secrets")]
-        [System.Text.Json.Serialization.JsonPropertyName("secrets")]
-        [YamlMember(Alias = "secrets")]
         [ProtoMember(19, Name = "secrets")]
         [DataMember(Order = 19, Name = "secrets")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<string>, Uri>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<string>, Uri>))]
-        protected virtual OneOf<List<string>, Uri> SecretsToken { get; set; }
+        [YamlMember(Alias = "secrets")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "secrets"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<string>, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("secrets"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<string>, Uri>))]
+        protected virtual OneOf<List<string>, Uri>? SecretsValue { get; set; }
 
-        private List<string> _Secrets;
         /// <summary>
-        /// Gets/sets an <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s secrets
+        /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s secrets
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual List<string> Secrets
+        public virtual List<string>? Secrets
         {
             get
             {
-                if (this._Secrets == null
-                    && this.SecretsToken != null)
-                {
-                    if (this.SecretsToken.T1Value == null)
-                        this._Secrets = new ExternalDefinitionCollection<string>(this.SecretsToken.T2Value);
-                    else
-                        this._Secrets = this.SecretsToken.T1Value;
-                }
-                return this._Secrets;
+                return this.SecretsValue?.T1Value;
             }
             set
             {
                 if (value == null)
-                {
-                    this._Secrets = null;
-                    this.SecretsToken = null;
-                    return;
-                }
-                this._Secrets = value;
-                this.SecretsToken = new(value);
+                    this.SecretsValue = null;
+                else
+                    this.SecretsValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s secrets
+        /// Gets/sets an <see cref="Uri"/> pointing at a file containing the <see cref="WorkflowDefinition"/>'s secrets
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual Uri SecretshUri
+        public virtual Uri? SecretsUri
         {
             get
             {
-                if (this.Secrets == null
-                    || this._Secrets is not ExternalDefinitionCollection<string> secrets)
-                    return null;
-                return secrets.DefinitionUri;
+                return this.SecretsValue?.T2Value;
             }
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-                this._Secrets = new ExternalDefinitionCollection<string>(value);
-                this.AuthToken = new(value);
+                    this.SecretsValue = null;
+                else
+                    this.SecretsValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/>s
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/>s
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "auth")]
-        [System.Text.Json.Serialization.JsonPropertyName("auth")]
-        [YamlMember(Alias = "auth")]
         [ProtoMember(20, Name = "auth")]
         [DataMember(Order = 20, Name = "auth")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
-        protected virtual OneOf<List<AuthenticationDefinition>, Uri> AuthToken { get; set; }
+        [YamlMember(Alias = "auth")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "auth"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("auth"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<AuthenticationDefinition>, Uri>))]
+        protected virtual OneOf<List<AuthenticationDefinition>, Uri>? AuthValue { get; set; }
 
-        private List<AuthenticationDefinition> _Auth;
         /// <summary>
-        /// Gets/sets an <see cref="JObject"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/>s
+        /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/> collection
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual List<AuthenticationDefinition> Auth
+        public virtual List<AuthenticationDefinition>? Auth
         {
             get
             {
-                if (this._Auth == null
-                    && this.AuthToken != null)
-                {
-                    if (this.AuthToken.T1Value == null)
-                        this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(this.AuthToken.T2Value);
-                    else
-                        this._Auth = this.AuthToken.T1Value;
-                }
-                return this._Auth;
+                return this.AuthValue?.T1Value;
             }
             set
             {
                 if (value == null)
-                {
-                    this._Auth = null;
-                    this.AuthToken = null;
-                    return;
-                }
-                this._Auth = value;
-                this.AuthToken = new(value);
+                    this.AuthValue = null;
+                else
+                    this.AuthValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the <see cref="Uri"/> to the file that defines the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/>s
+        /// Gets/sets an <see cref="Uri"/> pointing at a file containing the <see cref="WorkflowDefinition"/>'s <see cref="AuthenticationDefinition"/> collection
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
+        [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual Uri AuthUri
-
+        public virtual Uri? AuthUri
         {
             get
             {
-                if (this.Auth == null
-                    || this._Auth is not ExternalDefinitionCollection<AuthenticationDefinition> auth)
-                    return null;
-                return auth.DefinitionUri;
+                return this.AuthValue?.T2Value;
             }
             set
             {
                 if (value == null)
-                    throw new ArgumentNullException(nameof(value));
-                this._Auth = new ExternalDefinitionCollection<AuthenticationDefinition>(value);
-                this.AuthToken = new(value);
+                    this.AuthValue = null;
+                else
+                    this.AuthValue = value;
             }
+        }
+
+        /// <summary>
+        /// Gets/sets a boolean indicating whether or not actions should automatically be retried on unchecked errors. Defaults to false.
+        /// </summary>
+        [ProtoMember(21)]
+        [DataMember(Order = 21)]
+        public virtual bool AutoRetries { get; set; }
+
+        /// <summary>
+        /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="ExtensionDefinition"/>s
+        /// </summary>
+        [ProtoMember(22, Name = "extensions")]
+        [DataMember(Order = 22, Name = "extensions")]
+        [YamlMember(Alias = "extensions")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "extensions"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<List<ExtensionDefinition>, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("extensions"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<List<ExtensionDefinition>, Uri>))]
+        protected virtual OneOf<List<ExtensionDefinition>, Uri>? ExtensionsValue { get; set; }
+
+        /// <summary>
+        /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s <see cref="ExtensionDefinition"/> collection
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual List<ExtensionDefinition>? Extensions
+        {
+            get
+            {
+                return this.ExtensionsValue?.T1Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.ExtensionsValue = null;
+                else
+                    this.ExtensionsValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets/sets an <see cref="Uri"/> pointing at a file containing the <see cref="WorkflowDefinition"/>'s <see cref="ExtensionDefinition"/> collection
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        [YamlIgnore]
+        [ProtoIgnore]
+        [IgnoreDataMember]
+        public virtual Uri? ExtensionsUri
+        {
+            get
+            {
+                return this.ExtensionsValue?.T2Value;
+            }
+            set
+            {
+                if (value == null)
+                    this.ExtensionsValue = null;
+                else
+                    this.ExtensionsValue = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets the start <see cref="StateDefinition"/>
+        /// </summary>
+        /// <returns>The <see cref="StateDefinition"/> the <see cref="WorkflowDefinition"/> starts with</returns>
+        public virtual StateDefinition GetStartState()
+        {
+            var stateName = this.StartStateName;
+            if (this.Start != null)
+                stateName = this.Start.StateName;
+            if (string.IsNullOrWhiteSpace(stateName))
+                return this.States.First();
+            if (!this.TryGetState(stateName, out var state))
+                throw new NullReferenceException($"Failed to find a state definition with name '{state}'");
+            return state;
         }
 
         /// <summary>
@@ -652,7 +711,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         /// <param name="name">The name of the <see cref="StateDefinition"/> to get</param>
         /// <returns>The <see cref="StateDefinition"/> with the specified name, if any</returns>
-        public virtual StateDefinition GetState(string name)
+        public virtual StateDefinition? GetState(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
@@ -669,7 +728,7 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
-            state = this.GetState(name);
+            state = this.GetState(name)!;
             return state != null;
         }
 
@@ -679,7 +738,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <typeparam name="TState">The expected type of the <see cref="StateDefinition"/> with the specified name</typeparam>
         /// <param name="name">The name of the <see cref="StateDefinition"/> to get</param>
         /// <returns>The <see cref="StateDefinition"/> with the specified name, if any</returns>
-        public virtual TState GetState<TState>(string name)
+        public virtual TState? GetState<TState>(string name)
             where TState : StateDefinition
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -699,7 +758,7 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
-            state = this.GetState<TState>(name);
+            state = this.GetState<TState>(name)!;
             return state != null;
         }
 
@@ -708,7 +767,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         /// <param name="name">The name of the <see cref="EventDefinition"/> to get</param>
         /// <returns>The <see cref="EventDefinition"/> with the specified name, if any</returns>
-        public virtual EventDefinition GetEvent(string name)
+        public virtual EventDefinition? GetEvent(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
@@ -725,7 +784,7 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
-            e = this.GetEvent(name);
+            e = this.GetEvent(name)!;
             return e != null;
         }
 
@@ -734,7 +793,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         /// <param name="name">The name of the <see cref="FunctionDefinition"/> to get</param>
         /// <returns>The <see cref="FunctionDefinition"/> with the specified name, if any</returns>
-        public virtual FunctionDefinition GetFunction(string name)
+        public virtual FunctionDefinition? GetFunction(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
@@ -751,7 +810,7 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
-            function = this.GetFunction(name);
+            function = this.GetFunction(name)!;
             return function != null;
         }
 
@@ -760,7 +819,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to get</param>
         /// <returns>The <see cref="AuthenticationDefinition"/> with the specified name, if any</returns>
-        public virtual AuthenticationDefinition GetAuthentication(string name)
+        public virtual AuthenticationDefinition? GetAuthentication(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
@@ -777,7 +836,7 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException(nameof(name));
-            authentication = this.GetAuthentication(name);
+            authentication = this.GetAuthentication(name)!;
             return authentication != null;
         }
 

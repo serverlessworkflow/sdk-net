@@ -14,10 +14,10 @@
  * limitations under the License.
  *
  */
-using YamlDotNet.Serialization;
 using System.Collections.Generic;
-using ServerlessWorkflow.Sdk.Serialization;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -45,14 +45,14 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string InputCollection { get; set; }
+        public virtual string? InputCollection { get; set; }
 
         /// <summary>
         /// Gets/sets an expression specifying an array element of the states data to add the results of each iteration
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual string OutputCollection { get; set; }
+        public virtual string? OutputCollection { get; set; }
 
         /// <summary>
         /// Gets/sets the name of the iteration parameter that can be referenced in actions/workflow. For each parallel iteration, this param should contain an unique element of the array referenced by the  <see cref="InputCollection"/> expression
@@ -62,42 +62,37 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "iterationParam")]
         [ProtoMember(3, Name = "iterationParam")]
         [DataMember(Order = 3, Name = "iterationParam")]
-        public virtual string IterationParameter { get; set; }
+        public virtual string? IterationParameter { get; set; }
 
         /// <summary>
         /// Gets/sets a uint that specifies how upper bound on how many iterations may run in parallel
         /// </summary>
         [ProtoMember(4)]
         [DataMember(Order = 4)]
-        public virtual uint? Max { get; set; }
+        public virtual int? BatchSize { get; set; }
 
         /// <summary>
         /// Gets/sets a value used to configure the way the actions of each iterations should be executed
         /// </summary>
         [ProtoMember(5)]
         [DataMember(Order = 5)]
-        public virtual ActionExecutionMode ActionMode { get; set; }
+        public virtual ActionExecutionMode Mode { get; set; }
 
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> of actions to be executed for each of the elements of the <see cref="InputCollection"/>
         /// </summary>
+        [MinLength(1), Required]
+        [Newtonsoft.Json.JsonRequired]
         [ProtoMember(6)]
-        [DataMember(Order = 6)]
+        [DataMember(Order = 6, IsRequired = true)]
         public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
-
-        /// <summary>
-        /// Gets/sets the unique Id of a workflow to be executed for each of the elements of <see cref="InputCollection"/>
-        /// </summary>
-        [ProtoMember(7)]
-        [DataMember(Order = 7)]
-        public virtual string WorkflowId { get; set; }
 
         /// <summary>
         /// Gets the <see cref="ActionDefinition"/> with the specified name
         /// </summary>
         /// <param name="name">The name of the <see cref="ActionDefinition"/> to get</param>
         /// <returns>The <see cref="ActionDefinition"/> with the specified name</returns>
-        public virtual ActionDefinition GetAction(string name)
+        public virtual ActionDefinition? GetAction(string name)
         {
             return this.Actions.FirstOrDefault(s => s.Name == name);
         }
@@ -110,7 +105,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <returns>A boolean indicating whether or not a <see cref="ActionDefinition"/> with the specified name could be found</returns>
         public virtual bool TryGetAction(string name, out ActionDefinition action)
         {
-            action = this.GetAction(name);
+            action = this.GetAction(name)!;
             return action != null;
         }
 
@@ -122,8 +117,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <returns>A boolean indicating whether or not there is a next <see cref="ActionDefinition"/> in the pipeline</returns>
         public virtual bool TryGetNextAction(string previousActionName, out ActionDefinition action)
         {
-            action = null;
-            ActionDefinition previousAction = this.Actions.FirstOrDefault(a => a.Name == previousActionName);
+            action = null!;
+            ActionDefinition previousAction = this.Actions.FirstOrDefault(a => a.Name == previousActionName)!;
             int previousActionIndex = this.Actions.ToList().IndexOf(previousAction);
             int nextIndex = previousActionIndex + 1;
             if (nextIndex >= this.Actions.Count)

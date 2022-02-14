@@ -17,7 +17,6 @@
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
-using ServerlessWorkflow.Sdk.Services.Serialization;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -65,7 +64,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         public virtual async Task<IList<ValidationError>> ValidateAsync(string workflowJson, string specVersion, CancellationToken cancellationToken = default)
         {
             var workflow = this.Serializer.Deserialize<JObject>(workflowJson);
-            var schema = await this.LoadSchemaAsync(specVersion);
+            var schema = await this.LoadSchemaAsync(specVersion, cancellationToken);
             workflow.IsValid(schema, out IList<ValidationError> validationErrors);
             return validationErrors;
         }
@@ -77,10 +76,9 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                 throw new ArgumentNullException(nameof(workflow));
             var obj = JObject.FromObject(workflow);
 
-            //todo: remove
             var json = obj.ToString();
 
-            var schema = await this.LoadSchemaAsync(workflow.SpecVersion);
+            var schema = await this.LoadSchemaAsync(workflow.SpecVersion, cancellationToken);
             obj.IsValid(schema, out IList<ValidationError> validationErrors);
             return validationErrors;
         }
@@ -94,7 +92,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (this.Schemas.TryGetValue(specVersion, out var schema))
                 return schema;
             using HttpResponseMessage response = await this.HttpClient.GetAsync($"https://raw.githubusercontent.com/serverlessworkflow/specification/{(specVersion[..3] + ".x")}/schema/workflow.json", cancellationToken);
-            string json = await response.Content?.ReadAsStringAsync(cancellationToken);
+            var json = await response.Content?.ReadAsStringAsync(cancellationToken)!;
             response.EnsureSuccessStatusCode();
             schema = JSchema.Parse(json, new JSchemaUrlResolver());
             this.Schemas.TryAdd(specVersion, schema);

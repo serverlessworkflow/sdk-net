@@ -23,7 +23,7 @@ namespace ServerlessWorkflow.Sdk
     /// Enumerates all types of switch states
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.StringEnumConverterFactory))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
     public enum SwitchStateType
     {
         /// <summary>

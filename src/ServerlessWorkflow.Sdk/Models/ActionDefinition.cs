@@ -14,10 +14,10 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
-using YamlDotNet.Serialization;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -36,7 +36,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
-        public ActionType Type
+        public virtual ActionType Type
         {
             get
             {
@@ -56,10 +56,10 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string Name { get; set; }
+        public virtual string? Name { get; set; }
 
         /// <summary>
-        /// Gets/sets a <see cref="JToken"/> that represents the function to invoke
+        /// Gets/sets a <see cref="OneOf{T1, T2}"/> that represents the function to invoke
         /// </summary>
         [Newtonsoft.Json.JsonProperty(PropertyName = "functionRef")]
         [System.Text.Json.Serialization.JsonPropertyName("functionRef")]
@@ -68,9 +68,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [DataMember(Order = 2, Name = "functionRef")]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<FunctionReference, string>))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<FunctionReference, string>))]
-        protected virtual OneOf<FunctionReference, string> FunctionToken { get; set; }
+        protected virtual OneOf<FunctionReference, string>? FunctionValue { get; set; }
 
-        private FunctionReference _Function;
         /// <summary>
         /// Gets the object used to configure the reference of the function to invoke
         /// </summary>
@@ -79,28 +78,22 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public FunctionReference Function
+        public virtual FunctionReference? Function
         {
             get
             {
-                if (this._Function == null
-                    && this.FunctionToken != null)
-                {
-                    if (this.FunctionToken.T1Value == null)
-                        this._Function = new FunctionReference() { RefName = this.FunctionToken.T2Value };
+                if (this.FunctionValue?.T1Value == null
+                    && !string.IsNullOrWhiteSpace(this.FunctionValue?.T2Value))
+                        return new FunctionReference() { RefName = this.FunctionValue.T2Value };
                     else
-                        this._Function = this.FunctionToken.T1Value;
-                }
-                  
-                return this._Function;
+                        return this.FunctionValue?.T1Value;
             }
             set
             {
-                this._Function = value;
-                if (this._Function == null)
-                    this.FunctionToken = null;
+                if (value == null)
+                    this.FunctionValue = null;
                 else
-                    this.FunctionToken = new(this._Function);
+                    this.FunctionValue = value;
             }
         }
 
@@ -112,21 +105,18 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "eventRef")]
         [ProtoMember(3, Name = "eventRef")]
         [DataMember(Order = 3, Name = "eventRef")]
-        public EventReference Event { get; set; }
+        public virtual EventReference? Event { get; set; }
 
         /// <summary>
-        /// Gets/sets a <see cref="JToken"/> that references a subflow to run
+        /// Gets/sets a <see cref="OneOf{T1, T2}"/> that references a subflow to run
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "subflowRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("subflowRef")]
         [YamlMember(Alias = "subflowRef")]
         [ProtoMember(4, Name = "subflowRef")]
         [DataMember(Order = 4, Name = "subflowRef")]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<SubflowReference, string>))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<SubflowReference, string>))]
-        protected virtual OneOf<SubflowReference, string> SubflowToken { get; set; }
+        [Newtonsoft.Json.JsonProperty(PropertyName = "subflowRef"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<SubflowReference, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("subflowRef"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<SubflowReference, string>))]
+        protected virtual OneOf<SubflowReference, string>? SubflowValue { get; set; }
 
-        private SubflowReference _Subflow;
         /// <summary>
         /// Gets the object used to configure the reference of the subflow to run
         /// </summary>
@@ -135,63 +125,83 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public SubflowReference Subflow
+        public virtual SubflowReference? Subflow
         {
             get
             {
-                if (this._Subflow == null
-                    && this.SubflowToken != null)
+                if (this.SubflowValue?.T1Value == null
+                    && !string.IsNullOrWhiteSpace(this.SubflowValue?.T2Value))
                 {
-                    if (this.SubflowToken.T1Value == null)
+                    var components = this.SubflowValue.T2Value.Split(':', StringSplitOptions.RemoveEmptyEntries);
+                    var id = components.First();
+                    var version = null as string;
+                    if (components.Length > 1)
                     {
-                        var components = this.SubflowToken.T2Value.Split(':', StringSplitOptions.RemoveEmptyEntries);
-                        var id = components.First();
-                        var version = (string)null;
-                        if(components.Length > 1)
-                        {
-                            version = components.Last();
-                            id = this.SubflowToken.T2Value[..^(version.Length + 1)];
-                        }
-                        this._Subflow = new() { WorkflowId = id, Version = version };
+                        version = components.Last();
+                        id = this.SubflowValue.T2Value[..^(version.Length + 1)];
                     }
-                    else
-                        this._Subflow = this.SubflowToken.T1Value;
+                    return new() { WorkflowId = id, Version = version };
                 }
-                return this._Subflow;
+                return this.SubflowValue?.T1Value;
             }
             set
             {
-                this._Subflow = value;
-                if (this._Subflow == null)
-                    this.SubflowToken = null;
+                if (value == null)
+                    this.SubflowValue = null;
                 else
-                    this.SubflowToken = new(this._Subflow);
+                    this.SubflowValue = value;
             }
         }
 
         /// <summary>
-        /// Gets/sets the time period to wait for function execution to complete
+        /// Gets/sets the name of the workflow retry definition to use. If not defined uses the default runtime retry definition
         /// </summary>
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
         [ProtoMember(5)]
         [DataMember(Order = 5)]
-        public virtual TimeSpan? Timeout { get; set; }
+        public virtual string? RetryRef { get; set; }
+
+        /// <summary>
+        /// Gets/sets a <see cref="List{T}"/> containing references to defined <see cref="ErrorHandlerDefinition"/>s for which the action should not be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `true`
+        /// </summary>
+        [ProtoMember(6)]
+        [DataMember(Order = 6)]
+        public virtual List<string>? NonRetryableErrors { get; set; }
+
+        /// <summary>
+        /// Gets/sets a <see cref="List{T}"/> containing references to defined <see cref="ErrorHandlerDefinition"/>s for which the action should be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `false`
+        /// </summary>
+        [ProtoMember(7)]
+        [DataMember(Order = 7)]
+        public virtual List<string>? RetryableErrors { get; set; }
 
         /// <summary>
         /// Gets/sets an object used to define the way to filter the action's data
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "actionDataFilter")]
-        [System.Text.Json.Serialization.JsonPropertyName("actionDataFilter")]
-        [YamlMember(Alias = "actionDataFilter")]
-        [ProtoMember(6, Name = "actionDataFilter")]
-        [DataMember(Order = 6, Name = "actionDataFilter")]
-        public ActionDataFilterDefinition DataFilter { get; set; }
+        [ProtoMember(8)]
+        [DataMember(Order = 8)]
+        public ActionDataFilterDefinition? ActionDataFilter { get; set; }
+
+        /// <summary>
+        /// Gets/sets the <see cref="ActionDefinition"/>'s execution delay configuration
+        /// </summary>
+        [ProtoMember(9)]
+        [DataMember(Order = 9)]
+        public virtual ActionExecutionDelayDefinition? Sleep { get; set; }
+
+        /// <summary>
+        /// Gets/sets an expression to be evaluated positively as a condition for the <see cref="ActionDefinition"/> to execute.
+        /// </summary>
+        [ProtoMember(10)]
+        [DataMember(Order = 10)]
+        public virtual string? Condition { get; set; }
 
         /// <inheritdoc/>
-        public override string ToString()
+        public override string? ToString()
         {
-            return this.Name;
+            if (string.IsNullOrWhiteSpace(this.Name))
+                return base.ToString();
+            else
+                return this.Name;
         }
 
     }

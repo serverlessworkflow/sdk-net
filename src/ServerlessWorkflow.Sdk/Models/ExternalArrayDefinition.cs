@@ -34,6 +34,7 @@ namespace ServerlessWorkflow.Sdk.Models
         public ExternalArrayDefinition()
             : base()
         {
+            this.DefinitionUri = null!;
             this.Loaded = true;
         }
 

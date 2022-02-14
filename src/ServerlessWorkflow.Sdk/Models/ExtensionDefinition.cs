@@ -16,42 +16,33 @@
  */
 using System;
 using System.ComponentModel.DataAnnotations;
-
 namespace ServerlessWorkflow.Sdk.Models
 {
-
     /// <summary>
-    /// Represents an object used to define the execution timeout for a workflow instance
+    /// Represents the definition of a Serverless Workflow extension
     /// </summary>
     [ProtoContract]
     [DataContract]
-    public class ExecutionTimeoutDefinition
+    public class ExtensionDefinition
     {
 
         /// <summary>
-        /// Gets/sets the duration after which the workflow's execution will time out
+        /// Gets/sets the extension's unique id
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [DataMember(Order = 1, IsRequired = true)]
         [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual TimeSpan Duration { get; set; }
+        public virtual string ExtensionId { get; set; } = null!;
 
         /// <summary>
-        /// Gets/sets a boolean indicating whether or not to terminate the workflow execution.
+        /// Gets/sets an <see cref="Uri"/> to a resource containing the workflow extension definition (json or yaml)
         /// </summary>
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [DataMember(Order = 2, IsRequired = true)]
         [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual bool Interrupt { get; set; } = false;
-
-        /// <summary>
-        /// Gets/sets the name of a workflow state to be executed before workflow instance is terminated
-        /// </summary>
-        [ProtoMember(3)]
-        [DataMember(Order = 3)]
-        public virtual string RunBefore { get; set; }
+        public virtual Uri Resource { get; set; } = null!;
 
     }
 

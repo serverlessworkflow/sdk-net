@@ -29,7 +29,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// Represents the service used to validate a workflow's <see cref="ICollection{T}"/>s
     /// </summary>
     public class CollectionPropertyValidator<TElement>
-        : PropertyValidator<WorkflowDefinition, IEnumerable<TElement>>
+        : PropertyValidator<WorkflowDefinition, IEnumerable<TElement>?>
     {
 
         /// <summary>
@@ -50,9 +50,11 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         protected IServiceProvider ServiceProvider { get; }
 
         /// <inheritdoc/>
-        public override bool IsValid(ValidationContext<WorkflowDefinition> context, IEnumerable<TElement> value)
+        public override bool IsValid(ValidationContext<WorkflowDefinition> context, IEnumerable<TElement>? value)
         {
             int index = 0;
+            if (value == null)
+                return true;
             foreach (TElement elem in value)
             {
                 IEnumerable<IValidator<TElement>> validators = this.ServiceProvider.GetServices<IValidator<TElement>>();

@@ -11,7 +11,7 @@
         /// Gets the object's current value
         /// </summary>
         /// <returns>The object's current value</returns>
-        object GetValue();
+        object? GetValue();
 
     }
 

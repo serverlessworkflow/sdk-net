@@ -16,29 +16,29 @@
  */
 using System;
 
-namespace ServerlessWorkflow.Sdk.Serialization
+namespace ServerlessWorkflow.Sdk.Models
 {
     /// <summary>
-    /// Represents the <see cref="Attribute"/> used to indicate the discriminator value of a derived type
+    /// Represents an object used to configure an <see cref="ActionDefinition"/>'s execution delay
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-    public class DiscriminatorValueAttribute
-        : Attribute
+    [ProtoContract]
+    [DataContract]
+    public class ActionExecutionDelayDefinition
     {
 
         /// <summary>
-        /// Initializes a new <see cref="DiscriminatorValueAttribute"/>
+        /// Gets/sets the amount of time to wait before executing the configured <see cref="ActionDefinition"/>
         /// </summary>
-        /// <param name="value">The value used to discriminate the derived type marked by the <see cref="DiscriminatorValueAttribute"/></param>
-        public DiscriminatorValueAttribute(object value)
-        {
-            this.Value = value;
-        }
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
+        public virtual TimeSpan? Before { get; set; }
 
         /// <summary>
-        /// Gets the value used to discriminate the derived type marked by the <see cref="DiscriminatorValueAttribute"/>
+        /// Gets/sets the amount of time to wait after having executed the configured <see cref="ActionDefinition"/>
         /// </summary>
-        public object Value { get; }
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
+        public virtual TimeSpan? After { get; set; }
 
     }
 

@@ -40,7 +40,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.RuleFor(f => f.Operation)
                 .NotEmpty()
                 .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.Operation)}");
-            this.RuleFor(f => f.AuthRef)
+            this.RuleFor(f => f.AuthRef!)
                 .Must(ReferenceExistingAuthentication)
                 .WithErrorCode($"{nameof(FunctionDefinition)}.{nameof(FunctionDefinition.AuthRef)}")
                 .WithMessage(f => $"Failed to find an authentication definition with name '{f.AuthRef}'")

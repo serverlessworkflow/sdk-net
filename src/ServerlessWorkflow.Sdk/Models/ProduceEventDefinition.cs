@@ -30,16 +30,16 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public string EventReference { get; set; }
+        [ProtoMember(1, IsRequired = true)]
+        [DataMember(Order = 1, IsRequired = true)]
+        public string EventReference { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the data to pass to the cloud event to produce. If String, expression which selects parts of the states data output to become the data of the produced event. If object a custom object to become the data of produced event.
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public Any Data { get; set; }
+        public Any? Data { get; set; }
 
     }
 

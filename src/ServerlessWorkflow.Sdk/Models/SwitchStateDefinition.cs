@@ -16,7 +16,6 @@
  */
 using System;
 using System.Collections.Generic;
-using ServerlessWorkflow.Sdk.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -72,7 +71,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets an object used to configure the <see cref="SwitchStateDefinition"/>'s default condition, in case none of the specified conditions were met
         /// </summary>
-        public virtual DefaultConditionDefinition DefaultCondition { get; set; }
+        public virtual DefaultConditionDefinition DefaultCondition { get; set; } = null!;
 
     }
 

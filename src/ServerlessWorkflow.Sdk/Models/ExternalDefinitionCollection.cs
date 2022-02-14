@@ -23,8 +23,6 @@ namespace ServerlessWorkflow.Sdk.Models
     /// Represents a <see cref="List{T}"/> that can be loaded from an external definition file
     /// </summary>
     /// <typeparam name="T">The type of elements contained by the <see cref="ExternalDefinitionCollection{T}"/></typeparam>
-    [ProtoContract]
-    [DataContract]
     public class ExternalDefinitionCollection<T>
         : List<T>
     {
@@ -35,7 +33,9 @@ namespace ServerlessWorkflow.Sdk.Models
         public ExternalDefinitionCollection()
             : base()
         {
+            this.DefinitionUri = null!;
             this.Loaded = true;
+        
         }
 
         /// <summary>
@@ -45,6 +45,7 @@ namespace ServerlessWorkflow.Sdk.Models
         public ExternalDefinitionCollection(IEnumerable<T> collection)
             : base(collection)
         {
+            this.DefinitionUri = null!;
             this.Loaded = true;
         }
 
@@ -62,15 +63,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets the <see cref="Uri"/> used to reference the file that defines the elements contained by the <see cref="ExternalDefinitionCollection{T}"/>
         /// </summary>
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
         public virtual Uri DefinitionUri { get; private set; }
 
         /// <summary>
         /// Gets a boolean indicating whether or not the <see cref="ExternalDefinitionCollection{T}"/> has been loaded
         /// </summary>
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
         public virtual bool Loaded { get; }
 
     }

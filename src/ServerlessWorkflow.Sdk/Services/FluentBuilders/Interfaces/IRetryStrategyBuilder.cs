@@ -20,15 +20,15 @@ using System;
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
     /// <summary>
-    /// Defines the fundamentals of a service used to build <see cref="RetryStrategyDefinition"/>s
+    /// Defines the fundamentals of a service used to build <see cref="RetryDefinition"/>s
     /// </summary>
     public interface IRetryStrategyBuilder
     {
 
         /// <summary>
-        /// Sets the name of the <see cref="RetryStrategyDefinition"/> to build
+        /// Sets the name of the <see cref="RetryDefinition"/> to build
         /// </summary>
-        /// <param name="name">The name of the <see cref="RetryStrategyDefinition"/> to build</param>
+        /// <param name="name">The name of the <see cref="RetryDefinition"/> to build</param>
         /// <returns>The configured <see cref="IRetryStrategyBuilder"/></returns>
         IRetryStrategyBuilder WithName(string name);
 
@@ -40,13 +40,13 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IRetryStrategyBuilder WithDelayOf(TimeSpan duration);
 
         /// <summary>
-        /// Configures the <see cref="RetryStrategyDefinition"/> to not delay successive retry attempts
+        /// Configures the <see cref="RetryDefinition"/> to not delay successive retry attempts
         /// </summary>
         /// <returns>The configured <see cref="IRetryStrategyBuilder"/></returns>
         IRetryStrategyBuilder WithNoDelay();
 
         /// <summary>
-        /// Configures the <see cref="RetryStrategyDefinition"/>'s max delay between retry attempts
+        /// Configures the <see cref="RetryDefinition"/>'s max delay between retry attempts
         /// </summary>
         /// <param name="duration">The maximum duration to wait between two retry attempt</param>
         /// <returns>The configured <see cref="IRetryStrategyBuilder"/></returns>
@@ -88,10 +88,10 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IRetryStrategyBuilder WithJitterDuration(TimeSpan duration);
 
         /// <summary>
-        /// Builds the <see cref="RetryStrategyDefinition"/>
+        /// Builds the <see cref="RetryDefinition"/>
         /// </summary>
-        /// <returns>A new <see cref="RetryStrategyDefinition"/></returns>
-        RetryStrategyDefinition Build();
+        /// <returns>A new <see cref="RetryDefinition"/></returns>
+        RetryDefinition Build();
 
     }
 

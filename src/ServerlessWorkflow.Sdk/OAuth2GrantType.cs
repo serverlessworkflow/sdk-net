@@ -22,7 +22,7 @@ namespace ServerlessWorkflow.Sdk
     /// Enumerates all <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4">OAuth 2 grant types</see> supported for workflow runtime token generation
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.StringEnumConverterFactory))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
     public enum OAuth2GrantType
     {
         /// <summary>

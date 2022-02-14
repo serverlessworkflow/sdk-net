@@ -31,12 +31,12 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the unique event name the condition applies to
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "eventRef")]
+        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "eventRef")]
         [System.Text.Json.Serialization.JsonPropertyName("eventRef")]
         [YamlMember(Alias = "eventRef")]
-        [ProtoMember(1, Name = "eventRef")]
-        [DataMember(Order = 1, Name = "eventRef")]
-        public string Event { get; set; }
+        [ProtoMember(1, Name = "eventRef", IsRequired = true)]
+        [DataMember(Order = 1, Name = "eventRef", IsRequired = true)]
+        public string Event { get; set; } = null!;
 
     }
 

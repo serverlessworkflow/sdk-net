@@ -20,6 +20,7 @@ using System;
 
 namespace Newtonsoft.Json.Converters
 {
+
     /// <summary>
     /// Represents the <see cref="JsonConverter"/> used to convert from and to <see cref="Any"/> instances
     /// </summary>
@@ -28,10 +29,12 @@ namespace Newtonsoft.Json.Converters
     {
 
         /// <inheritdoc/>
-        public override Any ReadJson(JsonReader reader, Type objectType, Any existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override Any? ReadJson(JsonReader reader, Type objectType, Any? existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            var jobject = (JObject)JObject.ReadFrom(reader);
+            var token = JObject.ReadFrom(reader);
             var any = new Any();
+            if (token is not JObject jobject)
+                throw new Exception($"Any expects a value of a non-primitive, complex object type");
             foreach (var property in jobject.Properties())
             {
                 var value = JsonConvert.DeserializeObject(property.Value.ToString(Formatting.None));
@@ -41,9 +44,10 @@ namespace Newtonsoft.Json.Converters
         }
 
         /// <inheritdoc/>
-        public override void WriteJson(JsonWriter writer, Any value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, Any? value, JsonSerializer serializer)
         {
-            serializer.Serialize(writer, value.ToObject());
+            if(value != null)
+                serializer.Serialize(writer, value.ToObject());
         }
 
     }

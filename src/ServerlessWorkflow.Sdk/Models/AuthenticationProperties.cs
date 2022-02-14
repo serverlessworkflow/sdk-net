@@ -30,7 +30,12 @@ namespace ServerlessWorkflow.Sdk.Models
     public abstract class AuthenticationProperties
     {
 
-
+        /// <summary>
+        /// Gets/sets the <see cref="AuthenticationProperties"/>'s metadata
+        /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
+        public virtual Any? Metadata { get; set; }
 
     }
 
