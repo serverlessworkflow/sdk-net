@@ -113,7 +113,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (workflow == null)
                 throw new ArgumentNullException(nameof(workflow));
             if (workflow.DataInputSchemaUri != null)
-                workflow.DataInputSchema = await this.LoadJSchemaAsync(workflow.DataInputSchemaUri, cancellationToken);
+                workflow.DataInputSchema = await this.LoadDataInputSchemaAsync(workflow.DataInputSchemaUri, cancellationToken); //todo: load schema sub property
             if (workflow.EventsUri != null)
                 workflow.Events = await this.LoadExternalDefinitionCollectionAsync<EventDefinition>(workflow.EventsUri, cancellationToken);
             if(workflow.FunctionsUri != null)
@@ -130,12 +130,12 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         }
 
         /// <summary>
-        /// Loads the <see cref="JSchema"/> at the specified <see cref="Uri"/>
+        /// Loads the <see cref="DataInputSchemaDefinition"/> at the specified <see cref="Uri"/>
         /// </summary>
-        /// <param name="uri">The <see cref="Uri"/> the <see cref="JSchema"/> to load is located at</param>
+        /// <param name="uri">The <see cref="Uri"/> the <see cref="DataInputSchemaDefinition"/> to load is located at</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>The loaded <see cref="JSchema"/></returns>
-        protected virtual async Task<JSchema> LoadJSchemaAsync(Uri uri, CancellationToken cancellationToken = default)
+        /// <returns>The loaded <see cref="DataInputSchemaDefinition"/></returns>
+        protected virtual async Task<DataInputSchemaDefinition> LoadDataInputSchemaAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
@@ -156,7 +156,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             }
             if (!content.IsJson())
                 content = (await this.YamlSerializer.DeserializeAsync<JObject>(content, cancellationToken)).ToString(Formatting.None);
-            return JSchema.Parse(content, new JSchemaUrlResolver());
+            return JsonConvert.DeserializeObject<DataInputSchemaDefinition>(content)!;
         }
 
         /// <summary>

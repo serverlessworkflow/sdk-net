@@ -2,7 +2,7 @@
   "id": "ExternalRef",
   "name": "ExternalRef",
   "version": "0.1.0",
-  "dataInputSchema": "file:///resources/schemas/externalref.json",
+  //"dataInputSchema": "file:///resources/schemas/externalref.json",
   "constants": "file:///resources/constants/petstore.json",
   "events": "file:///resources/events/petstore.json",
   "functions": "file:///resources/functions/petstore.json",

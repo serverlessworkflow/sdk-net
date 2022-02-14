@@ -1,19 +1,20 @@
-﻿title: ExternalRefWorkflow
-type: object
-x-tags:
-  - workflow
-examples:
-  - id: string
-description: 'The data input schema for the official ''externalRef'' testworkflow, used by the .NET SDK'
-properties:
-  id:
-    type: string
-  pet:
-    type:
-      - string
-      - object
-    properties:
-      name:
-        type: string
-      category:
-        type: string
+﻿schema:
+  title: ExternalRefWorkflow
+  type: object
+  x-tags:
+    - workflow
+  examples:
+    - id: string
+  description: 'The data input schema for the official ''externalRef'' testworkflow, used by the .NET SDK'
+  properties:
+    id:
+      type: string
+    pet:
+      type:
+        - string
+        - object
+      properties:
+        name:
+          type: string
+        category:
+          type: string

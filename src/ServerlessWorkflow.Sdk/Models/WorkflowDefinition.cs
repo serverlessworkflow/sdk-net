@@ -90,9 +90,9 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(7, Name = "dataInputSchema")]
         [DataMember(Order = 7, Name = "dataInputSchema")]
         [YamlMember(Alias = "dataInputSchema")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<JSchema, Uri>))]
-        [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<JSchema, Uri>))]
-        protected virtual OneOf<JSchema, Uri>? DataInputSchemaValue { get; set; }
+        [Newtonsoft.Json.JsonProperty(PropertyName = "dataInputSchema"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DataInputSchemaDefinition, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("dataInputSchema"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DataInputSchemaDefinition, Uri>))]
+        protected virtual OneOf<DataInputSchemaDefinition, Uri>? DataInputSchemaValue { get; set; }
 
         /// <summary>
         /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s data input schema
@@ -102,7 +102,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual JSchema? DataInputSchema
+        public virtual DataInputSchemaDefinition? DataInputSchema
         {
             get
             {

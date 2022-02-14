@@ -142,7 +142,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IWorkflowBuilder WithDataInputSchema(JSchema schema)
         {
-            this.Workflow.DataInputSchema = schema ?? throw new ArgumentNullException(nameof(schema));
+            this.Workflow.DataInputSchema = new DataInputSchemaDefinition() { Schema = schema } ?? throw new ArgumentNullException(nameof(schema));
             return this;
         }
 
@@ -151,6 +151,8 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (string.IsNullOrWhiteSpace(annotation))
                 throw new ArgumentNullException(nameof(annotation));
+            if (this.Workflow.Annotations == null)
+                this.Workflow.Annotations = new();
             this.Workflow.Annotations.Add(annotation);
             return this;
         }

@@ -331,12 +331,22 @@
             Represents the object used to configure a <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s data input schema
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition.Schema">
+        <member name="P:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition.SchemaValue">
             <summary>
             Gets/sets the url of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s input data schema
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition.FailOnValidationError">
+        <member name="P:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition.Schema">
+            <summary>
+            Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s data input schema
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition.SchemaUri">
+            <summary>
+            Gets/sets an <see cref="T:System.Uri"/> pointing at the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s input data schema
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition.FailOnValidationErrors">
             <summary>
             Gets/sets a boolean indicating whether or not to terminate the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s execution whenever the validation of the input data fails. Defaults to true.
             </summary>
@@ -5111,13 +5121,13 @@
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>The updated <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadJSchemaAsync(System.Uri,System.Threading.CancellationToken)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadDataInputSchemaAsync(System.Uri,System.Threading.CancellationToken)">
             <summary>
-            Loads the <see cref="T:Newtonsoft.Json.Schema.JSchema"/> at the specified <see cref="T:System.Uri"/>
+            Loads the <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/> at the specified <see cref="T:System.Uri"/>
             </summary>
-            <param name="uri">The <see cref="T:System.Uri"/> the <see cref="T:Newtonsoft.Json.Schema.JSchema"/> to load is located at</param>
+            <param name="uri">The <see cref="T:System.Uri"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/> to load is located at</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>The loaded <see cref="T:Newtonsoft.Json.Schema.JSchema"/></returns>
+            <returns>The loaded <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/></returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionAsync(System.Uri,System.Threading.CancellationToken)">
             <summary>

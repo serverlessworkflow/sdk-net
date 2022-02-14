@@ -150,7 +150,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 Id = "fake",
                 Name = "fake",
                 Version = "fake",
-                States = new() { new InjectStateDefinition() { Name = "fake" } }
+                States = new() { new InjectStateDefinition() { Name = "fake", Data = new() } }
             };
 
             //act
@@ -160,7 +160,8 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             result.Should()
                 .NotBeNull();
             result.Errors.Should()
-                .BeNullOrEmpty();
+                .NotBeNullOrEmpty()
+                .And.Contain(e => e.PropertyName == nameof(StateDefinition.End));
         }
 
         [Fact]

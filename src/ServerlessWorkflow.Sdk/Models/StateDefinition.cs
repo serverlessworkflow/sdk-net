@@ -108,7 +108,7 @@ namespace ServerlessWorkflow.Sdk.Models
             {
                 if (this.DataInputSchemaValue?.T1Value == null
                     && this.DataInputSchemaValue?.T2Value != null)
-                    return new() { Schema = this.DataInputSchemaValue.T2Value };
+                    return new() { SchemaUri = this.DataInputSchemaValue.T2Value };
                 else
                     return this.DataInputSchemaValue?.T1Value;
             }
