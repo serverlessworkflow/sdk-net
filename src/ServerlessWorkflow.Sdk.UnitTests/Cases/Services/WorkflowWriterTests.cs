@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using FluentAssertions;
 using ProtoBuf;
 using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.IO;
@@ -102,6 +103,8 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
             stream.Position = 0;
             var deserialized = Serializer.Deserialize<WorkflowDefinition>(stream);
             Assert.NotNull(deserialized);
+            deserialized.States.Should().HaveCount(2);
+            deserialized.States[0].As<InjectStateDefinition>().Data.Should().NotBeNull();
         }
 
     }

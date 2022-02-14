@@ -16,6 +16,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -24,6 +25,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// Represents a workflow state that can be seen as a workflow gateway: they can direct transitions of a workflow based on certain conditions
     /// </summary>
     [DiscriminatorValue(StateType.Switch)]
+    [ProtoContract]
+    [DataContract]
     public class SwitchStateDefinition
         : StateDefinition
     {
@@ -54,11 +57,15 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> of <see cref="DataCaseDefinition"/>s between which to switch. Assigning the property sets the <see cref="SwitchStateDefinition"/>'s <see cref="SwitchType"/> to <see cref="SwitchStateType.Data"/>.
         /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual List<DataCaseDefinition> DataConditions { get; set; } = new List<DataCaseDefinition>();
 
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> of <see cref="EventCaseDefinition"/>s between which to switch. Assigning the property sets the <see cref="SwitchStateDefinition"/>'s <see cref="SwitchType"/> to <see cref="SwitchStateType.Event"/>.
         /// </summary>
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
         public virtual List<EventCaseDefinition> EventConditions { get; set; } = new List<EventCaseDefinition>();
 
         /// <summary>
@@ -71,6 +78,10 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets an object used to configure the <see cref="SwitchStateDefinition"/>'s default condition, in case none of the specified conditions were met
         /// </summary>
+        [Required]
+        [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(3, IsRequired = true)]
+        [DataMember(Order = 3, IsRequired = true)]
         public virtual DefaultConditionDefinition DefaultCondition { get; set; } = null!;
 
     }

@@ -21,6 +21,7 @@ using YamlDotNet.Core;
 
 namespace YamlDotNet.Serialization
 {
+
     /// <summary>
     /// Represents the <see cref="IYamlTypeConverter"/> used to serialize and deserialize <see cref="Any"/> instances
     /// </summary>

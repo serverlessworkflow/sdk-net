@@ -32,6 +32,9 @@ namespace Newtonsoft.Json.Converters
         public override Any? ReadJson(JsonReader reader, Type objectType, Any? existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             var token = JObject.ReadFrom(reader);
+            if(token == null
+                || token.Type == JTokenType.Null)
+                return null;
             var any = new Any();
             if (token is not JObject jobject)
                 throw new Exception($"Any expects a value of a non-primitive, complex object type");
