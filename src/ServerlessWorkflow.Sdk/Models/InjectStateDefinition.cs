@@ -24,6 +24,8 @@ namespace ServerlessWorkflow.Sdk.Models
     /// Represents a workflow state that injects static data into state data input
     /// </summary>
     [DiscriminatorValue(StateType.Inject)]
+    [DataContract]
+    [ProtoContract]
     public class InjectStateDefinition
         : StateDefinition
     {
