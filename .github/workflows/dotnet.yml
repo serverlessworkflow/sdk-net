@@ -13,7 +13,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.2
+        dotnet-version: 6.0.x
     - name: Install dependencies
       run: dotnet restore "./ServerlessWorkflow.Sdk.sln"
     - name: Build
@@ -25,3 +25,5 @@ jobs:
       with:
         PROJECT_FILE_PATH: src/ServerlessWorkflow.Sdk/ServerlessWorkflow.Sdk.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        
+        
