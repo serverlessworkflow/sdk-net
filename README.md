@@ -15,7 +15,7 @@ With the SDK, you can:
 
 | Latest Releases | Conformance to spec version |
 | :---: | :---: |
-| [0.7.4.1](https://github.com/serverlessworkflow/sdk-net/releases/) | [v0.7](https://github.com/serverlessworkflow/specification/tree/0.6.x) |
+| [0.7.4.4](https://github.com/serverlessworkflow/sdk-net/releases/) | [v0.7](https://github.com/serverlessworkflow/specification/tree/0.6.x) |
 
 ### Getting Started
 
