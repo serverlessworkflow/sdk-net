@@ -4,21 +4,21 @@
     <TargetFramework>net6.0</TargetFramework>
 	<Nullable>enable</Nullable>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>0.8.0.0</AssemblyVersion>
-    <FileVersion>0.8.0.0</FileVersion>
-    <Version>0.8.0.0</Version>
+    <AssemblyVersion>0.8.0.1</AssemblyVersion>
+    <FileVersion>0.8.0.1</FileVersion>
+    <Version>0.8.0.1</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <Company>ServerlessWorkflow.Sdk</Company>
     <Authors>The Serverless Workflow Specification Authors</Authors>
-    <Product>ServerlessWorkflow .NET 5.0 SDK</Product>
+    <Product>ServerlessWorkflow .NET 6.0 SDK</Product>
     <Copyright>Copyright © 2021 The Serverless Workflow Specification Authors</Copyright>
     <PackageProjectUrl>https://github.com/serverlessworkflow/sdk-net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/serverlessworkflow/sdk-net</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>serverless workflow sdk</PackageTags>
-    <Description>The .NET 5.0 SDK for the Serverless Workflow</Description>
+    <Description>The .NET 6.0 SDK for the Serverless Workflow</Description>
     <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
