@@ -118,9 +118,9 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual bool TryGetNextAction(string previousActionName, out ActionDefinition action)
         {
             action = null!;
-            ActionDefinition previousAction = this.Actions.FirstOrDefault(a => a.Name == previousActionName)!;
-            int previousActionIndex = this.Actions.ToList().IndexOf(previousAction);
-            int nextIndex = previousActionIndex + 1;
+            var previousAction = this.Actions.FirstOrDefault(a => a.Name == previousActionName)!;
+            var previousActionIndex = this.Actions.ToList().IndexOf(previousAction);
+            var nextIndex = previousActionIndex + 1;
             if (nextIndex >= this.Actions.Count)
                 return false;
             action = this.Actions.ElementAt(nextIndex);
