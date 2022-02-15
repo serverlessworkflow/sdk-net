@@ -17,6 +17,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Models
 {
@@ -83,6 +84,84 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(3, IsRequired = true)]
         [DataMember(Order = 3, IsRequired = true)]
         public virtual DefaultConditionDefinition DefaultCondition { get; set; } = null!;
+
+        /// <summary>
+        /// Gets the <see cref="SwitchCaseDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="caseName">The name of the <see cref="SwitchCaseDefinition"/> to get</param>
+        /// <returns>The <see cref="SwitchCaseDefinition"/> with the specified name</returns>
+        public virtual SwitchCaseDefinition? GetCase(string caseName)
+        {
+            SwitchCaseDefinition @case;
+            switch (this.SwitchType)
+            {
+                case SwitchStateType.Data:
+                    if (caseName == "default")
+                        @case = new DataCaseDefinition() { Name = "default", Transition = this.DefaultCondition.Transition, End = this.DefaultCondition.End };
+                    else
+                        @case = this.DataConditions.Single(c => c.Name == caseName);
+                    break;
+                case SwitchStateType.Event:
+                    if (caseName == "default")
+                        @case = new EventCaseDefinition() { Name = "default", Transition = this.DefaultCondition.Transition, End = this.DefaultCondition.End };
+                    else
+                        @case = this.EventConditions.Single(c => c.Name == caseName);
+                    break;
+                default:
+                    throw new NotSupportedException($"The specified switch state type '{this.SwitchType}' is not supported in this context");
+            }
+            return @case;
+        }
+
+        /// <summary>
+        /// Attempts to get the <see cref="SwitchCaseDefinition"/> with the specified name
+        /// </summary>
+        /// <param name="caseName">The name of the <see cref="SwitchCaseDefinition"/> to get</param>
+        /// <param name="case">The <see cref="SwitchCaseDefinition"/> with the specified name</param>
+        /// <returns>A boolean indicating whether or not the <see cref="SwitchCaseDefinition"/> with the specified name could be found</returns>
+        public virtual bool TryGetCase(string caseName, out SwitchCaseDefinition @case)
+        {
+            @case = null!;
+            try
+            {
+                @case = this.GetCase(caseName)!;
+            }
+            catch
+            {
+                return false;
+            }
+            return @case != null;
+        }
+
+        /// <summary>
+        /// Gets the <see cref="EventCaseDefinition"/> that applies to the specified event
+        /// </summary>
+        /// <param name="eventReference">The name of the event the <see cref="EventCaseDefinition"/> to get applies to</param>
+        /// <returns>The <see cref="EventCaseDefinition"/> that applies to the specified event</returns>
+        public virtual EventCaseDefinition? GetEventCase(string eventReference)
+        {
+            return this.EventConditions?.FirstOrDefault(c => c.Event == eventReference);
+        }
+
+        /// <summary>
+        /// Attempts to get the <see cref="EventCaseDefinition"/> that applies to the specified event
+        /// </summary>
+        /// <param name="eventReference">The reference of the event the <see cref="EventCaseDefinition"/> to get applies to</param>
+        /// <param name="case">The <see cref="EventCaseDefinition"/> that applies to the specified event</param>
+        /// <returns>A boolean indicating whether or not a <see cref="EventCaseDefinition"/> with the specified id could be found</returns>
+        public virtual bool TryGetEventCase(string eventReference, out EventCaseDefinition @case)
+        {
+            @case = null!;
+            try
+            {
+                @case = this.GetEventCase(eventReference)!;
+            }
+            catch
+            {
+                return false;
+            }
+            return @case != null;
+        }
 
     }
 

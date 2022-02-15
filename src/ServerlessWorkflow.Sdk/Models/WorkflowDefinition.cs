@@ -707,6 +707,40 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
+        /// Attempts to the start <see cref="StateDefinition"/>
+        /// </summary>
+        /// <param name="state">The start <see cref="StateDefinition"/></param>
+        /// <returns>A boolean indicating whether or not the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/> could be found</returns>
+        public virtual bool TryGetStartState(out StateDefinition state)
+        {
+            state = this.GetStartState()!;
+            return state != null;
+        }
+
+        /// <summary>
+        /// Gets the start <see cref="StateDefinition"/>
+        /// </summary>
+        /// <typeparam name="TState">The expected type of the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/></typeparam>
+        /// <returns>The start <see cref="StateDefinition"/></returns>
+        public virtual TState? GetStartState<TState>()
+            where TState : StateDefinition
+        {
+            return this.GetStartState() as TState;
+        }
+
+        /// <summary>
+        /// Attempts to the start <see cref="StateDefinition"/>
+        /// </summary>
+        /// <param name="state">The start <see cref="StateDefinition"/></param>
+        /// <returns>A boolean indicating whether or not the <see cref="WorkflowDefinition"/>'s start <see cref="StateDefinition"/> could be found</returns>
+        public virtual bool TryGetStartState<TState>(out TState state)
+            where TState : StateDefinition
+        {
+            state = this.GetStartState<TState>()!;
+            return state != null;
+        }
+
+        /// <summary>
         /// Gets the <see cref="StateDefinition"/> with the specified name
         /// </summary>
         /// <param name="name">The name of the <see cref="StateDefinition"/> to get</param>
