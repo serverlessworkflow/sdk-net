@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
 	<Nullable>enable</Nullable>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>0.8.0.2</AssemblyVersion>
-    <FileVersion>0.8.0.2</FileVersion>
-    <Version>0.8.0.2</Version>
+    <AssemblyVersion>0.8.0.3</AssemblyVersion>
+    <FileVersion>0.8.0.3</FileVersion>
+    <Version>0.8.0.3</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -44,7 +44,7 @@
 
   <ItemGroup>
     <PackageReference Include="CloudNative.CloudEvents" Version="2.2.0" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.6" />
     <PackageReference Include="Iso8601DurationHelper" Version="1.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
