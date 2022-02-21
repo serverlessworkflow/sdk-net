@@ -58,6 +58,13 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
+        /// Gets an <see cref="IDictionary{TKey, TValue}"/> containing the properties of the <see cref="Any"/>
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        [System.Text.Json.Serialization.JsonIgnore]
+        public IDictionary<string, object> DynamicProperties => this.ToObject().ToDictionary();
+
+        /// <summary>
         /// Creates a new <see cref="Any"/> from the specified object
         /// </summary>
         /// <returns>The object to create the new <see cref="Any"/> for</returns>
