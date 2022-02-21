@@ -23,7 +23,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// <summary>
     /// Represents a service used to validate <see cref="SwitchStateDefinition"/>s
     /// </summary>
-    public class SwitchStateValidator
+    internal class SwitchStateValidator
         : StateDefinitionValidator<SwitchStateDefinition>
     {
 

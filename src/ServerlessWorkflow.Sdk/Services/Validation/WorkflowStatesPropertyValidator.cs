@@ -29,7 +29,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// <summary>
     /// Represents the service used to validate a workflow's <see cref="StateDefinition"/>s
     /// </summary>
-    public class WorkflowStatesPropertyValidator
+    internal class WorkflowStatesPropertyValidator
         : PropertyValidator<WorkflowDefinition, List<StateDefinition>>
     {
 

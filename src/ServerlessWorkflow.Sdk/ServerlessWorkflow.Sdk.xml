@@ -4878,26 +4878,9 @@
             Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/> interface
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.#ctor(System.Net.Http.HttpClient)">
-            <summary>
-            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/>
-            </summary>
-            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> to use to fetch external resources</param>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.#ctor(System.Net.Http.IHttpClientFactory)">
-            <summary>
-            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/>
-            </summary>
-            <param name="httpClientFactory">The service used to create <see cref="T:System.Net.Http.HttpClient"/>s</param>
-        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.#ctor">
             <summary>
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/>
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.HttpClient">
-            <summary>
-            Gets the <see cref="T:System.Net.Http.HttpClient"/> to use to fetch external resources
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Workflow">
@@ -5024,15 +5007,6 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Build">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Dispose(System.Boolean)">
-            <summary>
-            Disposes of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/>
-            </summary>
-            <param name="disposing">A boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder"/> is being disposed of</param>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Dispose">
-            <inheritdoc/>
-        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowExecutionTimeoutBuilder">
             <summary>
             Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowExecutionTimeoutBuilder"/> interface
@@ -5120,6 +5094,25 @@
             <param name="stream">The <see cref="T:System.IO.Stream"/> to read the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> from</param>
             <param name="format">The format of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to read. Defaults to '<see cref="F:ServerlessWorkflow.Sdk.WorkflowDefinitionFormat.Yaml"/>'</param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver">
+            <summary>
+            Represents a <see cref="T:Newtonsoft.Json.Schema.JsonSchemaResolver"/> relying on an <see cref="T:System.Net.Http.HttpClient"/> to resolve uri references
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver.#ctor(System.Net.Http.HttpClient)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver"/>
+            </summary>
+            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> used to download remote schemas</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver.HttpClient">
+            <summary>
+            Gets the <see cref="T:System.Net.Http.HttpClient"/> used to download remote schemas
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver.GetSchemaResource(Newtonsoft.Json.Schema.ResolveSchemaContext,Newtonsoft.Json.Schema.SchemaReference)">
+            <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader">
             <summary>

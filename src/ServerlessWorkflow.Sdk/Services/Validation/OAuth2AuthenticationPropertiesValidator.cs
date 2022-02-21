@@ -23,7 +23,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// <summary>
     /// Represents the service used to validate <see cref="OAuth2AuthenticationProperties"/>s
     /// </summary>
-    public class OAuth2AuthenticationPropertiesValidator
+    internal class OAuth2AuthenticationPropertiesValidator
         : AbstractValidator<OAuth2AuthenticationProperties>
     {
 

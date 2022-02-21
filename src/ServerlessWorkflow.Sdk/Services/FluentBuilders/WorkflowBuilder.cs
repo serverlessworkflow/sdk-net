@@ -14,13 +14,11 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
@@ -29,43 +27,16 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     /// Represents the default implementation of the <see cref="IWorkflowBuilder"/> interface
     /// </summary>
     public class WorkflowBuilder
-        : MetadataContainerBuilder<IWorkflowBuilder>, IWorkflowBuilder, IDisposable
+        : MetadataContainerBuilder<IWorkflowBuilder>, IWorkflowBuilder
     {
-        private bool _Disposed;
-
-        /// <summary>
-        /// Initializes a new <see cref="WorkflowBuilder"/>
-        /// </summary>
-        /// <param name="httpClient">The <see cref="System.Net.Http.HttpClient"/> to use to fetch external resources</param>
-        public WorkflowBuilder(HttpClient httpClient)
-        {
-            this.HttpClient = httpClient;
-            this.Pipeline = new PipelineBuilder(this);
-        }
-
-        /// <summary>
-        /// Initializes a new <see cref="WorkflowBuilder"/>
-        /// </summary>
-        /// <param name="httpClientFactory">The service used to create <see cref="System.Net.Http.HttpClient"/>s</param>
-        public WorkflowBuilder(IHttpClientFactory httpClientFactory)
-            : this(httpClientFactory.CreateClient())
-        {
-
-        }
 
         /// <summary>
         /// Initializes a new <see cref="WorkflowBuilder"/>
         /// </summary>
         public WorkflowBuilder()
-            : this(new HttpClient())
         {
-
+            this.Pipeline = new PipelineBuilder(this);
         }
-
-        /// <summary>
-        /// Gets the <see cref="System.Net.Http.HttpClient"/> to use to fetch external resources
-        /// </summary>
-        protected HttpClient HttpClient { get; }
 
         /// <summary>
         /// Gets the <see cref="WorkflowDefinition"/> to configure
@@ -412,27 +383,6 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             this.Workflow.States = this.Pipeline.Build().ToList();
             return this.Workflow;
-        }
-
-        /// <summary>
-        /// Disposes of the <see cref="WorkflowBuilder"/>
-        /// </summary>
-        /// <param name="disposing">A boolean indicating whether or not the <see cref="WorkflowBuilder"/> is being disposed of</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!this._Disposed)
-            {
-                if (disposing)
-                    this.HttpClient?.Dispose();
-                this._Disposed = true;
-            }
-        }
-
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            this.Dispose(disposing: true);
-            GC.SuppressFinalize(this);
         }
 
     }

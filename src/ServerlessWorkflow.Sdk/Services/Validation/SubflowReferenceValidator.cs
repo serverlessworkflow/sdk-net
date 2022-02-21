@@ -22,7 +22,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// <summary>
     /// Represents the service used to validate <see cref="SubflowReference"/>s
     /// </summary>
-    public class SubflowReferenceValidator
+    internal class SubflowReferenceValidator
         : AbstractValidator<SubflowReference>
     {
 

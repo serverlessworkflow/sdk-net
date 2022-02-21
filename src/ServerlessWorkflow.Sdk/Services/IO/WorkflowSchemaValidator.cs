@@ -94,7 +94,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             using HttpResponseMessage response = await this.HttpClient.GetAsync($"https://raw.githubusercontent.com/serverlessworkflow/specification/{(specVersion[..3] + ".x")}/schema/workflow.json", cancellationToken);
             var json = await response.Content?.ReadAsStringAsync(cancellationToken)!;
             response.EnsureSuccessStatusCode();
-            schema = JSchema.Parse(json, new JSchemaUrlResolver());
+            schema = JSchema.Parse(json, new JSchemaHttpClientUrlResolver(this.HttpClient));
             this.Schemas.TryAdd(specVersion, schema);
             return schema;
         }

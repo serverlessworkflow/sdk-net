@@ -23,7 +23,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// <summary>
     /// Represents the service used to validate <see cref="FunctionDefinition"/>s
     /// </summary>
-    public class FunctionDefinitionValidator
+    internal class FunctionDefinitionValidator
         : AbstractValidator<FunctionDefinition>
     {
 

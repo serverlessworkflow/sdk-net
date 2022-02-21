@@ -22,7 +22,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// <summary>
     /// Represents the service used to validate <see cref="BasicAuthenticationProperties"/>s
     /// </summary>
-    public class BasicAuthenticationPropertiesValidator
+    internal class BasicAuthenticationPropertiesValidator
         : AbstractValidator<BasicAuthenticationProperties>
     {
 

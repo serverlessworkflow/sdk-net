@@ -22,7 +22,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// <summary>
     /// Represents a service used to validate <see cref="EventCaseDefinition"/>s
     /// </summary>
-    public class EventCaseDefinitionValidator
+    internal class EventCaseDefinitionValidator
         : SwitchCaseDefinitionValidator<EventCaseDefinition>
     {
 

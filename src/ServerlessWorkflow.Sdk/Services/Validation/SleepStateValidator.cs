@@ -22,7 +22,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// <summary>
     /// Represents a service used to validate <see cref="SleepStateDefinition"/>s
     /// </summary>
-    public class SleepStateValidator
+    internal class SleepStateValidator
         : StateDefinitionValidator<SleepStateDefinition>
     {
 
