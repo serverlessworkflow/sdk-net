@@ -24,7 +24,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     /// Represents the base class of all services used to validate <see cref="SwitchCaseDefinition"/>s
     /// </summary>
     /// <typeparam name="TCondition">The type of <see cref="SwitchCaseDefinition"/> to validate</typeparam>
-    public abstract class SwitchCaseDefinitionValidator<TCondition>
+    internal abstract class SwitchCaseDefinitionValidator<TCondition>
         : AbstractValidator<TCondition>
         where TCondition : SwitchCaseDefinition
     {
