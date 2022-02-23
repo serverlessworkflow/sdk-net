@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ServerlessWorkflow.Sdk.Services.IO
+namespace ServerlessWorkflow.Sdk.Services.Validation
 {
 
     /// <summary>
