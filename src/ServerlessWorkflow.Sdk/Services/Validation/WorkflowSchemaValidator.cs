@@ -16,10 +16,12 @@
  */
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
+using Octokit;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -60,11 +62,16 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// </summary>
         protected ConcurrentDictionary<string, JSchema> Schemas { get;  } = new();
 
+        /// <summary>
+        /// Gets the service used to resolve <see cref="JSchema"/>s by <see cref="Uri"/>
+        /// </summary>
+        protected JSchemaPreloadedResolver SchemaResolver { get; } = new();
+
         /// <inheritdoc/>
         public virtual async Task<IList<ValidationError>> ValidateAsync(string workflowJson, string specVersion, CancellationToken cancellationToken = default)
         {
             var workflow = this.Serializer.Deserialize<JObject>(workflowJson);
-            var schema = await this.LoadSchemaAsync(specVersion, cancellationToken);
+            var schema = await this.LoadSpecificationSchemaAsync(specVersion, cancellationToken);
             workflow.IsValid(schema, out IList<ValidationError> validationErrors);
             return validationErrors;
         }
@@ -75,10 +82,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             if (workflow == null)
                 throw new ArgumentNullException(nameof(workflow));
             var obj = JObject.FromObject(workflow);
-
-            var json = obj.ToString();
-
-            var schema = await this.LoadSchemaAsync(workflow.SpecVersion, cancellationToken);
+            var schema = await this.LoadSpecificationSchemaAsync(workflow.SpecVersion, cancellationToken);
             obj.IsValid(schema, out IList<ValidationError> validationErrors);
             return validationErrors;
         }
@@ -87,16 +91,31 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// Loads the Serverless Workflow <see cref="JSchema"/>
         /// </summary>
         /// <returns>The Serverless Workflow <see cref="JSchema"/></returns>
-        protected virtual async Task<JSchema> LoadSchemaAsync(string specVersion, CancellationToken cancellationToken = default)
+        protected virtual async Task<JSchema> LoadSpecificationSchemaAsync(string specVersion, CancellationToken cancellationToken = default)
         {
             if (this.Schemas.TryGetValue(specVersion, out var schema))
                 return schema;
-            using HttpResponseMessage response = await this.HttpClient.GetAsync($"https://raw.githubusercontent.com/serverlessworkflow/specification/{(specVersion[..3] + ".x")}/schema/workflow.json", cancellationToken);
-            var json = await response.Content?.ReadAsStringAsync(cancellationToken)!;
-            response.EnsureSuccessStatusCode();
-            schema = JSchema.Parse(json, new JSchemaUrlResolver());
+            var client = new GitHubClient(new ProductHeaderValue("serverless-workflow-sdk-net"));
+            var specJson = null as string;
+            foreach (var content in await client.Repository.Content.GetAllContentsByRef("serverlessworkflow", "specification", "schema", $"{specVersion[..3]}.x"))
+            {
+                if (string.IsNullOrWhiteSpace(content.DownloadUrl))
+                    continue;
+                var json = await this.GetSchemaJsonAsync(new(content.DownloadUrl), specVersion, cancellationToken);
+                if (content.Name == "workflow.json")
+                    specJson = json;
+            }
+            schema = JSchema.Parse(specJson!, this.SchemaResolver);
             this.Schemas.TryAdd(specVersion, schema);
             return schema;
+        }
+
+        protected virtual async Task<string> GetSchemaJsonAsync(Uri uri, string specVersion, CancellationToken cancellationToken = default)
+        {
+            using HttpResponseMessage response = await this.HttpClient.GetAsync(uri, cancellationToken);
+            var json = await response.Content?.ReadAsStringAsync(cancellationToken)!;
+            this.SchemaResolver.Add(new($"https://serverlessworkflow.io/schemas/{specVersion[..3]}/{uri.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries).Last()}"), json);
+            return json;
         }
 
     }

@@ -16,7 +16,9 @@
  */
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
 using System.Collections.Generic;
 using System.Threading;
@@ -63,15 +65,31 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <inheritdoc/>
         public virtual async Task<IWorkflowValidationResult> ValidateAsync(WorkflowDefinition workflowDefinition, bool validateSchema = true, bool validateDsl = true, CancellationToken cancellationToken = default)
         {
-            var schemaValidationErrors = await this.SchemaValidator.ValidateAsync(workflowDefinition, cancellationToken);
+            IList<ValidationError> schemaValidationErrors = new List<ValidationError>();
+            if (validateSchema)
+                schemaValidationErrors = await this.SchemaValidator.ValidateAsync(workflowDefinition, cancellationToken);
             var dslValidationErrors = new List<ValidationFailure>();
-            foreach (var dslValidator in this.DslValidators)
+            if (validateDsl)
             {
-                var validationResult = await dslValidator.ValidateAsync(workflowDefinition, cancellationToken);
-                if (validationResult.Errors != null)
-                    dslValidationErrors.AddRange(validationResult.Errors);
+                foreach (var dslValidator in this.DslValidators)
+                {
+                    var validationResult = await dslValidator.ValidateAsync(workflowDefinition, cancellationToken);
+                    if (validationResult.Errors != null)
+                        dslValidationErrors.AddRange(validationResult.Errors);
+                }
             }
             return new WorkflowValidationResult(schemaValidationErrors, dslValidationErrors);
+        }
+
+        /// <summary>
+        /// Creates a new default instance of the <see cref="IWorkflowValidator"/> interface
+        /// </summary>
+        /// <returns>A new <see cref="IWorkflowValidator"/></returns>
+        public static IWorkflowValidator Create()
+        {
+            IServiceCollection services = new ServiceCollection();
+            services.AddServerlessWorkflow();
+            return services.BuildServiceProvider().GetRequiredService<IWorkflowValidator>();
         }
 
     }

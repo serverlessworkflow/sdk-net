@@ -55,6 +55,7 @@
     <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="2.0.1.27" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
+    <PackageReference Include="Octokit" Version="0.50.0" />
     <PackageReference Include="protobuf-net.Core" Version="3.0.101" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
   </ItemGroup>

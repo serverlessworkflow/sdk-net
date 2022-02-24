@@ -5809,13 +5809,18 @@
             Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the loaded Serverless Workflow spec <see cref="T:Newtonsoft.Json.Schema.JSchema"/>s
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.SchemaResolver">
+            <summary>
+            Gets the service used to resolve <see cref="T:Newtonsoft.Json.Schema.JSchema"/>s by <see cref="T:System.Uri"/>
+            </summary>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.ValidateAsync(System.String,System.String,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.LoadSchemaAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.LoadSpecificationSchemaAsync(System.String,System.Threading.CancellationToken)">
             <summary>
             Loads the Serverless Workflow <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
             </summary>
@@ -5899,6 +5904,12 @@
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.Create">
+            <summary>
+            Creates a new default instance of the <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidator"/> interface
+            </summary>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidator"/></returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.StateType">
             <summary>
