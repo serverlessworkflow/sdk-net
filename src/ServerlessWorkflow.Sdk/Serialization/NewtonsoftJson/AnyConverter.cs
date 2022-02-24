@@ -17,6 +17,7 @@
 using Newtonsoft.Json.Linq;
 using ServerlessWorkflow.Sdk.Models;
 using System;
+using System.Dynamic;
 
 namespace Newtonsoft.Json.Converters
 {
@@ -41,6 +42,8 @@ namespace Newtonsoft.Json.Converters
             foreach (var property in jobject.Properties())
             {
                 var value = JsonConvert.DeserializeObject(property.Value.ToString(Formatting.None));
+                if (value is JObject jobj)
+                    value = jobj.ToObject<ExpandoObject>();
                 any.Set(property.Name, value);
             }
             return any;
