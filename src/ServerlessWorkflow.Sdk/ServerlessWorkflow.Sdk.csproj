@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
 	<Nullable>enable</Nullable>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>0.8.0.5</AssemblyVersion>
-    <FileVersion>0.8.0.5</FileVersion>
-    <Version>0.8.0.5</Version>
+    <AssemblyVersion>0.8.0.8</AssemblyVersion>
+    <FileVersion>0.8.0.8</FileVersion>
+    <Version>0.8.0.8</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -49,10 +49,10 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="Neuroglia.Serialization.Json" Version="2.0.1.26" />
-    <PackageReference Include="Neuroglia.Serialization.NewtonsoftJson" Version="2.0.1.26" />
-    <PackageReference Include="Neuroglia.Serialization.Protobuf" Version="2.0.1.26" />
-    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="2.0.1.26" />
+    <PackageReference Include="Neuroglia.Serialization.Json" Version="2.0.1.27" />
+    <PackageReference Include="Neuroglia.Serialization.NewtonsoftJson" Version="2.0.1.27" />
+    <PackageReference Include="Neuroglia.Serialization.Protobuf" Version="2.0.1.27" />
+    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="2.0.1.27" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
     <PackageReference Include="protobuf-net.Core" Version="3.0.101" />

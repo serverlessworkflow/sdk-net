@@ -78,8 +78,9 @@ namespace ServerlessWorkflow.Sdk
             services.AddSingleton<IWorkflowReader, WorkflowReader>();
             services.AddSingleton<IWorkflowWriter, WorkflowWriter>();
             services.AddSingleton<IWorkflowSchemaValidator, WorkflowSchemaValidator>();
+            services.AddSingleton<IWorkflowValidator, WorkflowValidator>();
             services.AddTransient<IWorkflowBuilder, WorkflowBuilder>();
-            services.AddValidatorsFromAssemblyContaining<WorkflowDefinitionValidator>();
+            services.AddValidatorsFromAssemblyContaining<WorkflowDefinitionValidator>(ServiceLifetime.Singleton);
             return services;
         }
 
