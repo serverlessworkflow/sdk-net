@@ -151,6 +151,11 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.Any.Fields">
             <inheritdoc/>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.Any.DynamicProperties">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the properties of the <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/>
+            </summary>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.Any.FromObject(System.Object)">
             <summary>
             Creates a new <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> from the specified object
@@ -5059,28 +5064,6 @@
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
         </member>
-        <member name="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowSchemaValidator">
-            <summary>
-            Defines the fundamentals of a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
-            </summary>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowSchemaValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Threading.CancellationToken)">
-            <summary>
-            Validates the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
-            </summary>
-            <param name="workflow">The input to validate</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>An <see cref="T:System.Collections.Generic.IList`1"/> containing the <see cref="T:Newtonsoft.Json.Schema.ValidationError"/>s that have occured</returns>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowSchemaValidator.ValidateAsync(System.String,System.String,System.Threading.CancellationToken)">
-            <summary>
-            Validates the specified JSON input
-            </summary>
-            <param name="json">The input to validate</param>
-            <param name="specVersion">The Serverless Workflow spec version to evaluate the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> against</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>An <see cref="T:System.Collections.Generic.IList`1"/> containing the <see cref="T:Newtonsoft.Json.Schema.ValidationError"/>s that have occured</returns>
-        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowWriter">
             <summary>
             Defines the fundamentals of a service used to write <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
@@ -5095,36 +5078,18 @@
             <param name="format">The format of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to read. Defaults to '<see cref="F:ServerlessWorkflow.Sdk.WorkflowDefinitionFormat.Yaml"/>'</param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
         </member>
-        <member name="T:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver">
-            <summary>
-            Represents a <see cref="T:Newtonsoft.Json.Schema.JsonSchemaResolver"/> relying on an <see cref="T:System.Net.Http.HttpClient"/> to resolve uri references
-            </summary>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver.#ctor(System.Net.Http.HttpClient)">
-            <summary>
-            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver"/>
-            </summary>
-            <param name="httpClient">The <see cref="T:System.Net.Http.HttpClient"/> used to download remote schemas</param>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver.HttpClient">
-            <summary>
-            Gets the <see cref="T:System.Net.Http.HttpClient"/> used to download remote schemas
-            </summary>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.JSchemaHttpClientUrlResolver.GetSchemaResource(Newtonsoft.Json.Schema.ResolveSchemaContext,Newtonsoft.Json.Schema.SchemaReference)">
-            <inheritdoc/>
-        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader">
             <summary>
             Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/> interface
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.#ctor(Microsoft.Extensions.Logging.ILogger{ServerlessWorkflow.Sdk.Services.IO.WorkflowReader},ServerlessWorkflow.Sdk.Services.IO.IWorkflowSchemaValidator,Neuroglia.Serialization.IJsonSerializer,Neuroglia.Serialization.IYamlSerializer,System.Net.Http.IHttpClientFactory)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.#ctor(Microsoft.Extensions.Logging.ILogger{ServerlessWorkflow.Sdk.Services.IO.WorkflowReader},ServerlessWorkflow.Sdk.Services.Validation.IWorkflowSchemaValidator,System.Collections.Generic.IEnumerable{FluentValidation.IValidator{ServerlessWorkflow.Sdk.Models.WorkflowDefinition}},Neuroglia.Serialization.IJsonSerializer,Neuroglia.Serialization.IYamlSerializer,System.Net.Http.IHttpClientFactory)">
             <summary>
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader"/>
             </summary>
             <param name="logger">The service used to perform logging</param>
             <param name="schemaValidator">The service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s</param>
+            <param name="dslValidators">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the services used to validate Serverless Workflow DSL</param>
             <param name="jsonSerializer">The service used to serialize and deserialize JSON</param>
             <param name="yamlSerializer">The service used to serialize and deserialize YAML</param>
             <param name="httpClientFactory">The service used to create <see cref="T:System.Net.Http.HttpClient"/>s</param>
@@ -5137,6 +5102,11 @@
         <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.SchemaValidator">
             <summary>
             Gets the service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.DslValidators">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the services used to validate Serverless Workflow DSL
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.JsonSerializer">
@@ -5163,7 +5133,7 @@
             </summary>
             <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to load external definitions for</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>The updated <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadDataInputSchemaAsync(System.Uri,System.Threading.CancellationToken)">
             <summary>
@@ -5195,45 +5165,6 @@
             Creates a new default instance of the <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/> interface
             </summary>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/></returns>
-        </member>
-        <member name="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator">
-            <summary>
-            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowSchemaValidator"/> interface
-            </summary>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.#ctor(Neuroglia.Serialization.IJsonSerializer,System.Net.Http.IHttpClientFactory)">
-            <summary>
-            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator"/>
-            </summary>
-            <param name="serializer">The service used to serialize and deserialize JSON</param>
-            <param name="httpClientFactory">The service used to create <see cref="T:System.Net.Http.HttpClient"/>s</param>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.Serializer">
-            <summary>
-            Gets the service used to serialize and deserialize JSON
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.HttpClient">
-            <summary>
-            Gets the <see cref="T:System.Net.Http.HttpClient"/> used to fetch the Serverless Workflow schema
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.Schemas">
-            <summary>
-            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the loaded Serverless Workflow spec <see cref="T:Newtonsoft.Json.Schema.JSchema"/>s
-            </summary>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.ValidateAsync(System.String,System.String,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowSchemaValidator.LoadSchemaAsync(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Loads the Serverless Workflow <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
-            </summary>
-            <returns>The Serverless Workflow <see cref="T:Newtonsoft.Json.Schema.JSchema"/></returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowWriter">
             <summary>
@@ -5589,6 +5520,63 @@
             </summary>
             <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowSchemaValidator">
+            <summary>
+            Defines the fundamentals of a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowSchemaValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Threading.CancellationToken)">
+            <summary>
+            Validates the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="workflow">The input to validate</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>An <see cref="T:System.Collections.Generic.IList`1"/> containing the <see cref="T:Newtonsoft.Json.Schema.ValidationError"/>s that have occured</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowSchemaValidator.ValidateAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Validates the specified JSON input
+            </summary>
+            <param name="json">The input to validate</param>
+            <param name="specVersion">The Serverless Workflow spec version to evaluate the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> against</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>An <see cref="T:System.Collections.Generic.IList`1"/> containing the <see cref="T:Newtonsoft.Json.Schema.ValidationError"/>s that have occured</returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidationResult">
+            <summary>
+            Defines the fundamentals of an object used to describe a <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s validation results
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidationResult.SchemaValidationErrors">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the schema-related validation errors that have occured during the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s validation
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidationResult.DslValidationErrors">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the DSL-related validation errors that have occured during the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s validation
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidationResult.IsValid">
+            <summary>
+            Gets a boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> is valid
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidator">
+            <summary>
+            Defines the fundamentals of a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+            Validates the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="workflowDefinition">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to validate</param>
+            <param name="validateSchema">A boolean indicating whether or not to validate the schema of the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></param>
+            <param name="validateDsl">A boolean indicating whether or not to validate the DSL of the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidationResult"/></returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.OAuth2AuthenticationPropertiesValidator">
             <summary>
             Represents the service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties"/>s
@@ -5794,6 +5782,45 @@
             <param name="startStateName">The name of the start <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></param>
             <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists</returns>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator">
+            <summary>
+            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowSchemaValidator"/> interface
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.#ctor(Neuroglia.Serialization.IJsonSerializer,System.Net.Http.IHttpClientFactory)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator"/>
+            </summary>
+            <param name="serializer">The service used to serialize and deserialize JSON</param>
+            <param name="httpClientFactory">The service used to create <see cref="T:System.Net.Http.HttpClient"/>s</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.Serializer">
+            <summary>
+            Gets the service used to serialize and deserialize JSON
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.HttpClient">
+            <summary>
+            Gets the <see cref="T:System.Net.Http.HttpClient"/> used to fetch the Serverless Workflow schema
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.Schemas">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.Dictionary`2"/> containing the loaded Serverless Workflow spec <see cref="T:Newtonsoft.Json.Schema.JSchema"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.ValidateAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.LoadSchemaAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Loads the Serverless Workflow <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
+            </summary>
+            <returns>The Serverless Workflow <see cref="T:Newtonsoft.Json.Schema.JSchema"/></returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator">
             <summary>
             Represents the service used to validate a workflow's <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s
@@ -5814,6 +5841,63 @@
             </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator.IsValid(FluentValidation.ValidationContext{ServerlessWorkflow.Sdk.Models.WorkflowDefinition},System.Collections.Generic.List{ServerlessWorkflow.Sdk.Models.StateDefinition})">
+            <inheritdoc/>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidationResult">
+            <summary>
+            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidationResult"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidationResult.#ctor">
+            <summary>
+            Inherits a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidationResult"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidationResult.#ctor(System.Collections.Generic.IEnumerable{Newtonsoft.Json.Schema.ValidationError},System.Collections.Generic.IEnumerable{FluentValidation.Results.ValidationFailure})">
+            <summary>
+            Inherits a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidationResult"/>
+            </summary>
+            <param name="schemaValidationErrors">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the schema-related validation errors  that have occured while validating the read <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></param>
+            <param name="dslValidationErrors">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the Serverless Workflow DSL-related validation errors that have occured while validating the read <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidationResult.SchemaValidationErrors">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidationResult.DslValidationErrors">
+            <inheritdoc/>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidationResult.IsValid">
+            <inheritdoc/>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator">
+            <summary>
+            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidator"/> interface
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.#ctor(Microsoft.Extensions.Logging.ILogger{ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator},ServerlessWorkflow.Sdk.Services.Validation.IWorkflowSchemaValidator,System.Collections.Generic.IEnumerable{FluentValidation.IValidator{ServerlessWorkflow.Sdk.Models.WorkflowDefinition}})">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator"/>
+            </summary>
+            <param name="logger">The service used to perform logging</param>
+            <param name="schemaValidator">The service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s</param>
+            <param name="dslValidators">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the services used to validate Serverless Workflow DSL</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.SchemaValidator">
+            <summary>
+            Gets the service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.DslValidators">
+            <summary>
+            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the services used to validate Serverless Workflow DSL
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.ValidateAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.StateType">

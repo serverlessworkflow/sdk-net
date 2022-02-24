@@ -14,17 +14,17 @@
  * limitations under the License.
  *
  */
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
+using ServerlessWorkflow.Sdk.Services.Validation;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,13 +44,15 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// </summary>
         /// <param name="logger">The service used to perform logging</param>
         /// <param name="schemaValidator">The service used to validate <see cref="WorkflowDefinition"/>s</param>
+        /// <param name="dslValidators">An <see cref="IEnumerable{T}"/> containing the services used to validate Serverless Workflow DSL</param>
         /// <param name="jsonSerializer">The service used to serialize and deserialize JSON</param>
         /// <param name="yamlSerializer">The service used to serialize and deserialize YAML</param>
         /// <param name="httpClientFactory">The service used to create <see cref="System.Net.Http.HttpClient"/>s</param>
-        public WorkflowReader(ILogger<WorkflowReader> logger, IWorkflowSchemaValidator schemaValidator, IJsonSerializer jsonSerializer, IYamlSerializer yamlSerializer, IHttpClientFactory httpClientFactory)
+        public WorkflowReader(ILogger<WorkflowReader> logger, IWorkflowSchemaValidator schemaValidator, IEnumerable<IValidator<WorkflowDefinition>> dslValidators, IJsonSerializer jsonSerializer, IYamlSerializer yamlSerializer, IHttpClientFactory httpClientFactory)
         {
             this.Logger = logger;
             this.SchemaValidator = schemaValidator;
+            this.DslValidators = dslValidators;
             this.JsonSerializer = jsonSerializer;
             this.YamlSerializer = yamlSerializer;
             this.HttpClient = httpClientFactory.CreateClient();
@@ -65,6 +67,11 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// Gets the service used to validate <see cref="WorkflowDefinition"/>s
         /// </summary>
         protected IWorkflowSchemaValidator SchemaValidator { get; }
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{T}"/> containing the services used to validate Serverless Workflow DSL
+        /// </summary>
+        protected IEnumerable<IValidator<WorkflowDefinition>> DslValidators { get; }
 
         /// <summary>
         /// Gets the service used to serialize and deserialize JSON
@@ -87,18 +94,16 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
             ISerializer serializer;
-            long offset = stream.Position;
-            using StreamReader reader = new(stream);
-            string input = reader.ReadToEnd();
+            var offset = stream.Position;
+            using var reader = new StreamReader(stream);
+            var input = reader.ReadToEnd();
             stream.Position = offset;
             if(input.IsJson())
                 serializer = this.JsonSerializer;
             else
                 serializer = this.YamlSerializer;
-            WorkflowDefinition workflowDefinition = await this.LoadExternalDefinitionsForAsync(await serializer.DeserializeAsync<WorkflowDefinition>(stream, cancellationToken), cancellationToken);
-            IList<ValidationError> validationErrors = await this.SchemaValidator.ValidateAsync(workflowDefinition, cancellationToken);
-            if (validationErrors.Any())
-                throw new ValidationException($"Failed to validate the specified workflow definition:{Environment.NewLine}{string.Join(Environment.NewLine, validationErrors.Select(e => $"Message: {e.Message}{Environment.NewLine}Schema path: {e.Path}{Environment.NewLine}Line: {e.LineNumber}, Position: {e.LinePosition}"))}");
+            var workflowDefinition = await serializer.DeserializeAsync<WorkflowDefinition>(stream, cancellationToken);
+            await this.LoadExternalDefinitionsForAsync(workflowDefinition, cancellationToken);
             return workflowDefinition;
         }
 
@@ -107,8 +112,8 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// </summary>
         /// <param name="workflow">The <see cref="WorkflowDefinition"/> to load external definitions for</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-        /// <returns>The updated <see cref="WorkflowDefinition"/></returns>
-        protected virtual async Task<WorkflowDefinition> LoadExternalDefinitionsForAsync(WorkflowDefinition workflow, CancellationToken cancellationToken = default)
+        /// <returns>A new awaitable <see cref="Task"/></returns>
+        protected virtual async Task LoadExternalDefinitionsForAsync(WorkflowDefinition workflow, CancellationToken cancellationToken = default)
         {
             if (workflow == null)
                 throw new ArgumentNullException(nameof(workflow));
@@ -126,7 +131,6 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                 workflow.Secrets = await this.LoadExternalDefinitionCollectionAsync<string>(workflow.SecretsUri, cancellationToken);
             if (workflow.AuthUri != null)
                 workflow.Auth = await this.LoadExternalDefinitionCollectionAsync<AuthenticationDefinition>(workflow.AuthUri, cancellationToken);
-            return workflow;
         }
 
         /// <summary>
