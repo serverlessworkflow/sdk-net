@@ -24,7 +24,7 @@ namespace ServerlessWorkflow.Sdk.Models
     [ProtoContract]
     [DataContract]
     public class ExternalDefinition
-        : Any
+        : DynamicObject
     {
 
         /// <summary>

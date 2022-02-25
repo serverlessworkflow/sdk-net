@@ -49,7 +49,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected IPipelineBuilder Pipeline { get; }
 
         /// <inheritdoc/>
-        public override Any? Metadata => this.Workflow.Metadata;
+        public override DynamicObject? Metadata => this.Workflow.Metadata;
 
         /// <inheritdoc/>
         public virtual IWorkflowBuilder WithKey(string key)
@@ -171,7 +171,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (constants == null)
                 throw new ArgumentNullException(nameof(constants));
-            this.Workflow.Constants = Any.FromObject(constants);
+            this.Workflow.Constants = DynamicObject.FromObject(constants);
             return this;
         }
 

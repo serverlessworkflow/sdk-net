@@ -56,9 +56,9 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "properties")]
         [ProtoMember(3, IsRequired = true, Name = "properties")]
         [DataMember(Order = 3, IsRequired = true, Name = "properties")]
-        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "properties"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Any, string>))]
+        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "properties"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DynamicObject, string>))]
         [System.Text.Json.Serialization.JsonPropertyName("properties"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<AuthenticationProperties, string>))]
-        protected virtual OneOf<Any, string> PropertiesValue { get; set; } = null!;
+        protected virtual OneOf<DynamicObject, string> PropertiesValue { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the <see cref="AuthenticationDefinition"/>'s properties
@@ -104,7 +104,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     default:
                         throw new NotSupportedException($"The specified authentication info type '{value.GetType()}' is not supported");
                 }
-                this.PropertiesValue = Any.FromObject(value);
+                this.PropertiesValue = DynamicObject.FromObject(value);
             }
         }
 

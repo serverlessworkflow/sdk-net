@@ -46,7 +46,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected FunctionDefinition Function { get; } = new FunctionDefinition();
 
         /// <inheritdoc/>
-        public override Any? Metadata
+        public override DynamicObject? Metadata
         {
             get
             {

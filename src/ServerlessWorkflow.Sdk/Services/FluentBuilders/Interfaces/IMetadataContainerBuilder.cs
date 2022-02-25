@@ -31,7 +31,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <summary>
         /// Gets the container's metadata
         /// </summary>
-        Any? Metadata { get; }
+        DynamicObject? Metadata { get; }
 
         /// <summary>
         /// Adds the specified metadata

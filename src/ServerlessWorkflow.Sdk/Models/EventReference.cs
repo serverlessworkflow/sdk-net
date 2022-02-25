@@ -58,9 +58,9 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(3, Name = "data")]
         [DataMember(Order = 3, Name = "data")]
         [YamlMember(Alias = "data")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "data"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Any, string>))]
-        [System.Text.Json.Serialization.JsonPropertyName("data"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Any, string>))]
-        protected virtual OneOf<Any, string>? DataValue { get; set; }
+        [Newtonsoft.Json.JsonProperty(PropertyName = "data"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DynamicObject, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("data"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DynamicObject, string>))]
+        protected virtual OneOf<DynamicObject, string>? DataValue { get; set; }
 
         /// <summary>
         /// Gets/sets a custom object to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'
@@ -70,7 +70,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual Any? Data
+        public virtual DynamicObject? Data
         {
             get
             {
@@ -113,7 +113,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(4)]
         [DataMember(Order = 4)]
-        public virtual Any? ContextAttributes { get; set; }
+        public virtual DynamicObject? ContextAttributes { get; set; }
 
         /// <summary>
         /// Gets the maximum amount of time to wait for the result event. If not defined it be set to the actionExecutionTimeout

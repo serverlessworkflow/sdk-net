@@ -35,7 +35,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected EventDefinition Event { get; } = new();
 
         /// <inheritdoc/>
-        public override Any? Metadata
+        public override DynamicObject? Metadata
         {
             get
             {

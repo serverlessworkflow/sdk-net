@@ -50,7 +50,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected TState State { get; } = new TState();
 
         /// <inheritdoc/>
-        public override Any? Metadata
+        public override DynamicObject? Metadata
         {
             get
             {

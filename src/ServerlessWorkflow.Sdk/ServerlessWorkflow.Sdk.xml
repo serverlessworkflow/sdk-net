@@ -132,36 +132,6 @@
             Gets/sets the amount of time to wait after having executed the configured <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>
             </summary>
         </member>
-        <member name="T:ServerlessWorkflow.Sdk.Models.Any">
-            <summary>
-            Represents an object of any type
-            </summary>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Models.Any.#ctor">
-            <summary>
-            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/>
-            </summary>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Models.Any.#ctor(System.Collections.Generic.IDictionary{System.String,System.Object})">
-            <summary>
-            Innitializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/>
-            </summary>
-            <param name="properties">An <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/>'s name/value property mappings</param>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.Any.Fields">
-            <inheritdoc/>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.Any.DynamicProperties">
-            <summary>
-            Gets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the properties of the <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/>
-            </summary>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Models.Any.FromObject(System.Object)">
-            <summary>
-            Creates a new <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> from the specified object
-            </summary>
-            <returns>The object to create the new <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> for</returns>
-        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition">
             <summary>
             Represents a reusable definition of a workflow authentication mechanism
@@ -922,7 +892,7 @@
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.FunctionReference.Arguments">
             <summary>
-            Gets/sets a <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> that contains the parameters of the function to invoke
+            Gets/sets a <see cref="!:Any"/> that contains the parameters of the function to invoke
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.FunctionReference.SelectionSet">
@@ -945,7 +915,7 @@
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.InjectStateDefinition.Data">
             <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> which can be set as state's data input and can be manipulated via filter
+            Gets/sets the <see cref="!:Any"/> which can be set as state's data input and can be manipulated via filter
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties">
@@ -6031,15 +6001,12 @@
             <param name="document">The <see cref="T:System.Text.Json.JsonDocument"/> to convert</param>
             <returns>A new object of the specified type</returns>
         </member>
-        <member name="T:Newtonsoft.Json.Converters.AnyConverter">
+        <member name="T:Newtonsoft.Json.IgnoreEmptyEnumerableContractResolver">
             <summary>
-            Represents the <see cref="T:Newtonsoft.Json.JsonConverter"/> used to convert from and to <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> instances
+            Represents a <see cref="T:Newtonsoft.Json.Serialization.DefaultContractResolver"/> used to ignore empty <see cref="T:System.Collections.IEnumerable"/>s when serializing
             </summary>
         </member>
-        <member name="M:Newtonsoft.Json.Converters.AnyConverter.ReadJson(Newtonsoft.Json.JsonReader,System.Type,ServerlessWorkflow.Sdk.Models.Any,System.Boolean,Newtonsoft.Json.JsonSerializer)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Newtonsoft.Json.Converters.AnyConverter.WriteJson(Newtonsoft.Json.JsonWriter,ServerlessWorkflow.Sdk.Models.Any,Newtonsoft.Json.JsonSerializer)">
+        <member name="M:Newtonsoft.Json.IgnoreEmptyEnumerableContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)">
             <inheritdoc/>
         </member>
         <member name="T:Newtonsoft.Json.Converters.Iso8601TimeSpanConverter">
@@ -6064,47 +6031,6 @@
             <inheritdoc/>
         </member>
         <member name="M:Newtonsoft.Json.Converters.OneOfConverter`2.WriteJson(Newtonsoft.Json.JsonWriter,ServerlessWorkflow.Sdk.Models.OneOf{`0,`1},Newtonsoft.Json.JsonSerializer)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Newtonsoft.Json.IgnoreEmptyEnumerableContractResolver">
-            <summary>
-            Represents a <see cref="T:Newtonsoft.Json.Serialization.DefaultContractResolver"/> used to ignore empty <see cref="T:System.Collections.IEnumerable"/>s when serializing
-            </summary>
-        </member>
-        <member name="M:Newtonsoft.Json.IgnoreEmptyEnumerableContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)">
-            <inheritdoc/>
-        </member>
-        <member name="T:YamlDotNet.Serialization.AnyConverter">
-            <summary>
-            Represents the <see cref="T:YamlDotNet.Serialization.IYamlTypeConverter"/> used to serialize and deserialize <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> instances
-            </summary>
-        </member>
-        <member name="M:YamlDotNet.Serialization.AnyConverter.Accepts(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="M:YamlDotNet.Serialization.AnyConverter.ReadYaml(YamlDotNet.Core.IParser,System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="M:YamlDotNet.Serialization.AnyConverter.WriteYaml(YamlDotNet.Core.IEmitter,System.Object,System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="T:YamlDotNet.Serialization.AnyDeserializer">
-            <summary>
-            Represents an <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/> used to deserialize <see cref="T:ServerlessWorkflow.Sdk.Models.Any"/> instances
-            </summary>
-        </member>
-        <member name="M:YamlDotNet.Serialization.AnyDeserializer.#ctor(YamlDotNet.Serialization.INodeDeserializer)">
-            <summary>
-            Initializes a new <see cref="T:YamlDotNet.Serialization.AnyDeserializer"/>
-            </summary>
-            <param name="inner">The inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/></param>
-        </member>
-        <member name="P:YamlDotNet.Serialization.AnyDeserializer.Inner">
-            <summary>
-            Gets the inner <see cref="T:YamlDotNet.Serialization.INodeDeserializer"/>
-            </summary>
-        </member>
-        <member name="M:YamlDotNet.Serialization.AnyDeserializer.Deserialize(YamlDotNet.Core.IParser,System.Type,System.Func{YamlDotNet.Core.IParser,System.Type,System.Object},System.Object@)">
             <inheritdoc/>
         </member>
         <member name="T:YamlDotNet.Serialization.OneOfConverter">

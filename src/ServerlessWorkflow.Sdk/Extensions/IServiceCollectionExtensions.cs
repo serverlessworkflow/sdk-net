@@ -62,7 +62,6 @@ namespace ServerlessWorkflow.Sdk
                 serializer => serializer
                     .IncludeNonPublicProperties()
                     .WithTypeConverter(new OneOfConverter())
-                    .WithTypeConverter(new AnyConverter())
                     .WithEmissionPhaseObjectGraphVisitor(args => new ChainedObjectGraphVisitor(args.InnerVisitor)),
                 deserializer => deserializer
                     .WithNodeDeserializer(
@@ -70,10 +69,7 @@ namespace ServerlessWorkflow.Sdk
                         syntax => syntax.InsteadOf<ScalarNodeDeserializer>())
                     .WithNodeDeserializer(
                         inner => new OneOfDeserializer(inner),
-                        syntax => syntax.InsteadOf<Iso8601TimeSpanConverter>())
-                    .WithNodeDeserializer(
-                        inner => new AnyDeserializer(inner),
-                        syntax => syntax.InsteadOf<OneOfDeserializer>()));
+                        syntax => syntax.InsteadOf<Iso8601TimeSpanConverter>()));
             services.AddHttpClient();
             services.AddSingleton<IWorkflowReader, WorkflowReader>();
             services.AddSingleton<IWorkflowWriter, WorkflowWriter>();

@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using Neuroglia;
 using ServerlessWorkflow.Sdk.Models;
 using System;
 
@@ -42,7 +41,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
-            this.State.Data = data is Any any ? any : new(data.ToDictionary());
+            this.State.Data = data is DynamicObject dyn ? dyn : new(data.ToDictionary());
             return this;
         }
 

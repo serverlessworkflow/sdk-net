@@ -41,7 +41,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual Any? Arguments { get; set; }
+        public virtual DynamicObject? Arguments { get; set; }
 
         /// <summary>
         /// Gets/sets a <see href="https://spec.graphql.org/June2018/#sec-Selection-Sets">GraphQL selection set</see>

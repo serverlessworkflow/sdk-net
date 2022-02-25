@@ -293,7 +293,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(11)]
         [DataMember(Order = 11)]
-        public virtual Any? Metadata { get; set; }
+        public virtual DynamicObject? Metadata { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

@@ -46,7 +46,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(1, IsRequired = true)]
         [DataMember(Order = 1, IsRequired = true)]
-        public virtual Any Data { get; set; } = null!;
+        public virtual DynamicObject Data { get; set; } = null!;
 
     }
 

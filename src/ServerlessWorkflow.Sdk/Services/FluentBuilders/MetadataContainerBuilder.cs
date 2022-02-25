@@ -14,8 +14,6 @@
  * limitations under the License.
  *
  */
-using Newtonsoft.Json.Linq;
-using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Collections.Generic;
 
@@ -32,7 +30,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     {
 
         /// <inheritdoc/>
-        public virtual Any? Metadata { get; protected set; }
+        public virtual DynamicObject? Metadata { get; protected set; }
 
         /// <inheritdoc/>
         public virtual TContainer WithMetadata(string key, object value)

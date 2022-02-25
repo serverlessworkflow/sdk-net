@@ -35,7 +35,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual Any? Metadata { get; set; }
+        public virtual DynamicObject? Metadata { get; set; }
 
     }
 

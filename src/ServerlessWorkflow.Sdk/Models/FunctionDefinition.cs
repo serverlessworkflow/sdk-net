@@ -64,7 +64,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(5)]
         [DataMember(Order = 5)]
-        public virtual Any? Metadata { get; set; }
+        public virtual DynamicObject? Metadata { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

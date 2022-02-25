@@ -39,7 +39,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public Any? Data { get; set; }
+        public DynamicObject? Data { get; set; }
 
     }
 

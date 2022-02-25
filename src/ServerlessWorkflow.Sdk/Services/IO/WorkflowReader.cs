@@ -169,7 +169,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// <param name="uri">The <see cref="Uri"/> the external definition to load is located at</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="JToken"/> that represents the object defined in the loaded external definition</returns>
-        protected virtual async Task<Any> LoadExternalDefinitionAsync(Uri uri, CancellationToken cancellationToken = default)
+        protected virtual async Task<DynamicObject> LoadExternalDefinitionAsync(Uri uri, CancellationToken cancellationToken = default)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
@@ -189,9 +189,9 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                     response.EnsureSuccessStatusCode();
             }
             if (content.IsJson())
-                return await this.JsonSerializer.DeserializeAsync<Any>(content, cancellationToken);
+                return await this.JsonSerializer.DeserializeAsync<DynamicObject>(content, cancellationToken);
             else
-                return await this.YamlSerializer.DeserializeAsync<Any>(content, cancellationToken);
+                return await this.YamlSerializer.DeserializeAsync<DynamicObject>(content, cancellationToken);
         }
 
         /// <summary>

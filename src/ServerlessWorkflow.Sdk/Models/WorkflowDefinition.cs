@@ -282,7 +282,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(13)]
         [DataMember(Order = 13)]
-        public virtual Any? Metadata { get; set; }
+        public virtual DynamicObject? Metadata { get; set; }
 
         /// <summary>
         /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="WorkflowDefinition"/>'s <see cref="EventDefinition"/> collection
@@ -465,9 +465,9 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(18, Name = "constants")]
         [DataMember(Order = 18, Name = "constants")]
         [YamlMember(Alias = "constants")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "constants"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<Any, Uri>))]
-        [System.Text.Json.Serialization.JsonPropertyName("constants"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<Any, Uri>))]
-        protected virtual OneOf<Any, Uri>? ConstantsValue { get; set; }
+        [Newtonsoft.Json.JsonProperty(PropertyName = "constants"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DynamicObject, Uri>))]
+        [System.Text.Json.Serialization.JsonPropertyName("constants"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DynamicObject, Uri>))]
+        protected virtual OneOf<DynamicObject, Uri>? ConstantsValue { get; set; }
 
         /// <summary>
         /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s constants
@@ -477,7 +477,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public virtual Any? Constants
+        public virtual DynamicObject? Constants
         {
             get
             {
