@@ -14,6 +14,8 @@
  * limitations under the License.
  *
  */
+using System.ComponentModel;
+
 namespace ServerlessWorkflow.Sdk.Models
 {
 
@@ -44,6 +46,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(3)]
         [DataMember(Order = 3)]
+        [DefaultValue(true)]
         public virtual bool UseData { get; set; } = true;
 
     }

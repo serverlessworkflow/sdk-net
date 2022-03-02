@@ -15,6 +15,7 @@
  *
  */
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ServerlessWorkflow.Sdk.Models
@@ -44,6 +45,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
+        [DefaultValue(true)]
         public virtual bool Interrupt { get; set; } = true;
 
         /// <summary>

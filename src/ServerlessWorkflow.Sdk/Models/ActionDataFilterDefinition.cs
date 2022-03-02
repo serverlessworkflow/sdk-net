@@ -15,6 +15,8 @@
  *
  */
 
+using System.ComponentModel;
+
 namespace ServerlessWorkflow.Sdk.Models
 {
 
@@ -52,6 +54,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(4)]
         [DataMember(Order = 4)]
+        [DefaultValue(true)]
         public virtual bool UseResults { get; set; } = true;
 
     }
