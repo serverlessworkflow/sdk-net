@@ -918,6 +918,42 @@
             Gets/sets the <see cref="!:Any"/> which can be set as state's data input and can be manipulated via filter
             </summary>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate">
+            <summary>
+            Represents a ProtoBuf surrogate used to serialize and deserialize <see cref="T:Newtonsoft.Json.Schema.JSchema"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate.#ctor">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate.#ctor(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate"/>
+            </summary>
+            <param name="properties"></param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate.Properties">
+            <summary>
+            Gets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:Neuroglia.Serialization.DynamicObject"/>'s properties
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate.op_Implicit(ServerlessWorkflow.Sdk.Models.JSchemaSurrogate)~Newtonsoft.Json.Schema.JSchema">
+            <summary>
+            Implicitly converts the specified <see cref="T:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate"/> into a new <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
+            </summary>
+            <param name="surrogate">The <see cref="T:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate"/> to convert</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate.op_Implicit(Newtonsoft.Json.Schema.JSchema)~ServerlessWorkflow.Sdk.Models.JSchemaSurrogate">
+            <summary>
+            Implicitly converts the specified <see cref="T:Newtonsoft.Json.Schema.JSchema"/> into a new <see cref="T:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate"/>
+            </summary>
+            <param name="schema">The <see cref="T:Newtonsoft.Json.Schema.JSchema"/> to convert</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate.FromObject(System.Object)">
+            <inheritdoc/>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties">
             <summary>
             Represents an object used to configure an 'OAuth2' authentication scheme

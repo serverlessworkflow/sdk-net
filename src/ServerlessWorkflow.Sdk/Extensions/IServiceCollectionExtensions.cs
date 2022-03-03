@@ -17,7 +17,10 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Serialization;
+using ProtoBuf.Meta;
+using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 using ServerlessWorkflow.Sdk.Services.IO;
 using ServerlessWorkflow.Sdk.Services.Validation;
@@ -77,6 +80,7 @@ namespace ServerlessWorkflow.Sdk
             services.AddSingleton<IWorkflowValidator, WorkflowValidator>();
             services.AddTransient<IWorkflowBuilder, WorkflowBuilder>();
             services.AddValidatorsFromAssemblyContaining<WorkflowDefinitionValidator>(ServiceLifetime.Singleton);
+            RuntimeTypeModel.Default[typeof(JSchema)].SetSurrogate(typeof(JSchemaSurrogate));
             return services;
         }
 
