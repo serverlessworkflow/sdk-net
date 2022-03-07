@@ -25,11 +25,6 @@ namespace ServerlessWorkflow.Sdk
     public enum FunctionType
     {
         /// <summary>
-        /// Indicates an Async API function
-        /// </summary>
-        [EnumMember(Value = "asyncapi")]
-        AsyncApi,
-        /// <summary>
         /// Indicates a REST function
         /// </summary>
         [EnumMember(Value = "rest")]
@@ -53,7 +48,12 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates an expression function
         /// </summary>
         [EnumMember(Value = "expression")]
-        Expression
+        Expression,
+        /// <summary>
+        /// Indicates an Async API function
+        /// </summary>
+        [EnumMember(Value = "asyncapi")]
+        AsyncApi
     }
 
 }
