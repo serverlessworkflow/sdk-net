@@ -1367,7 +1367,7 @@
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.SleepStateDefinition"/>
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.SleepStateDefinition.Delay">
+        <member name="P:ServerlessWorkflow.Sdk.Models.SleepStateDefinition.Duration">
             <summary>
             Gets/sets the amount of time to delay when in this state
             </summary>
@@ -2578,20 +2578,6 @@
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.DataSwitchCaseBuilder.Build">
-            <inheritdoc/>
-        </member>
-        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.DelayStateBuilder">
-            <summary>
-            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IDelayStateBuilder"/> interface
-            </summary>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.DelayStateBuilder.#ctor(ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder)">
-            <summary>
-            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.CallbackStateDefinition"/>
-            </summary>
-            <param name="pipeline">The <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder"/> the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilder`1"/> belongs to</param>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.DelayStateBuilder.For(System.TimeSpan)">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.ErrorHandlerBuilder">
@@ -4708,6 +4694,20 @@
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.RetryStrategyBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.SleepStateBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IDelayStateBuilder"/> interface
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.SleepStateBuilder.#ctor(ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.CallbackStateDefinition"/>
+            </summary>
+            <param name="pipeline">The <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder"/> the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilder`1"/> belongs to</param>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.SleepStateBuilder.For(System.TimeSpan)">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.StateBuilder`1">
