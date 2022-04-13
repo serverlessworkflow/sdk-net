@@ -48,10 +48,14 @@ namespace ServerlessWorkflow.Sdk.Models
         {
             get
             {
-                if (this.DataConditions != null)
+                if (this.DataConditions != null
+                    && this.DataConditions.Any())
                     return SwitchStateType.Data;
-                else
+                else if (this.EventConditions != null
+                    && this.EventConditions.Any())
                     return SwitchStateType.Event;
+                else
+                    throw new Exception($"A switch state must define at least one data-based or one event-based condition");
             }
         }
 

@@ -19,6 +19,7 @@ using System;
 
 namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
 {
+
     /// <summary>
     /// Represents the default implementation of the <see cref="IDelayStateBuilder"/> interface
     /// </summary>
