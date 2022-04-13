@@ -198,7 +198,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
                 Version = "fake",
                 Events = new() { new() { Name = "fake", Source = "fake", Type = "fake" }, new() { Name = "fake", Source = "fake", Type = "fake" } },
                 StartStateName = "sleep",
-                States = new() { new SleepStateDefinition() {Name = "sleep", Delay = TimeSpan.FromSeconds(2), IsEnd = true } }
+                States = new() { new SleepStateDefinition() {Name = "sleep", Duration = TimeSpan.FromSeconds(2), IsEnd = true } }
             };
 
             //act

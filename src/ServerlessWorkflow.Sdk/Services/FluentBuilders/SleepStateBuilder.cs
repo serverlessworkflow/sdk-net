@@ -22,7 +22,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
     /// <summary>
     /// Represents the default implementation of the <see cref="IDelayStateBuilder"/> interface
     /// </summary>
-    public class DelayStateBuilder
+    public class SleepStateBuilder
         : StateBuilder<SleepStateDefinition>, IDelayStateBuilder
     {
 
@@ -30,7 +30,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// Initializes a new <see cref="CallbackStateDefinition"/>
         /// </summary>
         /// <param name="pipeline">The <see cref="IPipelineBuilder"/> the <see cref="StateBuilder{TState}"/> belongs to</param>
-        public DelayStateBuilder(IPipelineBuilder pipeline)
+        public SleepStateBuilder(IPipelineBuilder pipeline)
             : base(pipeline)
         {
 
@@ -39,7 +39,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IDelayStateBuilder For(TimeSpan duration)
         {
-            this.State.Delay = duration;
+            this.State.Duration = duration;
             return this;
         }
 

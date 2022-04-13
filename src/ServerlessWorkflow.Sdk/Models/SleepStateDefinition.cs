@@ -42,12 +42,12 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the amount of time to delay when in this state
         /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "timeDelay"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonPropertyName("timeDelay"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
-        [YamlMember(Alias = "timeDelay")]
-        [ProtoMember(1, Name = "timeDelay")]
-        [DataMember(Order = 1, Name = "timeDelay")]
-        public virtual TimeSpan Delay { get; set; }
+        [Newtonsoft.Json.JsonProperty(PropertyName = "duration"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonPropertyName("duration"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [YamlMember(Alias = "duration")]
+        [ProtoMember(1, Name = "duration")]
+        [DataMember(Order = 1, Name = "duration")]
+        public virtual TimeSpan Duration { get; set; }
 
     }
 

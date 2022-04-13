@@ -55,7 +55,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IDelayStateBuilder Delay()
         {
-            return new DelayStateBuilder(this.Pipeline);
+            return new SleepStateBuilder(this.Pipeline);
         }
 
         /// <inheritdoc/>
