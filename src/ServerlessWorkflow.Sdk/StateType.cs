@@ -14,8 +14,6 @@
  * limitations under the License.
  *
  */
-using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 
 namespace ServerlessWorkflow.Sdk
 {
@@ -24,7 +22,7 @@ namespace ServerlessWorkflow.Sdk
     /// Enumerates all types of workflow states
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
     public enum StateType
     {
         /// <summary>
@@ -60,7 +58,7 @@ namespace ServerlessWorkflow.Sdk
         /// <summary>
         /// Indicates a foreach state
         /// </summary>
-        [EnumMember(Value = "forEach")]
+        [EnumMember(Value = "foreach")]
         ForEach,
         /// <summary>
         /// Indicates a callback state

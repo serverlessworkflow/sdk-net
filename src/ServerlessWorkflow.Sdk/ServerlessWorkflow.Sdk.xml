@@ -2236,6 +2236,11 @@
             Indicates an expression function
             </summary>
         </member>
+        <member name="F:ServerlessWorkflow.Sdk.FunctionType.AsyncApi">
+            <summary>
+            Indicates an Async API function
+            </summary>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.InvocationMode">
             <summary>
             Enumerates all invocation modes

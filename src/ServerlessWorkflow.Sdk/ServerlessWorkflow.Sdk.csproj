@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
 	<Nullable>enable</Nullable>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>0.8.0.15</AssemblyVersion>
-    <FileVersion>0.8.0.15</FileVersion>
-    <Version>0.8.0.15</Version>
+    <AssemblyVersion>0.8.0.16</AssemblyVersion>
+    <FileVersion>0.8.0.16</FileVersion>
+    <Version>0.8.0.16</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -44,16 +44,16 @@
 
   <ItemGroup>
     <PackageReference Include="CloudNative.CloudEvents" Version="2.2.0" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.6" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.4.0" />
     <PackageReference Include="Iso8601DurationHelper" Version="1.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="Neuroglia.Serialization.Dynamic" Version="2.0.1.32" />
-    <PackageReference Include="Neuroglia.Serialization.Json" Version="2.0.1.32" />
-    <PackageReference Include="Neuroglia.Serialization.NewtonsoftJson" Version="2.0.1.32" />
-    <PackageReference Include="Neuroglia.Serialization.Protobuf" Version="2.0.1.32" />
-    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="2.0.1.32" />
+    <PackageReference Include="Neuroglia.Serialization.Dynamic" Version="2.0.1.57" />
+    <PackageReference Include="Neuroglia.Serialization.Json" Version="2.0.1.57" />
+    <PackageReference Include="Neuroglia.Serialization.NewtonsoftJson" Version="2.0.1.57" />
+    <PackageReference Include="Neuroglia.Serialization.Protobuf" Version="2.0.1.57" />
+    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="2.0.1.57" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
     <PackageReference Include="Octokit" Version="0.50.0" />
