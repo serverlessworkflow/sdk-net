@@ -77,7 +77,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// Gets/sets the duration to wait for incoming events
         /// </summary>
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         public virtual TimeSpan? EventTimeout { get; set; }
 
         /// <summary>

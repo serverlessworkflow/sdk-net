@@ -93,7 +93,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(2, Name = "stateExecTimeout")]
         [DataMember(Order = 2, Name = "stateExecTimeout")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "stateExecTimeout"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonPropertyName("stateExecTimeout"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonPropertyName("stateExecTimeout"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         public TimeSpan? StateExecutionTimeout { get; set; }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(2, Name = "actionExecTimeout")]
         [DataMember(Order = 2, Name = "actionExecTimeout")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "actionExecTimeout"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonPropertyName("actionExecTimeout"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonPropertyName("actionExecTimeout"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         public TimeSpan? ActionExecutionTimeout { get; set; }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(2, Name = "branchExecTimeout")]
         [DataMember(Order = 2, Name = "branchExecTimeout")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "branchExecTimeout"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonPropertyName("branchExecTimeout"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonPropertyName("branchExecTimeout"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         public TimeSpan? BranchExecutionTimeout { get; set; }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(2, Name = "eventTimeout")]
         [DataMember(Order = 2, Name = "eventTimeout")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "eventTimeout"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonPropertyName("eventTimeout"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonPropertyName("eventTimeout"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         public TimeSpan? EventTimeout { get; set; }
 
     }

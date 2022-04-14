@@ -68,7 +68,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(3)]
         [DataMember(Order = 3)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         public virtual TimeSpan? Timeout { get; set; }
 
         /// <summary>

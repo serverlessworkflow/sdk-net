@@ -45,7 +45,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(2)]
         [DataMember(Order = 2)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         public virtual TimeSpan? Delay { get; set; }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(4)]
         [DataMember(Order = 4)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         public virtual TimeSpan? MaxDelay { get; set; }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [ProtoMember(5)]
         [DataMember(Order = 5)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         public virtual TimeSpan? Increment { get; set; }
 
         /// <summary>
