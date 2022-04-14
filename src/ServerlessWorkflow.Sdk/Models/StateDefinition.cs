@@ -19,6 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using YamlDotNet.Serialization;
+
 namespace ServerlessWorkflow.Sdk.Models
 {
 
@@ -237,7 +238,7 @@ namespace ServerlessWorkflow.Sdk.Models
             get
             {
                 if (this.EndValue?.T1Value == null
-                    && !string.IsNullOrWhiteSpace(this.TransitionValue?.T2Value))
+                    && (this.EndValue != null && this.EndValue.T2Value))
                     return new() {  };
                 else
                     return this.EndValue?.T1Value;
