@@ -5983,15 +5983,15 @@
             Indicates JSON
             </summary>
         </member>
-        <member name="T:System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter">
+        <member name="T:System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter">
             <summary>
             Represents the <see cref="T:System.Text.Json.Serialization.JsonConverter`1"/> used to convert <see cref="T:System.TimeSpan"/>s from and to ISO 8601 durations
             </summary>
         </member>
-        <member name="M:System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+        <member name="M:System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
             <inheritdoc/>
         </member>
-        <member name="M:System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter.Write(System.Text.Json.Utf8JsonWriter,System.Nullable{System.TimeSpan},System.Text.Json.JsonSerializerOptions)">
+        <member name="M:System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter.Write(System.Text.Json.Utf8JsonWriter,System.Nullable{System.TimeSpan},System.Text.Json.JsonSerializerOptions)">
             <inheritdoc/>
         </member>
         <member name="T:System.Text.Json.Serialization.Converters.OneOfConverter`2">
