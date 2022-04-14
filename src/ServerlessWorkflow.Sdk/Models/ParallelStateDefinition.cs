@@ -50,10 +50,10 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual ParallelCompletionType CompletionType { get; set; } = ParallelCompletionType.And;
+        public virtual ParallelCompletionType CompletionType { get; set; } = ParallelCompletionType.AllOf;
 
         /// <summary>
-        /// Gets/sets a value that represents the amount of <see cref="BranchDefinition"/>es to complete for completing the state, when <see cref="CompletionType"/> is set to <see cref="ParallelCompletionType.N"/>
+        /// Gets/sets a value that represents the amount of <see cref="BranchDefinition"/>es to complete for completing the state, when <see cref="CompletionType"/> is set to <see cref="ParallelCompletionType.AtLeastN"/>
         /// </summary>
         [ProtoMember(3)]
         [DataMember(Order = 3)]

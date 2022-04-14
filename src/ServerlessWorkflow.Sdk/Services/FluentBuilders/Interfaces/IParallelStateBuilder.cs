@@ -41,12 +41,6 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IParallelStateBuilder WaitForAll();
 
         /// <summary>
-        /// Configures the <see cref="ParallelStateDefinition"/> to wait for any branch to complete before resuming the workflow's execution
-        /// </summary>
-        /// <returns>The configured <see cref="IParallelStateBuilder"/></returns>
-        IParallelStateBuilder WaitForAny();
-
-        /// <summary>
         /// Configures the <see cref="ParallelStateDefinition"/> to wait for the specified amount of branches to complete before resuming the workflow's execution
         /// </summary>
         /// <param name="amount">The amount of branches to wait for the execution of</param>

@@ -14,7 +14,6 @@
  * limitations under the License.
  *
  */
-using System.Runtime.Serialization;
 
 namespace ServerlessWorkflow.Sdk
 {
@@ -28,18 +27,13 @@ namespace ServerlessWorkflow.Sdk
         /// <summary>
         /// Indicates that all branches should be completed before completing the parallel execution
         /// </summary>
-        [EnumMember(Value = "and")]
-        And,
-        /// <summary>
-        /// Indicates that the first branch to complete will complete the parallel execution, thus potentially cancelling running branches
-        /// </summary>
-        [EnumMember(Value = "xor")]
-        Xor,
+        [EnumMember(Value = "allOf")]
+        AllOf,
         /// <summary>
         /// Indicates that 'N' amount of branches should complete before completing the parallel execution, thus potentially cancelling running branches
         /// </summary>
-        [EnumMember(Value = "n")]
-        N
+        [EnumMember(Value = "atLeast")]
+        AtLeastN
     }
 
 }

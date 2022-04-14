@@ -59,7 +59,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
                             .WithArgument("username", "${ .username }")))
                 .Then(state =>
                     state.ExecuteInParallel()
-                        .WaitForAny()
+                        .WaitForAll()
                         .Branch(branch => 
                             branch.WithName("first")
                                 .Concurrently()

@@ -48,7 +48,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IParallelStateBuilder WaitFor(uint amount)
         {
-            this.State.CompletionType = ParallelCompletionType.N;
+            this.State.CompletionType = ParallelCompletionType.AtLeastN;
             this.State.N = amount;
             return this;
         }
@@ -56,14 +56,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <inheritdoc/>
         public virtual IParallelStateBuilder WaitForAll()
         {
-            this.State.CompletionType = ParallelCompletionType.And;
-            return this;
-        }
-
-        /// <inheritdoc/>
-        public virtual IParallelStateBuilder WaitForAny()
-        {
-            this.State.CompletionType = ParallelCompletionType.Xor;
+            this.State.CompletionType = ParallelCompletionType.AllOf;
             return this;
         }
 
