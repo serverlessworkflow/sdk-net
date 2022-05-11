@@ -111,7 +111,7 @@ namespace ServerlessWorkflow.Sdk.Models
             get
             {
                 if (this.EndValue?.T1Value == null
-                    && this.EndValue!.T2Value)
+                    && (this.EndValue != null && this.EndValue.T2Value))
                     return new() { };
                 else
                     return this.EndValue?.T1Value;
