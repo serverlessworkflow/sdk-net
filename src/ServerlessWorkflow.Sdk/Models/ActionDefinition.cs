@@ -110,11 +110,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets a <see cref="OneOf{T1, T2}"/> that references a subflow to run
         /// </summary>
-        [YamlMember(Alias = "subflowRef")]
-        [ProtoMember(4, Name = "subflowRef")]
-        [DataMember(Order = 4, Name = "subflowRef")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "subflowRef"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<SubflowReference, string>))]
-        [System.Text.Json.Serialization.JsonPropertyName("subflowRef"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<SubflowReference, string>))]
+        [YamlMember(Alias = "subFlowRef")]
+        [ProtoMember(4, Name = "subFlowRef")]
+        [DataMember(Order = 4, Name = "subFlowRef")]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "subFlowRef"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<SubflowReference, string>))]
+        [System.Text.Json.Serialization.JsonPropertyName("subFlowRef"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<SubflowReference, string>))]
         protected virtual OneOf<SubflowReference, string>? SubflowValue { get; set; }
 
         /// <summary>

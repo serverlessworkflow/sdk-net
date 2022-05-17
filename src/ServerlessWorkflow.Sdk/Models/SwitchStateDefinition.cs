@@ -64,14 +64,14 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual List<DataCaseDefinition> DataConditions { get; set; } = new List<DataCaseDefinition>();
+        public virtual List<DataCaseDefinition>? DataConditions { get; set; }
 
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> of <see cref="EventCaseDefinition"/>s between which to switch. Assigning the property sets the <see cref="SwitchStateDefinition"/>'s <see cref="SwitchType"/> to <see cref="SwitchStateType.Event"/>.
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual List<EventCaseDefinition> EventConditions { get; set; } = new List<EventCaseDefinition>();
+        public virtual List<EventCaseDefinition>? EventConditions { get; set; }
 
         /// <summary>
         /// Gets/sets the duration to wait for incoming events
