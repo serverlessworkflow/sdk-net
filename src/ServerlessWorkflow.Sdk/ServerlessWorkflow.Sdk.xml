@@ -331,6 +331,11 @@
             Represents an object used to define the transition of the workflow if there is no matching data conditions or event timeout is reached
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.Name">
+            <summary>
+            Gets/sets <see cref="T:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition"/>'s name
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.TransitionValue">
             <summary>
             Gets/sets a <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the next transition of the workflow if there is valid matches
@@ -2205,6 +2210,40 @@
             <param name="input">The input to parse</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.WorkflowDefinitionExtensions">
+            <summary>
+            Defines extensions for <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.WorkflowDefinitionExtensions.GetActions(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Nullable{ServerlessWorkflow.Sdk.ActionType})">
+            <summary>
+            Gets all the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>s of the specified type declared in the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to query</param>
+            <param name="type">The type of <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>s to get. A null value gets all <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>s</param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>s of the specified type declared in the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.WorkflowDefinitionExtensions.GetFunctionReferences(ServerlessWorkflow.Sdk.Models.WorkflowDefinition)">
+            <summary>
+            Gets all the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionReference"/>s declared in the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to query</param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionReference"/>s declared in the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.WorkflowDefinitionExtensions.GetEventReferences(ServerlessWorkflow.Sdk.Models.WorkflowDefinition)">
+            <summary>
+            Gets all the <see cref="T:ServerlessWorkflow.Sdk.Models.EventReference"/>s declared in the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to query</param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.EventReference"/>s declared in the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.WorkflowDefinitionExtensions.GetSubflowReferences(ServerlessWorkflow.Sdk.Models.WorkflowDefinition)">
+            <summary>
+            Gets all the <see cref="T:ServerlessWorkflow.Sdk.Models.SubflowReference"/>s declared in the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to query</param>
+            <returns>A new <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.SubflowReference"/>s declared in the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.FunctionType">
             <summary>
@@ -5982,6 +6021,17 @@
             <summary>
             Indicates JSON
             </summary>
+        </member>
+        <member name="T:System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter">
+            <summary>
+            Represents the <see cref="T:System.Text.Json.Serialization.JsonConverter`1"/> used to convert <see cref="T:System.TimeSpan"/>s from and to ISO 8601 durations
+            </summary>
+        </member>
+        <member name="M:System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter.Read(System.Text.Json.Utf8JsonReader@,System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Text.Json.Serialization.Converters.Iso8601TimeSpanConverter.Write(System.Text.Json.Utf8JsonWriter,System.TimeSpan,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
         </member>
         <member name="T:System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter">
             <summary>

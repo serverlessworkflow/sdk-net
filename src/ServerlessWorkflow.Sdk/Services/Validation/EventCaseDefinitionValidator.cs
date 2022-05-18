@@ -40,7 +40,8 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.RuleFor(c => c.Event)
                 .Must(ReferenceExistingEvent)
                 .When(c => !string.IsNullOrWhiteSpace(c.Event))
-                .WithErrorCode($"{nameof(EventCaseDefinition)}.{nameof(EventCaseDefinition.Event)}");
+                .WithErrorCode($"{nameof(EventCaseDefinition)}.{nameof(EventCaseDefinition.Event)}")
+                .WithMessage(e => $"Failed to find an event definition with the specified name '{e.Event}'");
         }
 
         /// <summary>

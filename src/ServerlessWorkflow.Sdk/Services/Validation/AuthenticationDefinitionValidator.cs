@@ -42,6 +42,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.RuleFor(a => a.Properties)
                 .Must(BeOfExpectedType)
                 .WithErrorCode($"{nameof(AuthenticationDefinition)}.{nameof(AuthenticationDefinition.Properties)}")
+                .WithMessage((auth, properties) => $"The specified properties object cannot be discriminated against the expected type for scheme '{auth.Scheme}'")
                 .When(a => a.Properties != null);
             this.RuleFor(a => a.Properties)
                 .SetInheritanceValidator(v =>
