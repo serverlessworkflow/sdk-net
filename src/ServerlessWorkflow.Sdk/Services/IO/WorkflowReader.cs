@@ -148,10 +148,9 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
             string? content;
-            if (!uri.IsAbsoluteUri)
-            {
-                
-            }
+            if (!uri.IsAbsoluteUri
+                 || (uri.IsFile && Path.IsPathRooted(uri.LocalPath)))
+                uri = this.ResolveRelativeUri(uri, options);
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
@@ -183,6 +182,9 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
             string? content;
+            if (!uri.IsAbsoluteUri
+                || (uri.IsFile && Path.IsPathRooted(uri.LocalPath)))
+                uri = this.ResolveRelativeUri(uri, options);
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
@@ -216,6 +218,9 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
             string? content;
+            if (!uri.IsAbsoluteUri
+                || (uri.IsFile && Path.IsPathRooted(uri.LocalPath)))
+                uri = this.ResolveRelativeUri(uri, options);
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
@@ -253,7 +258,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                         throw new NullReferenceException($"The '{nameof(WorkflowReaderOptions.BaseUri)}' property must be set when using the specified {nameof(RelativeUriReferenceResolutionMode)} '{RelativeUriReferenceResolutionMode.ConvertToAbsolute}'");
                     return new(options.BaseUri, uri.ToString());
                 case RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath:
-                    return new(Path.Combine(options.BaseDirectory, uri.LocalPath));
+                    return new(Path.Combine(options.BaseDirectory, uri.ToString()));
                 case RelativeUriReferenceResolutionMode.None:
                     throw new NotSupportedException($"Relative uris are not supported when using the specified {nameof(RelativeUriReferenceResolutionMode)} '{RelativeUriReferenceResolutionMode.ConvertToAbsolute}'");
                 default:
