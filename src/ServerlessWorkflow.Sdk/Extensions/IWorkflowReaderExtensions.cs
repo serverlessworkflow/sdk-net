@@ -16,6 +16,18 @@ namespace ServerlessWorkflow.Sdk
     {
 
         /// <summary>
+        /// Reads a <see cref="WorkflowDefinition"/> from the specified <see cref="Stream"/>
+        /// </summary>
+        /// <param name="reader">The extended <see cref="IWorkflowReader"/></param>
+        /// <param name="stream">The <see cref="Stream"/> to read the <see cref="WorkflowDefinition"/> from</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new <see cref="WorkflowDefinition"/></returns>
+        public static async Task<WorkflowDefinition> ReadAsync(this IWorkflowReader reader, Stream stream, CancellationToken cancellationToken = default)
+        {
+            return await reader.ReadAsync(stream, new(), cancellationToken);
+        }
+
+        /// <summary>
         /// Parses the specified input into a new <see cref="WorkflowDefinition"/>
         /// </summary>
         /// <param name="reader">The extended <see cref="IWorkflowReader"/></param>

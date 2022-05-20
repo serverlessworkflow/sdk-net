@@ -18,27 +18,27 @@
 namespace ServerlessWorkflow.Sdk
 {
     /// <summary>
-    /// Enumerates all <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4">OAuth 2 grant types</see> supported for workflow runtime token generation
+    /// Enumerates all types of reference resolution modes for relative <see cref="Uri"/>s
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum OAuth2GrantType
+    public enum RelativeUriReferenceResolutionMode
     {
         /// <summary>
-        /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.3">resource-owner password credentials grant type</see>
+        /// Indicates that relative uris should be converted to an absolute one by combining them to a specified base uri
         /// </summary>
-        [EnumMember(Value = "password")]
-        Password,
+        [EnumMember(Value = "convertToAbsolute")]
+        ConvertToAbsolute,
         /// <summary>
-        /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">client credentials grant type</see>
+        /// Indicates that relative uris should be converted to a file path relative to a specified base directory
         /// </summary>
-        [EnumMember(Value = "clientCredentials")]
-        ClientCredentials,
+        [EnumMember(Value = "convertToRelativeFilePath")]
+        ConvertToRelativeFilePath,
         /// <summary>
-        /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc8693">token exchange grant type</see>
+        /// Indicates that relative uris should not be resolved
         /// </summary>
-        [EnumMember(Value = "tokenExchange")]
-        TokenExchange
+        [EnumMember(Value = "none")]
+        None
     }
 
 }

@@ -89,10 +89,12 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         protected HttpClient HttpClient { get; }
 
         /// <inheritdoc/>
-        public virtual async Task<WorkflowDefinition> ReadAsync(Stream stream, CancellationToken cancellationToken = default)
+        public virtual async Task<WorkflowDefinition> ReadAsync(Stream stream, WorkflowReaderOptions? options = null, CancellationToken cancellationToken = default)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
+            if(options == null)
+                options = new WorkflowReaderOptions();
             ISerializer serializer;
             var offset = stream.Position;
             using var reader = new StreamReader(stream);
@@ -103,7 +105,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
             else
                 serializer = this.YamlSerializer;
             var workflowDefinition = await serializer.DeserializeAsync<WorkflowDefinition>(stream, cancellationToken);
-            await this.LoadExternalDefinitionsForAsync(workflowDefinition, cancellationToken);
+            await this.LoadExternalDefinitionsForAsync(workflowDefinition, options, cancellationToken);
             return workflowDefinition;
         }
 
@@ -111,39 +113,45 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// Loads external definitions for the specified <see cref="WorkflowDefinition"/>
         /// </summary>
         /// <param name="workflow">The <see cref="WorkflowDefinition"/> to load external definitions for</param>
+        /// <param name="options">The <see cref="WorkflowReaderOptions"/> to use</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new awaitable <see cref="Task"/></returns>
-        protected virtual async Task LoadExternalDefinitionsForAsync(WorkflowDefinition workflow, CancellationToken cancellationToken = default)
+        protected virtual async Task LoadExternalDefinitionsForAsync(WorkflowDefinition workflow, WorkflowReaderOptions options, CancellationToken cancellationToken = default)
         {
             if (workflow == null)
                 throw new ArgumentNullException(nameof(workflow));
             if (workflow.DataInputSchemaUri != null)
-                workflow.DataInputSchema = await this.LoadDataInputSchemaAsync(workflow.DataInputSchemaUri, cancellationToken); //todo: load schema sub property
+                workflow.DataInputSchema = await this.LoadDataInputSchemaAsync(workflow.DataInputSchemaUri, options, cancellationToken); //todo: load schema sub property
             if (workflow.EventsUri != null)
-                workflow.Events = await this.LoadExternalDefinitionCollectionAsync<EventDefinition>(workflow.EventsUri, cancellationToken);
+                workflow.Events = await this.LoadExternalDefinitionCollectionAsync<EventDefinition>(workflow.EventsUri, options, cancellationToken);
             if(workflow.FunctionsUri != null)
-                workflow.Functions = await this.LoadExternalDefinitionCollectionAsync<FunctionDefinition>(workflow.FunctionsUri, cancellationToken);
+                workflow.Functions = await this.LoadExternalDefinitionCollectionAsync<FunctionDefinition>(workflow.FunctionsUri, options, cancellationToken);
             if (workflow.RetriesUri != null)
-                workflow.Retries = await this.LoadExternalDefinitionCollectionAsync<RetryDefinition>(workflow.RetriesUri, cancellationToken);
+                workflow.Retries = await this.LoadExternalDefinitionCollectionAsync<RetryDefinition>(workflow.RetriesUri, options, cancellationToken);
             if (workflow.ConstantsUri != null)
-                workflow.Constants = await this.LoadExternalDefinitionAsync(workflow.ConstantsUri, cancellationToken);
+                workflow.Constants = await this.LoadExternalDefinitionAsync(workflow.ConstantsUri, options, cancellationToken);
             if (workflow.SecretsUri != null)
-                workflow.Secrets = await this.LoadExternalDefinitionCollectionAsync<string>(workflow.SecretsUri, cancellationToken);
+                workflow.Secrets = await this.LoadExternalDefinitionCollectionAsync<string>(workflow.SecretsUri, options, cancellationToken);
             if (workflow.AuthUri != null)
-                workflow.Auth = await this.LoadExternalDefinitionCollectionAsync<AuthenticationDefinition>(workflow.AuthUri, cancellationToken);
+                workflow.Auth = await this.LoadExternalDefinitionCollectionAsync<AuthenticationDefinition>(workflow.AuthUri, options, cancellationToken);
         }
 
         /// <summary>
         /// Loads the <see cref="DataInputSchemaDefinition"/> at the specified <see cref="Uri"/>
         /// </summary>
         /// <param name="uri">The <see cref="Uri"/> the <see cref="DataInputSchemaDefinition"/> to load is located at</param>
+        /// <param name="options">The <see cref="WorkflowReaderOptions"/> to use</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>The loaded <see cref="DataInputSchemaDefinition"/></returns>
-        protected virtual async Task<DataInputSchemaDefinition> LoadDataInputSchemaAsync(Uri uri, CancellationToken cancellationToken = default)
+        protected virtual async Task<DataInputSchemaDefinition> LoadDataInputSchemaAsync(Uri uri, WorkflowReaderOptions options, CancellationToken cancellationToken = default)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
             string? content;
+            if (!uri.IsAbsoluteUri)
+            {
+                
+            }
             if (uri.IsFile)
             {
                 string filePath = uri.LocalPath;
@@ -167,9 +175,10 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// Loads an external definition
         /// </summary>
         /// <param name="uri">The <see cref="Uri"/> the external definition to load is located at</param>
+        /// <param name="options">The <see cref="WorkflowReaderOptions"/> to use</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="JToken"/> that represents the object defined in the loaded external definition</returns>
-        protected virtual async Task<DynamicObject> LoadExternalDefinitionAsync(Uri uri, CancellationToken cancellationToken = default)
+        protected virtual async Task<DynamicObject> LoadExternalDefinitionAsync(Uri uri, WorkflowReaderOptions options, CancellationToken cancellationToken = default)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
@@ -199,9 +208,10 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// </summary>
         /// <typeparam name="T">The type of external definition to load</typeparam>
         /// <param name="uri">The <see cref="Uri"/> the external definition to load is located at</param>
+        /// <param name="options">The <see cref="WorkflowReaderOptions"/> to use</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="List{T}"/> containing the elements defined by the loaded external definition</returns>
-        protected virtual async Task<List<T>> LoadExternalDefinitionCollectionAsync<T>(Uri uri, CancellationToken cancellationToken = default)
+        protected virtual async Task<List<T>> LoadExternalDefinitionCollectionAsync<T>(Uri uri, WorkflowReaderOptions options, CancellationToken cancellationToken = default)
         {
             if (uri == null)
                 throw new ArgumentNullException(nameof(uri));
@@ -224,6 +234,31 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                 return await this.JsonSerializer.DeserializeAsync<ExternalDefinitionCollection<T>>(content, cancellationToken);
             else
                 return await this.YamlSerializer.DeserializeAsync<ExternalDefinitionCollection<T>>(content, cancellationToken);
+        }
+
+        /// <summary>
+        /// Resolves the specified relative <see cref="Uri"/>
+        /// </summary>
+        /// <param name="uri">The relative <see cref="Uri"/> to resolve</param>
+        /// <param name="options">The <see cref="WorkflowReaderOptions"/> to use</param>
+        /// <returns>The resolved <see cref="Uri"/></returns>
+        protected virtual Uri ResolveRelativeUri(Uri uri, WorkflowReaderOptions options)
+        {
+            if(uri == null)
+                throw new ArgumentNullException(nameof(uri));
+            switch (options.RelativeUriResolutionMode)
+            {
+                case RelativeUriReferenceResolutionMode.ConvertToAbsolute:
+                    if (options.BaseUri == null)
+                        throw new NullReferenceException($"The '{nameof(WorkflowReaderOptions.BaseUri)}' property must be set when using the specified {nameof(RelativeUriReferenceResolutionMode)} '{RelativeUriReferenceResolutionMode.ConvertToAbsolute}'");
+                    return new(options.BaseUri, uri.ToString());
+                case RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath:
+                    return new(Path.Combine(options.BaseDirectory, uri.LocalPath));
+                case RelativeUriReferenceResolutionMode.None:
+                    throw new NotSupportedException($"Relative uris are not supported when using the specified {nameof(RelativeUriReferenceResolutionMode)} '{RelativeUriReferenceResolutionMode.ConvertToAbsolute}'");
+                default:
+                    throw new NotSupportedException($"The specified {nameof(RelativeUriReferenceResolutionMode)} '{RelativeUriReferenceResolutionMode.ConvertToAbsolute}' is not supported");
+            }
         }
 
         /// <summary>

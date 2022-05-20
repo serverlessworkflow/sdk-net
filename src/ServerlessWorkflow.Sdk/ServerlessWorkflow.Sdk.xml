@@ -2202,6 +2202,15 @@
             Defines extensions for <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/>s
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.IWorkflowReaderExtensions.ReadAsync(ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader,System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Reads a <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> from the specified <see cref="T:System.IO.Stream"/>
+            </summary>
+            <param name="reader">The extended <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/></param>
+            <param name="stream">The <see cref="T:System.IO.Stream"/> to read the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> from</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.IWorkflowReaderExtensions.ParseAsync(ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader,System.String,System.Threading.CancellationToken)">
             <summary>
             Parses the specified input into a new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
@@ -2339,6 +2348,26 @@
         <member name="F:ServerlessWorkflow.Sdk.ParallelCompletionType.AtLeastN">
             <summary>
             Indicates that 'N' amount of branches should complete before completing the parallel execution, thus potentially cancelling running branches
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode">
+            <summary>
+            Enumerates all types of reference resolution modes for relative <see cref="!:Uri"/>s
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.ConvertToAbsolute">
+            <summary>
+            Indicates that relative uris should be converted to an absolute one by combining them to a specified base uri
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath">
+            <summary>
+            Indicates that relative uris should be converted to a file path relative to a specified base directory
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.None">
+            <summary>
+            Indicates that relative uris should not be resolved
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.ServerlessWorkflowSpecVersion">
@@ -5092,11 +5121,12 @@
             Defines the fundamentals of a service used to read <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader.ReadAsync(System.IO.Stream,System.Threading.CancellationToken)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader.ReadAsync(System.IO.Stream,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
             <summary>
             Reads a <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> from the specified <see cref="T:System.IO.Stream"/>
             </summary>
             <param name="stream">The <see cref="T:System.IO.Stream"/> to read the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> from</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
         </member>
@@ -5160,47 +5190,79 @@
             Gets the <see cref="T:System.Net.Http.HttpClient"/> used to retrieve external definitions
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.ReadAsync(System.IO.Stream,System.Threading.CancellationToken)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.ReadAsync(System.IO.Stream,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionsForAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Threading.CancellationToken)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionsForAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
             <summary>
             Loads external definitions for the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
             </summary>
             <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to load external definitions for</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadDataInputSchemaAsync(System.Uri,System.Threading.CancellationToken)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadDataInputSchemaAsync(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
             <summary>
             Loads the <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/> at the specified <see cref="T:System.Uri"/>
             </summary>
             <param name="uri">The <see cref="T:System.Uri"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/> to load is located at</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>The loaded <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionAsync(System.Uri,System.Threading.CancellationToken)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionAsync(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
             <summary>
             Loads an external definition
             </summary>
             <param name="uri">The <see cref="T:System.Uri"/> the external definition to load is located at</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the object defined in the loaded external definition</returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionCollectionAsync``1(System.Uri,System.Threading.CancellationToken)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionCollectionAsync``1(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
             <summary>
             Loads external definitions of the specified type
             </summary>
             <typeparam name="T">The type of external definition to load</typeparam>
             <param name="uri">The <see cref="T:System.Uri"/> the external definition to load is located at</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new <see cref="T:System.Collections.Generic.List`1"/> containing the elements defined by the loaded external definition</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.ResolveRelativeUri(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions)">
+            <summary>
+            Resolves the specified relative <see cref="T:System.Uri"/>
+            </summary>
+            <param name="uri">The relative <see cref="T:System.Uri"/> to resolve</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
+            <returns>The resolved <see cref="T:System.Uri"/></returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.Create">
             <summary>
             Creates a new default instance of the <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/> interface
             </summary>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/></returns>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions">
+            <summary>
+            Represents the options used to configure an <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions.BaseUri">
+            <summary>
+            Gets/sets the base <see cref="T:System.Uri"/> to use to combine to relative <see cref="T:System.Uri"/>s when the <see cref="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions.RelativeUriResolutionMode"/> property is set to <see cref="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.ConvertToAbsolute"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions.BaseDirectory">
+            <summary>
+            Gets/sets the base directory to use when resolving relative <see cref="T:System.Uri"/> when the <see cref="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions.RelativeUriResolutionMode"/> property is set to <see cref="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath"/>. Defaults to <see cref="P:System.AppContext.BaseDirectory"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions.RelativeUriResolutionMode">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode"/> to use. Defaults to <see cref="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath"/>
+            </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowWriter">
             <summary>
