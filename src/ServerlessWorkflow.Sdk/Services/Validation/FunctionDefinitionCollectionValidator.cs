@@ -31,7 +31,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
     {
 
         /// <inheritdoc/>
-        public override string Name => throw new NotImplementedException();
+        public override string Name => "FunctionDefinitionCollection";
 
         /// <inheritdoc/>
         public override bool IsValid(ValidationContext<WorkflowDefinition> context, IEnumerable<FunctionDefinition> value)
