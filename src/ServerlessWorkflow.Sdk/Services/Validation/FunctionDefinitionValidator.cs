@@ -59,7 +59,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <returns>A boolean indicating whether or not the specified <see cref="AuthenticationDefinition"/> exists</returns>
         protected virtual bool ReferenceExistingAuthentication(string authenticationName)
         {
-            return this.Workflow.TryGetEvent(authenticationName, out _);
+            return this.Workflow.TryGetAuthentication(authenticationName, out _);
         }
 
     }
