@@ -36,9 +36,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             result.Should()
                 .NotBeNull();
             result.Errors.Should()
-                .NotBeNullOrEmpty()
-                .And.HaveCount(1)
-                .And.Contain(e => e.PropertyName == nameof(FunctionDefinition.AuthRef));
+                .BeNullOrEmpty();
         }
 
         [Fact]

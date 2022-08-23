@@ -514,6 +514,11 @@
             Gets/sets an <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.EventCorrelationDefinition"/>s used to define the way the cloud event is correlated
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.EventDefinition.DataOnly">
+            <summary>
+            Gets/sets a boolean indicating whether or not to use the event's data only (thus making data the top level element, instead of including all context attributes at top level). Defaults to true.
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.EventDefinition.Metadata">
             <summary>
             Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>'s metadata
@@ -5538,7 +5543,7 @@
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionCollectionValidator">
             <summary>
-            Represents the <see cref="T:FluentValidation.Validators.PropertyValidator"/> used to validate a <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> collection
+            Represents the <see cref="!:PropertyValidator"/> used to validate a <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> collection
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.Validation.FunctionDefinitionCollectionValidator.Name">

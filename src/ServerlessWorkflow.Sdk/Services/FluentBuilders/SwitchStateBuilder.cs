@@ -62,6 +62,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
                 throw new ArgumentException(nameof(caseSetup));
             IDataSwitchCaseBuilder builder = new DataSwitchCaseBuilder(this.Pipeline);
             caseSetup(builder);
+            this.State.DataConditions = new();
             this.State.DataConditions.Add(builder.Build());
             return this;
         }

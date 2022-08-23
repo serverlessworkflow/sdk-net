@@ -258,7 +258,10 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                         throw new NullReferenceException($"The '{nameof(WorkflowReaderOptions.BaseUri)}' property must be set when using the specified {nameof(RelativeUriReferenceResolutionMode)} '{RelativeUriReferenceResolutionMode.ConvertToAbsolute}'");
                     return new(options.BaseUri, uri.ToString());
                 case RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath:
-                    return new(Path.Combine(options.BaseDirectory, uri.ToString()));
+                    var localPath = uri.LocalPath;
+                    if(localPath.StartsWith("//") || localPath.StartsWith("\\\\"))
+                        localPath = localPath.Substring(2);
+                    return new Uri(Path.Combine(options.BaseDirectory, localPath));
                 case RelativeUriReferenceResolutionMode.None:
                     throw new NotSupportedException($"Relative uris are not supported when using the specified {nameof(RelativeUriReferenceResolutionMode)} '{RelativeUriReferenceResolutionMode.ConvertToAbsolute}'");
                 default:

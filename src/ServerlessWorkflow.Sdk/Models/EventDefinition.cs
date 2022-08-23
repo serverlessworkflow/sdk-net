@@ -72,10 +72,17 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual List<EventCorrelationDefinition>? Correlations { get; set; }
 
         /// <summary>
-        /// Gets/sets the <see cref="EventDefinition"/>'s metadata
+        /// Gets/sets a boolean indicating whether or not to use the event's data only (thus making data the top level element, instead of including all context attributes at top level). Defaults to true.
         /// </summary>
         [ProtoMember(6)]
         [DataMember(Order = 6)]
+        public virtual bool DataOnly { get; set; } = true;
+
+        /// <summary>
+        /// Gets/sets the <see cref="EventDefinition"/>'s metadata
+        /// </summary>
+        [ProtoMember(7)]
+        [DataMember(Order = 7)]
         public virtual DynamicObject? Metadata { get; set; }
 
         /// <inheritdoc/>
