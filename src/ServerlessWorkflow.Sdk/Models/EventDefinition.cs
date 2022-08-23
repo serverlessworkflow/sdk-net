@@ -15,6 +15,7 @@
  *
  */
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using YamlDotNet.Serialization;
 
@@ -59,6 +60,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(4)]
         [DataMember(Order = 4)]
+        [DefaultValue(EventKind.Consumed)]
         public virtual EventKind Kind { get; set; } = EventKind.Consumed;
 
         /// <summary>
@@ -76,6 +78,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(6)]
         [DataMember(Order = 6)]
+        [DefaultValue(true)]
         public virtual bool DataOnly { get; set; } = true;
 
         /// <summary>

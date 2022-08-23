@@ -7,13 +7,15 @@
       "name": "ProducedEvent",
       "kind": "produced",
       "type": "producedEvent",
-      "source": "workflow"
+      "source": "workflow",
+      "dataOnly": false
     },
     {
       "name": "ConsumedEvent",
       "kind": "consumed",
       "type": "consumedEvent",
-      "source": "workflow"
+      "source": "workflow",
+      "dataOnly": false
     }
   ],
   "functions": [
