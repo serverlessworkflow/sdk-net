@@ -52,7 +52,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (audiences == null)
                 throw new ArgumentNullException(nameof(audiences));
-            this.Properties.Audiences = audiences.ToList();
+            this.Properties.Audience = audiences.ToList();
             return this;
         }
 
@@ -68,7 +68,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (scopes == null)
                 throw new ArgumentNullException(nameof(scopes));
-            this.Properties.Audiences = scopes.ToList();
+            this.Properties.Audience = scopes.ToList();
             return this;
         }
 

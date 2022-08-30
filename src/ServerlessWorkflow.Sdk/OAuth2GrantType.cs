@@ -32,12 +32,12 @@ namespace ServerlessWorkflow.Sdk
         /// <summary>
         /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">client credentials grant type</see>
         /// </summary>
-        [EnumMember(Value = "clientCredentials")]
+        [EnumMember(Value = "client_credentials")]
         ClientCredentials,
         /// <summary>
         /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc8693">token exchange grant type</see>
         /// </summary>
-        [EnumMember(Value = "tokenExchange")]
+        [EnumMember(Value = "urn:ietf:params:oauth:grant-type:token-exchange")]
         TokenExchange
     }
 
