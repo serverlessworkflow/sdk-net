@@ -83,25 +83,20 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IOAuth2AuthenticationBuilder UseAudiences(params string[] audiences);
 
         /// <summary>
-        /// Configures the <see cref="AuthenticationDefinition"/> to exchange the specified subject token when requesting an access token
+        /// Configures the token that represents the identity of the party on behalf of whom the request is being made.Typically, the subject of this token will be the subject of the security token issued in response to the request.
         /// </summary>
-        /// <param name="token">The token to exchange</param>
+        /// <param name="tokenType">The type of the specified token</param>
+        /// <param name="token">The subject token</param>
         /// <returns>The configured <see cref="IOAuth2AuthenticationBuilder"/></returns>
-        IOAuth2AuthenticationBuilder WithSubjectToken(string token);
+        IOAuth2AuthenticationBuilder WithSubjectToken(OAuth2TokenType tokenType, string token);
 
         /// <summary>
-        /// Configures the <see cref="AuthenticationDefinition"/> to impersonate the specified user
+        /// Configures the token that represents the identity of the acting party.Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
         /// </summary>
-        /// <param name="subject">The subject of the user to impersonate</param>
+        /// <param name="tokenType">The type of the specified token</param>
+        /// <param name="token">The actor token</param>
         /// <returns>The configured <see cref="IOAuth2AuthenticationBuilder"/></returns>
-        IOAuth2AuthenticationBuilder WithRequestedSubject(string subject);
-
-        /// <summary>
-        /// Configures the <see cref="AuthenticationDefinition"/> to exchange an access token with a new one from the specified issuer
-        /// </summary>
-        /// <param name="issuer">The issuer to exchnage the token with</param>
-        /// <returns>The configured <see cref="IOAuth2AuthenticationBuilder"/></returns>
-        IOAuth2AuthenticationBuilder WithRequestedIssuer(string issuer);
+        IOAuth2AuthenticationBuilder WithActorToken(OAuth2TokenType tokenType, string token);
 
     }
 

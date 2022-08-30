@@ -999,29 +999,34 @@
             Gets/sets the password to use when authenticating
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.Scopes">
+        <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.Scope">
             <summary>
-            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the authorized scopes of the resulting token
+            Gets/sets a space-separated list containing the authorized scopes to request
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.Audiences">
+        <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.Audience">
             <summary>
-            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the authorized audiences of the resulting token
+            Gets/sets a space-separated list containing the authorized audiences of the resulting token
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.SubjectToken">
             <summary>
-            Gets/sets the token to exchange for Impersonation
+            Gets/sets the token that represents the identity of the party on behalf of whom the request is being made.Typically, the subject of this token will be the subject of the security token issued in response to the request.
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.RequestedSubject">
+        <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.SubjectTokenType">
             <summary>
-            Gets/sets the requested subject for Impersonation and Direct Naked Impersonation, which can be the id or the username of the user to impersonate
+            Gets/sets an identifie that indicates the type of the security token in the "subject_token" parameter.
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.RequestedIssuer">
+        <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.ActorToken">
             <summary>
-            Gets/sets the issuer that must generate a new token in return for the exchanged one
+            Gets/sets a token that represents the identity of the acting party.Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.OAuth2AuthenticationProperties.ActorTokenType">
+            <summary>
+            Gets/sets an identifier, as described in Section 3, that indicates the type of the security token in the "actor_token" parameter. This is REQUIRED when the "actor_token" parameter is present in the request but MUST NOT be included otherwise.
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.ODataCommandOptions">
@@ -2338,6 +2343,21 @@
         <member name="F:ServerlessWorkflow.Sdk.OAuth2GrantType.TokenExchange">
             <summary>
             Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc8693">token exchange grant type</see>
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.OAuth2TokenType">
+            <summary>
+            Enumerates all supported token types
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.OAuth2TokenType.AccessToken">
+            <summary>
+            Indicates an access token
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.OAuth2TokenType.IdentityToken">
+            <summary>
+            Indicates an identity token
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.ParallelCompletionType">
@@ -3767,25 +3787,20 @@
             <param name="audiences">An array containing the audiences to use</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.WithSubjectToken(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.WithSubjectToken(ServerlessWorkflow.Sdk.OAuth2TokenType,System.String)">
             <summary>
-            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to exchange the specified subject token when requesting an access token
+            Configures the token that represents the identity of the party on behalf of whom the request is being made.Typically, the subject of this token will be the subject of the security token issued in response to the request.
             </summary>
-            <param name="token">The token to exchange</param>
+            <param name="tokenType">The type of the specified token</param>
+            <param name="token">The subject token</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.WithRequestedSubject(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.WithActorToken(ServerlessWorkflow.Sdk.OAuth2TokenType,System.String)">
             <summary>
-            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to impersonate the specified user
+            Configures the token that represents the identity of the acting party.Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
             </summary>
-            <param name="subject">The subject of the user to impersonate</param>
-            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder"/></returns>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.WithRequestedIssuer(System.String)">
-            <summary>
-            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to exchange an access token with a new one from the specified issuer
-            </summary>
-            <param name="issuer">The issuer to exchnage the token with</param>
+            <param name="tokenType">The type of the specified token</param>
+            <param name="token">The actor token</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder"/></returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOperationStateBuilder">
@@ -4592,19 +4607,16 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithClientSecret(System.String)">
             <inheritdoc/>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithUserName(System.String)">
+            <inheritdoc/>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithPassword(System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithRequestedIssuer(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithSubjectToken(ServerlessWorkflow.Sdk.OAuth2TokenType,System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithRequestedSubject(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithSubjectToken(System.String)">
-            <inheritdoc/>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithUserName(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithActorToken(ServerlessWorkflow.Sdk.OAuth2TokenType,System.String)">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.OperationStateBuilder">

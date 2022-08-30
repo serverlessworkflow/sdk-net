@@ -52,7 +52,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (audiences == null)
                 throw new ArgumentNullException(nameof(audiences));
-            this.Properties.Audience = audiences.ToList();
+            this.Properties.Audience = string.Join(" ", audiences);
             return this;
         }
 
@@ -68,7 +68,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         {
             if (scopes == null)
                 throw new ArgumentNullException(nameof(scopes));
-            this.Properties.Audience = scopes.ToList();
+            this.Properties.Audience = string.Join(" ", scopes);
             return this;
         }
 
@@ -100,6 +100,15 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IOAuth2AuthenticationBuilder WithUserName(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                throw new ArgumentNullException(nameof(username));
+            this.Properties.Username = username;
+            return this;
+        }
+
+        /// <inheritdoc/>
         public virtual IOAuth2AuthenticationBuilder WithPassword(string password)
         {
             if (string.IsNullOrWhiteSpace(password))
@@ -109,38 +118,22 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOAuth2AuthenticationBuilder WithRequestedIssuer(string issuer)
-        {
-            if (string.IsNullOrWhiteSpace(issuer))
-                throw new ArgumentNullException(nameof(issuer));
-            this.Properties.RequestedIssuer = issuer;
-            return this;
-        }
-
-        /// <inheritdoc/>
-        public virtual IOAuth2AuthenticationBuilder WithRequestedSubject(string subject)
-        {
-            if (string.IsNullOrWhiteSpace(subject))
-                throw new ArgumentNullException(nameof(subject));
-            this.Properties.RequestedSubject = subject;
-            return this;
-        }
-
-        /// <inheritdoc/>
-        public virtual IOAuth2AuthenticationBuilder WithSubjectToken(string token)
+        public virtual IOAuth2AuthenticationBuilder WithSubjectToken(OAuth2TokenType tokenType, string token)
         {
             if (string.IsNullOrWhiteSpace(token))
                 throw new ArgumentNullException(nameof(token));
+            this.Properties.SubjectTokenType = tokenType;
             this.Properties.SubjectToken = token;
             return this;
         }
 
         /// <inheritdoc/>
-        public virtual IOAuth2AuthenticationBuilder WithUserName(string username)
+        public virtual IOAuth2AuthenticationBuilder WithActorToken(OAuth2TokenType tokenType, string token)
         {
-            if (string.IsNullOrWhiteSpace(username))
-                throw new ArgumentNullException(nameof(username));
-            this.Properties.Username = username;
+            if (string.IsNullOrWhiteSpace(token))
+                throw new ArgumentNullException(nameof(token));
+            this.Properties.ActorTokenType = tokenType;
+            this.Properties.ActorToken = token;
             return this;
         }
 

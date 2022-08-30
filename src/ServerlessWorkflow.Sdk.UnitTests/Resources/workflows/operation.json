@@ -34,7 +34,7 @@
       "type": "operation",
       "actions": [
         {
-          "name": "Function",
+          "name": "Function1",
           "functionRef": {
             "refName": "Function",
             "arguments": {
@@ -43,7 +43,7 @@
           }
         },
         {
-          "name": "Function",
+          "name": "Function2",
           "eventRef": {
             "triggerEventRef": "ProducedEvent",
             "resultEventRef": "ConsumedEvent"

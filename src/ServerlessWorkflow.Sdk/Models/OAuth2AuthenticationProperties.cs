@@ -114,13 +114,13 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual string? SubjectToken { get; set; }
 
         /// <summary>
-        /// Gets/sets an identifier, as described in Section 3, that indicates the type of the security token in the "subject_token" parameter.
+        /// Gets/sets an identifie that indicates the type of the security token in the "subject_token" parameter.
         /// </summary>
         [Newtonsoft.Json.JsonProperty("subject_token_type")]
         [System.Text.Json.Serialization.JsonPropertyName("subject_token_type")]
         [ProtoMember(10)]
         [DataMember(Name = "subject_token_type", Order = 10)]
-        public virtual string? SubjectTokenType { get; set; }
+        public virtual OAuth2TokenType? SubjectTokenType { get; set; }
 
         /// <summary>
         /// Gets/sets a token that represents the identity of the acting party.Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
@@ -138,7 +138,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [System.Text.Json.Serialization.JsonPropertyName("actor_token_type")]
         [ProtoMember(11)]
         [DataMember(Name = "actor_token_type", Order = 11)]
-        public virtual string? ActorTokenType { get; set; }
+        public virtual OAuth2TokenType? ActorTokenType { get; set; }
 
     }
 
