@@ -30,17 +30,17 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates an action that invokes a function
         /// </summary>
         [EnumMember(Value = "function")]
-        Function,
+        Function = 1,
         /// <summary>
         /// Indicates an action that executes a cloud event trigger
         /// </summary>
         [EnumMember(Value = "trigger")]
-        Trigger,
+        Trigger = 2,
         /// <summary>
         /// Indicates an action that executes a subflow
         /// </summary>
         [EnumMember(Value = "subflow")]
-        Subflow
+        Subflow = 4
     }
 
 }

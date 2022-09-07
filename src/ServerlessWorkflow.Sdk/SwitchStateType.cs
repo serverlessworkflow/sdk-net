@@ -30,12 +30,12 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates a data switch
         /// </summary>
         [EnumMember(Value = "data")]
-        Data,
+        Data = 1,
         /// <summary>
         /// Indicates an event switch
         /// </summary>
         [EnumMember(Value = "event")]
-        Event
+        Event = 2
     }
 
 }

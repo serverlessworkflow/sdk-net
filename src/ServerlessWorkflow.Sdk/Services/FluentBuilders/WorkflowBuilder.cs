@@ -49,7 +49,17 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         protected IPipelineBuilder Pipeline { get; }
 
         /// <inheritdoc/>
-        public override DynamicObject? Metadata => this.Workflow.Metadata;
+        public override DynamicObject? Metadata
+        {
+            get
+            {
+                return this.Workflow.Metadata;
+            }
+            protected set
+            {
+                this.Workflow.Metadata = value;
+            }
+        }
 
         /// <inheritdoc/>
         public virtual IWorkflowBuilder WithKey(string key)
@@ -118,7 +128,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IWorkflowBuilder AnnotateWith(string annotation)
+        public virtual IWorkflowBuilder WithAnnotation(string annotation)
         {
             if (string.IsNullOrWhiteSpace(annotation))
                 throw new ArgumentNullException(nameof(annotation));

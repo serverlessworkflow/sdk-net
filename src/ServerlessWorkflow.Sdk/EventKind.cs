@@ -30,12 +30,12 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates an event to consume
         /// </summary>
         [EnumMember(Value = "consumed")]
-        Consumed,
+        Consumed = 1,
         /// <summary>
         /// Indicates an event to produce
         /// </summary>
         [EnumMember(Value = "produced")]
-        Produced
+        Produced = 2
     }
 
 }

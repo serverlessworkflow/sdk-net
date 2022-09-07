@@ -29,42 +29,42 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates an operation state
         /// </summary>
         [EnumMember(Value = "operation")]
-        Operation,
+        Operation = 1,
         /// <summary>
         /// Indicates a sleep state
         /// </summary>
         [EnumMember(Value = "sleep")]
-        Sleep,
+        Sleep = 2,
         /// <summary>
         /// Indicates an event state
         /// </summary>
         [EnumMember(Value = "event")]
-        Event,
+        Event = 4,
         /// <summary>
         /// Indicates a parallel state
         /// </summary>
         [EnumMember(Value = "parallel")]
-        Parallel,
+        Parallel = 8,
         /// <summary>
         /// Indicates a switch state
         /// </summary>
         [EnumMember(Value = "switch")]
-        Switch,
+        Switch = 16,
         /// <summary>
         /// Indicates an inject state
         /// </summary>
         [EnumMember(Value = "inject")]
-        Inject,
+        Inject = 32,
         /// <summary>
         /// Indicates a foreach state
         /// </summary>
         [EnumMember(Value = "foreach")]
-        ForEach,
+        ForEach = 64,
         /// <summary>
         /// Indicates a callback state
         /// </summary>
         [EnumMember(Value = "callback")]
-        Callback
+        Callback = 128
     }
 
 }

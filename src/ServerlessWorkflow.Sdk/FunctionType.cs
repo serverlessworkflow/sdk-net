@@ -28,32 +28,32 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates a REST function
         /// </summary>
         [EnumMember(Value = "rest")]
-        Rest,
+        Rest = 1,
         /// <summary>
         /// Indicates an Remote Procedure Call (RPC)
         /// </summary>
         [EnumMember(Value = "rpc")]
-        Rpc,
+        Rpc = 2,
         /// <summary>
         /// Indicates a GraphQL function
         /// </summary>
         [EnumMember(Value = "graphql")]
-        GraphQL,
+        GraphQL = 4,
         /// <summary>
         /// Indicates an OData function
         /// </summary>
         [EnumMember(Value = "odata")]
-        OData,
+        OData = 8,
         /// <summary>
         /// Indicates an expression function
         /// </summary>
         [EnumMember(Value = "expression")]
-        Expression,
+        Expression = 16,
         /// <summary>
         /// Indicates an Async API function
         /// </summary>
         [EnumMember(Value = "asyncapi")]
-        AsyncApi
+        AsyncApi = 32
     }
 
 }

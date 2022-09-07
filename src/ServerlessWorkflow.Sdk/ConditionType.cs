@@ -30,12 +30,12 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates a transition condition
         /// </summary>
         [EnumMember(Value = "transition")]
-        Transition,
+        Transition = 1,
         /// <summary>
         /// Indicates an end condition
         /// </summary>
         [EnumMember(Value = "end")]
-        End
+        End = 2
     }
 
 }

@@ -29,17 +29,17 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates the basic (username/password) authentication scheme
         /// </summary>
         [EnumMember(Value = "basic")]
-        Basic,
+        Basic = 1,
         /// <summary>
         /// Indicates the bearer (JwT) authentication scheme
         /// </summary>
         [EnumMember(Value = "bearer")]
-        Bearer,
+        Bearer = 2,
         /// <summary>
         /// Indicates the OAuth 2 authentication scheme
         /// </summary>
         [EnumMember(Value = "oauth2")]
-        OAuth2
+        OAuth2 = 4
     }
 
 }

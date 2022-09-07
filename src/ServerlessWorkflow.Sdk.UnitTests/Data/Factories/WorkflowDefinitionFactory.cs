@@ -19,6 +19,8 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Data.Factories
                 .WithId("fake-workflow")
                 .WithVersion("0.1.0-fake")
                 .WithName("Fake Workflow")
+                .WithAnnotation("group=/synapse")
+                .WithMetadata("group", "synapse")
                 .WithDataInputSchema(new JSchemaGenerator().Generate(typeof(TestInputData)))
                 .AddFunction(function =>
                     function.WithName("fake-function")

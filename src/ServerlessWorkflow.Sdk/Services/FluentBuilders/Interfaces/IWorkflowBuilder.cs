@@ -90,7 +90,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// </summary>
         /// <param name="annotation">The annotation to append to the <see cref="WorkflowDefinition"/> to build</param>
         /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
-        IWorkflowBuilder AnnotateWith(string annotation);
+        IWorkflowBuilder WithAnnotation(string annotation);
 
         /// <summary>
         /// Configures the expression language used by the <see cref="WorkflowDefinition"/> to build

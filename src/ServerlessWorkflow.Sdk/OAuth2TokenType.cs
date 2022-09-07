@@ -28,12 +28,12 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates an access token
         /// </summary>
         [EnumMember(Value = "urn:ietf:params:oauth:token-type:access_token")]
-        AccessToken,
+        AccessToken = 1,
         /// <summary>
         /// Indicates an identity token
         /// </summary>
         [EnumMember(Value = "urn:ietf:params:oauth:token-type:id_token")]
-        IdentityToken
+        IdentityToken = 2
     }
 
 }

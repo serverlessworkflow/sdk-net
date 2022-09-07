@@ -52,18 +52,10 @@ namespace ServerlessWorkflow.Sdk.Models
         }
 
         /// <summary>
-        /// Gets the <see cref="StateDefinition"/>'s type
-        /// </summary>
-        [YamlMember]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual StateType Type { get; protected set; }
-
-        /// <summary>
         /// Gets/sets the <see cref="StateDefinition"/>'s id
         /// </summary>
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
         public virtual string? Id { get; set; }
 
         /// <summary>
@@ -71,9 +63,17 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [Required]
         [Newtonsoft.Json.JsonRequired]
+        [ProtoMember(2)]
+        [DataMember(Order = 2)]
+        public virtual string Name { get; set; } = null!;
+
+        /// <summary>
+        /// Gets the <see cref="StateDefinition"/>'s type
+        /// </summary>
+        [YamlMember]
         [ProtoMember(3)]
         [DataMember(Order = 3)]
-        public virtual string Name { get; set; } = null!;
+        public virtual StateType Type { get; protected set; }
 
         /// <summary>
         /// Gets/sets the filter to apply to the <see cref="StateDefinition"/>'s input and output data
@@ -156,12 +156,33 @@ namespace ServerlessWorkflow.Sdk.Models
         public virtual List<ErrorHandlerDefinition>? Errors { get; set; }
 
         /// <summary>
+        /// Gets/sets the id of the <see cref="StateDefinition"/> used to compensate the <see cref="StateDefinition"/>
+        /// </summary>
+        [ProtoMember(9)]
+        [DataMember(Order = 9)]
+        public virtual string? CompensatedBy { get; set; }
+
+        /// <summary>
+        /// Gets/sets a boolean indicating whether or not the <see cref="StateDefinition"/> is used for compensating another <see cref="StateDefinition"/>
+        /// </summary>
+        [ProtoMember(10)]
+        [DataMember(Order = 10)]
+        public virtual bool UsedForCompensation { get; set; }
+
+        /// <summary>
+        /// Gets/sets the <see cref="StateDefinition"/>'s metadata
+        /// </summary>
+        [ProtoMember(11)]
+        [DataMember(Order = 11)]
+        public virtual DynamicObject? Metadata { get; set; }
+
+        /// <summary>
         /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="StateDefinition"/>'s <see cref="TransitionDefinition"/>
         /// </summary>
-        [ProtoMember(7, Name = "transition")]
-        [DataMember(Order = 7, Name = "transition")]
+        [ProtoMember(999999999, Name = "transition")]
+        [DataMember(Order = 999999999, Name = "transition")]
         [YamlMember(Alias = "transition")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "transition"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "transition", Order = 999999999), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
         [System.Text.Json.Serialization.JsonPropertyName("transition"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
         protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
 
@@ -218,10 +239,10 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="StateDefinition"/>'s <see cref="EndDefinition"/>
         /// </summary>
-        [ProtoMember(4, Name = "end")]
-        [DataMember(Order = 4, Name = "end")]
+        [ProtoMember(999999999, Name = "end")]
+        [DataMember(Order = 999999999, Name = "end")]
         [YamlMember(Alias = "end")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "end"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "end", Order = 999999999), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
         [System.Text.Json.Serialization.JsonPropertyName("end"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
         protected virtual OneOf<EndDefinition, bool>? EndValue { get; set; }
 
@@ -239,7 +260,7 @@ namespace ServerlessWorkflow.Sdk.Models
             {
                 if (this.EndValue?.T1Value == null
                     && (this.EndValue != null && this.EndValue.T2Value))
-                    return new() {  };
+                    return new() { };
                 else
                     return this.EndValue?.T1Value;
             }
@@ -274,27 +295,6 @@ namespace ServerlessWorkflow.Sdk.Models
                 this.EndValue = value;
             }
         }
-
-        /// <summary>
-        /// Gets/sets the id of the <see cref="StateDefinition"/> used to compensate the <see cref="StateDefinition"/>
-        /// </summary>
-        [ProtoMember(9)]
-        [DataMember(Order = 9)]
-        public virtual string? CompensatedBy { get; set; }
-
-        /// <summary>
-        /// Gets/sets a boolean indicating whether or not the <see cref="StateDefinition"/> is used for compensating another <see cref="StateDefinition"/>
-        /// </summary>
-        [ProtoMember(10)]
-        [DataMember(Order = 10)]
-        public virtual bool UsedForCompensation { get; set; }
-
-        /// <summary>
-        /// Gets/sets the <see cref="StateDefinition"/>'s metadata
-        /// </summary>
-        [ProtoMember(11)]
-        [DataMember(Order = 11)]
-        public virtual DynamicObject? Metadata { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()

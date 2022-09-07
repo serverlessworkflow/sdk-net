@@ -31,6 +31,13 @@ namespace ServerlessWorkflow.Sdk.Models
     {
 
         /// <summary>
+        /// Gets/sets the unique action definition name
+        /// </summary>
+        [ProtoMember(1)]
+        [DataMember(Order = 1)]
+        public virtual string? Name { get; set; }
+
+        /// <summary>
         /// Gets the <see cref="ActionDefinition"/>'s type
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
@@ -50,13 +57,6 @@ namespace ServerlessWorkflow.Sdk.Models
                     throw new InvalidOperationException("Failed to determine the action type");
             }
         }
-
-        /// <summary>
-        /// Gets/sets the unique action definition name
-        /// </summary>
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string? Name { get; set; }
 
         /// <summary>
         /// Gets/sets a <see cref="OneOf{T1, T2}"/> that represents the function to invoke

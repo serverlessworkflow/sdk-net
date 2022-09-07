@@ -49,14 +49,14 @@
             Represents the object used to define a workflow action
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.ActionDefinition.Type">
-            <summary>
-            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>'s type
-            </summary>
-        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.ActionDefinition.Name">
             <summary>
             Gets/sets the unique action definition name
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ActionDefinition.Type">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>'s type
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.ActionDefinition.FunctionValue">
@@ -1443,11 +1443,6 @@
             </summary>
             <param name="type">The <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s type</param>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.Type">
-            <summary>
-            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s type
-            </summary>
-        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.Id">
             <summary>
             Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s id
@@ -1456,6 +1451,11 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.Name">
             <summary>
             Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s id
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.Type">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s type
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.DataFilter">
@@ -1481,6 +1481,21 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.Errors">
             <summary>
             Gets/sets the configuration of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s error handling
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.CompensatedBy">
+            <summary>
+            Gets/sets the id of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> used to compensate the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.UsedForCompensation">
+            <summary>
+            Gets/sets a boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> is used for compensating another <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.Metadata">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s metadata
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.TransitionValue">
@@ -1511,21 +1526,6 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.IsEnd">
             <summary>
             Gets/sets a boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> is the end of a logicial workflow path
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.CompensatedBy">
-            <summary>
-            Gets/sets the id of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> used to compensate the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.UsedForCompensation">
-            <summary>
-            Gets/sets a boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> is used for compensating another <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.Metadata">
-            <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s metadata
             </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.StateDefinition.ToString">
@@ -1757,6 +1757,21 @@
             Gets/sets the <see cref="T:System.Version"/> of the Serverless Workflow schema to use
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ExpressionLanguage">
+            <summary>
+            Gets/sets the language the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s expressions are expressed in
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Annotations">
+            <summary>
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s annotations
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Metadata">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s metadata
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.DataInputSchemaValue">
             <summary>
             Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s data input <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
@@ -1770,121 +1785,6 @@
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.DataInputSchemaUri">
             <summary>
             Gets/sets an <see cref="T:System.Uri"/> pointing at the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s input data schema
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ExpressionLanguage">
-            <summary>
-            Gets/sets the language the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s expressions are expressed in
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Annotations">
-            <summary>
-            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s annotations
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.TimeoutsValue">
-            <summary>
-            Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s execution timeouts
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Timeouts">
-            <summary>
-            Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s execution timeouts
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.TimeoutsUri">
-            <summary>
-            Gets/sets an <see cref="T:System.Uri"/> pointing at the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowTimeoutDefinition"/>
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.StartValue">
-            <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Start">
-            <summary>
-            Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StartDefinition"/>
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.StartStateName">
-            <summary>
-            Gets/sets the name of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.KeepActive">
-            <summary>
-            Gets/sets a boolean indicating whether or not to keep instances of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> active even if there are no active execution paths. Instance can be terminated via 'terminate end definition' or reaching defined 'execTimeout'
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Metadata">
-            <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s metadata
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.EventsValue">
-            <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> collection
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Events">
-            <summary>
-            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>s
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.EventsUri">
-            <summary>
-            Gets/sets an <see cref="T:System.Uri"/> pointing at a file containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> collection
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.FunctionsValue">
-            <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> collection
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Functions">
-            <summary>
-            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>s
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.FunctionsUri">
-            <summary>
-            Gets/sets an <see cref="T:System.Uri"/> pointing at a file containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> collection
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.RetriesValue">
-            <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.RetryDefinition"/> collection
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Retries">
-            <summary>
-            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.RetryDefinition"/>s
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.RetriesUri">
-            <summary>
-            Gets/sets an <see cref="T:System.Uri"/> pointing at a file containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.RetryDefinition"/> collection
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.States">
-            <summary>
-            Gets/sets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ConstantsValue">
-            <summary>
-            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Constants">
-            <summary>
-            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ConstantsUri">
-            <summary>
-            Gets/sets an <see cref="T:System.Uri"/> pointing at a file containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.SecretsValue">
@@ -1917,9 +1817,109 @@
             Gets/sets an <see cref="T:System.Uri"/> pointing at a file containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> collection
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ConstantsValue">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Constants">
+            <summary>
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ConstantsUri">
+            <summary>
+            Gets/sets an <see cref="T:System.Uri"/> pointing at a file containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s constants
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.EventsValue">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> collection
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Events">
+            <summary>
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>s
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.EventsUri">
+            <summary>
+            Gets/sets an <see cref="T:System.Uri"/> pointing at a file containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> collection
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.FunctionsValue">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> collection
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Functions">
+            <summary>
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>s
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.FunctionsUri">
+            <summary>
+            Gets/sets an <see cref="T:System.Uri"/> pointing at a file containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> collection
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.TimeoutsValue">
+            <summary>
+            Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s execution timeouts
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Timeouts">
+            <summary>
+            Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s execution timeouts
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.TimeoutsUri">
+            <summary>
+            Gets/sets an <see cref="T:System.Uri"/> pointing at the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowTimeoutDefinition"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.RetriesValue">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.RetryDefinition"/> collection
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Retries">
+            <summary>
+            Gets/sets a <see cref="T:System.Collections.Generic.List`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.RetryDefinition"/>s
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.RetriesUri">
+            <summary>
+            Gets/sets an <see cref="T:System.Uri"/> pointing at a file containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.RetryDefinition"/> collection
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.StartValue">
+            <summary>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.OneOf`2"/> that defines the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.Start">
+            <summary>
+            Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StartDefinition"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.StartStateName">
+            <summary>
+            Gets/sets the name of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s start <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.States">
+            <summary>
+            Gets/sets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.AutoRetries">
             <summary>
             Gets/sets a boolean indicating whether or not actions should automatically be retried on unchecked errors. Defaults to false.
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.KeepActive">
+            <summary>
+            Gets/sets a boolean indicating whether or not to keep instances of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> active even if there are no active execution paths. Instance can be terminated via 'terminate end definition' or reaching defined 'execTimeout'
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.WorkflowDefinition.ExtensionsValue">
@@ -4314,7 +4314,7 @@
             <param name="schema">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:Newtonsoft.Json.Schema.JSchema"/></param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.AnnotateWith(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.WithAnnotation(System.String)">
             <summary>
             Annotates the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to build
             </summary>
@@ -5007,7 +5007,7 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.WithDataInputSchema(Newtonsoft.Json.Schema.JSchema)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.AnnotateWith(System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.WithAnnotation(System.String)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.UseExpressionLanguage(System.String)">

@@ -30,12 +30,12 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates YAML
         /// </summary>
         [EnumMember(Value = "yaml")]
-        Yaml,
+        Yaml = 1,
         /// <summary>
         /// Indicates JSON
         /// </summary>
         [EnumMember(Value = "json")]
-        Json
+        Json = 2
     }
 
 }

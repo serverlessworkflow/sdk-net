@@ -28,17 +28,17 @@ namespace ServerlessWorkflow.Sdk
         /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.3">resource-owner password credentials grant type</see>
         /// </summary>
         [EnumMember(Value = "password")]
-        Password,
+        Password = 1,
         /// <summary>
         /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">client credentials grant type</see>
         /// </summary>
         [EnumMember(Value = "client_credentials")]
-        ClientCredentials,
+        ClientCredentials = 2,
         /// <summary>
         /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc8693">token exchange grant type</see>
         /// </summary>
         [EnumMember(Value = "urn:ietf:params:oauth:grant-type:token-exchange")]
-        TokenExchange
+        TokenExchange = 4
     }
 
 }
