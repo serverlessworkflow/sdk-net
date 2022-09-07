@@ -44,16 +44,16 @@
 
   <ItemGroup>
     <PackageReference Include="CloudNative.CloudEvents" Version="2.3.1" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.1" />
     <PackageReference Include="Iso8601DurationHelper" Version="1.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="Neuroglia.Serialization.Dynamic" Version="2.0.1.70" />
-    <PackageReference Include="Neuroglia.Serialization.Json" Version="2.0.1.70" />
-    <PackageReference Include="Neuroglia.Serialization.NewtonsoftJson" Version="2.0.1.70" />
-    <PackageReference Include="Neuroglia.Serialization.Protobuf" Version="2.0.1.70" />
-    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="2.0.1.70" />
+    <PackageReference Include="Neuroglia.Serialization.Dynamic" Version="2.0.1.78" />
+    <PackageReference Include="Neuroglia.Serialization.Json" Version="2.0.1.78" />
+    <PackageReference Include="Neuroglia.Serialization.NewtonsoftJson" Version="2.0.1.78" />
+    <PackageReference Include="Neuroglia.Serialization.Protobuf" Version="2.0.1.78" />
+    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="2.0.1.78" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.14" />
     <PackageReference Include="Octokit" Version="2.0.1" />
