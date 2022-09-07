@@ -179,10 +179,10 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="StateDefinition"/>'s <see cref="TransitionDefinition"/>
         /// </summary>
-        [ProtoMember(999999999, Name = "transition")]
-        [DataMember(Order = 999999999, Name = "transition")]
+        [ProtoMember(9998, Name = "transition")]
+        [DataMember(Order = 9998, Name = "transition")]
         [YamlMember(Alias = "transition")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "transition", Order = 999999999), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
+        [Newtonsoft.Json.JsonProperty(PropertyName = "transition", Order = 999999998), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
         [System.Text.Json.Serialization.JsonPropertyName("transition"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
         protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
 
@@ -239,8 +239,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the <see cref="StateDefinition"/>'s <see cref="EndDefinition"/>
         /// </summary>
-        [ProtoMember(999999999, Name = "end")]
-        [DataMember(Order = 999999999, Name = "end")]
+        [ProtoMember(9999, Name = "end")]
+        [DataMember(Order = 9999, Name = "end")]
         [YamlMember(Alias = "end")]
         [Newtonsoft.Json.JsonProperty(PropertyName = "end", Order = 999999999), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
         [System.Text.Json.Serialization.JsonPropertyName("end"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
