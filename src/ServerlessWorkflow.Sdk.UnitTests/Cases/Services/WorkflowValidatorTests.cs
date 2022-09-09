@@ -34,8 +34,8 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
         public async Task Validate_Json_ShouldWork()
         {
             //arrange
-            var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "operation.json"));
-            var workflow = await this.Reader.ParseAsync(yaml);
+            var json = File.ReadAllText(Path.Combine("Resources", "Workflows", "operation.json"));
+            var workflow = await this.Reader.ParseAsync(json);
 
             //act
             var validationResult = await this.Validator.ValidateAsync(workflow);
@@ -43,6 +43,21 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
             //assert
             validationResult.Should().NotBeNull();
             validationResult.IsValid.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Validate_Invalid_Json_ShouldFail()
+        {
+            //arrange
+            var json = File.ReadAllText(Path.Combine("Resources", "Workflows", "missing-transition.json"));
+            var workflow = await this.Reader.ParseAsync(json);
+            //act
+            var validationResult = await this.Validator.ValidateAsync(workflow);
+
+            //assert
+            validationResult.Should().NotBeNull();
+            validationResult.IsValid.Should().BeFalse();
+            validationResult.DslValidationErrors.Should().NotBeEmpty();
         }
 
     }

@@ -21,7 +21,6 @@ using ServerlessWorkflow.Sdk.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
@@ -48,12 +47,17 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         }
 
         /// <inheritdoc/>
-        public override string Name => typeof(WorkflowStatesPropertyValidator).Name;
+        public override string Name => nameof(WorkflowStatesPropertyValidator);
 
         /// <summary>
         /// Gets the current <see cref="IServiceProvider"/>
         /// </summary>
         protected IServiceProvider ServiceProvider { get; }
+
+        protected override string GetDefaultMessageTemplate(string errorCode)
+        {
+            return "Failed to validate the state";
+        }
 
         /// <inheritdoc/>
         public override bool IsValid(ValidationContext<WorkflowDefinition> context, List<StateDefinition> value)
@@ -63,7 +67,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             {
                 if (!StateValidatorTypes.TryGetValue(state.GetType(), out var validatorTypes))
                     continue;
-                var validators = validatorTypes!.Select(t => (IValidator)Activator.CreateInstance(t, (WorkflowDefinition)context.InstanceToValidate)!);
+                var validators = validatorTypes!.Select(t => (IValidator)Activator.CreateInstance(t, context.InstanceToValidate)!);
                 foreach (IValidator validator in validators)
                 {
                     var args = new object[] { state };
@@ -78,6 +82,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                         continue;
                     foreach (var failure in validationResult.Errors)
                     {
+                        failure.PropertyName = $"{nameof(WorkflowDefinition.States)}[{index}].{failure.PropertyName}";
                         context.AddFailure(failure);
                     }
                     return false;

@@ -65,6 +65,9 @@
     <None Update="Resources\workflows\externalref.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\workflows\missing-transition.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\workflows\operation.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

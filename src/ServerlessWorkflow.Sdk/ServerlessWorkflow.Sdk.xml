@@ -326,44 +326,9 @@
             Gets/sets a boolean indicating whether or not to terminate the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s execution whenever the validation of the input data fails. Defaults to true.
             </summary>
         </member>
-        <member name="T:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition">
+        <member name="T:ServerlessWorkflow.Sdk.Models.DefaultCaseDefinition">
             <summary>
-            Represents an object used to define the transition of the workflow if there is no matching data conditions or event timeout is reached
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.Name">
-            <summary>
-            Gets/sets <see cref="T:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition"/>'s name
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.TransitionValue">
-            <summary>
-            Gets/sets a <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the next transition of the workflow if there is valid matches
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.Transition">
-            <summary>
-            Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s transition to another <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> upon completion
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.TransitionToStateName">
-            <summary>
-            Gets/sets the name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to transition to upon completion
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.EndValue">
-            <summary>
-            Gets/sets a <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the object used to configure the end of the workflow
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.End">
-            <summary>
-            Gets/sets the object used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s transition to another <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> upon completion
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.DefaultConditionDefinition.IsEnd">
-            <summary>
-            Gets/sets a boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> is the end of a logicial workflow path
+            Represents an object used to define the transition of the workflow if there is no matching cases or event timeout is reached
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.EndDefinition">
@@ -1594,7 +1559,7 @@
             Represents the base class for all <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/> case implementations
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition.Type">
+        <member name="P:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition.OutcomeType">
             <summary>
             Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/>'s type
             </summary>
@@ -2151,21 +2116,6 @@
         <member name="F:ServerlessWorkflow.Sdk.AuthenticationScheme.OAuth2">
             <summary>
             Indicates the OAuth 2 authentication scheme
-            </summary>
-        </member>
-        <member name="T:ServerlessWorkflow.Sdk.ConditionType">
-            <summary>
-            Enumerates all types of conditions
-            </summary>
-        </member>
-        <member name="F:ServerlessWorkflow.Sdk.ConditionType.Transition">
-            <summary>
-            Indicates a transition condition
-            </summary>
-        </member>
-        <member name="F:ServerlessWorkflow.Sdk.ConditionType.End">
-            <summary>
-            Indicates an end condition
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.EventKind">
@@ -5417,6 +5367,18 @@
             <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataCaseDefinition"/> to validate belongs to</param>
             <param name="state">The <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataCaseDefinition"/> to validate belongs to</param>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.Validation.DefaultCaseDefinitionValidator">
+            <summary>
+            Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.DefaultCaseDefinition"/>s
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.DefaultCaseDefinitionValidator.#ctor(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Models.SwitchStateDefinition)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.DefaultCaseDefinitionValidator"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataCaseDefinition"/> to validate belongs to</param>
+            <param name="state">The <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataCaseDefinition"/> to validate belongs to</param>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.ErrorHandlerDefinitionValidator">
             <summary>
             Represents the service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.ErrorHandlerDefinition"/>s
@@ -5835,6 +5797,20 @@
             Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchCaseDefinition"/> to validate belongs to
             </summary>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.SwitchCaseDefinitionValidator`1.ReferenceExistingState(ServerlessWorkflow.Sdk.Models.TransitionDefinition)">
+            <summary>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists
+            </summary>
+            <param name="transition">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
+            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.SwitchCaseDefinitionValidator`1.ReferenceExistingState(System.String)">
+            <summary>
+            Determines whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists
+            </summary>
+            <param name="stateName">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> to check</param>
+            <returns>A boolean indicating whether or not the specified <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> exists</returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.SwitchStateValidator">
             <summary>
             Represents a service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.SwitchStateDefinition"/>s
@@ -6069,6 +6045,21 @@
         <member name="F:ServerlessWorkflow.Sdk.StateType.Callback">
             <summary>
             Indicates a callback state
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.SwitchCaseOutcomeType">
+            <summary>
+            Enumerates all types of conditions
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.SwitchCaseOutcomeType.Transition">
+            <summary>
+            Indicates a transition condition
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.SwitchCaseOutcomeType.End">
+            <summary>
+            Indicates an end condition
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.SwitchStateType">

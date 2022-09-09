@@ -24,7 +24,7 @@ namespace ServerlessWorkflow.Sdk
     /// </summary>
     [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
     [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum ConditionType
+    public enum SwitchCaseOutcomeType
     {
         /// <summary>
         /// Indicates a transition condition

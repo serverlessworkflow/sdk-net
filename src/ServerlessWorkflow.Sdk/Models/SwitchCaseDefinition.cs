@@ -38,14 +38,14 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public ConditionType Type
+        public SwitchCaseOutcomeType OutcomeType
         {
             get
             {
                 if (this.Transition != null)
-                    return ConditionType.Transition;
+                    return SwitchCaseOutcomeType.Transition;
                 else
-                    return ConditionType.End;
+                    return SwitchCaseOutcomeType.End;
             }
         }
 

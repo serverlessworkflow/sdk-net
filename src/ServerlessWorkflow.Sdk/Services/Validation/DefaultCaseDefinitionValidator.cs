@@ -14,29 +14,26 @@
  * limitations under the License.
  *
  */
-using FluentValidation;
 using ServerlessWorkflow.Sdk.Models;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
     /// <summary>
-    /// Represents a service used to validate <see cref="DataCaseDefinition"/>s
+    /// Represents a service used to validate <see cref="DefaultCaseDefinition"/>s
     /// </summary>
-    internal class DataCaseDefinitionValidator
-        : SwitchCaseDefinitionValidator<DataCaseDefinition>
+    internal class DefaultCaseDefinitionValidator
+        : SwitchCaseDefinitionValidator<DefaultCaseDefinition>
     {
 
         /// <summary>
-        /// Initializes a new <see cref="DataCaseDefinitionValidator"/>
+        /// Initializes a new <see cref="DefaultCaseDefinitionValidator"/>
         /// </summary>
         /// <param name="workflow">The <see cref="WorkflowDefinition"/> the <see cref="DataCaseDefinition"/> to validate belongs to</param>
         /// <param name="state">The <see cref="SwitchStateDefinition"/> the <see cref="DataCaseDefinition"/> to validate belongs to</param>
-        public DataCaseDefinitionValidator(WorkflowDefinition workflow, SwitchStateDefinition state)
+        public DefaultCaseDefinitionValidator(WorkflowDefinition workflow, SwitchStateDefinition state)
              : base(workflow, state)
         {
-            this.RuleFor(c => c.Condition)
-                .NotEmpty()
-                .WithErrorCode($"{nameof(DataCaseDefinition)}.{nameof(DataCaseDefinition.Condition)}");
+            
         }
 
     }

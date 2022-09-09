@@ -55,7 +55,10 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             this.RuleFor(s => s.DefaultCondition)
                 .NotNull()
                 .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DefaultCondition)}");
- 
+            this.RuleFor(s => s.DefaultCondition)
+                .SetValidator(c => new DefaultCaseDefinitionValidator(this.Workflow, c))
+                .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DefaultCondition)}");
+
         }
 
     }

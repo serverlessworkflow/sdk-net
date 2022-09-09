@@ -87,7 +87,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonRequired]
         [ProtoMember(3, IsRequired = true)]
         [DataMember(Order = 3, IsRequired = true)]
-        public virtual DefaultConditionDefinition DefaultCondition { get; set; } = null!;
+        public virtual DefaultCaseDefinition DefaultCondition { get; set; } = null!;
 
         /// <summary>
         /// Gets the <see cref="SwitchCaseDefinition"/> with the specified name

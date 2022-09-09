@@ -38,6 +38,10 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         {
             this.Workflow = workflow;
             this.State = state;
+            this.RuleFor(s => s.Transition!)
+                .Must(ReferenceExistingState)
+                .When(s => s.Transition != null)
+                .WithMessage((state, transition) => $"Failed to find the state '{transition.NextState}' to transition to");
             this.RuleFor(c => c.Transition)
                 .NotNull()
                 .When(c => c.End == null)
@@ -48,6 +52,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .When(c => c.Transition == null)
                 .WithErrorCode($"{nameof(DataCaseDefinition)}.{nameof(DataCaseDefinition.End)}")
                 .WithMessage($"One of either '{nameof(DataCaseDefinition.Transition)}' or '{nameof(DataCaseDefinition.End)}' properties must be set");
+
         }
 
         /// <summary>
@@ -60,6 +65,25 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// </summary>
         protected SwitchStateDefinition State { get; }
 
+        /// <summary>
+        /// Determines whether or not the specified <see cref="StateDefinition"/> exists
+        /// </summary>
+        /// <param name="transition">The name of the <see cref="StateDefinition"/> to check</param>
+        /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> exists</returns>
+        protected virtual bool ReferenceExistingState(TransitionDefinition transition)
+        {
+            return this.Workflow.TryGetState(transition.NextState, out _);
+        }
+
+        /// <summary>
+        /// Determines whether or not the specified <see cref="StateDefinition"/> exists
+        /// </summary>
+        /// <param name="stateName">The name of the <see cref="StateDefinition"/> to check</param>
+        /// <returns>A boolean indicating whether or not the specified <see cref="StateDefinition"/> exists</returns>
+        protected virtual bool ReferenceExistingState(string stateName)
+        {
+            return this.Workflow.TryGetState(stateName, out _);
+        }
     }
 
 }
