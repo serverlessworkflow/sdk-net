@@ -99,12 +99,13 @@ namespace ServerlessWorkflow.Sdk.Models
                     case OAuth2AuthenticationProperties:
                         this.Scheme = AuthenticationScheme.OAuth2;
                         break;
-                    case SecretBasedAuthenticationProperties:
+                    case SecretBasedAuthenticationProperties secretBasedProperties:
+                        this.PropertiesValue = secretBasedProperties.Secret;
                         break;
                     default:
                         throw new NotSupportedException($"The specified authentication info type '{value.GetType()}' is not supported");
                 }
-                this.PropertiesValue = DynamicObject.FromObject(value);
+                this.PropertiesValue = DynamicObject.FromObject(value)!;
             }
         }
 
