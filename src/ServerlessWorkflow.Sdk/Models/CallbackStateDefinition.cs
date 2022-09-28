@@ -68,6 +68,8 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the callback event data filter definition
         /// </summary>
+        [ProtoMember(4)]
+        [DataMember(Order = 4)]
         public virtual EventDataFilterDefinition EventDataFilter { get; set; } = new EventDataFilterDefinition();
 
     }
