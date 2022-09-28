@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Schema;
 using ServerlessWorkflow.Sdk.Models;
+using ServerlessWorkflow.Sdk.Services.IO;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,11 +39,13 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// Initializes a new <see cref="WorkflowValidator"/>
         /// </summary>
         /// <param name="logger">The service used to perform logging</param>
+        /// <param name="externalDefinitionResolver">The service used to resolve external definitions referenced by <see cref="WorkflowDefinition"/>s</param>
         /// <param name="schemaValidator">The service used to validate <see cref="WorkflowDefinition"/>s</param>
         /// <param name="dslValidators">An <see cref="IEnumerable{T}"/> containing the services used to validate Serverless Workflow DSL</param>
-        public WorkflowValidator(ILogger<WorkflowValidator> logger, IWorkflowSchemaValidator schemaValidator, IEnumerable<IValidator<WorkflowDefinition>> dslValidators)
+        public WorkflowValidator(ILogger<WorkflowValidator> logger, IWorkflowExternalDefinitionResolver externalDefinitionResolver, IWorkflowSchemaValidator schemaValidator, IEnumerable<IValidator<WorkflowDefinition>> dslValidators)
         {
             this.Logger = logger;
+            this.ExternalDefinitionResolver = externalDefinitionResolver;
             this.SchemaValidator = schemaValidator;
             this.DslValidators = dslValidators;
         }
@@ -51,6 +54,11 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// Gets the service used to perform logging
         /// </summary>
         protected ILogger Logger { get; }
+
+        /// <summary>
+        /// Gets the service used to resolve external definitions referenced by <see cref="WorkflowDefinition"/>s
+        /// </summary>
+        protected IWorkflowExternalDefinitionResolver ExternalDefinitionResolver { get; }
 
         /// <summary>
         /// Gets the service used to validate <see cref="WorkflowDefinition"/>s
@@ -65,6 +73,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <inheritdoc/>
         public virtual async Task<IWorkflowValidationResult> ValidateAsync(WorkflowDefinition workflowDefinition, bool validateSchema = true, bool validateDsl = true, CancellationToken cancellationToken = default)
         {
+            workflowDefinition = await this.ExternalDefinitionResolver.LoadExternalDefinitionsAsync(workflowDefinition, new(), cancellationToken);
             IList<ValidationError> schemaValidationErrors = new List<ValidationError>();
             if (validateSchema)
                 schemaValidationErrors = await this.SchemaValidator.ValidateAsync(workflowDefinition, cancellationToken);
@@ -93,4 +102,5 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         }
 
     }
+
 }

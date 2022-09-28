@@ -1367,21 +1367,6 @@
             Gets/sets the object used to define the time/repeating intervals at which workflow instances can/should be started
             </summary>
         </member>
-        <member name="T:ServerlessWorkflow.Sdk.Models.StateDataFilter">
-            <summary>
-            Represents the object used to configure how to filter the states data input and output
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.StateDataFilter.Input">
-            <summary>
-            Gets/sets an expression to filter the states data input
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Models.StateDataFilter.Output">
-            <summary>
-            Gets/sets an expression that filters the states data output
-            </summary>
-        </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.StateDataFilterDefinition">
             <summary>
             Represents the object used to configure how to filter the states data input and output
@@ -2168,6 +2153,16 @@
             </summary>
             <param name="reader">The extended <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/></param>
             <param name="stream">The <see cref="T:System.IO.Stream"/> to read the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> from</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.IWorkflowReaderExtensions.ParseAsync(ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader,System.String,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
+            <summary>
+            Parses the specified input into a new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="reader">The extended <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/></param>
+            <param name="input">The input to parse</param>
+            <param name="options"><see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
         </member>
@@ -5083,6 +5078,20 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowExecutionTimeoutBuilder.Build">
             <inheritdoc/>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowExternalDefinitionResolver">
+            <summary>
+            Defines the fundamentals of a service used to resolve the external definitions referenced by a <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowExternalDefinitionResolver.LoadExternalDefinitionsAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
+            <summary>
+            Loads the external definitions referenced by the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
+            </summary>
+            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to load the external references of</param>
+            <param name="options">The options used to configure how to read external definitions</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The loaded <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader">
             <summary>
             Defines the fundamentals of a service used to read <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
@@ -5111,35 +5120,96 @@
             <param name="format">The format of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to read. Defaults to '<see cref="F:ServerlessWorkflow.Sdk.WorkflowDefinitionFormat.Yaml"/>'</param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/></returns>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver">
+            <summary>
+            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowExternalDefinitionResolver"/> interface
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.#ctor(Microsoft.Extensions.Logging.ILogger{ServerlessWorkflow.Sdk.Services.IO.WorkflowReader},Neuroglia.Serialization.IJsonSerializer,Neuroglia.Serialization.IYamlSerializer,System.Net.Http.IHttpClientFactory)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver"/>
+            </summary>
+            <param name="logger">The service used to perform logging</param>
+            <param name="jsonSerializer">The service used to serialize and deserialize JSON</param>
+            <param name="yamlSerializer">The service used to serialize and deserialize YAML</param>
+            <param name="httpClientFactory">The service used to create <see cref="T:System.Net.Http.HttpClient"/>s</param>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.Logger">
+            <summary>
+            Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.JsonSerializer">
+            <summary>
+            Gets the service used to serialize and deserialize JSON
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.YamlSerializer">
+            <summary>
+            Gets the service used to serialize and deserialize YAML
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.HttpClient">
+            <summary>
+            Gets the <see cref="T:System.Net.Http.HttpClient"/> used to retrieve external definitions
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.LoadExternalDefinitionsAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.LoadDataInputSchemaAsync(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
+            <summary>
+            Loads the <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/> at the specified <see cref="T:System.Uri"/>
+            </summary>
+            <param name="uri">The <see cref="T:System.Uri"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/> to load is located at</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The loaded <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.LoadExternalDefinitionAsync(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
+            <summary>
+            Loads an external definition
+            </summary>
+            <param name="uri">The <see cref="T:System.Uri"/> the external definition to load is located at</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the object defined in the loaded external definition</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.LoadExternalDefinitionCollectionAsync``1(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
+            <summary>
+            Loads external definitions of the specified type
+            </summary>
+            <typeparam name="T">The type of external definition to load</typeparam>
+            <param name="uri">The <see cref="T:System.Uri"/> the external definition to load is located at</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>A new <see cref="T:System.Collections.Generic.List`1"/> containing the elements defined by the loaded external definition</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowExternalDefinitionResolver.ResolveRelativeUri(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions)">
+            <summary>
+            Resolves the specified relative <see cref="T:System.Uri"/>
+            </summary>
+            <param name="uri">The relative <see cref="T:System.Uri"/> to resolve</param>
+            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
+            <returns>The resolved <see cref="T:System.Uri"/></returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader">
             <summary>
             Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.IO.IWorkflowReader"/> interface
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.#ctor(Microsoft.Extensions.Logging.ILogger{ServerlessWorkflow.Sdk.Services.IO.WorkflowReader},ServerlessWorkflow.Sdk.Services.Validation.IWorkflowSchemaValidator,System.Collections.Generic.IEnumerable{FluentValidation.IValidator{ServerlessWorkflow.Sdk.Models.WorkflowDefinition}},Neuroglia.Serialization.IJsonSerializer,Neuroglia.Serialization.IYamlSerializer,System.Net.Http.IHttpClientFactory)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.#ctor(Microsoft.Extensions.Logging.ILogger{ServerlessWorkflow.Sdk.Services.IO.WorkflowReader},ServerlessWorkflow.Sdk.Services.IO.IWorkflowExternalDefinitionResolver,Neuroglia.Serialization.IJsonSerializer,Neuroglia.Serialization.IYamlSerializer)">
             <summary>
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader"/>
             </summary>
             <param name="logger">The service used to perform logging</param>
-            <param name="schemaValidator">The service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s</param>
-            <param name="dslValidators">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the services used to validate Serverless Workflow DSL</param>
+            <param name="externalDefinitionResolver">The service used to resolve external definitions referenced by <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s</param>
             <param name="jsonSerializer">The service used to serialize and deserialize JSON</param>
             <param name="yamlSerializer">The service used to serialize and deserialize YAML</param>
-            <param name="httpClientFactory">The service used to create <see cref="T:System.Net.Http.HttpClient"/>s</param>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.Logger">
             <summary>
             Gets the service used to perform logging
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.SchemaValidator">
-            <summary>
-            Gets the service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
-            </summary>
-        </member>
-        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.DslValidators">
-            <summary>
-            Gets an <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the services used to validate Serverless Workflow DSL
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.JsonSerializer">
@@ -5152,58 +5222,13 @@
             Gets the service used to serialize and deserialize YAML
             </summary>
         </member>
-        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.HttpClient">
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.ExternalDefinitionResolver">
             <summary>
-            Gets the <see cref="T:System.Net.Http.HttpClient"/> used to retrieve external definitions
+            Gets the service used to resolve external definitions referenced by <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
             </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.ReadAsync(System.IO.Stream,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
             <inheritdoc/>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionsForAsync(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
-            <summary>
-            Loads external definitions for the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
-            </summary>
-            <param name="workflow">The <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to load external definitions for</param>
-            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new awaitable <see cref="T:System.Threading.Tasks.Task"/></returns>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadDataInputSchemaAsync(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
-            <summary>
-            Loads the <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/> at the specified <see cref="T:System.Uri"/>
-            </summary>
-            <param name="uri">The <see cref="T:System.Uri"/> the <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/> to load is located at</param>
-            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>The loaded <see cref="T:ServerlessWorkflow.Sdk.Models.DataInputSchemaDefinition"/></returns>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionAsync(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
-            <summary>
-            Loads an external definition
-            </summary>
-            <param name="uri">The <see cref="T:System.Uri"/> the external definition to load is located at</param>
-            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the object defined in the loaded external definition</returns>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.LoadExternalDefinitionCollectionAsync``1(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions,System.Threading.CancellationToken)">
-            <summary>
-            Loads external definitions of the specified type
-            </summary>
-            <typeparam name="T">The type of external definition to load</typeparam>
-            <param name="uri">The <see cref="T:System.Uri"/> the external definition to load is located at</param>
-            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
-            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
-            <returns>A new <see cref="T:System.Collections.Generic.List`1"/> containing the elements defined by the loaded external definition</returns>
-        </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.ResolveRelativeUri(System.Uri,ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions)">
-            <summary>
-            Resolves the specified relative <see cref="T:System.Uri"/>
-            </summary>
-            <param name="uri">The relative <see cref="T:System.Uri"/> to resolve</param>
-            <param name="options">The <see cref="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions"/> to use</param>
-            <returns>The resolved <see cref="T:System.Uri"/></returns>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowReader.Create">
             <summary>
@@ -5228,7 +5253,12 @@
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions.RelativeUriResolutionMode">
             <summary>
-            Gets the <see cref="T:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode"/> to use. Defaults to <see cref="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath"/>
+            Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode"/> to use. Defaults to <see cref="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath"/>
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.IO.WorkflowReaderOptions.LoadExternalDefinitions">
+            <summary>
+            Gets/sets a boolean indicating whether or not to load external definitions
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.IO.WorkflowWriter">
@@ -5970,17 +6000,23 @@
             Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.IWorkflowValidator"/> interface
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.#ctor(Microsoft.Extensions.Logging.ILogger{ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator},ServerlessWorkflow.Sdk.Services.Validation.IWorkflowSchemaValidator,System.Collections.Generic.IEnumerable{FluentValidation.IValidator{ServerlessWorkflow.Sdk.Models.WorkflowDefinition}})">
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.#ctor(Microsoft.Extensions.Logging.ILogger{ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator},ServerlessWorkflow.Sdk.Services.IO.IWorkflowExternalDefinitionResolver,ServerlessWorkflow.Sdk.Services.Validation.IWorkflowSchemaValidator,System.Collections.Generic.IEnumerable{FluentValidation.IValidator{ServerlessWorkflow.Sdk.Models.WorkflowDefinition}})">
             <summary>
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator"/>
             </summary>
             <param name="logger">The service used to perform logging</param>
+            <param name="externalDefinitionResolver">The service used to resolve external definitions referenced by <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s</param>
             <param name="schemaValidator">The service used to validate <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s</param>
             <param name="dslValidators">An <see cref="T:System.Collections.Generic.IEnumerable`1"/> containing the services used to validate Serverless Workflow DSL</param>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.Logger">
             <summary>
             Gets the service used to perform logging
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.ExternalDefinitionResolver">
+            <summary>
+            Gets the service used to resolve external definitions referenced by <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Services.Validation.WorkflowValidator.SchemaValidator">

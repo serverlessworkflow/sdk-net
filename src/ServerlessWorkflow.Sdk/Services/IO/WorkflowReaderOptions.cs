@@ -35,9 +35,14 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         public virtual string BaseDirectory { get; set; } = AppContext.BaseDirectory;
 
         /// <summary>
-        /// Gets the <see cref="RelativeUriReferenceResolutionMode"/> to use. Defaults to <see cref="RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath"/>
+        /// Gets/sets the <see cref="RelativeUriReferenceResolutionMode"/> to use. Defaults to <see cref="RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath"/>
         /// </summary>
         public virtual RelativeUriReferenceResolutionMode RelativeUriResolutionMode { get; set; } = RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath;
+
+        /// <summary>
+        /// Gets/sets a boolean indicating whether or not to load external definitions
+        /// </summary>
+        public virtual bool LoadExternalDefinitions { get; set; }
 
     }   
 

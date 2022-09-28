@@ -163,7 +163,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
             var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "externalref.json"));
 
             //act
-            var workflow = await this.Reader.ParseAsync(yaml);
+            var workflow = await this.Reader.ParseAsync(yaml, new WorkflowReaderOptions() { LoadExternalDefinitions = true });
 
             //assert
             workflow

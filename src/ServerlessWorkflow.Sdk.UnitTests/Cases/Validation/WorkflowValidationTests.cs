@@ -2,9 +2,12 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Newtonsoft.Json;
 using ServerlessWorkflow.Sdk.Models;
+using ServerlessWorkflow.Sdk.Services.Validation;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Xunit;
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
@@ -24,6 +27,8 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         protected IServiceProvider ServiceProvider { get; }
 
         protected IValidator<WorkflowDefinition> WorkflowDefinitionValidator { get; }
+
+        protected IWorkflowValidator WorkflowValidator = Sdk.Services.Validation.WorkflowValidator.Create();
 
         [Fact]
         public void Validate_Workflow_NoId_ShouldFail()
@@ -275,10 +280,27 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
 
             //assert
             result.Should()
-               .NotBeNull();
+                .NotBeNull();
             result.Errors.Should()
                 .NotBeNullOrEmpty()
                 .And.Contain(e => e.PropertyName == nameof(WorkflowDefinition.Retries));
+        }
+
+        [Fact]
+        public async void Validate_Workflow_WithExternalReferences_ShouldWork()
+        {
+            //arrange
+            var json = File.ReadAllText(Path.Combine("resources", "workflows", "external-function-definition.json"));
+            var workflow = JsonConvert.DeserializeObject<WorkflowDefinition>(json);
+
+            //act
+            var result = await this.WorkflowValidator.ValidateAsync(workflow);
+            var loadedWorflowJson = JsonConvert.SerializeObject(workflow);
+            var deserializedWorkflow = JsonConvert.DeserializeObject<WorkflowDefinition>(loadedWorflowJson);
+
+            //assert
+            result.IsValid.Should().BeTrue();
+            deserializedWorkflow.Functions.Should().BeNullOrEmpty();
         }
 
     }

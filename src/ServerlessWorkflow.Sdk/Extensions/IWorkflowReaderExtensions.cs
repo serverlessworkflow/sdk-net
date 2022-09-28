@@ -32,14 +32,27 @@ namespace ServerlessWorkflow.Sdk
         /// </summary>
         /// <param name="reader">The extended <see cref="IWorkflowReader"/></param>
         /// <param name="input">The input to parse</param>
+        /// <param name="options"><see cref="WorkflowReaderOptions"/> to use</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
         /// <returns>A new <see cref="WorkflowDefinition"/></returns>
-        public static async Task<WorkflowDefinition> ParseAsync(this IWorkflowReader reader, string input, CancellationToken cancellationToken = default)
+        public static async Task<WorkflowDefinition> ParseAsync(this IWorkflowReader reader, string input, WorkflowReaderOptions options, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(input))
                 throw new ArgumentNullException(nameof(input));
             using Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(input));
-            return await reader.ReadAsync(stream, cancellationToken);
+            return await reader.ReadAsync(stream, options, cancellationToken);
+        }
+
+        /// <summary>
+        /// Parses the specified input into a new <see cref="WorkflowDefinition"/>
+        /// </summary>
+        /// <param name="reader">The extended <see cref="IWorkflowReader"/></param>
+        /// <param name="input">The input to parse</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>A new <see cref="WorkflowDefinition"/></returns>
+        public static async Task<WorkflowDefinition> ParseAsync(this IWorkflowReader reader, string input,CancellationToken cancellationToken = default)
+        {
+            return await reader.ParseAsync(input, new(), cancellationToken);
         }
 
     }

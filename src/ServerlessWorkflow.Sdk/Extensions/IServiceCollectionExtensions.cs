@@ -45,8 +45,9 @@ namespace ServerlessWorkflow.Sdk
         {
             var newtonsoftJsonDefaultConfig = (JsonSerializerSettings settings) =>
             {
+                settings.ContractResolver = new NonPublicSetterContractResolver();
                 settings.NullValueHandling = NullValueHandling.Ignore;
-                settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                settings.DefaultValueHandling = DefaultValueHandling.Ignore;
             };
             var defaultSettings = JsonConvert.DefaultSettings;
             JsonConvert.DefaultSettings = () =>
@@ -74,6 +75,7 @@ namespace ServerlessWorkflow.Sdk
                         inner => new OneOfDeserializer(inner),
                         syntax => syntax.InsteadOf<Iso8601TimeSpanConverter>()));
             services.AddHttpClient();
+            services.AddSingleton<IWorkflowExternalDefinitionResolver, WorkflowExternalDefinitionResolver>();
             services.AddSingleton<IWorkflowReader, WorkflowReader>();
             services.AddSingleton<IWorkflowWriter, WorkflowWriter>();
             services.AddSingleton<IWorkflowSchemaValidator, WorkflowSchemaValidator>();
