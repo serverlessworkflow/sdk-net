@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using Cronos;
 using Newtonsoft.Json.Linq;
 using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Services.FluentBuilders;
@@ -47,10 +48,9 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Services
                     strat.WithName("retry1")
                         .WithNoDelay()
                         .MaxAttempts(5))
-                .StartsWith(flow => 
-                    flow.Delay(TimeSpan.FromSeconds(3)))
-                .Then(flow => 
-                    flow.Inject(new JObject()))
+                .StartsWith(flow => flow.Delay(TimeSpan.FromSeconds(3)),
+                            schedule => schedule.Every("0 * * * *"))
+                .Then(flow => flow.Inject(new JObject()))
                 .Then(flow =>
                     flow.Execute(action => 
                         action.Invoke(function => 

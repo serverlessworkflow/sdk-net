@@ -2103,6 +2103,26 @@
             Indicates the OAuth 2 authentication scheme
             </summary>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Cron">
+            <summary>
+            Defines helper methods to handle CRON expressions
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Cron.Parse(System.String)">
+            <summary>
+            Parses the specified input into a new <see cref="T:Cronos.CronExpression"/>
+            </summary>
+            <param name="input">The input to parse</param>
+            <returns>A new <see cref="T:Cronos.CronExpression"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Cron.TryParse(System.String,Cronos.CronExpression@)">
+            <summary>
+            Parses the specified input into a new <see cref="T:Cronos.CronExpression"/>
+            </summary>
+            <param name="input">The input to parse</param>
+            <param name="cron">The parsed <see cref="T:Cronos.CronExpression"/>, if any</param>
+            <returns>A boolean indicating whether or not the specified input could be parsed</returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.EventKind">
             <summary>
             Enumerates all kinds of workflow events
@@ -3940,6 +3960,39 @@
             </summary>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.RetryDefinition"/></returns>
         </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder">
+            <summary>
+            Defines the fundamentals of a service used to build a <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder.AtInterval(System.TimeSpan)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/> to execute at the specified interval
+            </summary>
+            <param name="interval">The interval at which to execute the <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/></param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder.Every(System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/> to execute at a frequency defined by the specified CRON expression
+            </summary>
+            <param name="cronExpression">A CRON expression that defines the frequency at which to execute the <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/></param>
+            <param name="validUntil">The date and time when the cron expression invocation is no longer valid</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder.UseTimezone(System.String)">
+            <summary>
+            Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/> to use the specified timezone
+            </summary>
+            <param name="timezone">The timezone to use</param>
+            <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder.Build">
+            <summary>
+            Builds a new <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/>
+            </summary>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/></returns>
+        </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder">
             <summary>
             Defines the fundamentals of a service used to configure a <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
@@ -4389,6 +4442,23 @@
             <param name="stateSetup">An <see cref="T:System.Func`2"/> used to setup the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></param>
             <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder"/> used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s</returns>
         </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.StartsWith(System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder},System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder})">
+            <summary>
+            Sets and configures the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            </summary>
+            <param name="stateSetup">An <see cref="T:System.Func`2"/> used to setup the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></param>
+            <param name="scheduleSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s schedule</param>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder"/> used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.StartsWith(System.String,System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder},System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder})">
+            <summary>
+            Sets and configures the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
+            </summary>
+            <param name="name">The name of the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></param>
+            <param name="stateSetup">An <see cref="T:System.Func`2"/> used to setup the startup <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/></param>
+            <param name="scheduleSetup">An <see cref="T:System.Action`1"/> used to setup the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s schedule</param>
+            <returns>A new <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IPipelineBuilder"/> used to configure the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>s</returns>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IWorkflowBuilder.ImportEventsFrom(System.Uri)">
             <summary>
             Adds the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>s defined in the specified file
@@ -4710,6 +4780,28 @@
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.RetryStrategyBuilder.Build">
+            <inheritdoc/>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.ScheduleBuilder">
+            <summary>
+            Represents the default implementation of the <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder"/> interface
+            </summary>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Services.FluentBuilders.ScheduleBuilder.Schedule">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/> to build
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ScheduleBuilder.AtInterval(System.TimeSpan)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ScheduleBuilder.Every(System.String,System.Nullable{System.DateTime})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ScheduleBuilder.UseTimezone(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ScheduleBuilder.Build">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.SleepStateBuilder">
@@ -5034,6 +5126,12 @@
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.StartsWith(System.String,System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.StartsWith(System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder},System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder})">
+            <inheritdoc/>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.StartsWith(System.String,System.Func{ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilderFactory,ServerlessWorkflow.Sdk.Services.FluentBuilders.IStateBuilder},System.Action{ServerlessWorkflow.Sdk.Services.FluentBuilders.IScheduleBuilder})">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.WorkflowBuilder.Build">

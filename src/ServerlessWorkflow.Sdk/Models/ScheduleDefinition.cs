@@ -15,6 +15,7 @@
  *
  */
 using Newtonsoft.Json.Linq;
+using System;
 using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
@@ -31,9 +32,11 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets/sets the time interval (ISO 8601 format) describing when workflow instances can be created.
         /// </summary>
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
         [ProtoMember(1)]
         [DataMember(Order = 1)]
-        public virtual string? Interval { get; set; }
+        public virtual TimeSpan? Interval { get; set; }
 
         /// <summary>
         /// Gets/sets a <see cref="JToken"/> that represents the CRON expression that defines when the workflow instance should be created

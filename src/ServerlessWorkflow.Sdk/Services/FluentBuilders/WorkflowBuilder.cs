@@ -389,6 +389,30 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
+        public virtual IPipelineBuilder StartsWith(Func<IStateBuilderFactory, IStateBuilder> stateSetup, Action<IScheduleBuilder> scheduleSetup)
+        {
+            if (stateSetup == null) throw new ArgumentNullException(nameof(stateSetup));
+            if (scheduleSetup == null) throw new ArgumentNullException(nameof(scheduleSetup));
+            var state = this.Pipeline.AddState(stateSetup);
+            var schedule = new ScheduleBuilder();
+            scheduleSetup(schedule);
+            this.Workflow.Start = new() { StateName = state.Name, Schedule = schedule.Build() };
+            return this.Pipeline;
+        }
+
+        /// <inheritdoc/>
+        public virtual IPipelineBuilder StartsWith(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup, Action<IScheduleBuilder> scheduleSetup)
+        {
+            if (stateSetup == null) throw new ArgumentNullException(nameof(stateSetup));
+            if (scheduleSetup == null) throw new ArgumentNullException(nameof(scheduleSetup));
+            if (string.IsNullOrWhiteSpace(name))
+                throw new ArgumentNullException(nameof(name));
+            if (stateSetup == null)
+                throw new ArgumentNullException(nameof(stateSetup));
+            return this.StartsWith(flow => stateSetup(flow).WithName(name), scheduleSetup);
+        }
+
+        /// <inheritdoc/>
         public virtual WorkflowDefinition Build()
         {
             this.Workflow.States = this.Pipeline.Build().ToList();

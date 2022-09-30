@@ -216,6 +216,23 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         IPipelineBuilder StartsWith(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup);
 
         /// <summary>
+        /// Sets and configures the startup <see cref="StateDefinition"/>
+        /// </summary>
+        /// <param name="stateSetup">An <see cref="Func{T, TResult}"/> used to setup the startup <see cref="StateDefinition"/></param>
+        /// <param name="scheduleSetup">An <see cref="Action{T}"/> used to setup the <see cref="WorkflowDefinition"/>'s schedule</param>
+        /// <returns>A new <see cref="IPipelineBuilder"/> used to configure the <see cref="WorkflowDefinition"/>'s <see cref="StateDefinition"/>s</returns>
+        IPipelineBuilder StartsWith(Func<IStateBuilderFactory, IStateBuilder> stateSetup, Action<IScheduleBuilder> scheduleSetup);
+
+        /// <summary>
+        /// Sets and configures the startup <see cref="StateDefinition"/>
+        /// </summary>
+        /// <param name="name">The name of the startup <see cref="StateDefinition"/></param>
+        /// <param name="stateSetup">An <see cref="Func{T, TResult}"/> used to setup the startup <see cref="StateDefinition"/></param>
+        /// <param name="scheduleSetup">An <see cref="Action{T}"/> used to setup the <see cref="WorkflowDefinition"/>'s schedule</param>
+        /// <returns>A new <see cref="IPipelineBuilder"/> used to configure the <see cref="WorkflowDefinition"/>'s <see cref="StateDefinition"/>s</returns>
+        IPipelineBuilder StartsWith(string name, Func<IStateBuilderFactory, IStateBuilder> stateSetup, Action<IScheduleBuilder> scheduleSetup);
+
+        /// <summary>
         /// Adds the <see cref="EventDefinition"/>s defined in the specified file
         /// </summary>
         /// <param name="uri">The <see cref="Uri"/> of the file that defines the <see cref="EventDefinition"/>s</param>

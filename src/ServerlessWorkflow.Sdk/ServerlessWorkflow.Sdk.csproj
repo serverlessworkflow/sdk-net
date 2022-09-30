@@ -4,9 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
 	<Nullable>enable</Nullable>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>0.8.1.16</AssemblyVersion>
-    <FileVersion>0.8.1.16</FileVersion>
-    <Version>0.8.1.16</Version>
+    <AssemblyVersion>0.8.2</AssemblyVersion>
+    <FileVersion>0.8.2</FileVersion>
+    <Version>0.8.2</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
@@ -44,6 +44,7 @@
 
   <ItemGroup>
     <PackageReference Include="CloudNative.CloudEvents" Version="2.3.1" />
+    <PackageReference Include="Cronos" Version="0.7.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.1" />
     <PackageReference Include="Iso8601DurationHelper" Version="1.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
