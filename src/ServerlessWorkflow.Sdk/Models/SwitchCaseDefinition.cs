@@ -27,6 +27,7 @@ namespace ServerlessWorkflow.Sdk.Models
     [DataContract]
     [ProtoInclude(100, typeof(DataCaseDefinition))]
     [ProtoInclude(200, typeof(EventCaseDefinition))]
+    [ProtoInclude(300, typeof(DefaultCaseDefinition))]
     public abstract class SwitchCaseDefinition
     {
 
