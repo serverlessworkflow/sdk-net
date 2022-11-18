@@ -17,7 +17,6 @@
 using Newtonsoft.Json.Schema;
 using System;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Models
@@ -42,7 +41,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<JSchema, Uri>))]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<JSchema, Uri>))]
 
-        protected virtual OneOf<JSchema, Uri> SchemaValue { get; set; } = null!;
+        protected virtual OneOf<JSchema, Uri>? SchemaValue { get; set; }
 
         /// <summary>
         /// Gets/sets the object used to configure the <see cref="WorkflowDefinition"/>'s data input schema

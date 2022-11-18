@@ -75,8 +75,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         {
             workflowDefinition = await this.ExternalDefinitionResolver.LoadExternalDefinitionsAsync(workflowDefinition, new(), cancellationToken);
             IList<ValidationError> schemaValidationErrors = new List<ValidationError>();
-            if (validateSchema)
-                schemaValidationErrors = await this.SchemaValidator.ValidateAsync(workflowDefinition, cancellationToken);
+            if (validateSchema) schemaValidationErrors = await this.SchemaValidator.ValidateAsync(workflowDefinition, cancellationToken);
             var dslValidationErrors = new List<ValidationFailure>();
             if (validateDsl)
             {

@@ -8,6 +8,7 @@ using ServerlessWorkflow.Sdk.Services.Validation;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
@@ -287,7 +288,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
         }
 
         [Fact]
-        public async void Validate_Workflow_WithExternalReferences_ShouldWork()
+        public async Task Validate_Workflow_WithExternalReferences_ShouldWork()
         {
             //arrange
             var json = File.ReadAllText(Path.Combine("resources", "workflows", "external-function-definition.json"));
@@ -301,6 +302,40 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             //assert
             result.IsValid.Should().BeTrue();
             deserializedWorkflow.Functions.Should().BeNullOrEmpty();
+        }
+
+        [Fact]
+        public async Task Validate_Workflow_WithInputDataSchema_ShouldWork()
+        {
+            //arrange
+            var json = File.ReadAllText(Path.Combine("resources", "workflows", "input-data-schema.json"));
+            var workflow = JsonConvert.DeserializeObject<WorkflowDefinition>(json);
+
+            //act
+            var result = await this.WorkflowValidator.ValidateAsync(workflow);
+            var loadedWorflowJson = JsonConvert.SerializeObject(workflow);
+            var deserializedWorkflow = JsonConvert.DeserializeObject<WorkflowDefinition>(loadedWorflowJson);
+
+            //assert
+            result.IsValid.Should().BeTrue();
+            deserializedWorkflow.DataInputSchema.Should().NotBeNull();
+        }
+
+        [Fact]
+        public async Task Validate_Workflow_WithExternalInputDataSchema_ShouldWork()
+        {
+            //arrange
+            var json = File.ReadAllText(Path.Combine("resources", "workflows", "external-input-data-schema.json"));
+            var workflow = JsonConvert.DeserializeObject<WorkflowDefinition>(json);
+
+            //act
+            var result = await this.WorkflowValidator.ValidateAsync(workflow);
+            var loadedWorflowJson = JsonConvert.SerializeObject(workflow);
+            var deserializedWorkflow = JsonConvert.DeserializeObject<WorkflowDefinition>(loadedWorflowJson);
+
+            //assert
+            result.IsValid.Should().BeTrue();
+            deserializedWorkflow.DataInputSchemaUri.Should().NotBeNull();
         }
 
     }

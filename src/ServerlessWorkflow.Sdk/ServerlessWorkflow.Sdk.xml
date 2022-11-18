@@ -1291,6 +1291,11 @@
             Represents an object used to define the time/repeating intervals at which workflow instances can/should be started 
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ScheduleDefinition.Type">
+            <summary>
+            Gets the <see cref="T:ServerlessWorkflow.Sdk.Models.ScheduleDefinition"/>'s type
+            </summary>
+        </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.ScheduleDefinition.Interval">
             <summary>
             Gets/sets the time interval (ISO 8601 format) describing when workflow instances can be created.
@@ -2358,6 +2363,21 @@
         <member name="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.None">
             <summary>
             Indicates that relative uris should not be resolved
+            </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.ScheduleDefinitionType">
+            <summary>
+            Enumerates all types of schedule definitions
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.ScheduleDefinitionType.Cron">
+            <summary>
+            Indicates the definition of a CRON expression based schedule
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.ScheduleDefinitionType.Interval">
+            <summary>
+            Indicates the definition of an interval based schedule
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.ServerlessWorkflowSpecVersion">
@@ -6044,6 +6064,15 @@
             Loads the Serverless Workflow <see cref="T:Newtonsoft.Json.Schema.JSchema"/>
             </summary>
             <returns>The Serverless Workflow <see cref="T:Newtonsoft.Json.Schema.JSchema"/></returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.GetSchemaJsonAsync(System.Uri,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves the JSON content of the specified schema
+            </summary>
+            <param name="uri">The <see cref="T:System.Uri"/> of the referenced JSON schema</param>
+            <param name="specVersion">The Serverless Workflow specification version</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The JSON content of the specified schema</returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator">
             <summary>

@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Octokit;
@@ -79,9 +80,11 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <inheritdoc/>
         public virtual async Task<IList<ValidationError>> ValidateAsync(WorkflowDefinition workflow, CancellationToken cancellationToken = default)
         {
-            if (workflow == null)
-                throw new ArgumentNullException(nameof(workflow));
-            var obj = JObject.FromObject(workflow);
+            if (workflow == null) throw new ArgumentNullException(nameof(workflow));
+            var serializerSettings = JsonConvert.DefaultSettings?.Invoke();
+            if (serializerSettings == null) serializerSettings = new();
+            serializerSettings.DefaultValueHandling = DefaultValueHandling.Include;
+            var obj = JObject.FromObject(workflow, Newtonsoft.Json.JsonSerializer.Create(serializerSettings));
             var schema = await this.LoadSpecificationSchemaAsync(workflow.SpecVersion, cancellationToken);
             obj.IsValid(schema, out IList<ValidationError> validationErrors);
             return validationErrors;
@@ -93,8 +96,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         /// <returns>The Serverless Workflow <see cref="JSchema"/></returns>
         protected virtual async Task<JSchema> LoadSpecificationSchemaAsync(string specVersion, CancellationToken cancellationToken = default)
         {
-            if (this.Schemas.TryGetValue(specVersion, out var schema))
-                return schema;
+            if (this.Schemas.TryGetValue(specVersion, out var schema)) return schema;
             var client = new GitHubClient(new ProductHeaderValue("serverless-workflow-sdk-net"));
             var specJson = null as string;
             foreach (var content in await client.Repository.Content.GetAllContentsByRef("serverlessworkflow", "specification", "schema", $"{specVersion[..3]}.x"))
@@ -110,6 +112,13 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             return schema;
         }
 
+        /// <summary>
+        /// Retrieves the JSON content of the specified schema
+        /// </summary>
+        /// <param name="uri">The <see cref="Uri"/> of the referenced JSON schema</param>
+        /// <param name="specVersion">The Serverless Workflow specification version</param>
+        /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+        /// <returns>The JSON content of the specified schema</returns>
         protected virtual async Task<string> GetSchemaJsonAsync(Uri uri, string specVersion, CancellationToken cancellationToken = default)
         {
             using HttpResponseMessage response = await this.HttpClient.GetAsync(uri, cancellationToken);
