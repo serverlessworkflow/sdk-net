@@ -1,30 +1,40 @@
-name: Publish Packages
+name: Manual publish of .NET packages
 
 on:
-  release:
-    types: [published]
-  workflow_call:
+  workflow_dispatch:
+
+env:
+  SOLUTION: ./ServerlessWorkflow.Sdk.sln
 
 jobs:
-  build:
-    # Skip if it's not running in the `serverlessworkflow/sdk-net` repo
+  publish:
     if: github.repository == 'serverlessworkflow/sdk-net'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet-version: ['6.0.x' ]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Install dependencies
-      run: dotnet restore "./ServerlessWorkflow.Sdk.sln"
-    - name: Build
-      run: dotnet build "./ServerlessWorkflow.Sdk.sln" --configuration Release --no-restore
-    - name: Push
-      uses: brandedoutcast/publish-nuget@v2.5.2
-      with:
-        PROJECT_FILE_PATH: src/ServerlessWorkflow.Sdk/ServerlessWorkflow.Sdk.csproj
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        
-        
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Pull latest version tag
+        if: github.event_name != 'pull_request'
+        run: |
+          git fetch
+          git pull
+      - name: Setup .NET ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+
+      - name: Restore dependencies
+        run: dotnet restore "${{ env.SOLUTION }}"
+
+      - name: Build
+        run: dotnet build "${{ env.SOLUTION }}" --configuration Release --no-restore
+      
+      - name: Publish NuGet Packages
+        run: dotnet nuget push "./src/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate

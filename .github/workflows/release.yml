@@ -36,18 +36,18 @@ jobs:
           files: |
             **/Release/*.nupkg
             LICENSE
-  #publish:
-  #  runs-on: ubuntu-latest
-  #  steps:
-  #    - name: Checkout
-  #      uses: actions/checkout@v3
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #    - name: Retrieve build items
-  #      uses: actions/cache@v3
-  #      id: build-dotnet-cache
-  #      with:
-  #        path: ./**/Release/*.nupkg
-  #        key: build-dotnet-cache-${{ github.sha }}
+      - name: Retrieve build items
+        uses: actions/cache@v3
+        id: build-dotnet-cache
+        with:
+          path: ./**/Release/*.nupkg
+          key: build-dotnet-cache-${{ github.sha }}
       
-  #    - name: Publish NuGet Packages
-  #      run: dotnet nuget push "./src/*/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+      - name: Publish NuGet Packages
+        run: dotnet nuget push "./src/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
