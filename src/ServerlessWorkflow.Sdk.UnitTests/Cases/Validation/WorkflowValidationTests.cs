@@ -338,6 +338,23 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation
             deserializedWorkflow.DataInputSchemaUri.Should().NotBeNull();
         }
 
+        [Fact]
+        public async Task Validate_Workflow_WithExtensions_ShouldWork()
+        {
+            //arrange
+            var json = File.ReadAllText(Path.Combine("resources", "workflows", "extended.json"));
+            var workflow = JsonConvert.DeserializeObject<WorkflowDefinition>(json);
+
+            //act
+            var result = await this.WorkflowValidator.ValidateAsync(workflow);
+            var loadedWorflowJson = JsonConvert.SerializeObject(workflow);
+            var deserializedWorkflow = JsonConvert.DeserializeObject<WorkflowDefinition>(loadedWorflowJson);
+
+            //assert
+            result.IsValid.Should().BeTrue();
+            deserializedWorkflow.Extensions.Should().NotBeNull();
+        }
+
     }
 
 }

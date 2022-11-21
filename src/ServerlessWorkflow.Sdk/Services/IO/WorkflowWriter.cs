@@ -50,13 +50,13 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         protected IYamlSerializer YamlSerializer { get; }
 
         /// <inheritdoc/>
-        public virtual void Write(WorkflowDefinition workflow, Stream stream, WorkflowDefinitionFormat format = WorkflowDefinitionFormat.Yaml)
+        public virtual void Write(WorkflowDefinition workflow, Stream stream, string format = WorkflowDefinitionFormat.Yaml)
         {
             if (workflow == null)
                 throw new ArgumentNullException(nameof(workflow));
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
-            ISerializer serializer = format switch
+            Neuroglia.Serialization.ISerializer serializer = format switch
             {
                 WorkflowDefinitionFormat.Json => this.JsonSerializer,
                 WorkflowDefinitionFormat.Yaml => this.YamlSerializer,

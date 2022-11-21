@@ -33,7 +33,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// <param name="stream">The <see cref="Stream"/> to read the <see cref="WorkflowDefinition"/> from</param>
         /// <param name="format">The format of the <see cref="WorkflowDefinition"/> to read. Defaults to '<see cref="WorkflowDefinitionFormat.Yaml"/>'</param>
         /// <returns>A new <see cref="WorkflowDefinition"/></returns>
-        void Write(WorkflowDefinition workflow, Stream stream, WorkflowDefinitionFormat format = WorkflowDefinitionFormat.Yaml);
+        void Write(WorkflowDefinition workflow, Stream stream, string format = WorkflowDefinitionFormat.Yaml);
 
     }
 

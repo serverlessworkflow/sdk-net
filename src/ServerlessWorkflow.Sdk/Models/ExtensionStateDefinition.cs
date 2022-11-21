@@ -15,22 +15,27 @@
  *
  */
 
-namespace ServerlessWorkflow.Sdk;
+namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
-/// Enumerates all kinds of workflow events
+/// Represents the definition of an extension state
 /// </summary>
-public static class EventKind
+[DiscriminatedByDefault]
+[DataContract]
+[ProtoContract]
+public class ExtensionStateDefinition
+    : StateDefinition
 {
 
     /// <summary>
-    /// Indicates an event to consume
+    /// Initializes a new <see cref="ExtensionStateDefinition"/>
     /// </summary>
-    public const string Consumed = "consumed";
+    public ExtensionStateDefinition() : base(StateType.Extension) { }
 
     /// <summary>
-    /// Indicates an event to produce
+    /// Initializes a new <see cref="ExtensionStateDefinition"/>
     /// </summary>
-    public const string Produced = "produced";
+    /// <param name="type">The type of the extension state</param>
+    public ExtensionStateDefinition(string type) : base(type) { }
 
 }

@@ -46,7 +46,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .Must(BeProduced)
                 .When(e => !string.IsNullOrWhiteSpace(e.ProduceEvent))
                 .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ProduceEvent)}")
-                .WithMessage(eventRef => $"The event with name '{eventRef.ProduceEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Produced)}'");
+                .WithMessage(eventRef => $"The event with name '{eventRef.ProduceEvent}' must be of kind '{EventKind.Produced}'");
             this.RuleFor(e => e.ResultEvent)
                 .NotEmpty()
                 .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ResultEvent)}");
@@ -59,7 +59,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .Must(BeConsumed)
                 .When(e => !string.IsNullOrWhiteSpace(e.ResultEvent))
                 .WithErrorCode($"{nameof(EventReference)}.{nameof(EventReference.ResultEvent)}")
-                .WithMessage(eventRef => $"The event with name '{eventRef.ResultEvent}' must be of kind '{EnumHelper.Stringify(EventKind.Consumed)}'");
+                .WithMessage(eventRef => $"The event with name '{eventRef.ResultEvent}' must be of kind '{EventKind.Consumed}'");
         }
 
         /// <summary>

@@ -1,3 +1,4 @@
 ﻿{
-  "schema": "file://resources/schemas/input-data.json"
+  "schema": "file://resources/schemas/input-data.json",
+  "failOnValidationErrors": false
 }

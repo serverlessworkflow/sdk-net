@@ -15,25 +15,22 @@
  *
  */
 
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all supported token types
+/// </summary>
+public static class OAuth2TokenType
 {
+
     /// <summary>
-    /// Enumerates all supported token types
+    /// Indicates an access token
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum OAuth2TokenType
-    {
-        /// <summary>
-        /// Indicates an access token
-        /// </summary>
-        [EnumMember(Value = "urn:ietf:params:oauth:token-type:access_token")]
-        AccessToken = 1,
-        /// <summary>
-        /// Indicates an identity token
-        /// </summary>
-        [EnumMember(Value = "urn:ietf:params:oauth:token-type:id_token")]
-        IdentityToken = 2
-    }
+    public const string AccessToken = "urn:ietf:params:oauth:token-type:access_token";
+
+    /// <summary>
+    /// Indicates an identity token
+    /// </summary>
+    public const string IdentityToken = "urn:ietf:params:oauth:token-type:id_token";
 
 }

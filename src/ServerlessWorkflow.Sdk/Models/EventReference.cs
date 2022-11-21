@@ -14,131 +14,136 @@
  * limitations under the License.
  *
  */
-using System;
-using System.ComponentModel.DataAnnotations;
-using YamlDotNet.Serialization;
 
-namespace ServerlessWorkflow.Sdk.Models
+using System.ComponentModel.DataAnnotations;
+
+namespace ServerlessWorkflow.Sdk.Models;
+
+
+/// <summary>
+/// Represents a reference to an <see cref="EventDefinition"/>
+/// </summary>
+[ProtoContract]
+[DataContract]
+public class EventReference
 {
 
     /// <summary>
-    /// Represents a reference to an <see cref="EventDefinition"/>
+    /// Gets the name of the event to produce
     /// </summary>
-    [ProtoContract]
-    [DataContract]
-    public class EventReference
+    [Required]
+    [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "triggerEventRef")]
+    [System.Text.Json.Serialization.JsonPropertyName("triggerEventRef")]
+    [YamlMember(Alias = "triggerEventRef")]
+    [ProtoMember(1, IsRequired = true, Name = "triggerEventRef")]
+    [DataMember(Order = 1, IsRequired = true, Name = "triggerEventRef")]
+    public virtual string ProduceEvent { get; set; } = null!;
+
+    /// <summary>
+    /// Gets the name of the event to consume
+    /// </summary>
+    [Newtonsoft.Json.JsonProperty(PropertyName = "resultEventRef")]
+    [System.Text.Json.Serialization.JsonPropertyName("resultEventRef")]
+    [YamlMember(Alias = "resultEventRef")]
+    [ProtoMember(2)]
+    [DataMember(Order = 2)]
+    public virtual string ResultEvent { get; set; } = null!;
+
+    /// <summary>
+    /// Gets/sets the data to become the cloud event's payload. 
+    /// If string type, an expression which selects parts of the states data output to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'. 
+    /// If object type, a custom object to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'.
+    /// </summary>
+    [ProtoMember(3, Name = "data")]
+    [DataMember(Order = 3, Name = "data")]
+    [YamlMember(Alias = "data")]
+    [Newtonsoft.Json.JsonProperty(PropertyName = "data"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DynamicObject, string>))]
+    [System.Text.Json.Serialization.JsonPropertyName("data"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DynamicObject, string>))]
+    protected virtual OneOf<DynamicObject, string>? DataValue { get; set; }
+
+    /// <summary>
+    /// Gets/sets a custom object to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'
+    /// </summary>
+    [Newtonsoft.Json.JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [YamlIgnore]
+    [ProtoIgnore]
+    [IgnoreDataMember]
+    public virtual DynamicObject? Data
     {
-
-        /// <summary>
-        /// Gets the name of the event to produce
-        /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty(PropertyName = "triggerEventRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("triggerEventRef")]
-        [YamlMember(Alias = "triggerEventRef")]
-        [ProtoMember(1, IsRequired = true, Name = "triggerEventRef")]
-        [DataMember(Order = 1, IsRequired = true, Name = "triggerEventRef")]
-        public virtual string ProduceEvent { get; set; } = null!;
-
-        /// <summary>
-        /// Gets the name of the event to consume
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "resultEventRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("resultEventRef")]
-        [YamlMember(Alias = "resultEventRef")]
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual string ResultEvent { get; set; } = null!;
-
-        /// <summary>
-        /// Gets/sets the data to become the cloud event's payload. 
-        /// If string type, an expression which selects parts of the states data output to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'. 
-        /// If object type, a custom object to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'.
-        /// </summary>
-        [ProtoMember(3, Name = "data")]
-        [DataMember(Order = 3, Name = "data")]
-        [YamlMember(Alias = "data")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "data"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<DynamicObject, string>))]
-        [System.Text.Json.Serialization.JsonPropertyName("data"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<DynamicObject, string>))]
-        protected virtual OneOf<DynamicObject, string>? DataValue { get; set; }
-
-        /// <summary>
-        /// Gets/sets a custom object to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual DynamicObject? Data
+        get
         {
-            get
-            {
-                return this.DataValue?.T1Value;
-            }
-            set
-            {
-                if (value == null)
-                    this.DataValue = null;
-                else
-                    this.DataValue = value;
-            }
+            return this.DataValue?.T1Value;
         }
-
-        /// <summary>
-        /// Gets/sets an expression which selects parts of the states data output to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual string? DataExpression
+        set
         {
-            get
-            {
-                return this.DataValue?.T2Value;
-            }
-            set
-            {
-                if (value == null)
-                    this.DataValue = null;
-                else
-                    this.DataValue = value;
-            }
+            if (value == null)
+                this.DataValue = null;
+            else
+                this.DataValue = value;
         }
-
-        /// <summary>
-        /// Gets/sets additional extension context attributes to the produced event
-        /// </summary>
-        [ProtoMember(4)]
-        [DataMember(Order = 4)]
-        public virtual DynamicObject? ContextAttributes { get; set; }
-
-        /// <summary>
-        /// Gets the maximum amount of time to wait for the result event. If not defined it be set to the actionExecutionTimeout
-        /// </summary>
-        [ProtoMember(5)]
-        [DataMember(Order = 5)]
-        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
-        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
-        public virtual TimeSpan? ConsumeEventTimeout { get; set; }
-
-        /// <summary>
-        /// Gets/sets the reference event's <see cref="Sdk.InvocationMode"/>. Default is <see cref="InvocationMode.Synchronous"/>.
-        /// </summary>
-        /// <remarks>
-        /// Default value of this property is sync, meaning that workflow execution should wait until the function completes (the result event is received).<para></para>
-        /// If set to async, workflow execution should just produce the trigger event and should not wait for the result event
-        /// </remarks>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "invoke")]
-        [System.Text.Json.Serialization.JsonPropertyName("invoke")]
-        [YamlMember(Alias = "invoke")]
-        [ProtoMember(6, Name = "invoke")]
-        [DataMember(Order = 6, Name = "invoke")]
-        public virtual InvocationMode InvocationMode { get; set; } = InvocationMode.Synchronous;
-
-
     }
+
+    /// <summary>
+    /// Gets/sets an expression which selects parts of the states data output to become the data (payload) of the event referenced by '<see cref="ProduceEvent"/>'
+    /// </summary>
+    [Newtonsoft.Json.JsonIgnore]
+    [System.Text.Json.Serialization.JsonIgnore]
+    [YamlIgnore]
+    [ProtoIgnore]
+    [IgnoreDataMember]
+    public virtual string? DataExpression
+    {
+        get
+        {
+            return this.DataValue?.T2Value;
+        }
+        set
+        {
+            if (value == null)
+                this.DataValue = null;
+            else
+                this.DataValue = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets/sets additional extension context attributes to the produced event
+    /// </summary>
+    [ProtoMember(4)]
+    [DataMember(Order = 4)]
+    public virtual DynamicObject? ContextAttributes { get; set; }
+
+    /// <summary>
+    /// Gets the maximum amount of time to wait for the result event. If not defined it be set to the actionExecutionTimeout
+    /// </summary>
+    [ProtoMember(5)]
+    [DataMember(Order = 5)]
+    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.Iso8601TimeSpanConverter))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.Iso8601NullableTimeSpanConverter))]
+    public virtual TimeSpan? ConsumeEventTimeout { get; set; }
+
+    /// <summary>
+    /// Gets/sets the reference event's <see cref="Sdk.InvocationMode"/>. Default is <see cref="InvocationMode.Synchronous"/>.
+    /// </summary>
+    /// <remarks>
+    /// Default value of this property is sync, meaning that workflow execution should wait until the function completes (the result event is received).<para></para>
+    /// If set to async, workflow execution should just produce the trigger event and should not wait for the result event
+    /// </remarks>
+    [Newtonsoft.Json.JsonProperty(PropertyName = "invoke")]
+    [System.Text.Json.Serialization.JsonPropertyName("invoke")]
+    [YamlMember(Alias = "invoke")]
+    [ProtoMember(6, Name = "invoke")]
+    [DataMember(Order = 6, Name = "invoke")]
+    public virtual string InvocationMode { get; set; } = Sdk.InvocationMode.Synchronous;
+
+    /// <summary>
+    /// Gets/sets an <see cref="IDictionary{TKey, TValue}"/> containing the <see cref="FunctionReference"/>'s extension properties
+    /// </summary>
+    [ProtoMember(7)]
+    [DataMember(Order = 7)]
+    [Newtonsoft.Json.JsonExtensionData]
+    [System.Text.Json.Serialization.JsonExtensionData]
+    public virtual IDictionary<string, object>? ExtensionProperties { get; set; }
 
 }

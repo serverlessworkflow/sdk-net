@@ -114,6 +114,11 @@
             Gets/sets an expression to be evaluated positively as a condition for the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to execute.
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.ActionDefinition.ExtensionProperties">
+            <summary>
+            Gets/sets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>'s extension properties
+            </summary>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.ActionDefinition.ToString">
             <inheritdoc/>
         </member>
@@ -489,6 +494,11 @@
             Gets/sets the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>'s metadata
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.EventDefinition.ExtensionProperties">
+            <summary>
+            Gets/sets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/>'s extension properties
+            </summary>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.EventDefinition.ToString">
             <inheritdoc/>
         </member>
@@ -542,6 +552,11 @@
             Default value of this property is sync, meaning that workflow execution should wait until the function completes (the result event is received).<para></para>
             If set to async, workflow execution should just produce the trigger event and should not wait for the result event
             </remarks>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.EventReference.ExtensionProperties">
+            <summary>
+            Gets/sets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionReference"/>'s extension properties
+            </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.EventStateDefinition">
             <summary>
@@ -646,6 +661,22 @@
             <summary>
             Gets/sets an <see cref="T:System.Uri"/> to a resource containing the workflow extension definition (json or yaml)
             </summary>
+        </member>
+        <member name="T:ServerlessWorkflow.Sdk.Models.ExtensionStateDefinition">
+            <summary>
+            Represents the definition of an extension state
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.ExtensionStateDefinition.#ctor">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.ExtensionStateDefinition"/>
+            </summary>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Models.ExtensionStateDefinition.#ctor(System.String)">
+            <summary>
+            Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.ExtensionStateDefinition"/>
+            </summary>
+            <param name="type">The type of the extension state</param>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.ExternalArrayDefinition">
             <summary>
@@ -852,6 +883,11 @@
             Gets/sets the function's metadata
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.FunctionDefinition.ExtensionProperties">
+            <summary>
+            Gets/sets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/>'s extension properties
+            </summary>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.FunctionDefinition.ToString">
             <inheritdoc/>
         </member>
@@ -875,6 +911,11 @@
             Gets/sets a <see href="https://spec.graphql.org/June2018/#sec-Selection-Sets">GraphQL selection set</see>
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.FunctionReference.ExtensionProperties">
+            <summary>
+            Gets/sets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionReference"/>'s extension properties
+            </summary>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.FunctionReference.ToString">
             <inheritdoc/>
         </member>
@@ -890,7 +931,7 @@
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.InjectStateDefinition.Data">
             <summary>
-            Gets/sets the <see cref="!:Any"/> which can be set as state's data input and can be manipulated via filter
+            Gets/sets the object to inject within the state's data input and can be manipulated via filter
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Models.JSchemaSurrogate">
@@ -1392,7 +1433,7 @@
             Represents a <see href="https://github.com/serverlessworkflow/specification/blob/master/specification.md#State-Definition">serverless workflow state definition</see>
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Models.StateDefinition.#ctor(ServerlessWorkflow.Sdk.StateType)">
+        <member name="M:ServerlessWorkflow.Sdk.Models.StateDefinition.#ctor(System.String)">
             <summary>
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>
             </summary>
@@ -1420,7 +1461,7 @@
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.DataInputSchemaValue">
             <summary>
-            Gets/sets the <see cref="T:Newtonsoft.Json.Linq.JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
+            Gets/sets the <see cref="!:JToken"/> that represents the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.Models.EndDefinition"/>
             </summary>
         </member>
         <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.DataInputSchema">
@@ -1483,6 +1524,11 @@
             Gets/sets a boolean indicating whether or not the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/> is the end of a logicial workflow path
             </summary>
         </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.StateDefinition.ExtensionProperties">
+            <summary>
+            Gets/sets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.StateDefinition"/>'s extension properties
+            </summary>
+        </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.StateDefinition.ToString">
             <inheritdoc/>
         </member>
@@ -1501,7 +1547,7 @@
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.SubflowReference"/>
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Models.SubflowReference.#ctor(System.String,System.String,ServerlessWorkflow.Sdk.InvocationMode)">
+        <member name="M:ServerlessWorkflow.Sdk.Models.SubflowReference.#ctor(System.String,System.String,System.String)">
             <summary>
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.SubflowReference"/>
             </summary>
@@ -1509,7 +1555,7 @@
             <param name="version">The version of the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to run. Defaults to 'latest'</param>
             <param name="invocationMode">The subflow's <see cref="T:ServerlessWorkflow.Sdk.InvocationMode"/>. Defaults to <see cref="F:ServerlessWorkflow.Sdk.InvocationMode.Synchronous"/>.</param>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Models.SubflowReference.#ctor(System.String,ServerlessWorkflow.Sdk.InvocationMode)">
+        <member name="M:ServerlessWorkflow.Sdk.Models.SubflowReference.#ctor(System.String,System.String)">
             <summary>
             Initializes a new <see cref="T:ServerlessWorkflow.Sdk.Models.SubflowReference"/>
             </summary>
@@ -1536,6 +1582,11 @@
             Subflows that are invoked async do not propagate their errors to the associated action definition and the workflow state, meaning that any errors that happen during their execution cannot be handled in the workflow states onErrors definition.<para></para>
             Note that errors raised during subflows that are invoked async should not fail workflow execution.
             </remarks>
+        </member>
+        <member name="P:ServerlessWorkflow.Sdk.Models.SubflowReference.ExtensionProperties">
+            <summary>
+            Gets/sets an <see cref="T:System.Collections.Generic.IDictionary`2"/> containing the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionReference"/>'s extension properties
+            </summary>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Models.SubflowReference.Parse(System.String)">
             <summary>
@@ -2205,7 +2256,7 @@
             Defines extensions for <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.WorkflowDefinitionExtensions.GetActions(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.Nullable{ServerlessWorkflow.Sdk.ActionType})">
+        <member name="M:ServerlessWorkflow.Sdk.WorkflowDefinitionExtensions.GetActions(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.String)">
             <summary>
             Gets all the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>s of the specified type declared in the <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
             </summary>
@@ -2347,7 +2398,7 @@
         </member>
         <member name="T:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode">
             <summary>
-            Enumerates all types of reference resolution modes for relative <see cref="!:Uri"/>s
+            Enumerates all types of reference resolution modes for relative <see cref="T:System.Uri"/>s
             </summary>
         </member>
         <member name="F:ServerlessWorkflow.Sdk.RelativeUriReferenceResolutionMode.ConvertToAbsolute">
@@ -2477,10 +2528,10 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder.WithContextAttributes(System.Collections.Generic.IDictionary{System.String,System.String})">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder.Run(System.String,System.String,ServerlessWorkflow.Sdk.InvocationMode)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder.Run(System.String,System.String,System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder.Run(System.String,ServerlessWorkflow.Sdk.InvocationMode)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder.Run(System.String,System.String)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.ActionBuilder.Synchronously">
@@ -2902,7 +2953,7 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.WithName(System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.OfType(ServerlessWorkflow.Sdk.FunctionType)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.OfType(System.String)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.FunctionBuilder.ForOperation(System.String)">
@@ -3018,7 +3069,7 @@
             <param name="e">The <see cref="T:ServerlessWorkflow.Sdk.Models.EventDefinition"/> to consume</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder.Run(System.String,System.String,ServerlessWorkflow.Sdk.InvocationMode)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder.Run(System.String,System.String,System.String)">
             <summary>
             Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to build to run the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
             </summary>
@@ -3027,7 +3078,7 @@
             <param name="invocationMode">The <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/>'s <see cref="T:ServerlessWorkflow.Sdk.InvocationMode"/>. Defaults to <see cref="F:ServerlessWorkflow.Sdk.InvocationMode.Synchronous"/></param>
             <returns>The service used to build <see cref="T:ServerlessWorkflow.Sdk.Models.SubflowReference"/>s</returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder.Run(System.String,ServerlessWorkflow.Sdk.InvocationMode)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IActionBuilder.Run(System.String,System.String)">
             <summary>
             Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.ActionDefinition"/> to build to run the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>
             </summary>
@@ -3608,7 +3659,7 @@
             <param name="name">The name of the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to build</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.OfType(ServerlessWorkflow.Sdk.FunctionType)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IFunctionBuilder.OfType(System.String)">
             <summary>
             Sets the type of the <see cref="T:ServerlessWorkflow.Sdk.Models.FunctionDefinition"/> to build
             </summary>
@@ -3716,7 +3767,7 @@
             Defines the fundamentals of a service used to build a <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> with scheme <see cref="F:ServerlessWorkflow.Sdk.AuthenticationScheme.OAuth2"/>
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.UseGranType(ServerlessWorkflow.Sdk.OAuth2GrantType)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.UseGranType(System.String)">
             <summary>
             Configures the <see cref="T:ServerlessWorkflow.Sdk.Models.AuthenticationDefinition"/> to use the specified <see cref="T:ServerlessWorkflow.Sdk.OAuth2GrantType"/> when requesting an access token
             </summary>
@@ -3772,7 +3823,7 @@
             <param name="audiences">An array containing the audiences to use</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.WithSubjectToken(ServerlessWorkflow.Sdk.OAuth2TokenType,System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.WithSubjectToken(System.String,System.String)">
             <summary>
             Configures the token that represents the identity of the party on behalf of whom the request is being made.Typically, the subject of this token will be the subject of the security token issued in response to the request.
             </summary>
@@ -3780,7 +3831,7 @@
             <param name="token">The subject token</param>
             <returns>The configured <see cref="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.WithActorToken(ServerlessWorkflow.Sdk.OAuth2TokenType,System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.IOAuth2AuthenticationBuilder.WithActorToken(System.String,System.String)">
             <summary>
             Configures the token that represents the identity of the acting party.Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
             </summary>
@@ -4627,7 +4678,7 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.UseAudiences(System.String[])">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.UseGranType(ServerlessWorkflow.Sdk.OAuth2GrantType)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.UseGranType(System.String)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.UseScopes(System.String[])">
@@ -4648,10 +4699,10 @@
         <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithPassword(System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithSubjectToken(ServerlessWorkflow.Sdk.OAuth2TokenType,System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithSubjectToken(System.String,System.String)">
             <inheritdoc/>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithActorToken(ServerlessWorkflow.Sdk.OAuth2TokenType,System.String)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.FluentBuilders.OAuth2AuthenticationBuilder.WithActorToken(System.String,System.String)">
             <inheritdoc/>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.FluentBuilders.OperationStateBuilder">
@@ -5229,7 +5280,7 @@
             Defines the fundamentals of a service used to write <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/>s
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowWriter.Write(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.IO.Stream,ServerlessWorkflow.Sdk.WorkflowDefinitionFormat)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.IWorkflowWriter.Write(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.IO.Stream,System.String)">
             <summary>
             Writes the specified <see cref="T:ServerlessWorkflow.Sdk.Models.WorkflowDefinition"/> to a <see cref="T:System.IO.Stream"/>
             </summary>
@@ -5401,7 +5452,7 @@
             Gets the service used to serialize and deserialize YAML
             </summary>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowWriter.Write(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.IO.Stream,ServerlessWorkflow.Sdk.WorkflowDefinitionFormat)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowWriter.Write(ServerlessWorkflow.Sdk.Models.WorkflowDefinition,System.IO.Stream,System.String)">
             <inheritdoc/>
         </member>
         <member name="M:ServerlessWorkflow.Sdk.Services.IO.WorkflowWriter.Create">
@@ -6065,7 +6116,7 @@
             </summary>
             <returns>The Serverless Workflow <see cref="T:Newtonsoft.Json.Schema.JSchema"/></returns>
         </member>
-        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.GetSchemaJsonAsync(System.Uri,System.String,System.Threading.CancellationToken)">
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.GetSpecificationSchemaJsonAsync(System.Uri,System.String,System.Threading.CancellationToken)">
             <summary>
             Retrieves the JSON content of the specified schema
             </summary>
@@ -6073,6 +6124,21 @@
             <param name="specVersion">The Serverless Workflow specification version</param>
             <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
             <returns>The JSON content of the specified schema</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.GetExtensionSchemaObjectAsync(ServerlessWorkflow.Sdk.Models.ExtensionDefinition,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves the JSON content of the specified <see cref="T:ServerlessWorkflow.Sdk.Models.ExtensionDefinition"/>'s schema
+            </summary>
+            <param name="extension">The <see cref="T:ServerlessWorkflow.Sdk.Models.ExtensionDefinition"/> that defines the referenced JSON schema</param>
+            <param name="cancellationToken">A <see cref="T:System.Threading.CancellationToken"/></param>
+            <returns>The JSON content of the specified schema</returns>
+        </member>
+        <member name="M:ServerlessWorkflow.Sdk.Services.Validation.WorkflowSchemaValidator.ResolveRelativeUri(System.Uri)">
+            <summary>
+            Resolves the specified relative <see cref="T:System.Uri"/>
+            </summary>
+            <param name="uri">The relative <see cref="T:System.Uri"/> to resolve</param>
+            <returns>The resolved <see cref="T:System.Uri"/></returns>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.Services.Validation.WorkflowStatesPropertyValidator">
             <summary>
@@ -6208,6 +6274,11 @@
         <member name="F:ServerlessWorkflow.Sdk.StateType.Callback">
             <summary>
             Indicates a callback state
+            </summary>
+        </member>
+        <member name="F:ServerlessWorkflow.Sdk.StateType.Extension">
+            <summary>
+            Indicates an extension (custom) state
             </summary>
         </member>
         <member name="T:ServerlessWorkflow.Sdk.SwitchCaseOutcomeType">

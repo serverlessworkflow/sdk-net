@@ -14,86 +14,91 @@
  * limitations under the License.
  *
  */
-using System.Collections.Generic;
+
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using YamlDotNet.Serialization;
 
-namespace ServerlessWorkflow.Sdk.Models
+namespace ServerlessWorkflow.Sdk.Models;
+
+/// <summary>
+/// Represents an object used to define events and their correlations
+/// </summary>
+[ProtoContract]
+[DataContract]
+public class EventDefinition
 {
 
     /// <summary>
-    /// Represents an object used to define events and their correlations
+    /// Gets/sets the Unique event name
     /// </summary>
-    [ProtoContract]
-    [DataContract]
-    public class EventDefinition
+    [Required]
+    [Newtonsoft.Json.JsonRequired]
+    [ProtoMember(1)]
+    [DataMember(Order = 1)]
+    public virtual string Name { get; set; } = null!;
+
+    /// <summary>
+    /// Gets/sets the cloud event source
+    /// </summary>
+    [Required]
+    [Newtonsoft.Json.JsonRequired]
+    [ProtoMember(2)]
+    [DataMember(Order = 2)]
+    public virtual string? Source { get; set; }
+
+    /// <summary>
+    /// Gets/sets the cloud event type
+    /// </summary>
+    [ProtoMember(3)]
+    [DataMember(Order = 3)]
+    public virtual string Type { get; set; } = null!;
+
+    /// <summary>
+    /// Gets/sets a value that defines the CloudEvent as either '<see cref="EventKind.Consumed"/>' or '<see cref="EventKind.Produced"/>' by the workflow. Default is '<see cref="EventKind.Consumed"/>'.
+    /// </summary>
+    [ProtoMember(4)]
+    [DataMember(Order = 4)]
+    [DefaultValue(EventKind.Consumed)]
+    public virtual string Kind { get; set; } = EventKind.Consumed;
+
+    /// <summary>
+    /// Gets/sets an <see cref="List{T}"/> containing the <see cref="EventCorrelationDefinition"/>s used to define the way the cloud event is correlated
+    /// </summary>
+    [Newtonsoft.Json.JsonProperty(PropertyName = "correlation"), MinLength(1)]
+    [System.Text.Json.Serialization.JsonPropertyName("correlation")]
+    [YamlMember(Alias = "correlation")]
+    [ProtoMember(5, Name = "correlation")]
+    [DataMember(Order = 5, Name = "correlation")]
+    public virtual List<EventCorrelationDefinition>? Correlations { get; set; }
+
+    /// <summary>
+    /// Gets/sets a boolean indicating whether or not to use the event's data only (thus making data the top level element, instead of including all context attributes at top level). Defaults to true.
+    /// </summary>
+    [ProtoMember(6)]
+    [DataMember(Order = 6)]
+    [DefaultValue(true)]
+    public virtual bool DataOnly { get; set; } = true;
+
+    /// <summary>
+    /// Gets/sets the <see cref="EventDefinition"/>'s metadata
+    /// </summary>
+    [ProtoMember(7)]
+    [DataMember(Order = 7)]
+    public virtual DynamicObject? Metadata { get; set; }
+
+    /// <summary>
+    /// Gets/sets an <see cref="IDictionary{TKey, TValue}"/> containing the <see cref="EventDefinition"/>'s extension properties
+    /// </summary>
+    [ProtoMember(8)]
+    [DataMember(Order = 8)]
+    [Newtonsoft.Json.JsonExtensionData]
+    [System.Text.Json.Serialization.JsonExtensionData]
+    public virtual IDictionary<string, object>? ExtensionProperties { get; set; }
+
+    /// <inheritdoc/>
+    public override string ToString()
     {
-
-        /// <summary>
-        /// Gets/sets the Unique event name
-        /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string Name { get; set; } = null!;
-
-        /// <summary>
-        /// Gets/sets the cloud event source
-        /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired]
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual string? Source { get; set; }
-
-        /// <summary>
-        /// Gets/sets the cloud event type
-        /// </summary>
-        [ProtoMember(3)]
-        [DataMember(Order = 3)]
-        public virtual string Type { get; set; } = null!;
-
-        /// <summary>
-        /// Gets/sets a value that defines the CloudEvent as either '<see cref="EventKind.Consumed"/>' or '<see cref="EventKind.Produced"/>' by the workflow. Default is '<see cref="EventKind.Consumed"/>'.
-        /// </summary>
-        [ProtoMember(4)]
-        [DataMember(Order = 4)]
-        [DefaultValue(EventKind.Consumed)]
-        public virtual EventKind Kind { get; set; } = EventKind.Consumed;
-
-        /// <summary>
-        /// Gets/sets an <see cref="List{T}"/> containing the <see cref="EventCorrelationDefinition"/>s used to define the way the cloud event is correlated
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "correlation"), MinLength(1)]
-        [System.Text.Json.Serialization.JsonPropertyName("correlation")]
-        [YamlMember(Alias = "correlation")]
-        [ProtoMember(5, Name = "correlation")]
-        [DataMember(Order = 5, Name = "correlation")]
-        public virtual List<EventCorrelationDefinition>? Correlations { get; set; }
-
-        /// <summary>
-        /// Gets/sets a boolean indicating whether or not to use the event's data only (thus making data the top level element, instead of including all context attributes at top level). Defaults to true.
-        /// </summary>
-        [ProtoMember(6)]
-        [DataMember(Order = 6)]
-        [DefaultValue(true)]
-        public virtual bool DataOnly { get; set; } = true;
-
-        /// <summary>
-        /// Gets/sets the <see cref="EventDefinition"/>'s metadata
-        /// </summary>
-        [ProtoMember(7)]
-        [DataMember(Order = 7)]
-        public virtual DynamicObject? Metadata { get; set; }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return this.Name;
-        }
-
+        return this.Name;
     }
 
 }

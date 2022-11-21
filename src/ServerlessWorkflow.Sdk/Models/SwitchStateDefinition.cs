@@ -44,7 +44,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// <summary>
         /// Gets the <see cref="SwitchStateDefinition"/>'s type
         /// </summary>
-        public virtual SwitchStateType SwitchType
+        public virtual string SwitchType
         {
             get
             {

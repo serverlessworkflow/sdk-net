@@ -14,28 +14,23 @@
  * limitations under the License.
  *
  */
-using System.Runtime.Serialization;
 
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all workflow definition formats
+/// </summary>
+public static class WorkflowDefinitionFormat
 {
 
     /// <summary>
-    /// Enumerates all workflow definition formats
+    /// Indicates YAML
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum WorkflowDefinitionFormat
-    {
-        /// <summary>
-        /// Indicates YAML
-        /// </summary>
-        [EnumMember(Value = "yaml")]
-        Yaml = 1,
-        /// <summary>
-        /// Indicates JSON
-        /// </summary>
-        [EnumMember(Value = "json")]
-        Json = 2
-    }
+    public const string Yaml = "yaml";
+
+    /// <summary>
+    /// Indicates JSON
+    /// </summary>
+    public const string Json = "json";
 
 }

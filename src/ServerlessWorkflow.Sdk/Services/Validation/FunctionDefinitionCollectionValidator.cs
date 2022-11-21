@@ -42,7 +42,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
             foreach (FunctionDefinition function in value)
             {
 
-                ValidationResult validationResult = validator.Validate(function);
+                FluentValidation.Results.ValidationResult validationResult = validator.Validate(function);
                 if (validationResult.IsValid)
                 {
                     index++;

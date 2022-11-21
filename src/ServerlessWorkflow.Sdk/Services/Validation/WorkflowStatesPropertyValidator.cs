@@ -77,7 +77,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                             m.Name == nameof(IValidator.Validate) 
                             && m.GetParameters().Length == 1 
                             && m.GetParameters().First().ParameterType != typeof(IValidationContext));
-                    var validationResult = (ValidationResult)validationMethod.Invoke(validator, args)!;
+                    var validationResult = (FluentValidation.Results.ValidationResult)validationMethod.Invoke(validator, args)!;
                     if (validationResult.IsValid)
                         continue;
                     foreach (var failure in validationResult.Errors)

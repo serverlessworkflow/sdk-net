@@ -14,33 +14,28 @@
  * limitations under the License.
  *
  */
-using System.Runtime.Serialization;
 
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all types of actions
+/// </summary>
+public static class ActionType
 {
 
     /// <summary>
-    /// Enumerates all types of actions
+    /// Indicates an action that invokes a function
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum ActionType
-    {
-        /// <summary>
-        /// Indicates an action that invokes a function
-        /// </summary>
-        [EnumMember(Value = "function")]
-        Function = 1,
-        /// <summary>
-        /// Indicates an action that executes a cloud event trigger
-        /// </summary>
-        [EnumMember(Value = "trigger")]
-        Trigger = 2,
-        /// <summary>
-        /// Indicates an action that executes a subflow
-        /// </summary>
-        [EnumMember(Value = "subflow")]
-        Subflow = 4
-    }
+    public const string Function = "function";
+
+    /// <summary>
+    /// Indicates an action that executes a cloud event trigger
+    /// </summary>
+    public const string Trigger = "trigger";
+
+    /// <summary>
+    /// Indicates an action that executes a subflow
+    /// </summary>
+    public const string Subflow = "subflow";
 
 }

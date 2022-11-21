@@ -14,28 +14,23 @@
  * limitations under the License.
  *
  */
-using System.Runtime.Serialization;
 
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all types of conditions
+/// </summary>
+public static class SwitchCaseOutcomeType
 {
 
     /// <summary>
-    /// Enumerates all types of conditions
+    /// Indicates a transition condition
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum SwitchCaseOutcomeType
-    {
-        /// <summary>
-        /// Indicates a transition condition
-        /// </summary>
-        [EnumMember(Value = "transition")]
-        Transition = 1,
-        /// <summary>
-        /// Indicates an end condition
-        /// </summary>
-        [EnumMember(Value = "end")]
-        End = 2
-    }
+    public const string Transition = "transition";
+
+    /// <summary>
+    /// Indicates an end condition
+    /// </summary>
+    public const string End = "end";
 
 }

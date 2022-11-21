@@ -17,8 +17,6 @@
 using FluentValidation;
 using FluentValidation.Results;
 using ServerlessWorkflow.Sdk.Models;
-using System;
-using System.Linq;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation
 {
@@ -102,9 +100,9 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
         protected IServiceProvider ServiceProvider { get; }
 
         /// <inheritdoc/>
-        public override ValidationResult Validate(ValidationContext<WorkflowDefinition> context)
+        public override FluentValidation.Results.ValidationResult Validate(ValidationContext<WorkflowDefinition> context)
         {
-            ValidationResult validationResult = base.Validate(context);
+            FluentValidation.Results.ValidationResult validationResult = base.Validate(context);
             if (context.InstanceToValidate.States != null 
                 && !context.InstanceToValidate.States.Any(s => s.End != null))
                 validationResult.Errors.Add(new ValidationFailure("End", $"The workflow's main control flow must specify an EndDefinition"));

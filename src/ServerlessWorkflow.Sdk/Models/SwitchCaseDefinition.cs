@@ -39,7 +39,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlIgnore]
         [ProtoIgnore]
         [IgnoreDataMember]
-        public SwitchCaseOutcomeType OutcomeType
+        public string OutcomeType
         {
             get
             {

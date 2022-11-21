@@ -36,8 +36,8 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonProperty("grant_type")]
         [System.Text.Json.Serialization.JsonPropertyName("grant_type")]
         [ProtoMember(1)]
-        [DataMember(Name= "grant_type", Order = 1)]
-        public virtual OAuth2GrantType GrantType { get; set; }
+        [DataMember(Name = "grant_type", Order = 1)]
+        public virtual string GrantType { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets the uri of the OAuth2 authority to use to generate an access token
@@ -120,7 +120,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [System.Text.Json.Serialization.JsonPropertyName("subject_token_type")]
         [ProtoMember(10)]
         [DataMember(Name = "subject_token_type", Order = 10)]
-        public virtual OAuth2TokenType? SubjectTokenType { get; set; }
+        public virtual string? SubjectTokenType { get; set; }
 
         /// <summary>
         /// Gets/sets a token that represents the identity of the acting party.Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
@@ -138,7 +138,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [System.Text.Json.Serialization.JsonPropertyName("actor_token_type")]
         [ProtoMember(11)]
         [DataMember(Name = "actor_token_type", Order = 11)]
-        public virtual OAuth2TokenType? ActorTokenType { get; set; }
+        public virtual string? ActorTokenType { get; set; }
 
     }
 

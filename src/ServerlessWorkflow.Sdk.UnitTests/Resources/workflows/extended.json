@@ -1,0 +1,25 @@
+﻿{
+  "id": "extended-workflow",
+  "name": "Extended workflow",
+  "version": "1.0.0",
+  "specVersion": "0.8",
+  "extensions": [
+    {
+      "extensionId": "customState",
+      "resource": "resources\\extensions\\state-type-extension.json"
+    }
+  ],
+  "states": [
+    {
+      "name": "AWS Step Function State",
+      "type": "x-aws-step-function",
+      "functions": [
+        {
+          "name": "arn:aws:lambda:us-east-1:YOUR_ACCCOUNT_NUMBER:function:ApiCaller:$LATEST",
+          "payload": {}
+        }
+      ],
+      "end": true
+    }
+  ]
+}

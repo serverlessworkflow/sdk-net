@@ -15,39 +15,34 @@
  *
  */
 
-using System.ComponentModel.DataAnnotations;
+namespace ServerlessWorkflow.Sdk.Models;
 
-namespace ServerlessWorkflow.Sdk.Models
+/// <summary>
+/// Represents a workflow state that injects static data into state data input
+/// </summary>
+[DiscriminatorValue(StateType.Inject)]
+[DataContract]
+[ProtoContract]
+public class InjectStateDefinition
+    : StateDefinition
 {
 
     /// <summary>
-    /// Represents a workflow state that injects static data into state data input
+    /// Initializes a new <see cref="InjectStateDefinition"/>
     /// </summary>
-    [DiscriminatorValue(StateType.Inject)]
-    [DataContract]
-    [ProtoContract]
-    public class InjectStateDefinition
-        : StateDefinition
+    public InjectStateDefinition()
+        : base(StateType.Inject)
     {
 
-        /// <summary>
-        /// Initializes a new <see cref="InjectStateDefinition"/>
-        /// </summary>
-        public InjectStateDefinition()
-            : base(StateType.Inject)
-        {
-
-        }
-
-        /// <summary>
-        /// Gets/sets the <see cref="Any"/> which can be set as state's data input and can be manipulated via filter
-        /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired]
-        [ProtoMember(1, IsRequired = true)]
-        [DataMember(Order = 1, IsRequired = true)]
-        public virtual DynamicObject Data { get; set; } = null!;
-
     }
+
+    /// <summary>
+    /// Gets/sets the object to inject within the state's data input and can be manipulated via filter
+    /// </summary>
+    [Required]
+    [Newtonsoft.Json.JsonRequired]
+    [ProtoMember(1, IsRequired = true)]
+    [DataMember(Order = 1, IsRequired = true)]
+    public virtual DynamicObject Data { get; set; } = null!;
 
 }

@@ -1,0 +1,63 @@
+﻿{
+  "type": "object",
+  "properties": {
+    "states": {
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/x-aws-step-function-state"
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "x-aws-step-function-state": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "State name"
+        },
+        "type": {
+          "type": "string",
+          "const": "x-aws-step-function",
+          "description": "State type"
+        },
+        "functions": {
+          "type": "array",
+          "minLength": 1,
+          "items": {
+            "$ref": "#/definitions/x-aws-step-function"
+          }
+        },
+        "end": {
+          "$ref": "#/definitions/end",
+          "description": "State end definition"
+        },
+        "transition": {
+          "description": "Next transition of the workflow after the state",
+          "$ref": "#/definitions/transition"
+        },
+        "metadata": {
+          "$ref": "common.json#/definitions/metadata"
+        }
+      },
+      "required": [ "name", "type", "functions" ],
+      "additionalProperties": false
+    },
+    "x-aws-step-function": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "payload": {
+          "type": "object"
+        }
+      },
+      "required": [ "name" ]
+    }
+  }
+}
