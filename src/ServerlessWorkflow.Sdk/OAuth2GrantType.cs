@@ -15,30 +15,27 @@
  *
  */
 
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4">OAuth 2 grant types</see> supported for workflow runtime token generation
+/// </summary>
+public static class OAuth2GrantType
 {
+
     /// <summary>
-    /// Enumerates all <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4">OAuth 2 grant types</see> supported for workflow runtime token generation
+    /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.3">resource-owner password credentials grant type</see>
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum OAuth2GrantType
-    {
-        /// <summary>
-        /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.3">resource-owner password credentials grant type</see>
-        /// </summary>
-        [EnumMember(Value = "password")]
-        Password = 1,
-        /// <summary>
-        /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">client credentials grant type</see>
-        /// </summary>
-        [EnumMember(Value = "client_credentials")]
-        ClientCredentials = 2,
-        /// <summary>
-        /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc8693">token exchange grant type</see>
-        /// </summary>
-        [EnumMember(Value = "urn:ietf:params:oauth:grant-type:token-exchange")]
-        TokenExchange = 4
-    }
+    public const string Password = "password";
+
+    /// <summary>
+    /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">client credentials grant type</see>
+    /// </summary>
+    public const string ClientCredentials = "client_credentials";
+
+    /// <summary>
+    /// Indicates the <see href="https://datatracker.ietf.org/doc/html/rfc8693">token exchange grant type</see>
+    /// </summary>
+    public const string TokenExchange = "urn:ietf:params:oauth:grant-type:token-exchange";
 
 }

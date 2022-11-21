@@ -47,7 +47,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [YamlMember(Alias = "scheme")]
         [ProtoMember(2, Name = "scheme")]
         [DataMember(Order = 2, Name = "scheme")]
-        public virtual AuthenticationScheme Scheme { get; set; }
+        public virtual string Scheme { get; set; } = null!;
 
         /// <summary>
         /// Gets/sets a <see cref="OneOf{T1, T2}"/> that represents the <see cref="AuthenticationDefinition"/>'s <see cref="AuthenticationProperties"/>
@@ -81,7 +81,7 @@ namespace ServerlessWorkflow.Sdk.Models
                     AuthenticationScheme.Basic => this.PropertiesValue.T1Value.ToObject<BasicAuthenticationProperties>(),
                     AuthenticationScheme.Bearer => this.PropertiesValue.T1Value.ToObject<BearerAuthenticationProperties>(),
                     AuthenticationScheme.OAuth2 => this.PropertiesValue.T1Value.ToObject<OAuth2AuthenticationProperties>(),
-                    _ => throw new NotSupportedException($"The specified authentication scheme '{EnumHelper.Stringify(this.Scheme)}' is not supported")
+                    _ => throw new NotSupportedException($"The specified authentication scheme '{this.Scheme}' is not supported")
                 };
             }
             set

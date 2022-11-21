@@ -60,7 +60,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 IEnumerable<IValidator<TElement>> validators = this.ServiceProvider.GetServices<IValidator<TElement>>();
                 foreach (IValidator<TElement> validator in validators)
                 {
-                    ValidationResult validationResult = validator.Validate(elem);
+                    FluentValidation.Results.ValidationResult validationResult = validator.Validate(elem);
                     if (validationResult.IsValid)
                         continue;
                     foreach (var failure in validationResult.Errors)

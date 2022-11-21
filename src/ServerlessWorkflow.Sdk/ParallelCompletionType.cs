@@ -15,25 +15,22 @@
  *
  */
 
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all parallel completion types
+/// </summary>
+public static class ParallelCompletionType
 {
+
     /// <summary>
-    /// Enumerates all parallel completion types
+    /// Indicates that all branches should be completed before completing the parallel execution
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum ParallelCompletionType
-    {
-        /// <summary>
-        /// Indicates that all branches should be completed before completing the parallel execution
-        /// </summary>
-        [EnumMember(Value = "allOf")]
-        AllOf,
-        /// <summary>
-        /// Indicates that 'N' amount of branches should complete before completing the parallel execution, thus potentially cancelling running branches
-        /// </summary>
-        [EnumMember(Value = "atLeast")]
-        AtLeastN
-    }
+    public const string AllOf = "allOf";
+
+    /// <summary>
+    /// Indicates that 'N' amount of branches should complete before completing the parallel execution, thus potentially cancelling running branches
+    /// </summary>
+    public const string AtLeastN = "atLeast";
 
 }

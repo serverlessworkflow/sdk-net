@@ -15,31 +15,27 @@
  *
  */
 
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all supported authentication schemes
+/// </summary>
+public static class AuthenticationScheme
 {
 
     /// <summary>
-    /// Enumerates all supported authentication schemes
+    /// Indicates the basic (username/password) authentication scheme
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum AuthenticationScheme
-    {
-        /// <summary>
-        /// Indicates the basic (username/password) authentication scheme
-        /// </summary>
-        [EnumMember(Value = "basic")]
-        Basic = 1,
-        /// <summary>
-        /// Indicates the bearer (JwT) authentication scheme
-        /// </summary>
-        [EnumMember(Value = "bearer")]
-        Bearer = 2,
-        /// <summary>
-        /// Indicates the OAuth 2 authentication scheme
-        /// </summary>
-        [EnumMember(Value = "oauth2")]
-        OAuth2 = 4
-    }
+    public const string Basic = "basic";
+
+    /// <summary>
+    /// Indicates the bearer (JwT) authentication scheme
+    /// </summary>
+    public const string Bearer = "bearer";
+
+    /// <summary>
+    /// Indicates the OAuth 2 authentication scheme
+    /// </summary>
+    public const string OAuth2 = "oauth2";
 
 }

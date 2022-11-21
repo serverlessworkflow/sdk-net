@@ -14,46 +14,41 @@
  * limitations under the License.
  *
  */
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all types of functions
+/// </summary>
+public static class FunctionType
 {
 
     /// <summary>
-    /// Enumerates all types of functions
+    /// Indicates a REST function
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum FunctionType
-    {
-        /// <summary>
-        /// Indicates a REST function
-        /// </summary>
-        [EnumMember(Value = "rest")]
-        Rest = 1,
-        /// <summary>
-        /// Indicates an Remote Procedure Call (RPC)
-        /// </summary>
-        [EnumMember(Value = "rpc")]
-        Rpc = 2,
-        /// <summary>
-        /// Indicates a GraphQL function
-        /// </summary>
-        [EnumMember(Value = "graphql")]
-        GraphQL = 4,
-        /// <summary>
-        /// Indicates an OData function
-        /// </summary>
-        [EnumMember(Value = "odata")]
-        OData = 8,
-        /// <summary>
-        /// Indicates an expression function
-        /// </summary>
-        [EnumMember(Value = "expression")]
-        Expression = 16,
-        /// <summary>
-        /// Indicates an Async API function
-        /// </summary>
-        [EnumMember(Value = "asyncapi")]
-        AsyncApi = 32
-    }
+    public const string Rest = "rest";
+
+    /// <summary>
+    /// Indicates an Remote Procedure Call (RPC)
+    /// </summary>
+    public const string Rpc = "rpc";
+
+    /// <summary>
+    /// Indicates a GraphQL function
+    /// </summary>
+    public const string GraphQL = "graphql";
+
+    /// <summary>
+    /// Indicates an OData function
+    /// </summary>
+    public const string OData = "odata";
+    /// <summary>
+    /// Indicates an expression function
+    /// </summary>
+    public const string Expression = "expression";
+
+    /// <summary>
+    /// Indicates an Async API function
+    /// </summary>
+    public const string AsyncApi = "asyncapi";
 
 }

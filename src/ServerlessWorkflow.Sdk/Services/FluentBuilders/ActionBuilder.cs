@@ -193,7 +193,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual ISubflowActionBuilder Run(string workflowId, string version, InvocationMode invocationMode = InvocationMode.Synchronous)
+        public virtual ISubflowActionBuilder Run(string workflowId, string version, string invocationMode = InvocationMode.Synchronous)
         {
             if (string.IsNullOrWhiteSpace(workflowId))
                 throw new ArgumentNullException(nameof(workflowId));
@@ -202,7 +202,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual ISubflowActionBuilder Run(string workflowId, InvocationMode invocationMode = InvocationMode.Synchronous)
+        public virtual ISubflowActionBuilder Run(string workflowId, string invocationMode = InvocationMode.Synchronous)
         {
             if (string.IsNullOrWhiteSpace(workflowId))
                 throw new ArgumentNullException(nameof(workflowId));

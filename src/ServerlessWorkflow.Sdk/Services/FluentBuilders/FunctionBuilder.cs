@@ -64,7 +64,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IFunctionBuilder OfType(FunctionType type)
+        public virtual IFunctionBuilder OfType(string type)
         {
             this.Function.Type = type;
             return this;

@@ -31,7 +31,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// </summary>
         /// <param name="grantType">The <see cref="OAuth2GrantType"/> to use</param>
         /// <returns>The configured <see cref="IOAuth2AuthenticationBuilder"/></returns>
-        IOAuth2AuthenticationBuilder UseGranType(OAuth2GrantType grantType);
+        IOAuth2AuthenticationBuilder UseGranType(string grantType);
 
         /// <summary>
         /// Configures the <see cref="AuthenticationDefinition"/> to use the specified authority to generate an access token
@@ -88,7 +88,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <param name="tokenType">The type of the specified token</param>
         /// <param name="token">The subject token</param>
         /// <returns>The configured <see cref="IOAuth2AuthenticationBuilder"/></returns>
-        IOAuth2AuthenticationBuilder WithSubjectToken(OAuth2TokenType tokenType, string token);
+        IOAuth2AuthenticationBuilder WithSubjectToken(string tokenType, string token);
 
         /// <summary>
         /// Configures the token that represents the identity of the acting party.Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
@@ -96,7 +96,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         /// <param name="tokenType">The type of the specified token</param>
         /// <param name="token">The actor token</param>
         /// <returns>The configured <see cref="IOAuth2AuthenticationBuilder"/></returns>
-        IOAuth2AuthenticationBuilder WithActorToken(OAuth2TokenType tokenType, string token);
+        IOAuth2AuthenticationBuilder WithActorToken(string tokenType, string token);
 
     }
 

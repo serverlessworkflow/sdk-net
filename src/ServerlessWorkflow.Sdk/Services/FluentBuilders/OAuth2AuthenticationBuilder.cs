@@ -57,7 +57,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOAuth2AuthenticationBuilder UseGranType(OAuth2GrantType grantType)
+        public virtual IOAuth2AuthenticationBuilder UseGranType(string grantType)
         {
             this.Properties.GrantType = grantType;
             return this;
@@ -118,7 +118,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOAuth2AuthenticationBuilder WithSubjectToken(OAuth2TokenType tokenType, string token)
+        public virtual IOAuth2AuthenticationBuilder WithSubjectToken(string tokenType, string token)
         {
             if (string.IsNullOrWhiteSpace(token))
                 throw new ArgumentNullException(nameof(token));
@@ -128,7 +128,7 @@ namespace ServerlessWorkflow.Sdk.Services.FluentBuilders
         }
 
         /// <inheritdoc/>
-        public virtual IOAuth2AuthenticationBuilder WithActorToken(OAuth2TokenType tokenType, string token)
+        public virtual IOAuth2AuthenticationBuilder WithActorToken(string tokenType, string token)
         {
             if (string.IsNullOrWhiteSpace(token))
                 throw new ArgumentNullException(nameof(token));

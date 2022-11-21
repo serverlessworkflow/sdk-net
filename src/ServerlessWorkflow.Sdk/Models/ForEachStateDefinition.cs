@@ -76,7 +76,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(5)]
         [DataMember(Order = 5)]
-        public virtual ActionExecutionMode Mode { get; set; }
+        public virtual string Mode { get; set; } = ActionExecutionMode.Sequential;
 
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> of actions to be executed for each of the elements of the <see cref="InputCollection"/>

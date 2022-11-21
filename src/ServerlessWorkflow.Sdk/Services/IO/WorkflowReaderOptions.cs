@@ -37,7 +37,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
         /// <summary>
         /// Gets/sets the <see cref="RelativeUriReferenceResolutionMode"/> to use. Defaults to <see cref="RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath"/>
         /// </summary>
-        public virtual RelativeUriReferenceResolutionMode RelativeUriResolutionMode { get; set; } = RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath;
+        public virtual string RelativeUriResolutionMode { get; set; } = RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath;
 
         /// <summary>
         /// Gets/sets a boolean indicating whether or not to load external definitions

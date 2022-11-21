@@ -14,28 +14,23 @@
  * limitations under the License.
  *
  */
-using System.Runtime.Serialization;
 
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all types of switch states
+/// </summary>
+public static class SwitchStateType
 {
 
     /// <summary>
-    /// Enumerates all types of switch states
+    /// Indicates a data switch
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum SwitchStateType
-    {
-        /// <summary>
-        /// Indicates a data switch
-        /// </summary>
-        [EnumMember(Value = "data")]
-        Data = 1,
-        /// <summary>
-        /// Indicates an event switch
-        /// </summary>
-        [EnumMember(Value = "event")]
-        Event = 2
-    }
+    public const string Data = "data";
+
+    /// <summary>
+    /// Indicates an event switch
+    /// </summary>
+    public const string Event = "event";
 
 }

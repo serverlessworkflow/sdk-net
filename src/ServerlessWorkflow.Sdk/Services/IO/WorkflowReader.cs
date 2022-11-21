@@ -74,7 +74,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                 throw new ArgumentNullException(nameof(stream));
             if(options == null)
                 options = new WorkflowReaderOptions();
-            ISerializer serializer;
+            Neuroglia.Serialization.ISerializer serializer;
             var offset = stream.Position;
             using var reader = new StreamReader(stream);
             var input = reader.ReadToEnd();

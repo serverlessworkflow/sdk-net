@@ -33,7 +33,7 @@ namespace ServerlessWorkflow.Sdk
         /// <param name="workflow">The <see cref="WorkflowDefinition"/> to query</param>
         /// <param name="type">The type of <see cref="ActionDefinition"/>s to get. A null value gets all <see cref="ActionDefinition"/>s</param>
         /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="ActionDefinition"/>s of the specified type declared in the <see cref="WorkflowDefinition"/></returns>
-        public static IEnumerable<ActionDefinition> GetActions(this WorkflowDefinition workflow, ActionType? type = null)
+        public static IEnumerable<ActionDefinition> GetActions(this WorkflowDefinition workflow, string? type = null)
         {
             var actions = workflow.States.SelectMany(s => s switch
             {
@@ -44,8 +44,7 @@ namespace ServerlessWorkflow.Sdk
                 ParallelStateDefinition parallelState => parallelState.Branches.SelectMany(b => b.Actions),
                 _ => Array.Empty<ActionDefinition>()
             });
-            if (type.HasValue)
-                actions = actions.Where(a => a.Type == type.Value);
+            if (!string.IsNullOrWhiteSpace(type)) actions = actions.Where(a => a.Type == type);
             return actions;
         }
 

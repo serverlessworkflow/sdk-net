@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "specVersion": "0.8",
   "dataInputSchema": {
-    "schema": "file://resources/schemas/input-data.json"
+    "schema": "file://resources/schemas/input-data.json",
+    "failOnValidationErrors": false
   },
   "states": [
       {

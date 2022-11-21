@@ -44,6 +44,9 @@
     <None Update="Resources\events\petstore.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\extensions\state-type-extension.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Resources\functions\petstore.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -67,6 +70,9 @@
     </None>
     <None Update="Resources\secrets\default.yaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Resources\workflows\extended.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Resources\workflows\external-function-definition.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

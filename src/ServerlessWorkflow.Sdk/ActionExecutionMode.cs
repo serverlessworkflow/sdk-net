@@ -14,28 +14,23 @@
  * limitations under the License.
  *
  */
-using System.Runtime.Serialization;
 
-namespace ServerlessWorkflow.Sdk.Models
+namespace ServerlessWorkflow.Sdk.Models;
+
+/// <summary>
+/// Enumerates all types of actions
+/// </summary>
+public static class ActionExecutionMode
 {
 
     /// <summary>
-    /// Enumerates all types of actions
+    /// Indicates a sequential execution of actions
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum ActionExecutionMode
-    {
-        /// <summary>
-        /// Indicates a sequential execution of actions
-        /// </summary>
-        [EnumMember(Value = "sequential")]
-        Sequential,
-        /// <summary>
-        /// Indicates a parallel execution of actions
-        /// </summary>
-        [EnumMember(Value = "parallel")]
-        Parallel
-    }
+    public const string Sequential = "sequential";
+
+    /// <summary>
+    /// Indicates a parallel execution of actions
+    /// </summary>
+    public const string Parallel = "parallel";
 
 }

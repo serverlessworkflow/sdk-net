@@ -14,25 +14,22 @@
  * limitations under the License.
  *
  */
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all invocation modes
+/// </summary>
+public static class InvocationMode
 {
+
     /// <summary>
-    /// Enumerates all invocation modes
+    /// Indicates a synchronous invocation mode
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum InvocationMode
-    {
-        /// <summary>
-        /// Indicates a synchronous invocation mode
-        /// </summary>
-        [EnumMember(Value = "sync")]
-        Synchronous,
-        /// <summary>
-        /// Indicates an asynchronous invocation mode
-        /// </summary>
-        [EnumMember(Value = "async")]
-        Asynchronous
-    }
+    public const string Synchronous = "sync";
+
+    /// <summary>
+    /// Indicates an asynchronous invocation mode
+    /// </summary>
+    public const string Asynchronous = "async";
 
 }

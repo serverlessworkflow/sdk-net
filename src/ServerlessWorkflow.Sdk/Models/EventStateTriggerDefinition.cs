@@ -46,7 +46,7 @@ namespace ServerlessWorkflow.Sdk.Models
         /// </summary>
         [ProtoMember(2)]
         [DataMember(Order = 2)]
-        public virtual ActionExecutionMode ActionMode { get; set; }
+        public virtual string ActionMode { get; set; } = ActionExecutionMode.Sequential;
 
         /// <summary>
         /// Gets/sets an <see cref="List{T}"/> containing the actions to be performed if expression matches

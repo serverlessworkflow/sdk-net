@@ -53,7 +53,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation
                 .Must(BeConsumed)
                 .When(t => t.Events != null && t.Events.Any())
                 .WithErrorCode($"{nameof(EventStateTriggerDefinition)}.{nameof(EventStateTriggerDefinition.Events)}")
-                .WithMessage(eventRef => $"The event with name '{eventRef}' must be of kind '{EnumHelper.Stringify(EventKind.Consumed)}' to be used in an event state trigger");
+                .WithMessage(eventRef => $"The event with name '{eventRef}' must be of kind '{EventKind.Consumed}' to be used in an event state trigger");
         }
 
         /// <summary>

@@ -35,7 +35,7 @@ namespace ServerlessWorkflow.Sdk.Models
         [Newtonsoft.Json.JsonIgnore]
         [System.Text.Json.Serialization.JsonIgnore]
         [YamlIgnore]
-        public virtual ScheduleDefinitionType Type => this.Cron == null ? ScheduleDefinitionType.Interval : ScheduleDefinitionType.Cron;
+        public virtual string Type => this.Cron == null ? ScheduleDefinitionType.Interval : ScheduleDefinitionType.Cron;
 
         /// <summary>
         /// Gets/sets the time interval (ISO 8601 format) describing when workflow instances can be created.

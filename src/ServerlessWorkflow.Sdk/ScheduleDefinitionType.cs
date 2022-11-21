@@ -15,25 +15,23 @@
  *
  */
 
-namespace ServerlessWorkflow.Sdk
+namespace ServerlessWorkflow.Sdk;
+
+/// <summary>
+/// Enumerates all types of schedule definitions
+/// </summary>
+
+public static class ScheduleDefinitionType
 {
+
     /// <summary>
-    /// Enumerates all types of schedule definitions
+    /// Indicates the definition of a CRON expression based schedule
     /// </summary>
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.StringEnumConverterFactory))]
-    public enum ScheduleDefinitionType
-    {
-        /// <summary>
-        /// Indicates the definition of a CRON expression based schedule
-        /// </summary>
-        [EnumMember(Value = "cron")]
-        Cron = 1,
-        /// <summary>
-        /// Indicates the definition of an interval based schedule
-        /// </summary>
-        [EnumMember(Value = "interval")]
-        Interval = 2
-    }
+    public const string Cron = "cron";
+
+    /// <summary>
+    /// Indicates the definition of an interval based schedule
+    /// </summary>
+    public const string Interval = "interval";
 
 }
