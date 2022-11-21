@@ -49,7 +49,7 @@ public class ActionDefinition
             else if (this.Subflow != null)
                 return ActionType.Subflow;
             else
-                throw new InvalidOperationException("Failed to determine the action type");
+                return string.Empty;
         }
     }
 
