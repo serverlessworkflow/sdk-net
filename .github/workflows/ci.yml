@@ -1,0 +1,30 @@
+name: Continuous integration
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '.github/**'
+  workflow_dispatch:
+
+jobs:
+  test:
+    # Skip if it's not running in the `serverlessworkflow/sdk-net` repo
+    if: github.repository == 'serverlessworkflow/sdk-net' && github.ref_name == 'main'
+    uses: ./.github/workflows/test-dotnet.yml
+    secrets: inherit
+
+  versioning:
+    needs: [test]
+    uses: ./.github/workflows/versioning.yml
+    secrets: inherit
+
+  build:
+    needs: [versioning]
+    uses: ./.github/workflows/build-dotnet.yml
+    secrets: inherit
+
+  release:
+    needs: [build]
+    uses: ./.github/workflows/release.yml
+    secrets: inherit

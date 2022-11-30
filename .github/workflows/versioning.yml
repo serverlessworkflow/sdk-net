@@ -1,0 +1,28 @@
+name: Auto Versioning .NET
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  increment-version:
+    if: github.repository == 'serverlessworkflow/sdk-net' && github.ref_name == 'main'
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.BOT_PAT }}
+
+      - name: Reset Origin
+        run: |
+          git remote set-url origin "https://${{ secrets.BOT_USERNAME }}:${{ secrets.BOT_PAT }}@github.com/${{ github.repository }}.git"
+          git checkout ${{ github.ref_name }}
+      - name: Install Versioning.NET
+        run: |
+          dotnet tool install --global Versioning.NET --version 0.7.4
+      - name: Increment Version
+        run: |
+          dotnet-version increment-version-with-git-hints -g "." --branch-name ${{ github.ref_name }} --author-email ${{ secrets.BOT_EMAIL }}
