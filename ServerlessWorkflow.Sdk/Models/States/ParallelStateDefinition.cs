@@ -1,0 +1,57 @@
+﻿using Neuroglia;
+
+namespace ServerlessWorkflow.Sdk.Models;
+
+/// <summary>
+/// Represents a workflow state that executes <see cref="BranchDefinition"/>es in parallel
+/// </summary>
+[DataContract]
+[DiscriminatorValue(StateType.Parallel)]
+public class ParallelStateDefinition
+    : StateDefinition
+{
+
+    /// <summary>
+    /// Initializes a new <see cref="ParallelStateDefinition"/>
+    /// </summary>
+    public ParallelStateDefinition() : base(StateType.Parallel) { }
+
+    /// <summary>
+    /// Gets/sets an <see cref="List{T}"/> containing the <see cref="BranchDefinition"/>es executed by the <see cref="ParallelStateDefinition"/>
+    /// </summary>
+    [Required, MinLength(1)]
+    [DataMember(Order = 5, Name = "branches"), JsonPropertyOrder(5), JsonPropertyName("branches"), YamlMember(Alias = "branches", Order = 5)]
+    public virtual List<BranchDefinition> Branches { get; set; } = new List<BranchDefinition>();
+
+    /// <summary>
+    /// Gets/sets a value that configures the way the <see cref="ParallelStateDefinition"/> completes. Defaults to 'And'
+    /// </summary>
+    [DataMember(Order = 6, Name = "completionType"), JsonPropertyOrder(6), JsonPropertyName("completionType"), YamlMember(Alias = "completionType", Order = 6)]
+    public virtual string CompletionType { get; set; } = ParallelCompletionType.AllOf;
+
+    /// <summary>
+    /// Gets/sets a value that represents the amount of <see cref="BranchDefinition"/>es to complete for completing the state, when <see cref="CompletionType"/> is set to <see cref="ParallelCompletionType.AtLeastN"/>
+    /// </summary>
+    [DataMember(Order = 7, Name = "n"), JsonPropertyOrder(7), JsonPropertyName("n"), YamlMember(Alias = "n", Order = 7)]
+    public virtual uint? N { get; set; }
+
+    /// <summary>
+    /// Gets the <see cref="BranchDefinition"/> with the specified name
+    /// </summary>
+    /// <param name="name">The name of the <see cref="BranchDefinition"/> to get</param>
+    /// <returns>The <see cref="BranchDefinition"/> with the specified name</returns>
+    public virtual BranchDefinition? GetBranch(string name) => this.Branches.FirstOrDefault(b => b.Name == name);
+
+    /// <summary>
+    /// Attempts to get the <see cref="BranchDefinition"/> with the specified name
+    /// </summary>
+    /// <param name="name">The name of the <see cref="BranchDefinition"/> to get</param>
+    /// <param name="branch">The <see cref="BranchDefinition"/> with the specified name</param>
+    /// <returns>A boolean indicating whether or not a <see cref="BranchDefinition"/> with the specified name could be found</returns>
+    public virtual bool TryGetBranch(string name, out BranchDefinition branch)
+    {
+        branch = this.GetBranch(name)!;
+        return branch != null;
+    }
+
+}
