@@ -9,6 +9,23 @@ public class ExtensionDefinition
 {
 
     /// <summary>
+    /// Initializes a new <see cref="ExtensionDefinition"/>
+    /// </summary>
+    public ExtensionDefinition() { }
+
+    /// <summary>
+    /// Initializes a new <see cref="ExtensionDefinition"/>
+    /// </summary>
+    /// <param name="extensionId">The id that uniquely identifies the extension to import</param>
+    /// <param name="resource">The uri that references the extension resource</param>
+    public ExtensionDefinition(string extensionId, Uri resource)
+    {
+        if(string.IsNullOrWhiteSpace(extensionId)) throw new ArgumentNullException(nameof(extensionId));
+        this.ExtensionId = extensionId;
+        this.Resource = resource ?? throw new ArgumentNullException(nameof(resource));
+    }
+
+    /// <summary>
     /// Gets/sets the extension's unique id
     /// </summary>
     [Required, MinLength(1)]

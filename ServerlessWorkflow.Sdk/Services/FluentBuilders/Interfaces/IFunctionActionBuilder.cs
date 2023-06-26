@@ -21,13 +21,13 @@ public interface IFunctionActionBuilder
     /// <param name="name">The name of the argument to add</param>
     /// <param name="value">The value or workflow expression of the argument to add</param>
     /// <returns>The configured <see cref="IFunctionActionBuilder"/></returns>
-    IFunctionActionBuilder WithArgument(string name, string value);
+    IFunctionActionBuilder WithArgument(string name, object value);
 
     /// <summary>
     /// Configures the <see cref="FunctionDefinition"/> to use the specified argument when performing the function call
     /// </summary>
     /// <param name="args">An <see cref="IDictionary{TKey, TValue}"/> containing the name/value pairs of the arguments to use</param>
     /// <returns>The configured <see cref="IFunctionActionBuilder"/></returns>
-    IFunctionActionBuilder WithArguments(IDictionary<string, string> args);
+    IFunctionActionBuilder WithArguments(IDictionary<string, object> args);
 
 }

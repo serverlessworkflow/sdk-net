@@ -27,7 +27,17 @@ public class FunctionBuilder
     protected FunctionDefinition Function { get; } = new FunctionDefinition();
 
     /// <inheritdoc/>
-    public override IDictionary<string, object>? Metadata => this.Function.Metadata;
+    public override DynamicMapping? Metadata
+    {
+        get
+        {
+            return this.Function.Metadata;
+        }
+        protected set
+        {
+            this.Function.Metadata = value;
+        }
+    }
 
     /// <inheritdoc/>
     public virtual IFunctionBuilder WithName(string name)

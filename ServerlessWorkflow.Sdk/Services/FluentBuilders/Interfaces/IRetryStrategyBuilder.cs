@@ -45,7 +45,7 @@ public interface IRetryStrategyBuilder
     /// </summary>
     /// <param name="duration">The duration which will be added to the delay between successive retries</param>
     /// <returns>The configured <see cref="IRetryStrategyBuilder"/></returns>
-    IRetryStrategyBuilder WithDelayIncrementation(TimeSpan duration);
+    IRetryStrategyBuilder WithDelayIncrement(TimeSpan duration);
 
     /// <summary>
     /// Configures the value by which the delay is multiplied before each attempt.

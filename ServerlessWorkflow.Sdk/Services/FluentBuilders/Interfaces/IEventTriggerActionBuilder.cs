@@ -1,7 +1,7 @@
 ﻿namespace ServerlessWorkflow.Sdk.Services.FluentBuilders;
 
 /// <summary>
-/// Defines the fundamentals of a service used to build <see cref="ActionDefinition"/>s of type <see cref="ActionType.Trigger"/>
+/// Defines the fundamentals of a service used to build <see cref="ActionDefinition"/>s of type <see cref="ActionType.Event"/>
 /// </summary>
 public interface IEventTriggerActionBuilder
 {

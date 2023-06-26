@@ -20,7 +20,18 @@ public class ParallelStateBuilder
     /// <inheritdoc/>
     public virtual IParallelStateBuilder Branch(Action<IBranchBuilder> branchSetup)
     {
-        IBranchBuilder branch = new BranchBuilder(this.Pipeline);
+        var branch = new BranchBuilder(this.Pipeline);
+        branchSetup(branch);
+        this.State.Branches.Add(branch.Build());
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IParallelStateBuilder Branch(string name, Action<IBranchBuilder> branchSetup)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        if (branchSetup == null) throw new ArgumentNullException(nameof(branchSetup));
+        var branch = new BranchBuilder(this.Pipeline).WithName(name);
         branchSetup(branch);
         this.State.Branches.Add(branch.Build());
         return this;

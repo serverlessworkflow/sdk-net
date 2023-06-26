@@ -11,12 +11,20 @@ public interface ISwitchStateBuilder
     /// Switches on the <see cref="SwitchStateDefinition"/>'s data 
     /// </summary>
     /// <returns>The configured <see cref="IDataSwitchStateBuilder"/></returns>
-    IDataSwitchStateBuilder Data();
+    IDataSwitchStateBuilder SwitchData();
 
     /// <summary>
     /// Switches on consumed <see cref="CloudEvent"/>s
     /// </summary>
     /// <returns>The configured <see cref="IEventSwitchStateBuilder"/></returns>
-    IEventSwitchStateBuilder Events();
+    IEventSwitchStateBuilder SwitchEvents();
+
+    /// <summary>
+    /// Configures the <see cref="SwitchStateDefinition"/>'s default case
+    /// </summary>
+    /// <param name="name">The name of the default case</param>
+    /// <param name="outcomeSetup">An action used to configure the outcome of the default case</param>
+    /// <returns>The configured <see cref="IEventSwitchStateBuilder"/></returns>
+    ISwitchStateBuilder WithDefaultCase(string name, Action<IStateOutcomeBuilder> outcomeSetup);
 
 }

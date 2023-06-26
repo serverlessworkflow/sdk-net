@@ -36,7 +36,7 @@ public class RetryStrategyBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IRetryStrategyBuilder WithDelayIncrementation(TimeSpan duration)
+    public virtual IRetryStrategyBuilder WithDelayIncrement(TimeSpan duration)
     {
         this.Strategy.Increment = duration;
         return this;

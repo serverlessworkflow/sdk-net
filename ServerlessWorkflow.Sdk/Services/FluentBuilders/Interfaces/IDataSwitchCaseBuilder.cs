@@ -12,7 +12,7 @@ public interface IDataSwitchCaseBuilder
     /// </summary>
     /// <param name="expression">The workflow expression used to evaluate the data</param>
     /// <returns>The configured <see cref="ISwitchStateBuilder"/></returns>
-    IDataSwitchCaseBuilder WithExpression(string expression);
+    IDataSwitchCaseBuilder When(string expression);
 
     /// <summary>
     /// Builds the <see cref="DataCaseDefinition"/>

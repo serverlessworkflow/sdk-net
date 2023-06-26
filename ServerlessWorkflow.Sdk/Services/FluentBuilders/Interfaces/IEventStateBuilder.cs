@@ -12,7 +12,7 @@ public interface IEventStateBuilder
     /// </summary>
     /// <param name="triggerSetup">The <see cref="Action{T}"/> used to build the <see cref="EventStateTriggerDefinition"/></param>
     /// <returns>The configured <see cref="IEventStateBuilder"/></returns>
-    IEventStateBuilder Trigger(Action<IEventStateTriggerBuilder> triggerSetup);
+    IEventStateBuilder TriggeredBy(Action<IEventStateTriggerBuilder> triggerSetup);
 
     /// <summary>
     /// Configures the <see cref="EventStateDefinition"/> to wait for all triggers to complete before resuming the workflow's execution

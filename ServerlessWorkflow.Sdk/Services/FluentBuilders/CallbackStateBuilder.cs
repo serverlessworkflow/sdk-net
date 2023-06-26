@@ -18,18 +18,28 @@ public class CallbackStateBuilder
     }
 
     /// <inheritdoc/>
-    public virtual ICallbackStateBuilder Action(Action<IActionBuilder> actionSetup)
+    public virtual ICallbackStateBuilder Execute(Action<IActionBuilder> actionSetup)
     {
-        if (actionSetup == null)
-            throw new ArgumentNullException(nameof(actionSetup));
-        IActionBuilder builder = new ActionBuilder(this.Pipeline);
+        if (actionSetup == null) throw new ArgumentNullException(nameof(actionSetup));
+        var builder = new ActionBuilder(this.Pipeline);
         actionSetup(builder);
-        ActionDefinition action = builder.Build();
-        return this.Action(action);
+        var action = builder.Build();
+        return this.Execute(action);
     }
 
     /// <inheritdoc/>
-    public virtual ICallbackStateBuilder Action(ActionDefinition action)
+    public ICallbackStateBuilder Execute(string name, Action<IActionBuilder> actionSetup)
+    {
+        if (actionSetup == null) throw new ArgumentNullException(nameof(actionSetup));
+        var builder = new ActionBuilder(this.Pipeline);
+        builder.WithName(name);
+        actionSetup(builder);
+        var action = builder.Build();
+        return this.Execute(action);
+    }
+
+    /// <inheritdoc/>
+    public virtual ICallbackStateBuilder Execute(ActionDefinition action)
     {
         if (action == null)
             throw new ArgumentNullException(nameof(action));

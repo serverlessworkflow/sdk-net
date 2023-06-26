@@ -19,7 +19,7 @@ public class EventDefinition
     /// Gets/sets the cloud event source
     /// </summary>
     [DataMember(Order = 2, Name = "source"), JsonPropertyOrder(2), JsonPropertyName("source"), YamlMember(Alias = "source", Order = 2)]
-    public virtual string? Source { get; set; }
+    public virtual Uri? Source { get; set; }
 
     /// <summary>
     /// Gets/sets the cloud event type
@@ -52,7 +52,7 @@ public class EventDefinition
     /// Gets/sets the <see cref="EventDefinition"/>'s metadata
     /// </summary>
     [DataMember(Order = 7, Name = "metadata"), JsonPropertyOrder(7), JsonPropertyName("metadata"), YamlMember(Alias = "metadata", Order = 7)]
-    public virtual IDictionary<string, object>? Metadata { get; set; }
+    public virtual DynamicMapping? Metadata { get; set; }
 
     /// <summary>
     /// Gets/sets an <see cref="IDictionary{TKey, TValue}"/> containing the <see cref="EventDefinition"/>'s extension properties

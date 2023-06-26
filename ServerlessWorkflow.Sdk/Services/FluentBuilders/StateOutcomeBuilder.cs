@@ -29,9 +29,18 @@ public class StateOutcomeBuilder
     /// <inheritdoc/>
     public virtual void TransitionTo(Func<IStateBuilderFactory, IStateBuilder> stateSetup)
     {
+        if(stateSetup == null) throw new ArgumentNullException(nameof(stateSetup));
         //TODO: configure transition
-        StateDefinition state = this.Pipeline.AddState(stateSetup);
+        var state = this.Pipeline.AddState(stateSetup);
         this.Outcome = new TransitionDefinition() { NextState = state.Name };
+    }
+
+    /// <inheritdoc/>
+    public virtual void TransitionTo(string stateName)
+    {
+        if (string.IsNullOrWhiteSpace(stateName)) throw new ArgumentNullException(nameof(stateName));
+        //TODO: configure transition
+        this.Outcome = new TransitionDefinition() { NextState = stateName };
     }
 
     /// <inheritdoc/>

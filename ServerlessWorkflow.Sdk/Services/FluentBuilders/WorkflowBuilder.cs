@@ -26,7 +26,7 @@ public class WorkflowBuilder
     protected IPipelineBuilder Pipeline { get; }
 
     /// <inheritdoc/>
-    public override IDictionary<string, object>? Metadata
+    public override DynamicMapping? Metadata
     {
         get
         {
@@ -121,6 +121,17 @@ public class WorkflowBuilder
     public virtual IWorkflowBuilder UseJq() => this.UseExpressionLanguage("jq");
 
     /// <inheritdoc/>
+    public virtual IWorkflowBuilder UseExtension(string id, Uri resourceUri)
+    {
+        if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
+        if (resourceUri == null) throw new ArgumentNullException(nameof(resourceUri));
+        this.Workflow.Extensions ??= new();
+        if (this.Workflow.Extensions.Any(e => e.ExtensionId == id)) throw new Exception($"An extension with the specified id '{id}' has already been registered");
+        this.Workflow.Extensions.Add(new(id, resourceUri));
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual IWorkflowBuilder WithExecutionTimeout(Action<IWorkflowExecutionTimeoutBuilder> timeoutSetup)
     {
         var builder = new WorkflowExecutionTimeoutBuilder(this.Pipeline);
@@ -147,7 +158,7 @@ public class WorkflowBuilder
     public virtual IWorkflowBuilder UseConstants(object constants)
     {
         if (constants == null) throw new ArgumentNullException(nameof(constants));
-        this.Workflow.Constants = constants is IDictionary<string, object> dico ? dico.ToDictionary(kvp => kvp.Key, kvp => kvp.Value) : Serialization.Serializer.Json.Deserialize<Dictionary<string, object>>(Serialization.Serializer.Json.Serialize(constants))!;
+        this.Workflow.Constants = new(constants is IDictionary<string, object> dico ? dico.ToDictionary(kvp => kvp.Key, kvp => kvp.Value) : Serialization.Serializer.Json.Deserialize<Dictionary<string, object>>(Serialization.Serializer.Json.Serialize(constants))!);
         return this;
     }
 
@@ -155,7 +166,7 @@ public class WorkflowBuilder
     public virtual IWorkflowBuilder AddConstant(string name, object value)
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-        if (this.Workflow.Constants == null) this.Workflow.Constants = new Dictionary<string, object>();
+        if (this.Workflow.Constants == null) this.Workflow.Constants = new();
         this.Workflow.Constants[name] = value ?? throw new ArgumentNullException(nameof(value));
         return this;
     }

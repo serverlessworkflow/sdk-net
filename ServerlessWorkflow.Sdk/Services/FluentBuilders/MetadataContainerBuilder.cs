@@ -10,13 +10,13 @@ public abstract class MetadataContainerBuilder<TContainer>
 {
 
     /// <inheritdoc/>
-    public virtual IDictionary<string, object>? Metadata { get; protected set; }
+    public virtual DynamicMapping? Metadata { get; protected set; }
 
     /// <inheritdoc/>
     public virtual TContainer WithMetadata(string key, object value)
     {
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentNullException(nameof(key));
-        this.Metadata ??= new Dictionary<string, object>();
+        this.Metadata ??= new();
         this.Metadata[key] = value;
         return (TContainer)(object)this;
     }
@@ -24,11 +24,8 @@ public abstract class MetadataContainerBuilder<TContainer>
     /// <inheritdoc/>
     public virtual TContainer WithMetadata(IDictionary<string, object> metadata)
     {
-        if (metadata == null) throw new ArgumentNullException(nameof(metadata));
-        foreach (KeyValuePair<string, object> kvp in metadata)
-        {
-            this.WithMetadata(kvp.Key, kvp.Value);
-        }
+        if(metadata == null) throw new ArgumentNullException(nameof(metadata));
+        this.Metadata = new(metadata);
         return (TContainer)(object)this;
     }
 

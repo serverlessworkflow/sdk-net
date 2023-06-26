@@ -39,6 +39,13 @@ public interface IStateBuilderFactory
     IInjectStateBuilder Inject(object data);
 
     /// <summary>
+    /// Creates and configures a new <see cref="ExtensionStateDefinition"/>
+    /// </summary>
+    /// <param name="type">The type of the <see cref="ExtensionStateDefinition"/> to build</param>
+    /// <returns>A new <see cref="IExtensionStateBuilder"/></returns>
+    IExtensionStateBuilder Extension(string type);
+
+    /// <summary>
     /// Creates and configures a new <see cref="OperationStateDefinition"/>
     /// </summary>
     /// <param name="action">The <see cref="ActionDefinition"/> to execute</param>

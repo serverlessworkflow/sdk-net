@@ -19,7 +19,7 @@ public class InjectStateDefinition
     /// <summary>
     /// Gets/sets the object to inject within the state's data input and can be manipulated via filter
     /// </summary>
-    [DataMember(Order = 5, Name = "data"), JsonPropertyOrder(5), JsonPropertyName("data"), YamlMember(Alias = "data", Order = 5)]
+    [DataMember(Order = 6, Name = "data"), JsonPropertyOrder(6), JsonPropertyName("data"), YamlMember(Alias = "data", Order = 6)]
     public virtual object Data { get; set; } = null!;
 
 }

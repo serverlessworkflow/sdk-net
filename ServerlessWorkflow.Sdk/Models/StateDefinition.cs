@@ -97,31 +97,31 @@ public abstract class StateDefinition
     /// <summary>
     /// Gets/sets the configuration of the state definition's error handling
     /// </summary>
-    [DataMember(Order = 6, Name = "onErrors"), JsonPropertyOrder(6), JsonPropertyName("onErrors"), YamlMember(Alias = "onErrors", Order = 6)]
+    [DataMember(Order = 90, Name = "onErrors"), JsonPropertyOrder(90), JsonPropertyName("onErrors"), YamlMember(Alias = "onErrors", Order = 90)]
     public virtual List<ErrorHandlerDefinition>? Errors { get; set; }
 
     /// <summary>
     /// Gets/sets the id of the state definition used to compensate the state definition
     /// </summary>
-    [DataMember(Order = 7, Name = "compensatedBy"), JsonPropertyOrder(7), JsonPropertyName("compensatedBy"), YamlMember(Alias = "compensatedBy", Order = 7)]
+    [DataMember(Order = 91, Name = "compensatedBy"), JsonPropertyOrder(91), JsonPropertyName("compensatedBy"), YamlMember(Alias = "compensatedBy", Order = 91)]
     public virtual string? CompensatedBy { get; set; }
 
     /// <summary>
     /// Gets/sets a boolean indicating whether or not the state definition is used for compensating another state definition
     /// </summary>
-    [DataMember(Order = 8, Name = "usedForCompensation"), JsonPropertyOrder(8), JsonPropertyName("usedForCompensation"), YamlMember(Alias = "usedForCompensation", Order = 8)]
+    [DataMember(Order = 92, Name = "usedForCompensation"), JsonPropertyOrder(92), JsonPropertyName("usedForCompensation"), YamlMember(Alias = "usedForCompensation", Order = 92)]
     public virtual bool UsedForCompensation { get; set; }
 
     /// <summary>
     /// Gets/sets the state definition's metadata, if any
     /// </summary>
-    [DataMember(Order = 9, Name = "metadata"), JsonPropertyOrder(9), JsonPropertyName("metadata"), YamlMember(Alias = "metadata", Order = 9)]
-    public virtual IDictionary<string, object>? Metadata { get; set; }
+    [DataMember(Order = 93, Name = "metadata"), JsonPropertyOrder(93), JsonPropertyName("metadata"), YamlMember(Alias = "metadata", Order = 93)]
+    public virtual DynamicMapping? Metadata { get; set; }
 
     /// <summary>
     /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the state definition's <see cref="TransitionDefinition"/>
     /// </summary>
-    [DataMember(Order = 10, Name = "transition"), JsonPropertyOrder(10), JsonPropertyName("transition"), YamlMember(Alias = "transition", Order = 10)]
+    [DataMember(Order = 94, Name = "transition"), JsonPropertyOrder(94), JsonPropertyName("transition"), YamlMember(Alias = "transition", Order = 94)]
     [JsonConverter(typeof(OneOfConverter<TransitionDefinition, string>))]
     protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
 
@@ -163,7 +163,7 @@ public abstract class StateDefinition
     /// <summary>
     /// Gets/sets an object used to configure the state definition's end, if any
     /// </summary>
-    [DataMember(Order = 11, Name = "end"), JsonPropertyOrder(11), JsonPropertyName("end"), YamlMember(Alias = "end", Order = 11)]
+    [DataMember(Order = 95, Name = "end"), JsonPropertyOrder(95), JsonPropertyName("end"), YamlMember(Alias = "end", Order = 95)]
     [JsonConverter(typeof(OneOfConverter<EndDefinition, bool>))]
     protected virtual OneOf<EndDefinition, bool>? EndValue { get; set; }
 

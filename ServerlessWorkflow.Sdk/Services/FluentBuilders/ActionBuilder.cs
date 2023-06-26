@@ -35,6 +35,14 @@ public class ActionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IActionBuilder WithCondition(string expression)
+    {
+        if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
+        this.Action.Condition = expression;
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual IActionBuilder FromStateData(string expression)
     {
         this.Action.ActionDataFilter!.FromStateData = expression;
@@ -82,7 +90,7 @@ public class ActionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IFunctionActionBuilder WithArgument(string name, string value)
+    public virtual IFunctionActionBuilder WithArgument(string name, object value)
     {
         if (this.Action.Function!.Arguments == null) this.Action.Function.Arguments = new Dictionary<string, object>();
         this.Action.Function.Arguments[name] = value;
@@ -90,7 +98,7 @@ public class ActionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IFunctionActionBuilder WithArguments(IDictionary<string, string> args)
+    public virtual IFunctionActionBuilder WithArguments(IDictionary<string, object> args)
     {
         this.Action.Function!.Arguments = args.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value);
         return this;

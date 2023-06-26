@@ -30,8 +30,8 @@ public class AuthenticationDefinition
     /// </summary>
     [Required, MinLength(1)]
     [DataMember(Order = 3, Name = "properties", IsRequired = true), JsonPropertyOrder(3), JsonPropertyName("properties"), YamlMember(Alias = "properties", Order = 3)]
-    [JsonConverter(typeof(OneOfConverter<string, IDictionary<string, object>>))]
-    protected virtual OneOf<string, IDictionary<string, object>> PropertiesValue { get; set; } = null!;
+    [JsonConverter(typeof(OneOfConverter<string, DynamicMapping>))]
+    protected virtual OneOf<string, DynamicMapping> PropertiesValue { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the <see cref="AuthenticationDefinition"/>'s properties
@@ -71,7 +71,7 @@ public class AuthenticationDefinition
                 default:
                     throw new NotSupportedException($"The specified authentication info type '{value.GetType()}' is not supported");
             }
-            this.PropertiesValue = value.Properties.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            this.PropertiesValue = new DynamicMapping(value.Properties);
         }
     }
 

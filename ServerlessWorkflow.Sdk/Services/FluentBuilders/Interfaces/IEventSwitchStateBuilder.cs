@@ -12,13 +12,21 @@ public interface IEventSwitchStateBuilder
     /// </summary>
     /// <param name="duration">The duration after which the <see cref="SwitchStateDefinition"/>'s execution times out</param>
     /// <returns>The configured <see cref="IDataSwitchCaseBuilder"/></returns>
-    IEventSwitchStateBuilder Timeout(TimeSpan duration);
+    IEventSwitchStateBuilder TimeoutAfter(TimeSpan duration);
 
     /// <summary>
     /// Creates and configures a new data-based <see cref="SwitchCaseDefinition"/>
     /// </summary>
     /// <param name="caseBuilder">The <see cref="Action{T}"/> used to build the <see cref="CloudEvent"/>-based <see cref="SwitchCaseDefinition"/></param>
     /// <returns>The configured <see cref="IEventSwitchStateBuilder"/></returns>
-    IEventSwitchStateBuilder Case(Action<IEventSwitchCaseBuilder> caseBuilder);
+    IEventSwitchStateBuilder WithCase(Action<IEventSwitchCaseBuilder> caseBuilder);
+
+    /// <summary>
+    /// Creates and configures a new data-based <see cref="SwitchCaseDefinition"/>
+    /// </summary>
+    /// <param name="name">The name of the case to add</param>
+    /// <param name="caseBuilder">The <see cref="Action{T}"/> used to build the <see cref="CloudEvent"/>-based <see cref="SwitchCaseDefinition"/></param>
+    /// <returns>The configured <see cref="IEventSwitchStateBuilder"/></returns>
+    IEventSwitchStateBuilder WithCase(string name, Action<IEventSwitchCaseBuilder> caseBuilder);
 
 }

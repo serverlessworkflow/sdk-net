@@ -126,4 +126,11 @@ public class StateBuilderFactory
         return new SwitchStateBuilder(this.Pipeline);
     }
 
+    /// <inheritdoc/>
+    public virtual IExtensionStateBuilder Extension(string type)
+    {
+        if(string.IsNullOrWhiteSpace(type)) throw new ArgumentNullException(nameof(type));
+        return new ExtensionStateBuilder(this.Pipeline, type);
+    }
+
 }

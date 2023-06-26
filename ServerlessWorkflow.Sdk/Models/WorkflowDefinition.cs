@@ -66,7 +66,7 @@ public class WorkflowDefinition
     /// Gets/sets the workflow definition's metadata
     /// </summary>
     [DataMember(Order = 9, Name = "metadata"), JsonPropertyName("metadata"), YamlMember(Alias = "metadata")]
-    public virtual IDictionary<string, object>? Metadata { get; set; }
+    public virtual DynamicMapping? Metadata { get; set; }
 
     /// <summary>
     /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the workflow definition's data input <see cref="JSchema"/>
@@ -201,14 +201,14 @@ public class WorkflowDefinition
     /// Gets/sets the <see cref="OneOf{T1, T2}"/> that represents the workflow definition's constants
     /// </summary>
     [DataMember(Order = 13, Name = "constants"), JsonPropertyName("constants"), YamlMember(Alias = "constants")]
-    [JsonConverter(typeof(OneOfConverter<IDictionary<string, object>, Uri>))]
-    protected virtual OneOf<IDictionary<string, object>, Uri>? ConstantsValue { get; set; }
+    [JsonConverter(typeof(OneOfConverter<DynamicMapping, Uri>))]
+    protected virtual OneOf<DynamicMapping, Uri>? ConstantsValue { get; set; }
 
     /// <summary>
     /// Gets/sets a <see cref="List{T}"/> containing the <see cref="WorkflowDefinition"/>'s constants
     /// </summary>
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual IDictionary<string, object>? Constants
+    public virtual DynamicMapping? Constants
     {
         get
         {

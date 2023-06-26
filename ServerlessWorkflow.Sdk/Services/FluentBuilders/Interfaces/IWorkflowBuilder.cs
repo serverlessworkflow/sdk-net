@@ -84,6 +84,14 @@ public interface IWorkflowBuilder
     IWorkflowBuilder UseJq();
 
     /// <summary>
+    /// Configures the workflow definition to use the specified extension
+    /// </summary>
+    /// <param name="id">The id of the workflow extension to use</param>
+    /// <param name="resourceUri">The uri that references the extension resource</param>
+    /// <returns>The configure <see cref="IWorkflowBuilder"/></returns>
+    IWorkflowBuilder UseExtension(string id, Uri resourceUri);
+
+    /// <summary>
     /// Adds the workflow definition authentication definitions defined in the specified file
     /// </summary>
     /// <param name="uri">The uri of the file that defines the authentication definitions</param>

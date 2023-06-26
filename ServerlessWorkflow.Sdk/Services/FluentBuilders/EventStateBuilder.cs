@@ -14,7 +14,7 @@ public class EventStateBuilder
     public EventStateBuilder(IPipelineBuilder pipeline) : base(pipeline) { }
 
     /// <inheritdoc/>
-    public virtual IEventStateBuilder Trigger(Action<IEventStateTriggerBuilder> triggerSetup)
+    public virtual IEventStateBuilder TriggeredBy(Action<IEventStateTriggerBuilder> triggerSetup)
     {
         if (triggerSetup == null) throw new ArgumentNullException(nameof(triggerSetup));
         var builder = new EventStateTriggerBuilder(this.Pipeline);

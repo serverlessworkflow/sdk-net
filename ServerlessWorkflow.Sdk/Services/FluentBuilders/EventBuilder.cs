@@ -13,7 +13,17 @@ public class EventBuilder
     protected EventDefinition Event { get; } = new();
 
     /// <inheritdoc/>
-    public override IDictionary<string, object>? Metadata => this.Event.Metadata;
+    public override DynamicMapping? Metadata
+    {
+        get
+        {
+            return this.Event.Metadata;
+        }
+        protected set
+        {
+            this.Event.Metadata = value;
+        }
+    }
 
     /// <inheritdoc/>
     public virtual IEventBuilder WithName(string name)
@@ -26,8 +36,7 @@ public class EventBuilder
     /// <inheritdoc/>
     public virtual IEventBuilder WithSource(Uri source)
     {
-        if (source == null) throw new ArgumentNullException(nameof(source));
-        this.Event.Source = source.ToString();
+        this.Event.Source = source ?? throw new ArgumentNullException(nameof(source));
         return this;
     }
 

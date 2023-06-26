@@ -20,19 +20,19 @@ public class ParallelStateDefinition
     /// Gets/sets an <see cref="List{T}"/> containing the <see cref="BranchDefinition"/>es executed by the <see cref="ParallelStateDefinition"/>
     /// </summary>
     [Required, MinLength(1)]
-    [DataMember(Order = 5, Name = "branches"), JsonPropertyOrder(5), JsonPropertyName("branches"), YamlMember(Alias = "branches", Order = 5)]
+    [DataMember(Order = 6, Name = "branches"), JsonPropertyOrder(6), JsonPropertyName("branches"), YamlMember(Alias = "branches", Order = 6)]
     public virtual List<BranchDefinition> Branches { get; set; } = new List<BranchDefinition>();
 
     /// <summary>
     /// Gets/sets a value that configures the way the <see cref="ParallelStateDefinition"/> completes. Defaults to 'And'
     /// </summary>
-    [DataMember(Order = 6, Name = "completionType"), JsonPropertyOrder(6), JsonPropertyName("completionType"), YamlMember(Alias = "completionType", Order = 6)]
+    [DataMember(Order = 7, Name = "completionType"), JsonPropertyOrder(7), JsonPropertyName("completionType"), YamlMember(Alias = "completionType", Order = 7)]
     public virtual string CompletionType { get; set; } = ParallelCompletionType.AllOf;
 
     /// <summary>
     /// Gets/sets a value that represents the amount of <see cref="BranchDefinition"/>es to complete for completing the state, when <see cref="CompletionType"/> is set to <see cref="ParallelCompletionType.AtLeastN"/>
     /// </summary>
-    [DataMember(Order = 7, Name = "n"), JsonPropertyOrder(7), JsonPropertyName("n"), YamlMember(Alias = "n", Order = 7)]
+    [DataMember(Order = 8, Name = "n"), JsonPropertyOrder(8), JsonPropertyName("n"), YamlMember(Alias = "n", Order = 8)]
     public virtual uint? N { get; set; }
 
     /// <summary>

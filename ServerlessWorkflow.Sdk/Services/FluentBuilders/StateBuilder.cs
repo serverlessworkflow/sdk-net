@@ -26,10 +26,20 @@ public abstract class StateBuilder<TState>
     /// <summary>
     /// Gets the state definition to configure
     /// </summary>
-    protected TState State { get; } = new TState();
+    protected TState State { get; set; } = new TState();
 
     /// <inheritdoc/>
-    public override IDictionary<string, object>? Metadata => this.State.Metadata;
+    public override DynamicMapping? Metadata
+    {
+        get
+        {
+            return this.State.Metadata;
+        }
+        protected set
+        {
+            this.State.Metadata = value;
+        }
+    }
 
     /// <inheritdoc/>
     public virtual IStateBuilder<TState> WithName(string name)
@@ -40,6 +50,21 @@ public abstract class StateBuilder<TState>
     }
 
     IStateBuilder IStateBuilder.WithName(string name) => this.WithName(name);
+
+    /// <inheritdoc/>
+    public virtual IStateBuilder<TState> WithExtensionProperty(string name, object value)
+    {
+        this.State.ExtensionData ??= new Dictionary<string, object>();
+        this.State.ExtensionData[name] = value;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IStateBuilder<TState> WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.State.ExtensionData = properties;
+        return this;
+    }
 
     /// <inheritdoc/>
     public virtual IStateBuilder<TState> FilterInput(string expression)

@@ -32,19 +32,19 @@ public class SwitchStateDefinition
     /// <summary>
     /// Gets/sets an <see cref="List{T}"/> of <see cref="DataCaseDefinition"/>s between which to switch. Assigning the property sets the <see cref="SwitchStateDefinition"/>'s <see cref="SwitchType"/> to <see cref="SwitchStateType.Data"/>.
     /// </summary>
-    [DataMember(Order = 5, Name = "dataConditions"), JsonPropertyOrder(5), JsonPropertyName("dataConditions"), YamlMember(Alias = "dataConditions", Order = 5)]
+    [DataMember(Order = 6, Name = "dataConditions"), JsonPropertyOrder(6), JsonPropertyName("dataConditions"), YamlMember(Alias = "dataConditions", Order = 6)]
     public virtual List<DataCaseDefinition>? DataConditions { get; set; }
 
     /// <summary>
     /// Gets/sets an <see cref="List{T}"/> of <see cref="EventCaseDefinition"/>s between which to switch. Assigning the property sets the <see cref="SwitchStateDefinition"/>'s <see cref="SwitchType"/> to <see cref="SwitchStateType.Event"/>.
     /// </summary>
-    [DataMember(Order = 6, Name = "eventConditions"), JsonPropertyOrder(6), JsonPropertyName("eventConditions"), YamlMember(Alias = "eventConditions", Order = 6)]
+    [DataMember(Order = 7, Name = "eventConditions"), JsonPropertyOrder(7), JsonPropertyName("eventConditions"), YamlMember(Alias = "eventConditions", Order = 7)]
     public virtual List<EventCaseDefinition>? EventConditions { get; set; }
 
     /// <summary>
     /// Gets/sets the duration to wait for incoming events
     /// </summary>
-    [DataMember(Order = 7, Name = "eventTimeout"), JsonPropertyOrder(7), JsonPropertyName("eventTimeout"), YamlMember(Alias = "eventTimeout", Order = 7)]
+    [DataMember(Order = 8, Name = "eventTimeout"), JsonPropertyOrder(8), JsonPropertyName("eventTimeout"), YamlMember(Alias = "eventTimeout", Order = 8)]
     [JsonConverter(typeof(Iso8601NullableTimeSpanConverter))]
     public virtual TimeSpan? EventTimeout { get; set; }
 
@@ -52,7 +52,7 @@ public class SwitchStateDefinition
     /// Gets/sets an object used to configure the <see cref="SwitchStateDefinition"/>'s default condition, in case none of the specified conditions were met
     /// </summary>
     [Required, MinLength(1)]
-    [DataMember(Order = 8, Name = "name", IsRequired = true), JsonPropertyOrder(8), JsonPropertyName("name"), YamlMember(Alias = "name", Order = 8)]
+    [DataMember(Order = 9, Name = "name", IsRequired = true), JsonPropertyOrder(9), JsonPropertyName("name"), YamlMember(Alias = "name", Order = 9)]
     public virtual DefaultCaseDefinition DefaultCondition { get; set; } = null!;
 
     /// <summary>

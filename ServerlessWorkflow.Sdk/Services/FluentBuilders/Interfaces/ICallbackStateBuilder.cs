@@ -10,16 +10,24 @@ public interface ICallbackStateBuilder
     /// <summary>
     /// Configures the <see cref="CallbackStateDefinition"/> to execute the specified <see cref="ActionDefinition"/> upon consumption of the callback <see cref="CloudEvent"/>
     /// </summary>
+    /// <param name="name">The name of the <see cref="ActionDefinition"/> to build</param>
     /// <param name="actionSetup">The <see cref="Action{T}"/> used to create the <see cref="ActionDefinition"/> to execute</param>
     /// <returns>The configured <see cref="ICallbackStateBuilder"/></returns>
-    ICallbackStateBuilder Action(Action<IActionBuilder> actionSetup);
+    ICallbackStateBuilder Execute(string name, Action<IActionBuilder> actionSetup);
+
+    /// <summary>
+    /// Configures the <see cref="CallbackStateDefinition"/> to execute the specified <see cref="ActionDefinition"/> upon consumption of the callback <see cref="CloudEvent"/>
+    /// </summary>
+    /// <param name="actionSetup">The <see cref="Action{T}"/> used to create the <see cref="ActionDefinition"/> to execute</param>
+    /// <returns>The configured <see cref="ICallbackStateBuilder"/></returns>
+    ICallbackStateBuilder Execute(Action<IActionBuilder> actionSetup);
 
     /// <summary>
     /// Configures the <see cref="CallbackStateDefinition"/> to execute the specified <see cref="ActionDefinition"/> upon consumption of the callback <see cref="CloudEvent"/>
     /// </summary>
     /// <param name="action">The <see cref="ActionDefinition"/> to execute</param>
     /// <returns>The configured <see cref="ICallbackStateBuilder"/></returns>
-    ICallbackStateBuilder Action(ActionDefinition action);
+    ICallbackStateBuilder Execute(ActionDefinition action);
 
     /// <summary>
     /// Configures the <see cref="CallbackStateDefinition"/> to wait for the consumption of a <see cref="CloudEvent"/> defined by specified <see cref="EventDefinition"/>

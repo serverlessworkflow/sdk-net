@@ -20,14 +20,14 @@ public class OperationStateDefinition
     /// Gets/sets a value that specifies how actions are to be performed (in sequence of parallel). Defaults to sequential
     /// </summary>
     [DefaultValue(ActionExecutionMode.Sequential)]
-    [DataMember(Order = 1, Name = "actionMode"), JsonPropertyOrder(1), JsonPropertyName("actionMode"), YamlMember(Alias = "actionMode", Order = 1)]
+    [DataMember(Order = 6, Name = "actionMode"), JsonPropertyOrder(6), JsonPropertyName("actionMode"), YamlMember(Alias = "actionMode", Order = 6)]
     public virtual string ActionMode { get; set; } = ActionExecutionMode.Sequential;
 
     /// <summary>
     /// Gets/sets an <see cref="List{T}"/> of actions to be performed if expression matches
     /// </summary>
     [Required, MinLength(1)]
-    [DataMember(Order = 2, Name = "actions", IsRequired = true), JsonPropertyOrder(2), JsonPropertyName("actions"), YamlMember(Alias = "actions", Order = 2)]
+    [DataMember(Order = 7, Name = "actions", IsRequired = true), JsonPropertyOrder(7), JsonPropertyName("actions"), YamlMember(Alias = "actions", Order = 7)]
     public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
     /// <summary>

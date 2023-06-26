@@ -15,6 +15,14 @@ public interface IParallelStateBuilder
     IParallelStateBuilder Branch(Action<IBranchBuilder> branchSetup);
 
     /// <summary>
+    /// Creates and configures a new <see cref="BranchDefinition"/>
+    /// </summary>
+    /// <param name="name">The name of the <see cref="BranchDefinition"/> to build</param>
+    /// <param name="branchSetup">The <see cref="Action{T}"/> used to setup the <see cref="BranchDefinition"/></param>
+    /// <returns>The configured <see cref="IParallelStateBuilder"/></returns>
+    IParallelStateBuilder Branch(string name, Action<IBranchBuilder> branchSetup);
+
+    /// <summary>
     /// Configures the <see cref="ParallelStateDefinition"/> to wait for all branches to complete before resuming the workflow's execution
     /// </summary>
     /// <returns>The configured <see cref="IParallelStateBuilder"/></returns>

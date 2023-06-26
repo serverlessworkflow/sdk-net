@@ -7,8 +7,8 @@ public interface IMetadata
 {
 
     /// <summary>
-    /// Gets an <see cref="IDictionary{TKey, TValue}"/> that contains the object's metadata
+    /// Gets an <see cref="DynamicMapping"/> that contains the object's metadata
     /// </summary>
-    IDictionary<string, object>? Metadata { get; }
+    DynamicMapping? Metadata { get; }
 
 }

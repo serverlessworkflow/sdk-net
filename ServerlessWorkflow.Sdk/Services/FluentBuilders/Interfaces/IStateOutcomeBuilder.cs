@@ -9,6 +9,13 @@ public interface IStateOutcomeBuilder
     /// <summary>
     /// Transitions to the specified state definition
     /// </summary>
+    /// <param name="stateName">The name of the state definition to transition to</param>
+    /// <returns>A new <see cref="IStateBuilder{TState}"/> used to configure the state definition to transition to</returns>
+    void TransitionTo(string stateName);
+
+    /// <summary>
+    /// Transitions to the specified state definition
+    /// </summary>
     /// <param name="stateSetup">An <see cref="Func{T, TResult}"/> used to setup the state definition to transition to</param>
     /// <returns>A new <see cref="IStateBuilder{TState}"/> used to configure the state definition to transition to</returns>
     void TransitionTo(Func<IStateBuilderFactory, IStateBuilder> stateSetup);

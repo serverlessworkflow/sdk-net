@@ -39,7 +39,7 @@ public class FunctionDefinition
     /// Gets/sets the function's metadata
     /// </summary>
     [DataMember(Order = 5, Name = "metadata", IsRequired = true), JsonPropertyName("metadata"), YamlMember(Alias = "metadata")]
-    public virtual IDictionary<string, object>? Metadata { get; set; }
+    public virtual DynamicMapping? Metadata { get; set; }
 
     /// <summary>
     /// Gets/sets an <see cref="IDictionary{TKey, TValue}"/> containing the <see cref="FunctionDefinition"/>'s extension properties

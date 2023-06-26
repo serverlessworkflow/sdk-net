@@ -11,7 +11,7 @@ public interface IMetadataContainerBuilder<TContainer>
     /// <summary>
     /// Gets the container's metadata
     /// </summary>
-    IDictionary<string, object>? Metadata { get; }
+    DynamicMapping? Metadata { get; }
 
     /// <summary>
     /// Adds the specified metadata

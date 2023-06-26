@@ -26,7 +26,7 @@ public interface IStateBuilder
 /// </summary>
 /// <typeparam name="TState">The type of state definition to build</typeparam>
 public interface IStateBuilder<TState>
-    : IStateBuilder, IMetadataContainerBuilder<IStateBuilder<TState>>
+    : IStateBuilder, IMetadataContainerBuilder<IStateBuilder<TState>>, IExtensibleBuilder<IStateBuilder<TState>>
     where TState : StateDefinition, new()
 {
 

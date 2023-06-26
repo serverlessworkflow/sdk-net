@@ -1,6 +1,4 @@
-﻿using Neuroglia;
-
-namespace ServerlessWorkflow.Sdk.Models;
+﻿namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
 /// Represents an object used to configure an 'OAuth2' authentication scheme
@@ -25,12 +23,12 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(GrantType).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(GrantType).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            this.Properties[nameof(GrantType).Slugify("_")] = value;
+            this.Properties[nameof(GrantType).ToCamelCase()] = value;
         }
     }
 
@@ -43,12 +41,12 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(Authority).Slugify("_"), out var value)) return new((string)value);
+            if (this.Properties.TryGetValue(nameof(Authority).ToCamelCase(), out var value)) return new((string)value);
             else return null!;
         }
         set
         {
-            this.Properties[nameof(Authority).Slugify("_")] = value.ToString();
+            this.Properties[nameof(Authority).ToCamelCase()] = value.ToString();
         }
     }
 
@@ -61,12 +59,12 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(ClientId).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(ClientId).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            this.Properties[nameof(ClientId).Slugify("_")] = value;
+            this.Properties[nameof(ClientId).ToCamelCase()] = value;
         }
     }
 
@@ -78,13 +76,13 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(ClientSecret).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(ClientSecret).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            if (value == null) this.Properties.Remove(nameof(ClientSecret).Slugify("_"));
-            else this.Properties[nameof(ClientSecret).Slugify("_")] = value;
+            if (value == null) this.Properties.Remove(nameof(ClientSecret).ToCamelCase());
+            else this.Properties[nameof(ClientSecret).ToCamelCase()] = value;
         }
     }
 
@@ -96,13 +94,13 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(Username).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(Username).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            if (value == null) this.Properties.Remove(nameof(Username).Slugify("_"));
-            else this.Properties[nameof(Username).Slugify("_")] = value;
+            if (value == null) this.Properties.Remove(nameof(Username).ToCamelCase());
+            else this.Properties[nameof(Username).ToCamelCase()] = value;
         }
     }
 
@@ -114,13 +112,13 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(Password).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(Password).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            if (value == null) this.Properties.Remove(nameof(Password).Slugify("_"));
-            else this.Properties[nameof(Password).Slugify("_")] = value;
+            if (value == null) this.Properties.Remove(nameof(Password).ToCamelCase());
+            else this.Properties[nameof(Password).ToCamelCase()] = value;
         }
     }
 
@@ -132,13 +130,13 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(Scope).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(Scope).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            if (value == null) this.Properties.Remove(nameof(Scope).Slugify("_"));
-            else this.Properties[nameof(Scope).Slugify("_")] = value;
+            if (value == null) this.Properties.Remove(nameof(Scope).ToCamelCase());
+            else this.Properties[nameof(Scope).ToCamelCase()] = value;
         }
     }
 
@@ -150,13 +148,13 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(Audience).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(Audience).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            if (value == null) this.Properties.Remove(nameof(Audience).Slugify("_"));
-            else this.Properties[nameof(Audience).Slugify("_")] = value;
+            if (value == null) this.Properties.Remove(nameof(Audience).ToCamelCase());
+            else this.Properties[nameof(Audience).ToCamelCase()] = value;
         }
     }
 
@@ -168,13 +166,13 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(SubjectToken).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(SubjectToken).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            if (value == null) this.Properties.Remove(nameof(SubjectToken).Slugify("_"));
-            else this.Properties[nameof(SubjectToken).Slugify("_")] = value;
+            if (value == null) this.Properties.Remove(nameof(SubjectToken).ToCamelCase());
+            else this.Properties[nameof(SubjectToken).ToCamelCase()] = value;
         }
     }
 
@@ -186,13 +184,13 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(SubjectTokenType).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(SubjectTokenType).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            if (value == null) this.Properties.Remove(nameof(SubjectTokenType).Slugify("_"));
-            else this.Properties[nameof(SubjectTokenType).Slugify("_")] = value;
+            if (value == null) this.Properties.Remove(nameof(SubjectTokenType).ToCamelCase());
+            else this.Properties[nameof(SubjectTokenType).ToCamelCase()] = value;
         }
     }
 
@@ -204,13 +202,13 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(ActorToken).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(ActorToken).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            if (value == null) this.Properties.Remove(nameof(ActorToken).Slugify("_"));
-            else this.Properties[nameof(ActorToken).Slugify("_")] = value;
+            if (value == null) this.Properties.Remove(nameof(ActorToken).ToCamelCase());
+            else this.Properties[nameof(ActorToken).ToCamelCase()] = value;
         }
     }
 
@@ -222,13 +220,13 @@ public class OAuth2AuthenticationProperties
     {
         get
         {
-            if (this.Properties.TryGetValue(nameof(ActorTokenType).Slugify("_"), out var value)) return (string)value;
+            if (this.Properties.TryGetValue(nameof(ActorTokenType).ToCamelCase(), out var value)) return (string)value;
             else return null!;
         }
         set
         {
-            if (value == null) this.Properties.Remove(nameof(ActorTokenType).Slugify("_"));
-            else this.Properties[nameof(ActorTokenType).Slugify("_")] = value;
+            if (value == null) this.Properties.Remove(nameof(ActorTokenType).ToCamelCase());
+            else this.Properties[nameof(ActorTokenType).ToCamelCase()] = value;
         }
     }
 

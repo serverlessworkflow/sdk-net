@@ -11,6 +11,10 @@ public class ExtensionStateDefinition
     : StateDefinition
 {
 
+    /// <inheritdoc/>
+    public ExtensionStateDefinition() { }
 
+    /// <inheritdoc/>
+    public ExtensionStateDefinition(string type): base(type) { }
 
 }

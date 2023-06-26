@@ -18,10 +18,9 @@ public class DataSwitchCaseBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IDataSwitchCaseBuilder WithExpression(string expression)
+    public virtual IDataSwitchCaseBuilder When(string expression)
     {
-        if (string.IsNullOrWhiteSpace(expression))
-            throw new ArgumentNullException(nameof(expression));
+        if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
         this.Case.Condition = expression;
         return this;
     }
@@ -29,7 +28,7 @@ public class DataSwitchCaseBuilder
     /// <inheritdoc/>
     public virtual new DataCaseDefinition Build()
     {
-        StateOutcomeDefinition outcome = base.Build();
+        var outcome = base.Build();
         switch (outcome)
         {
             case EndDefinition end:

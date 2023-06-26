@@ -19,7 +19,7 @@ public class SleepStateDefinition
     /// <summary>
     /// Gets/sets the amount of time to delay when in this state
     /// </summary>
-    [DataMember(Order = 5, Name = "duration"), JsonPropertyName("duration"), YamlMember(Alias = "duration")]
+    [DataMember(Order = 6, Name = "duration"), JsonPropertyOrder(6), JsonPropertyName("duration"), YamlMember(Alias = "duration", Order = 6)]
     [JsonConverter(typeof(Iso8601TimeSpanConverter))]
     public virtual TimeSpan Duration { get; set; }
 

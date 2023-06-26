@@ -1,7 +1,4 @@
-﻿using ServerlessWorkflow.Sdk.Services.FluentBuilders;
-using System.Collections;
-
-namespace ServerlessWorkflow.Sdk.UnitTests.Services;
+﻿namespace ServerlessWorkflow.Sdk.UnitTests.Services;
 
 public static class WorkflowDefinitionFactory
 {
@@ -34,7 +31,7 @@ public static class WorkflowDefinitionFactory
             .AddSecret("fake-secret")
             .UseJq()
             .StartsWith("fake-inject", state => state.Inject(new { foo = "bar" }))
-            .Then("fake-operation", state => state.Execute("fake-function-asyncapi", action => action.Invoke("fake-function-asyncapi").Invoke("fake-function-rest").WithArguments(new Dictionary<string, string>() { { "fake-argument-1", "fake-argument-1-value" }, { "fake-argument-2", "fake-argument-2-value" } })))
+            .Then("fake-operation", state => state.Execute("fake-function-asyncapi", action => action.Invoke("fake-function-asyncapi").Invoke("fake-function-rest").WithArguments(new Dictionary<string, object>() { { "fake-argument-1", "fake-argument-1-value" }, { "fake-argument-2", "fake-argument-2-value" } })))
             .End()
             .Build();
     }

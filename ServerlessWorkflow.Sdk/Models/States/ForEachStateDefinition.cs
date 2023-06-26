@@ -19,38 +19,38 @@ public class ForEachStateDefinition
     /// <summary>
     /// gets/sets an expression selecting an array element of the states data
     /// </summary>
-    [DataMember(Order = 5, Name = "inputCollection"), JsonPropertyOrder(5), JsonPropertyName("inputCollection"), YamlMember(Alias = "inputCollection", Order = 5)]
+    [DataMember(Order = 6, Name = "inputCollection"), JsonPropertyOrder(6), JsonPropertyName("inputCollection"), YamlMember(Alias = "inputCollection", Order = 6)]
     public virtual string? InputCollection { get; set; }
 
     /// <summary>
     /// Gets/sets an expression specifying an array element of the states data to add the results of each iteration
     /// </summary>
-    [DataMember(Order = 6, Name = "outputCollection"), JsonPropertyOrder(6), JsonPropertyName("outputCollection"), YamlMember(Alias = "outputCollection", Order = 6)]
+    [DataMember(Order = 7, Name = "outputCollection"), JsonPropertyOrder(7), JsonPropertyName("outputCollection"), YamlMember(Alias = "outputCollection", Order = 7)]
     public virtual string? OutputCollection { get; set; }
 
     /// <summary>
     /// Gets/sets the name of the iteration parameter that can be referenced in actions/workflow. For each parallel iteration, this param should contain an unique element of the array referenced by the  <see cref="InputCollection"/> expression
     /// </summary>
-    [DataMember(Order = 7, Name = "iterationParam"), JsonPropertyOrder(7), JsonPropertyName("iterationParam"), YamlMember(Alias = "iterationParam", Order = 7)]
+    [DataMember(Order = 8, Name = "iterationParam"), JsonPropertyOrder(8), JsonPropertyName("iterationParam"), YamlMember(Alias = "iterationParam", Order = 8)]
     public virtual string? IterationParam { get; set; }
 
     /// <summary>
     /// Gets/sets a uint that specifies how upper bound on how many iterations may run in parallel
     /// </summary>
-    [DataMember(Order = 8, Name = "batchSize"), JsonPropertyOrder(8), JsonPropertyName("batchSize"), YamlMember(Alias = "batchSize", Order = 8)]
+    [DataMember(Order = 9, Name = "batchSize"), JsonPropertyOrder(9), JsonPropertyName("batchSize"), YamlMember(Alias = "batchSize", Order = 9)]
     public virtual int? BatchSize { get; set; }
 
     /// <summary>
     /// Gets/sets a value used to configure the way the actions of each iterations should be executed
     /// </summary>
-    [DataMember(Order = 9, Name = "mode"), JsonPropertyOrder(9), JsonPropertyName("mode"), YamlMember(Alias = "mode", Order = 9)]
+    [DataMember(Order = 10, Name = "mode"), JsonPropertyOrder(10), JsonPropertyName("mode"), YamlMember(Alias = "mode", Order = 10)]
     public virtual string Mode { get; set; } = ActionExecutionMode.Sequential;
 
     /// <summary>
     /// Gets/sets an <see cref="List{T}"/> of actions to be executed for each of the elements of the <see cref="InputCollection"/>
     /// </summary>
     [Required, MinLength(1)]
-    [DataMember(Order = 10, Name = "actions"), JsonPropertyOrder(10), JsonPropertyName("actions"), YamlMember(Alias = "actions", Order = 10)]
+    [DataMember(Order = 11, Name = "actions"), JsonPropertyOrder(11), JsonPropertyName("actions"), YamlMember(Alias = "actions", Order = 11)]
     public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
 
     /// <summary>

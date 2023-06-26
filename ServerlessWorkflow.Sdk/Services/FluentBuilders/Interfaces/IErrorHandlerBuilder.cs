@@ -11,7 +11,7 @@ public interface IErrorHandlerBuilder
     /// </summary>
     /// <param name="strategy">The reference name of the <see cref="RetryDefinition"/> to use</param>
     /// <returns></returns>
-    IErrorHandlerBuilder UseRetryStrategy(string strategy);
+    IErrorHandlerBuilder Retry(string strategy);
 
     /// <summary>
     /// Configures the <see cref="ErrorHandlerDefinition"/> to catch the specified errors
@@ -19,20 +19,27 @@ public interface IErrorHandlerBuilder
     /// <param name="error">The domain-specific errors to catch</param>
     /// <param name="errorCode">The code of the errors to catch</param>
     /// <returns>The configured <see cref="IStateOutcomeBuilder"/></returns>
-    IStateOutcomeBuilder When(string error, string errorCode);
+    IErrorHandlerBuilder Catch(string error, string errorCode);
 
     /// <summary>
     /// Configures the <see cref="ErrorHandlerDefinition"/> to catch the specified errors
     /// </summary>
     /// <param name="error">The domain-specific errors to catch</param>
     /// <returns>The configured <see cref="IStateOutcomeBuilder"/></returns>
-    IStateOutcomeBuilder When(string error);
+    IErrorHandlerBuilder Catch(string error);
 
     /// <summary>
     /// Configures the <see cref="ErrorHandlerDefinition"/> to catch any error
     /// </summary>
     /// <returns>The configured <see cref="IStateOutcomeBuilder"/></returns>
-    IStateOutcomeBuilder WhenAny();
+    IErrorHandlerBuilder CatchAll();
+
+    /// <summary>
+    /// Configures the outcome of handled errors
+    /// </summary>
+    /// <param name="outcomeSetup">An <see cref="Action{T}"/> used to setup the outcome of handled errors</param>
+    /// <returns>The configured <see cref="IStateOutcomeBuilder"/></returns>
+    IErrorHandlerBuilder Then(Action<IStateOutcomeBuilder> outcomeSetup);
 
     /// <summary>
     /// Builds the <see cref="ErrorHandlerDefinition"/>

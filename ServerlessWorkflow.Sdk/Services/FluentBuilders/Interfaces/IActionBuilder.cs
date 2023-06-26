@@ -14,6 +14,13 @@ public interface IActionBuilder
     IActionBuilder WithName(string name);
 
     /// <summary>
+    /// Sets a runtime expression that represents the condition, if any, the <see cref="ActionDefinition"/> to build must satisfy to be run
+    /// </summary>
+    /// <param name="expression">The runtime expression that represents the condition the <see cref="ActionDefinition"/> must satisfy to run</param>
+    /// <returns>The configured <see cref="IActionBuilder"/></returns>
+    IActionBuilder WithCondition(string expression);
+
+    /// <summary>
     /// Configures the workflow expression used to filter the state data passed to the <see cref="ActionDefinition"/>
     /// </summary>
     /// <param name="expression">The workflow expression used to filter the <see cref="ActionDefinition"/>'s input state data</param>

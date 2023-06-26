@@ -20,8 +20,7 @@ public class ForEachStateBuilder
     /// <inheritdoc/>
     public virtual IForEachStateBuilder Execute(ActionDefinition action)
     {
-        if (action == null)
-            throw new ArgumentNullException(nameof(action));
+        if (action == null) throw new ArgumentNullException(nameof(action));
         this.State.Actions.Add(action);
         return this;
     }
@@ -29,9 +28,8 @@ public class ForEachStateBuilder
     /// <inheritdoc/>
     public virtual IForEachStateBuilder Execute(Action<IActionBuilder> actionSetup)
     {
-        if (actionSetup == null)
-            throw new ArgumentNullException(nameof(actionSetup));
-        IActionBuilder actionBuilder = new ActionBuilder(this.Pipeline);
+        if (actionSetup == null) throw new ArgumentNullException(nameof(actionSetup));
+        var actionBuilder = new ActionBuilder(this.Pipeline);
         actionSetup(actionBuilder);
         this.State.Actions.Add(actionBuilder.Build());
         return this;
@@ -40,10 +38,8 @@ public class ForEachStateBuilder
     /// <inheritdoc/>
     public virtual IForEachStateBuilder Execute(string name, Action<IActionBuilder> actionSetup)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException(nameof(name));
-        if (actionSetup == null)
-            throw new ArgumentNullException(nameof(actionSetup));
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        if (actionSetup == null) throw new ArgumentNullException(nameof(actionSetup));
         return this.Execute(a =>
         {
             actionSetup(a);
@@ -68,8 +64,7 @@ public class ForEachStateBuilder
     /// <inheritdoc/>
     public virtual IForEachStateBuilder UseInputCollection(string expression)
     {
-        if (string.IsNullOrWhiteSpace(expression))
-            throw new ArgumentNullException(nameof(expression));
+        if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
         this.State.InputCollection = expression;
         return this;
     }
@@ -77,8 +72,7 @@ public class ForEachStateBuilder
     /// <inheritdoc/>
     public virtual IForEachStateBuilder UseIterationParameter(string expression)
     {
-        if (string.IsNullOrWhiteSpace(expression))
-            throw new ArgumentNullException(nameof(expression));
+        if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
         this.State.IterationParam = expression;
         return this;
     }
@@ -86,8 +80,7 @@ public class ForEachStateBuilder
     /// <inheritdoc/>
     public virtual IForEachStateBuilder UseOutputCollection(string expression)
     {
-        if (string.IsNullOrWhiteSpace(expression))
-            throw new ArgumentNullException(nameof(expression));
+        if (string.IsNullOrWhiteSpace(expression)) throw new ArgumentNullException(nameof(expression));
         this.State.OutputCollection = expression;
         return this;
     }

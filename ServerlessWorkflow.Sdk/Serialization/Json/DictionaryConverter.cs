@@ -1,5 +1,4 @@
 ﻿using Neuroglia;
-using ServerlessWorkflow.Sdk.Extensions;
 
 namespace ServerlessWorkflow.Sdk.Serialization;
 
@@ -24,8 +23,30 @@ public class DictionaryConverter
     /// <inheritdoc/>
     public override void Write(Utf8JsonWriter writer, IDictionary<string, object> value, JsonSerializerOptions options)
     {
-        JsonSerializer.Serialize(writer, value.ToDictionary(kvp => kvp.Key, kvp => kvp.Value), options);
+        JsonSerializer.Serialize(writer, value, options);
     }
 
+}
+
+/// <summary>
+/// Represents the <see cref="JsonConverter"/> used to serialize and deserialize <see cref="DynamicMapping"/>s
+/// </summary>
+public class DynamicMappingConverter
+    : JsonConverter<DynamicMapping>
+{
+
+    /// <inheritdoc/>
+    public override DynamicMapping? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var doc = JsonDocument.ParseValue(ref reader);
+        var result = Serializer.Json.Deserialize<Dictionary<string, object>>(doc.RootElement.ToString())!;
+        return new(result.ToDictionary(kvp => kvp.Key, kvp => kvp.Value is JsonElement jsonElement ? jsonElement.ToObject() : kvp.Value)!);
+    }
+
+    /// <inheritdoc/>
+    public override void Write(Utf8JsonWriter writer, DynamicMapping value, JsonSerializerOptions options)
+    {
+        JsonSerializer.Serialize(writer, value.Properties, options);
+    }
 
 }

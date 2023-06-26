@@ -21,20 +21,20 @@ public class EventStateDefinition
     /// If 'true', consuming one of the defined events causes its associated actions to be performed. If 'false', all of the defined events must be consumed in order for actions to be performed. Defaults to 'true'.
     /// </summary>
     [DefaultValue(true)]
-    [DataMember(Order = 5, Name = "exclusive"), JsonPropertyOrder(5), JsonPropertyName("exclusive"), YamlMember(Alias = "exclusive", Order = 5)]
+    [DataMember(Order = 6, Name = "exclusive"), JsonPropertyOrder(6), JsonPropertyName("exclusive"), YamlMember(Alias = "exclusive", Order = 6)]
     public virtual bool Exclusive { get; set; } = true;
 
     /// <summary>
     /// Gets/sets an object used to configure the <see cref="EventStateDefinition"/>'s triggers and actions
     /// </summary>
     [Required, MinLength(1)]
-    [DataMember(Order = 6, Name = "onEvents", IsRequired = true), JsonPropertyOrder(6), JsonPropertyName("onEvents"), YamlMember(Alias = "onEvents", Order = 6)]
+    [DataMember(Order = 7, Name = "onEvents", IsRequired = true), JsonPropertyOrder(7), JsonPropertyName("onEvents"), YamlMember(Alias = "onEvents", Order = 7)]
     public virtual List<EventStateTriggerDefinition> OnEvents { get; set; } = new List<EventStateTriggerDefinition>();
 
     /// <summary>
     /// Gets/sets the duration to wait for incoming events
     /// </summary>
-    [DataMember(Order = 7, Name = "timeout", IsRequired = true), JsonPropertyOrder(7), JsonPropertyName("timeout"), YamlMember(Alias = "timeout", Order = 7)]
+    [DataMember(Order = 8, Name = "timeout", IsRequired = true), JsonPropertyOrder(8), JsonPropertyName("timeout"), YamlMember(Alias = "timeout", Order = 8)]
     [JsonConverter(typeof(Iso8601NullableTimeSpanConverter))]
     public virtual TimeSpan? Timeout { get; set; }
 

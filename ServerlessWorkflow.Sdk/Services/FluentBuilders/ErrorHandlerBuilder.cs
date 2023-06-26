@@ -33,27 +33,35 @@ public class ErrorHandlerBuilder
     protected IStateOutcomeBuilder Outcome { get; }
 
     /// <inheritdoc/>
-    public virtual IStateOutcomeBuilder When(string error, string errorCode)
+    public virtual IErrorHandlerBuilder Catch(string error, string errorCode)
     {
         this.ErrorHandler.Error = error;
         this.ErrorHandler.Code = errorCode;
-        return this.Outcome;
+        return this;
     }
 
     /// <inheritdoc/>
-    public virtual IStateOutcomeBuilder When(string error)
+    public virtual IErrorHandlerBuilder Catch(string error)
     {
         this.ErrorHandler.Error = error;
-        return this.Outcome;
+        return this;
     }
 
     /// <inheritdoc/>
-    public virtual IStateOutcomeBuilder WhenAny() => this.When("*");
+    public virtual IErrorHandlerBuilder CatchAll() => this.Catch("*");
 
     /// <inheritdoc/>
-    public virtual IErrorHandlerBuilder UseRetryStrategy(string policy)
+    public virtual IErrorHandlerBuilder Retry(string policy)
     {
         this.ErrorHandler.RetryRef = policy;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IErrorHandlerBuilder Then(Action<IStateOutcomeBuilder> outcomeSetup)
+    {
+        if (outcomeSetup == null) throw new ArgumentNullException(nameof(outcomeSetup));
+        outcomeSetup(this.Outcome);
         return this;
     }
 

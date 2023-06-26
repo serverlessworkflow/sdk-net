@@ -45,8 +45,7 @@ public static partial class JsonTypeInfoModifiers
 
     static void IncludeNonPublicProperties(JsonTypeInfo typeInfo, Type declaredType, Func<PropertyInfo, bool> filter)
     {
-        if (typeInfo.Kind != JsonTypeInfoKind.Object || !declaredType.IsAssignableFrom(typeInfo.Type))
-            return;
+        if (typeInfo.Kind != JsonTypeInfoKind.Object || !declaredType.IsAssignableFrom(typeInfo.Type)) return;
         var propertyInfos = declaredType.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic);
         foreach (var propertyInfo in propertyInfos.Where(p => p.GetIndexParameters().Length == 0 && filter(p)))
             IncludeProperty(typeInfo, propertyInfo);
@@ -69,6 +68,8 @@ public static partial class JsonTypeInfoModifiers
         property.CustomConverter = propertyInfo.GetCustomAttribute<JsonConverterAttribute>()?.ConverterType is { } converterType
             ? (JsonConverter?)Activator.CreateInstance(converterType)
             : null;
+        property.Order = propertyInfo.GetCustomAttribute<JsonPropertyOrderAttribute>()?.Order ?? 0;
+        property.IsExtensionData = propertyInfo.GetCustomAttribute<JsonExtensionDataAttribute>() != null;
         typeInfo.Properties.Add(property);
     }
 
@@ -83,7 +84,7 @@ public static partial class JsonTypeInfoModifiers
 
     static Func<object, object?> CreateGetterGeneric<TObject, TValue>(MethodInfo method)
     {
-        if (method == null) throw new ArgumentNullException();
+        if (method == null) throw new ArgumentNullException(nameof(method));
         if (typeof(TObject).IsValueType)
         {
             var func = (RefFunc<TObject, TValue>)Delegate.CreateDelegate(typeof(RefFunc<TObject, TValue>), null, method);
@@ -105,7 +106,7 @@ public static partial class JsonTypeInfoModifiers
 
     static Action<object, object?>? CreateSetterGeneric<TObject, TValue>(MethodInfo method)
     {
-        if (method == null) throw new ArgumentNullException();
+        if (method == null) throw new ArgumentNullException(nameof(method));
         if (typeof(TObject).IsValueType)
         {
             return (o, v) => method.Invoke(o, new[] { v });

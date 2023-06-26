@@ -26,4 +26,13 @@
     <ProjectReference Include="..\ServerlessWorkflow.Sdk\ServerlessWorkflow.Sdk.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Assets\WorkflowExtensions\condition-state-type.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\WorkflowExtensions\greet-function-type.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

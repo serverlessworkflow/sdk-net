@@ -79,7 +79,7 @@ public class WorkflowSchemaValidator
     {
         if (workflow == null) throw new ArgumentNullException(nameof(workflow));
         var serializerSettings = JsonConvert.DefaultSettings?.Invoke();
-        if (serializerSettings == null) serializerSettings = new();
+        serializerSettings ??= new();
         serializerSettings.DefaultValueHandling = DefaultValueHandling.Populate | DefaultValueHandling.Ignore;
         var obj = JObject.FromObject(workflow, Newtonsoft.Json.JsonSerializer.Create(serializerSettings));
         var schema = await this.LoadSpecificationSchemaAsync(workflow.SpecVersion, cancellationToken);
@@ -166,7 +166,7 @@ public class WorkflowSchemaValidator
     {
         if (uri == null) throw new ArgumentNullException(nameof(uri));
         var localPath = uri.ToString();
-        if (localPath.StartsWith("//") || localPath.StartsWith("\\\\")) localPath = localPath.Substring(2);
+        if (localPath.StartsWith("//") || localPath.StartsWith("\\\\")) localPath = localPath[2..];
         return new Uri(Path.Combine(AppContext.BaseDirectory, localPath));
     }
 

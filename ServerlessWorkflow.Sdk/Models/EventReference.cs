@@ -88,6 +88,7 @@ public class EventReference
     /// Default value of this property is sync, meaning that workflow execution should wait until the function completes (the result event is received).<para></para>
     /// If set to async, workflow execution should just produce the trigger event and should not wait for the result event
     /// </remarks>
+    [DefaultValue(Sdk.InvocationMode.Synchronous)]
     [DataMember(Order = 6, Name = "invoke"), JsonPropertyOrder(6), JsonPropertyName("invoke"), YamlMember(Alias = "invoke", Order = 6)]
     public virtual string InvocationMode { get; set; } = Sdk.InvocationMode.Synchronous;
 

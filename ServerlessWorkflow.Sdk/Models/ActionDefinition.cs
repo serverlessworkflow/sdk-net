@@ -25,7 +25,7 @@ public class ActionDefinition
             if (this.Function != null)
                 return ActionType.Function;
             else if (this.Event != null)
-                return ActionType.Trigger;
+                return ActionType.Event;
             else if (this.Subflow != null)
                 return ActionType.Subflow;
             else

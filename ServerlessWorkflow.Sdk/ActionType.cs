@@ -14,7 +14,7 @@ public static class ActionType
     /// <summary>
     /// Indicates an action that executes a cloud event trigger
     /// </summary>
-    public const string Trigger = "trigger";
+    public const string Event = "event";
 
     /// <summary>
     /// Indicates an action that executes a subflow
