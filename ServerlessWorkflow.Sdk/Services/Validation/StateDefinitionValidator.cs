@@ -6,7 +6,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// Represents the base class for all <see cref="IValidator"/>s used to validate state definitions
 /// </summary>
 /// <typeparam name="TState">The type of state definition to validate</typeparam>
-internal abstract class StateDefinitionValidator<TState>
+public abstract class StateDefinitionValidator<TState>
     : AbstractValidator<TState>
     where TState : StateDefinition
 {

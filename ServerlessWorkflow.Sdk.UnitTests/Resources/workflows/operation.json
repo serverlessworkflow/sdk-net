@@ -1,0 +1,56 @@
+﻿{
+  "id": "operation",
+  "name": "Operation",
+  "version": "0.1.0",
+  "events": [
+    {
+      "name": "ProducedEvent",
+      "kind": "produced",
+      "type": "producedEvent",
+      "source": "workflow",
+      "dataOnly": false
+    },
+    {
+      "name": "ConsumedEvent",
+      "kind": "consumed",
+      "type": "consumedEvent",
+      "source": "workflow",
+      "dataOnly": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "Function",
+      "operation": "http://fake.address"
+    }
+  ],
+  "metadata": {
+    "podSize": "small"
+  },
+  "start": "Operation",
+  "states": [
+    {
+      "name": "Operation",
+      "type": "operation",
+      "actions": [
+        {
+          "name": "Function1",
+          "functionRef": {
+            "refName": "Function",
+            "arguments": {
+              "message": "Hello world!"
+            }
+          }
+        },
+        {
+          "name": "Function2",
+          "eventRef": {
+            "triggerEventRef": "ProducedEvent",
+            "resultEventRef": "ConsumedEvent"
+          }
+        }
+      ],
+      "end": true
+    }
+  ]
+}

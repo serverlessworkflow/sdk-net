@@ -6,7 +6,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents the <see cref="PropertyValidator"/> used to validate a <see cref="FunctionDefinition"/> collection
 /// </summary>
-internal class FunctionDefinitionCollectionValidator
+public class FunctionDefinitionCollectionValidator
     : PropertyValidator<WorkflowDefinition, IEnumerable<FunctionDefinition>>
 {
 

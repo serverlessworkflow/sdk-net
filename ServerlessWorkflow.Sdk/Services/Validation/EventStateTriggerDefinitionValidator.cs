@@ -2,11 +2,10 @@
 
 namespace ServerlessWorkflow.Sdk.Services.Validation;
 
-
 /// <summary>
 /// Represents a service used to validate <see cref="EventStateTriggerDefinition"/>s
 /// </summary>
-internal class EventStateTriggerDefinitionValidator
+public class EventStateTriggerDefinitionValidator
     : AbstractValidator<EventStateTriggerDefinition>
 {
 

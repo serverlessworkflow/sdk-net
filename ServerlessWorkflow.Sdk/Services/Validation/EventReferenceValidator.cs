@@ -5,7 +5,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents the service used to validate <see cref="EventReference"/>s
 /// </summary>
-internal class EventReferenceValidator
+public class EventReferenceValidator
     : AbstractValidator<EventReference>
 {
 

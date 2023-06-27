@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents a service used to validate <see cref="DefaultCaseDefinition"/>s
 /// </summary>
-internal class DefaultCaseDefinitionValidator
+public class DefaultCaseDefinitionValidator
     : SwitchCaseDefinitionValidator<DefaultCaseDefinition>
 {
 

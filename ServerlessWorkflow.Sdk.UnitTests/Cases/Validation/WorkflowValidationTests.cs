@@ -2,7 +2,7 @@
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Validation;
 
-public class ValidationTests
+public class WorkflowValidationTests
 {
 
     [Fact]

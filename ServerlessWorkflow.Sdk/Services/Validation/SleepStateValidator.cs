@@ -4,7 +4,7 @@
 /// <summary>
 /// Represents a service used to validate <see cref="SleepStateDefinition"/>s
 /// </summary>
-internal class SleepStateValidator
+public class SleepStateValidator
     : StateDefinitionValidator<SleepStateDefinition>
 {
 

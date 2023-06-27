@@ -5,7 +5,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents the service used to validate <see cref="TransitionDefinition"/>s
 /// </summary>
-internal class TransitionDefinitionValidator
+public class TransitionDefinitionValidator
     : AbstractValidator<TransitionDefinition>
 {
 

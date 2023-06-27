@@ -5,7 +5,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents the service used to validate <see cref="FunctionReference"/>s
 /// </summary>
-internal class FunctionReferenceValidator
+public class FunctionReferenceValidator
     : AbstractValidator<FunctionReference>
 {
 

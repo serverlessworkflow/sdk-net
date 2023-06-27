@@ -5,7 +5,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents the service used to validate <see cref="ErrorHandlerDefinition"/>s
 /// </summary>
-internal class ErrorHandlerDefinitionValidator
+public class ErrorHandlerDefinitionValidator
     : AbstractValidator<ErrorHandlerDefinition>
 {
 

@@ -5,7 +5,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents a service used to validate <see cref="CallbackStateDefinition"/>s
 /// </summary>
-internal class CallbackStateValidator
+public class CallbackStateValidator
     : StateDefinitionValidator<CallbackStateDefinition>
 {
 

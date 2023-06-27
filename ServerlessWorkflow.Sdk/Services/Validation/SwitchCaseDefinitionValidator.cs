@@ -6,7 +6,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// Represents the base class of all services used to validate <see cref="SwitchCaseDefinition"/>s
 /// </summary>
 /// <typeparam name="TCondition">The type of <see cref="SwitchCaseDefinition"/> to validate</typeparam>
-internal abstract class SwitchCaseDefinitionValidator<TCondition>
+public abstract class SwitchCaseDefinitionValidator<TCondition>
     : AbstractValidator<TCondition>
     where TCondition : SwitchCaseDefinition
 {
@@ -52,18 +52,12 @@ internal abstract class SwitchCaseDefinitionValidator<TCondition>
     /// </summary>
     /// <param name="transition">The name of the state definition to check</param>
     /// <returns>A boolean indicating whether or not the specified state definition exists</returns>
-    protected virtual bool ReferenceExistingState(TransitionDefinition transition)
-    {
-        return this.Workflow.TryGetState(transition.NextState, out _);
-    }
+    protected virtual bool ReferenceExistingState(TransitionDefinition transition) => this.Workflow.TryGetState(transition.NextState, out _);
 
     /// <summary>
     /// Determines whether or not the specified state definition exists
     /// </summary>
     /// <param name="stateName">The name of the state definition to check</param>
     /// <returns>A boolean indicating whether or not the specified state definition exists</returns>
-    protected virtual bool ReferenceExistingState(string stateName)
-    {
-        return this.Workflow.TryGetState(stateName, out _);
-    }
+    protected virtual bool ReferenceExistingState(string stateName) => this.Workflow.TryGetState(stateName, out _);
 }

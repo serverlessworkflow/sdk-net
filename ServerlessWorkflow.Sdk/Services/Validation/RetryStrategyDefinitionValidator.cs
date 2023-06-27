@@ -5,7 +5,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents the service used to validate <see cref="RetryDefinition"/>s
 /// </summary>
-internal class RetryStrategyDefinitionValidator
+public class RetryStrategyDefinitionValidator
     : AbstractValidator<RetryDefinition>
 {
 

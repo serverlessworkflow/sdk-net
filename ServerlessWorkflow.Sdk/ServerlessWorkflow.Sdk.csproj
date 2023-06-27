@@ -4,7 +4,41 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<VersionPrefix>0.8.7</VersionPrefix>
+	<NeutralLanguage>en</NeutralLanguage>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Company>Cloud Native Computing Foundation</Company>
+    <Authors>The Serverless Workflow Specification Authors</Authors>
+    <Product>Serverless Workflow Specification 0.8 - .NET 7.0 SDK</Product>
+    <Copyright>Copyright © 2021 The Serverless Workflow Specification Authors</Copyright>
+    <PackageProjectUrl>https://github.com/serverlessworkflow/sdk-net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/serverlessworkflow/sdk-net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>serverless workflow sdk</PackageTags>
+    <Description>The .NET 7.0 SDK for the Serverless Workflow</Description>
+    <PackageIcon>icon.png</PackageIcon>
+    <Title>Serverless Workflow Specification 0.8 - .NET 7.0 SDK</Title>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\media\logos\icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Cronos" Version="0.7.1" />

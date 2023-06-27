@@ -8,7 +8,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents the service used to validate a workflow's <see cref="ICollection{T}"/>s
 /// </summary>
-internal class CollectionPropertyValidator<TElement>
+public class CollectionPropertyValidator<TElement>
     : PropertyValidator<WorkflowDefinition, IEnumerable<TElement>?>
 {
 

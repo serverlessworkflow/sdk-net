@@ -5,7 +5,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents the service used to validate <see cref="AuthenticationDefinition"/>s
 /// </summary>
-internal class AuthenticationDefinitionValidator
+public class AuthenticationDefinitionValidator
     : AbstractValidator<AuthenticationDefinition>
 {
 

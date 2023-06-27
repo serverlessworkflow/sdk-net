@@ -5,7 +5,7 @@ namespace ServerlessWorkflow.Sdk.Services.Validation;
 /// <summary>
 /// Represents a service used to validate <see cref="ForEachStateDefinition"/>s
 /// </summary>
-internal class ForEachStateValidator
+public class ForEachStateValidator
     : StateDefinitionValidator<ForEachStateDefinition>
 {
 
