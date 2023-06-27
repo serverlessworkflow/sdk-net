@@ -4,6 +4,7 @@
 /// Defines the fundamentals of a service used to build <see cref="ErrorHandlerDefinition"/>s
 /// </summary>
 public interface IErrorHandlerBuilder
+    : IExtensibleBuilder<IErrorHandlerBuilder>
 {
 
     /// <summary>

@@ -4,7 +4,7 @@
 /// Defines the fundamentals of a service used to build <see cref="FunctionDefinition"/>s
 /// </summary>
 public interface IFunctionBuilder
-    : IMetadataContainerBuilder<IFunctionBuilder>
+    : IMetadataContainerBuilder<IFunctionBuilder>, IExtensibleBuilder<IFunctionBuilder>
 {
 
     /// <summary>

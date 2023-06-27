@@ -33,6 +33,22 @@ public class ErrorHandlerBuilder
     protected IStateOutcomeBuilder Outcome { get; }
 
     /// <inheritdoc/>
+    public virtual IErrorHandlerBuilder WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.ErrorHandler.ExtensionData ??= new Dictionary<string, object>();
+        this.ErrorHandler.ExtensionData[name] = value;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IErrorHandlerBuilder WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.ErrorHandler.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual IErrorHandlerBuilder Catch(string error, string errorCode)
     {
         this.ErrorHandler.Error = error;

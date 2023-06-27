@@ -4,6 +4,7 @@
 /// Defines the fundamentals of a service used to build an authentication definition
 /// </summary>
 public interface IAuthenticationDefinitionBuilder
+    : IExtensibleBuilder<IAuthenticationDefinitionBuilder>
 {
 
     /// <summary>

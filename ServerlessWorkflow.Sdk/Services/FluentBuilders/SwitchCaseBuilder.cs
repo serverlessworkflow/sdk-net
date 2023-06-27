@@ -13,11 +13,7 @@ public abstract class SwitchCaseBuilder<TBuilder, TCase>
     /// Initializes a new <see cref="SwitchCaseBuilder{TBuilder, TCase}"/>
     /// </summary>
     /// <param name="pipeline">The <see cref="IPipelineBuilder"/> the <see cref="SwitchCaseBuilder{TBuilder, TCase}"/> belongs to</param>
-    public SwitchCaseBuilder(IPipelineBuilder pipeline)
-        : base(pipeline)
-    {
-        
-    }
+    public SwitchCaseBuilder(IPipelineBuilder pipeline) : base(pipeline) { }
 
     /// <summary>
     /// Gets the <see cref="SwitchCaseDefinition"/> to configure
@@ -27,8 +23,7 @@ public abstract class SwitchCaseBuilder<TBuilder, TCase>
     /// <inheritdoc/>
     public virtual TBuilder WithName(string name)
     {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentNullException(nameof(name));
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
         this.Case.Name = name;
         return (TBuilder)(object)this;
     }

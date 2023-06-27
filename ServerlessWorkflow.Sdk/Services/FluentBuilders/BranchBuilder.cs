@@ -35,6 +35,22 @@ public class BranchBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IBranchBuilder WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.Branch.ExtensionData ??= new Dictionary<string, object>();
+        this.Branch.ExtensionData[name] = value;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IBranchBuilder WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.Branch.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual IBranchBuilder Execute(ActionDefinition action)
     {
         if (action == null) throw new ArgumentNullException(nameof(action));

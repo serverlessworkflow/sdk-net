@@ -78,6 +78,22 @@ public class RetryStrategyBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IRetryStrategyBuilder WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.Strategy.ExtensionData ??= new Dictionary<string, object>();
+        this.Strategy.ExtensionData[name] = value;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IRetryStrategyBuilder WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.Strategy.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual RetryDefinition Build() => this.Strategy;
 
 }

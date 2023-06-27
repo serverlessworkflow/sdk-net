@@ -4,6 +4,7 @@
 /// Defines the fundamentals of a service used to build <see cref="ActionDefinition"/>s
 /// </summary>
 public interface IActionBuilder
+    : IExtensibleBuilder<IActionBuilder>
 {
 
     /// <summary>

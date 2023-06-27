@@ -48,6 +48,22 @@ public class FunctionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IFunctionBuilder WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.Function.ExtensionData ??= new Dictionary<string, object>();
+        this.Function.ExtensionData[name] = value;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IFunctionBuilder WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.Function.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual IFunctionBuilder OfType(string type)
     {
         this.Function.Type = type;

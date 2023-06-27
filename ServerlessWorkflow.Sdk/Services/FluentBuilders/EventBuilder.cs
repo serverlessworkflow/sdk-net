@@ -48,6 +48,22 @@ public class EventBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IEventBuilder WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.Event.ExtensionData ??= new Dictionary<string, object>();
+        this.Event.ExtensionData[name] = value;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IEventBuilder WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.Event.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual IEventBuilder CorrelateUsing(string contextAttributeName)
     {
         if (string.IsNullOrWhiteSpace(contextAttributeName)) throw new ArgumentNullException(nameof(contextAttributeName));

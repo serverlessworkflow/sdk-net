@@ -4,6 +4,7 @@
 /// Defines the fundamentals of a service used to build <see cref="RetryDefinition"/>s
 /// </summary>
 public interface IRetryStrategyBuilder
+    : IExtensibleBuilder<IRetryStrategyBuilder>
 {
 
     /// <summary>

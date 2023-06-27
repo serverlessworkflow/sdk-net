@@ -4,7 +4,7 @@
 /// Defines the fundamentals of a service used to build <see cref="EventDefinition"/>s
 /// </summary>
 public interface IEventBuilder
-    : IMetadataContainerBuilder<IEventBuilder>
+    : IMetadataContainerBuilder<IEventBuilder>, IExtensibleBuilder<IEventBuilder>
 {
 
     /// <summary>

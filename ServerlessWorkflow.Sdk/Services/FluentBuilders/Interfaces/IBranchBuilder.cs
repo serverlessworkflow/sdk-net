@@ -4,7 +4,7 @@
 /// Defines the fundamentals of a service used to configure <see cref="BranchDefinition"/>s
 /// </summary>
 public interface IBranchBuilder
-    : IActionCollectionBuilder<IBranchBuilder>
+    : IActionCollectionBuilder<IBranchBuilder>, IExtensibleBuilder<IBranchBuilder>
 {
 
     /// <summary>

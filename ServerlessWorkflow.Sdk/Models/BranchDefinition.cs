@@ -5,6 +5,7 @@
 /// </summary>
 [DataContract]
 public class BranchDefinition
+    : IExtensible
 {
 
     /// <summary>
@@ -27,6 +28,10 @@ public class BranchDefinition
     [Required, MinLength(1)]
     [DataMember(Order = 3, Name = "actions", IsRequired = true), JsonPropertyOrder(3), JsonPropertyName("actions"), YamlMember(Alias = "actions", Order = 3)]
     public virtual List<ActionDefinition> Actions { get; set; } = new List<ActionDefinition>();
+
+    /// <inheritdoc/>
+    [DataMember(Order = 999, Name = "extensionData"), JsonExtensionData]
+    public IDictionary<string, object>? ExtensionData { get; set; }
 
     /// <summary>
     /// Gets the <see cref="ActionDefinition"/> with the specified name

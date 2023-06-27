@@ -30,6 +30,22 @@ public abstract class AuthenticationDefinitionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IAuthenticationDefinitionBuilder WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.AuthenticationDefinition.ExtensionData ??= new Dictionary<string, object>();
+        this.AuthenticationDefinition.ExtensionData[name] = value;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IAuthenticationDefinitionBuilder WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.AuthenticationDefinition.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual void LoadFromSecret(string secret)
     {
         if (string.IsNullOrWhiteSpace(secret)) throw new ArgumentNullException(nameof(secret));

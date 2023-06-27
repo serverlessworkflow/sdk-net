@@ -212,4 +212,60 @@ public class ActionBuilder
     /// <inheritdoc/>
     public virtual ActionDefinition Build() => this.Action;
 
+    IActionBuilder IExtensibleBuilder<IActionBuilder>.WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.Action.ExtensionData ??= new Dictionary<string, object>();
+        this.Action.ExtensionData[name] = value;
+        return this;
+    }
+
+    IActionBuilder IExtensibleBuilder<IActionBuilder>.WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.Action.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
+    IEventTriggerActionBuilder IExtensibleBuilder<IEventTriggerActionBuilder>.WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.Action.Event!.ExtensionData ??= new Dictionary<string, object>();
+        this.Action.Event!.ExtensionData[name] = value;
+        return this;
+    }
+
+    IEventTriggerActionBuilder IExtensibleBuilder<IEventTriggerActionBuilder>.WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.Action.Event!.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
+    IFunctionActionBuilder IExtensibleBuilder<IFunctionActionBuilder>.WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.Action.Function!.ExtensionData ??= new Dictionary<string, object>();
+        this.Action.Function!.ExtensionData[name] = value;
+        return this;
+    }
+
+    IFunctionActionBuilder IExtensibleBuilder<IFunctionActionBuilder>.WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.Action.Function!.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
+    ISubflowActionBuilder IExtensibleBuilder<ISubflowActionBuilder>.WithExtensionProperty(string name, object value)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        this.Action.Subflow!.ExtensionData ??= new Dictionary<string, object>();
+        this.Action.Subflow!.ExtensionData[name] = value;
+        return this;
+    }
+
+    ISubflowActionBuilder IExtensibleBuilder<ISubflowActionBuilder>.WithExtensionProperties(IDictionary<string, object> properties)
+    {
+        this.Action.Subflow!.ExtensionData = properties ?? throw new ArgumentNullException(nameof(properties));
+        return this;
+    }
+
 }
