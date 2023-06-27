@@ -27,4 +27,21 @@ public static class StringExtensions
     /// <returns>The snake-cased string</returns>
     public static string ToSnakeCase(this string input) => YamlDotNet.Serialization.NamingConventions.UnderscoredNamingConvention.Instance.Apply(input);
 
+    /// <summary>
+    /// Determines whether or not the specified input is JSON format
+    /// </summary>
+    /// <param name="text">The input to check</param>
+    /// <returns>A boolean indicating whether or not the specified text is JSON format</returns>
+    public static bool IsJson(this string text)
+    {
+        if (string.IsNullOrWhiteSpace(text)) throw new ArgumentNullException(nameof(text));
+        var text2 = text.Trim();
+        if (!text2.StartsWith("[") || !text2.EndsWith("]"))
+        {
+            if (text2.StartsWith("{")) return text2.EndsWith("}");
+            else return false;
+        }
+        return true;
+    }
+
 }

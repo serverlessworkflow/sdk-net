@@ -505,7 +505,192 @@ public class WorkflowDefinition
     [DataMember(Order = 23, Name = "extensionData"), JsonExtensionData]
     public IDictionary<string, object>? ExtensionData { get; set; }
 
+    /// <summary>
+    /// Gets the start state definition
+    /// </summary>
+    /// <returns>The state definition the <see cref="WorkflowDefinition"/> starts with</returns>
+    public virtual StateDefinition GetStartState()
+    {
+        var stateName = this.StartStateName;
+        if (this.Start != null) stateName = this.Start.StateName;
+        if (string.IsNullOrWhiteSpace(stateName)) return this.States.First();
+        if (!this.TryGetState(stateName, out var state)) throw new NullReferenceException($"Failed to find a state definition with name '{state}'");
+        return state;
+    }
+
+    /// <summary>
+    /// Attempts to the start state definition
+    /// </summary>
+    /// <param name="state">The start state definition</param>
+    /// <returns>A boolean indicating whether or not the <see cref="WorkflowDefinition"/>'s start state definition could be found</returns>
+    public virtual bool TryGetStartState(out StateDefinition state)
+    {
+        state = this.GetStartState()!;
+        return state != null;
+    }
+
+    /// <summary>
+    /// Gets the start state definition
+    /// </summary>
+    /// <typeparam name="TState">The expected type of the <see cref="WorkflowDefinition"/>'s start state definition</typeparam>
+    /// <returns>The start state definition</returns>
+    public virtual TState? GetStartState<TState>() where TState : StateDefinition => this.GetStartState() as TState;
+
+    /// <summary>
+    /// Attempts to the start state definition
+    /// </summary>
+    /// <param name="state">The start state definition</param>
+    /// <returns>A boolean indicating whether or not the <see cref="WorkflowDefinition"/>'s start state definition could be found</returns>
+    public virtual bool TryGetStartState<TState>(out TState state)
+        where TState : StateDefinition
+    {
+        state = this.GetStartState<TState>()!;
+        return state != null;
+    }
+
+    /// <summary>
+    /// Gets the state definition with the specified name
+    /// </summary>
+    /// <param name="name">The name of the state definition to get</param>
+    /// <returns>The state definition with the specified name, if any</returns>
+    public virtual StateDefinition? GetState(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        return this.States?.FirstOrDefault(s => s.Name == name);
+    }
+
+    /// <summary>
+    /// Attempts to retrieve the state definition with the specified name
+    /// </summary>
+    /// <param name="name">The name of the state definition to retrieve</param>
+    /// <param name="state">The state definition with the specified name, if any</param>
+    /// <returns>A boolean indicating whether or not a state definition with the specified name could be found</returns>
+    public virtual bool TryGetState(string name, out StateDefinition state)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        state = this.GetState(name)!;
+        return state != null;
+    }
+
+    /// <summary>
+    /// Gets the state definition with the specified name
+    /// </summary>
+    /// <typeparam name="TState">The expected type of the state definition with the specified name</typeparam>
+    /// <param name="name">The name of the state definition to get</param>
+    /// <returns>The state definition with the specified name, if any</returns>
+    public virtual TState? GetState<TState>(string name)
+        where TState : StateDefinition
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        return this.GetState(name) as TState;
+    }
+
+    /// <summary>
+    /// Attempts to retrieve the state definition with the specified name
+    /// </summary>
+    /// <typeparam name="TState">The expected type of the state definition with the specified name</typeparam>
+    /// <param name="name">The name of the state definition to retrieve</param>
+    /// <param name="state">The state definition with the specified name, if any</param>
+    /// <returns>A boolean indicating whether or not a state definition with the specified name could be found</returns>
+    public virtual bool TryGetState<TState>(string name, out TState state)
+        where TState : StateDefinition
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        state = this.GetState<TState>(name)!;
+        return state != null;
+    }
+
+    /// <summary>
+    /// Gets the <see cref="EventDefinition"/> with the specified name
+    /// </summary>
+    /// <param name="name">The name of the <see cref="EventDefinition"/> to get</param>
+    /// <returns>The <see cref="EventDefinition"/> with the specified name, if any</returns>
+    public virtual EventDefinition? GetEvent(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        return this.Events?.FirstOrDefault(e => e.Name == name);
+    }
+
+    /// <summary>
+    /// Attempts to retrieve the <see cref="EventDefinition"/> with the specified name
+    /// </summary>
+    /// <param name="name">The name of the <see cref="EventDefinition"/> to retrieve</param>
+    /// <param name="e">The <see cref="EventDefinition"/> with the specified name, if any</param>
+    /// <returns>A boolean indicating whether or not a <see cref="EventDefinition"/> with the specified name could be found</returns>
+    public virtual bool TryGetEvent(string name, out EventDefinition e)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        e = this.GetEvent(name)!;
+        return e != null;
+    }
+
+    /// <summary>
+    /// Gets the <see cref="FunctionDefinition"/> with the specified name
+    /// </summary>
+    /// <param name="name">The name of the <see cref="FunctionDefinition"/> to get</param>
+    /// <returns>The <see cref="FunctionDefinition"/> with the specified name, if any</returns>
+    public virtual FunctionDefinition? GetFunction(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        return this.Functions?.FirstOrDefault(e => e.Name == name);
+    }
+
+    /// <summary>
+    /// Attempts to retrieve the <see cref="FunctionDefinition"/> with the specified name
+    /// </summary>
+    /// <param name="name">The name of the <see cref="FunctionDefinition"/> to retrieve</param>
+    /// <param name="function">The <see cref="FunctionDefinition"/> with the specified name, if any</param>
+    /// <returns>A boolean indicating whether or not a <see cref="FunctionDefinition"/> with the specified name could be found</returns>
+    public virtual bool TryGetFunction(string name, out FunctionDefinition function)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        function = this.GetFunction(name)!;
+        return function != null;
+    }
+
+    /// <summary>
+    /// Gets the <see cref="AuthenticationDefinition"/> with the specified name
+    /// </summary>
+    /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to get</param>
+    /// <returns>The <see cref="AuthenticationDefinition"/> with the specified name, if any</returns>
+    public virtual AuthenticationDefinition? GetAuthentication(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        return this.Auth?.FirstOrDefault(e => e.Name == name);
+    }
+
+    /// <summary>
+    /// Attempts to retrieve the <see cref="AuthenticationDefinition"/> with the specified name
+    /// </summary>
+    /// <param name="name">The name of the <see cref="AuthenticationDefinition"/> to retrieve</param>
+    /// <param name="authentication">The <see cref="AuthenticationDefinition"/> with the specified name, if any</param>
+    /// <returns>A boolean indicating whether or not a <see cref="AuthenticationDefinition"/> with the specified name could be found</returns>
+    public virtual bool TryGetAuthentication(string name, out AuthenticationDefinition authentication)
+    {
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        authentication = this.GetAuthentication(name)!;
+        return authentication != null;
+    }
+
     /// <inheritdoc/>
-    public override string ToString() => $"{this.Name} {this.Version}";
+    public override string ToString() => $"{this.Id} {this.Version}";
+
+    /// <summary>
+    /// Creates a new <see cref="IWorkflowBuilder"/> used to build a new <see cref="WorkflowDefinition"/>
+    /// </summary>
+    /// <param name="id">The id of the <see cref="WorkflowDefinition"/> to create</param>
+    /// <param name="name">The name of the <see cref="WorkflowDefinition"/> to create</param>
+    /// <param name="version">The version of the <see cref="WorkflowDefinition"/> to create</param>
+    /// <returns>A new <see cref="IWorkflowBuilder"/></returns>
+    public static IWorkflowBuilder Create(string id, string name, string version)
+    {
+        if (string.IsNullOrWhiteSpace(id)) throw new ArgumentNullException(nameof(id));
+        if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+        if (string.IsNullOrWhiteSpace(version)) throw new ArgumentNullException(nameof(version));
+        return new WorkflowBuilder()
+            .WithId(id)
+            .WithName(name)
+            .WithVersion(version);
+    }
 
 }

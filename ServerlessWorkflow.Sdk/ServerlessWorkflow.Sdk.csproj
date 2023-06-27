@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Cronos" Version="0.7.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
     <PackageReference Include="Iso8601DurationHelper" Version="1.1.0" />
     <PackageReference Include="JsonCons.Utilities" Version="1.0.0" />
     <PackageReference Include="JsonSchema.Net" Version="4.1.5" />

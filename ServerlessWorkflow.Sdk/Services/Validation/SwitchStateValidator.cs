@@ -1,0 +1,46 @@
+﻿using FluentValidation;
+
+namespace ServerlessWorkflow.Sdk.Services.Validation;
+
+/// <summary>
+/// Represents a service used to validate <see cref="SwitchStateDefinition"/>s
+/// </summary>
+internal class SwitchStateValidator
+    : StateDefinitionValidator<SwitchStateDefinition>
+{
+
+    /// <summary>
+    /// Initializes a new <see cref="SwitchStateValidator"/>
+    /// </summary>
+    /// <param name="workflow">The <see cref="WorkflowDefinition"/> to validate</param>
+    public SwitchStateValidator(WorkflowDefinition workflow)
+        : base(workflow)
+    {
+        this.RuleFor(s => s.DataConditions)
+            .NotEmpty()
+            .When(s => s.EventConditions == null || !s.EventConditions.Any())
+            .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DataConditions)}")
+            .WithMessage($"One of either '{nameof(SwitchStateDefinition.DataConditions)}' or '{nameof(SwitchStateDefinition.EventConditions)}' properties must be set");
+        this.RuleForEach(s => s.DataConditions)
+            .SetValidator(state => new DataCaseDefinitionValidator(this.Workflow, state))
+            .When(s => s.DataConditions != null && s.DataConditions.Any())
+            .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DataConditions)}");
+        this.RuleFor(s => s.EventConditions)
+            .NotEmpty()
+            .When(s => s.DataConditions == null || !s.DataConditions.Any())
+            .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.EventConditions)}")
+            .WithMessage($"One of either '{nameof(SwitchStateDefinition.DataConditions)}' or '{nameof(SwitchStateDefinition.EventConditions)}' properties must be set");
+        this.RuleForEach(s => s.EventConditions)
+            .SetValidator(state => new EventCaseDefinitionValidator(this.Workflow, state))
+            .When(s => s.EventConditions != null && s.EventConditions.Any())
+            .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.EventConditions)}");
+        this.RuleFor(s => s.DefaultCondition)
+            .NotNull()
+            .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DefaultCondition)}");
+        this.RuleFor(s => s.DefaultCondition)
+            .SetValidator(c => new DefaultCaseDefinitionValidator(this.Workflow, c))
+            .WithErrorCode($"{nameof(SwitchStateDefinition)}.{nameof(SwitchStateDefinition.DefaultCondition)}");
+
+    }
+
+}

@@ -223,7 +223,7 @@ namespace ServerlessWorkflow.Sdk.Services.IO
                 case RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath:
                     var localPath = uri.LocalPath;
                     if (localPath.StartsWith("//") || localPath.StartsWith("\\\\"))
-                        localPath = localPath.Substring(2);
+                        localPath = localPath[2..];
                     return new Uri(Path.Combine(options.BaseDirectory, localPath));
                 case RelativeUriReferenceResolutionMode.None:
                     throw new NotSupportedException($"Relative uris are not supported when using the specified {nameof(RelativeUriReferenceResolutionMode)} '{RelativeUriReferenceResolutionMode.ConvertToAbsolute}'");

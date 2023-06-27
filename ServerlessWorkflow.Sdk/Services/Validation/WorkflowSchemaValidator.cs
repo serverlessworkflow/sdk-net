@@ -49,7 +49,7 @@ public class WorkflowSchemaValidator
             jsonSchema = Serialization.Serializer.Json.Deserialize<JsonSchema>(jsonSchemaDocument)!;
         }
         var evaluationOptions = EvaluationOptions.Default;
-        evaluationOptions.OutputFormat = OutputFormat.Hierarchical;
+        evaluationOptions.OutputFormat = OutputFormat.List;
         return jsonSchema.Evaluate(jsonDocument, evaluationOptions);
     }
 
