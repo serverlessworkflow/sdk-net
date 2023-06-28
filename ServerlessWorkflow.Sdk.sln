@@ -21,6 +21,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerlessWorkflow.Sdk", "s
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerlessWorkflow.Sdk.UnitTests", "tests\ServerlessWorkflow.Sdk.UnitTests\ServerlessWorkflow.Sdk.UnitTests.csproj", "{F1575E10-B57B-4012-97FF-AF942A558D7C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{F3B6D944-46DA-4CAF-A8BE-0C8F230869F9}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

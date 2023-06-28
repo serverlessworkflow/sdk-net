@@ -55,4 +55,8 @@
     <PackageReference Include="YamlDotNet" Version="13.1.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Dev\ServerlessWorkflow\sdk-net\src\ServerlessWorkflow.Sdk\.editorconfig" />
+  </ItemGroup>
+
 </Project>
