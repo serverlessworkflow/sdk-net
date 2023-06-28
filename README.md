@@ -3,7 +3,7 @@
 
 # Serverless Workflow Specification - .NET SDK
 
-Provides .NET 6.0 API/SPI and Model Validation for the [Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
+Provides .NET 7.0 API/SPI and Model Validation for the [Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
 
 With the SDK, you can:
 
@@ -15,7 +15,7 @@ With the SDK, you can:
 
 | Latest Releases | Conformance to spec version |
 | :---: | :---: |
-| [0.8.0.10](https://github.com/serverlessworkflow/sdk-net/releases/) | [v0.8](https://github.com/serverlessworkflow/specification/tree/0.8.x) |
+| [0.8.7](https://github.com/serverlessworkflow/sdk-net/releases/) | [0.8](https://github.com/serverlessworkflow/specification/tree/0.8.x) |
 
 ### Getting Started
 
@@ -27,9 +27,9 @@ dotnet nuget add package ServerlessWorkflow.Sdk
 services.AddServerlessWorkflow();
 ```
 
-### How to use
+### Usage
 
-#### Building workflows programatically
+#### Build workflows programatically
 
 ```csharp
 var workflow = WorkflowDefinition.Create("MyWorkflow", "MyWorkflow", "1.0")
@@ -60,7 +60,7 @@ var workflow = WorkflowDefinition.Create("MyWorkflow", "MyWorkflow", "1.0")
   .Build();
 ```
 
-#### Reading workflows
+#### Read workflows
 
 ```csharp
 var reader = WorkflowReader.Create();
@@ -70,7 +70,7 @@ using(Stream stream = File.OpenRead("myWorkflow.json"))
 }
 ```
 
-#### Writing workflows
+#### Write workflows
 
 ```csharp
   var writer = WorkflowWriter.Create();
@@ -88,9 +88,163 @@ using(Stream stream = File.OpenRead("myWorkflow.json"))
   }
 ```
 
-#### Validating workflows
+#### Validate workflows
 
 ```csharp
 var validator = serviceProvider.GetRequiredService<IValidator<WorkflowDefinition>>();
 var validationResult = validator.Validate(myWorkflow);
+```
+
+#### Extend Workflows
+
+The SDK allows extending the Serverless Workflow in two ways, possibly combined: via metadata and via extensions.
+
+#### Metadata
+
+Workflow components that support metadata, such as `WorkflowDefinition` or `StateDefinition`, expose a `metadata` property, 
+which is a dynamic name/value mapping of properties used to enrich the serverless workflow model with information beyond its core definitions.
+
+It has the advantage of being an easy, cross-compatible way of declaring additional data, but lacks well-defined, well-documented schema of the data, thus loosing the ability to validate it
+without custom implementation.
+
+*Adding metadata to a workflow:*
+```csharp
+var workflow = new WorkflowBuilder()
+    ...
+    .WithMetadata(new Dictionary<string, object>() { { "metadataPropertyName", metadataPropertyValue } })
+    ...
+    .Build();
+```
+
+*Resulting workflow:*
+
+```yaml
+id: sample-workflow
+version: 1.0.0
+specVersion: 0.8
+metadata:
+  metadataPropertyName: metadataPropertyValue #added to the metadata property of supporting components
+...
+```
+
+
+#### Extension
+
+Users have the ability to define extensions, providing the ability to extend, override or replace parts of the Serverless Workflow schema.
+
+To do so, you must first create a file containing the JsonSchema of your extension, then reference it in your workflow definition.
+
+*Schema of a sample extension that adds a new `greet` `functionType`:*
+<table>
+<tr>
+    <th>JSON</th>
+    <th>YAML</th>
+</tr>
+<tr>
+<td valign="top">
+
+```json
+{
+  "$defs": {
+    "functions": {
+      "definitions": {
+        "function": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Defines the function type. Is either `rest`, `asyncapi, `rpc`, `graphql`, `odata`, `expression` or `greet`. Default is `rest`",
+              "enum": [
+                "rest",
+                "asyncapi",
+                "rpc",
+                "graphql",
+                "odata",
+                "expression",
+                "custom",
+                "greet"
+              ],
+              "default": "rest"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+</td>
+
+<td valign="top">
+
+```yaml
+'$defs':
+  functions:
+    definitions:
+      function:
+        type: object
+        properties:
+          type:
+            type: string
+            description: Defines the function type. Is either `rest`, `asyncapi, `rpc`,
+              `graphql`, `odata`, `expression` or `greet`. Default is `rest`
+            enum:
+            - rest
+            - asyncapi
+            - rpc
+            - graphql
+            - odata
+            - expression
+            - custom
+            - greet
+            default: rest
+```
+
+</td>
+</tr>
+</table>
+
+The above example refers to `/$defs/functions`, because upon validation the SDK bundles all the Serverless Workflow Specification's schemas into the `$defs` property of a single schema.
+
+*In this case, `functions` is the extensionless name of the schema file we want to override (https://serverlessworkflow.io/schemas/latest/functions.json).
+
+A [Json Merge Patch](https://datatracker.ietf.org/doc/html/rfc7386) is performed sequentially on the bundled schema with the defined extensions, in declaring order.
+
+*In this case, the above schema will patch the object defined at `/functions/definitions/function` in file https://serverlessworkflow.io/schemas/latest/functions.json*
+
+*Extending a workflow:*
+```csharp
+var workflow = new WorkflowBuilder()
+    .WithId("sample-extended")
+    .WithName("Sample Extended Workflow")
+    .WithVersion("1.0.0")
+    .UseSpecVersion(ServerlessWorkflowSpecVersion.V08)
+    .UseExtension("extensionId", new Uri("file://.../extensions/greet-function-type.json"))
+    .StartsWith("do-work", flow => flow.Execute("greet", action => action
+        .Invoke(function => function
+            .OfType("greet")
+            .WithName("greet")
+            .ForOperation("#"))))
+    .End()
+    .Build();
+```
+
+*Adding extension properties:*
+```csharp
+var workflow = new WorkflowBuilder()
+    ...
+    .WithExtensionProperty("extensionPropertyName", propertyValue } })
+    ...
+    .Build();
+```
+
+*Resulting workflow:*
+
+```yaml
+id: sample-workflow
+version: 1.0.0
+specVersion: 0.8
+extensionPropertyName: propertyValue #added as top level property of extended component, as opposed to metadata
+...
 ```

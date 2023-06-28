@@ -1,43 +1,36 @@
-﻿/*
- * Copyright 2021-Present The Serverless Workflow Specification Authors
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
 /// Represents the object used to define a workflow action
 /// </summary>
-[ProtoContract]
 [DataContract]
 public class ActionDefinition
+    : IExtensible
 {
 
     /// <summary>
     /// Gets/sets the unique action definition name
     /// </summary>
-    [ProtoMember(1)]
-    [DataMember(Order = 1)]
+    [DataMember(Order = 1, Name = "name"), JsonPropertyOrder(1), JsonPropertyName("name"), YamlMember(Alias = "name", Order = 1)]
     public virtual string? Name { get; set; }
 
     /// <summary>
     /// Gets the <see cref="ActionDefinition"/>'s type
     /// </summary>
-    [Newtonsoft.Json.JsonIgnore]
-    [System.Text.Json.Serialization.JsonIgnore]
-    [YamlIgnore]
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
     public virtual string Type
     {
         get
@@ -45,7 +38,7 @@ public class ActionDefinition
             if (this.Function != null)
                 return ActionType.Function;
             else if (this.Event != null)
-                return ActionType.Trigger;
+                return ActionType.Event;
             else if (this.Subflow != null)
                 return ActionType.Subflow;
             else
@@ -56,23 +49,14 @@ public class ActionDefinition
     /// <summary>
     /// Gets/sets a <see cref="OneOf{T1, T2}"/> that represents the function to invoke
     /// </summary>
-    [Newtonsoft.Json.JsonProperty(PropertyName = "functionRef")]
-    [System.Text.Json.Serialization.JsonPropertyName("functionRef")]
-    [YamlMember(Alias = "functionRef")]
-    [ProtoMember(2, Name = "functionRef")]
-    [DataMember(Order = 2, Name = "functionRef")]
-    [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<FunctionReference, string>))]
-    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<FunctionReference, string>))]
+    [DataMember(Order = 2, Name = "functionRef"), JsonPropertyOrder(2), JsonPropertyName("functionRef"), YamlMember(Alias = "functionRef", Order = 2)]
+    [JsonConverter(typeof(OneOfConverter<FunctionReference, string>))]
     protected virtual OneOf<FunctionReference, string>? FunctionValue { get; set; }
 
     /// <summary>
     /// Gets the object used to configure the reference of the function to invoke
     /// </summary>
-    [Newtonsoft.Json.JsonIgnore]
-    [System.Text.Json.Serialization.JsonIgnore]
-    [YamlIgnore]
-    [ProtoIgnore]
-    [IgnoreDataMember]
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
     public virtual FunctionReference? Function
     {
         get
@@ -95,31 +79,20 @@ public class ActionDefinition
     /// <summary>
     /// Gets the object used to configure the reference of the event to produce or consume
     /// </summary>
-    [Newtonsoft.Json.JsonProperty(PropertyName = "eventRef")]
-    [System.Text.Json.Serialization.JsonPropertyName("eventRef")]
-    [YamlMember(Alias = "eventRef")]
-    [ProtoMember(3, Name = "eventRef")]
-    [DataMember(Order = 3, Name = "eventRef")]
+    [DataMember(Order = 3, Name = "eventRef"), JsonPropertyOrder(3), JsonPropertyName("eventRef"), YamlMember(Alias = "eventRef", Order = 3)]
     public virtual EventReference? Event { get; set; }
 
     /// <summary>
     /// Gets/sets a <see cref="OneOf{T1, T2}"/> that references a subflow to run
     /// </summary>
-    [YamlMember(Alias = "subFlowRef")]
-    [ProtoMember(4, Name = "subFlowRef")]
-    [DataMember(Order = 4, Name = "subFlowRef")]
-    [Newtonsoft.Json.JsonProperty(PropertyName = "subFlowRef"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<SubflowReference, string>))]
-    [System.Text.Json.Serialization.JsonPropertyName("subFlowRef"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<SubflowReference, string>))]
+    [DataMember(Order = 4, Name = "eventRef"), JsonPropertyOrder(4), JsonPropertyName("eventRef"), YamlMember(Alias = "eventRef", Order = 4)]
+    [JsonConverter(typeof(OneOfConverter<SubflowReference, string>))]
     protected virtual OneOf<SubflowReference, string>? SubflowValue { get; set; }
 
     /// <summary>
     /// Gets the object used to configure the reference of the subflow to run
     /// </summary>
-    [Newtonsoft.Json.JsonIgnore]
-    [System.Text.Json.Serialization.JsonIgnore]
-    [YamlIgnore]
-    [ProtoIgnore]
-    [IgnoreDataMember]
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
     public virtual SubflowReference? Subflow
     {
         get
@@ -151,53 +124,44 @@ public class ActionDefinition
     /// <summary>
     /// Gets/sets the name of the workflow retry definition to use. If not defined uses the default runtime retry definition
     /// </summary>
-    [ProtoMember(5)]
-    [DataMember(Order = 5)]
+    [DataMember(Order = 5, Name = "retryRef"), JsonPropertyOrder(5), JsonPropertyName("retryRef"), YamlMember(Alias = "retryRef", Order = 5)]
     public virtual string? RetryRef { get; set; }
 
     /// <summary>
-    /// Gets/sets a <see cref="List{T}"/> containing references to defined <see cref="ErrorHandlerDefinition"/>s for which the action should not be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `true`
+    /// Gets/sets alist containing references to defined <see cref="ErrorHandlerDefinition"/>s for which the action should not be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `true`
     /// </summary>
-    [ProtoMember(6)]
-    [DataMember(Order = 6)]
+    [DataMember(Order = 6, Name = "nonRetryableErrors"), JsonPropertyOrder(6), JsonPropertyName("nonRetryableErrors"), YamlMember(Alias = "nonRetryableErrors", Order = 6)]
     public virtual List<string>? NonRetryableErrors { get; set; }
 
     /// <summary>
-    /// Gets/sets a <see cref="List{T}"/> containing references to defined <see cref="ErrorHandlerDefinition"/>s for which the action should be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `false`
+    /// Gets/sets alist containing references to defined <see cref="ErrorHandlerDefinition"/>s for which the action should be retried. Used only when `<see cref="WorkflowDefinition.AutoRetries"/>` is set to `false`
     /// </summary>
-    [ProtoMember(7)]
-    [DataMember(Order = 7)]
+    [DataMember(Order = 7, Name = "retryableErrors"), JsonPropertyOrder(7), JsonPropertyName("retryableErrors"), YamlMember(Alias = "retryableErrors", Order = 7)]
     public virtual List<string>? RetryableErrors { get; set; }
 
     /// <summary>
     /// Gets/sets an object used to define the way to filter the action's data
     /// </summary>
-    [ProtoMember(8)]
-    [DataMember(Order = 8)]
+    [DataMember(Order = 8, Name = "actionDataFilter"), JsonPropertyOrder(8), JsonPropertyName("actionDataFilter"), YamlMember(Alias = "actionDataFilter", Order = 8)]
     public ActionDataFilterDefinition? ActionDataFilter { get; set; }
 
     /// <summary>
     /// Gets/sets the <see cref="ActionDefinition"/>'s execution delay configuration
     /// </summary>
-    [ProtoMember(9)]
-    [DataMember(Order = 9)]
+    [DataMember(Order = 9, Name = "sleep"), JsonPropertyOrder(9), JsonPropertyName("sleep"), YamlMember(Alias = "sleep", Order = 9)]
     public virtual ActionExecutionDelayDefinition? Sleep { get; set; }
 
     /// <summary>
     /// Gets/sets an expression to be evaluated positively as a condition for the <see cref="ActionDefinition"/> to execute.
     /// </summary>
-    [ProtoMember(10)]
-    [DataMember(Order = 10)]
+    [DataMember(Order = 10, Name = "condition"), JsonPropertyOrder(10), JsonPropertyName("condition"), YamlMember(Alias = "condition", Order = 10)]
     public virtual string? Condition { get; set; }
 
     /// <summary>
     /// Gets/sets an <see cref="IDictionary{TKey, TValue}"/> containing the <see cref="ActionDefinition"/>'s extension properties
     /// </summary>
-    [ProtoMember(11)]
-    [DataMember(Order = 11)]
-    [Newtonsoft.Json.JsonExtensionData]
-    [System.Text.Json.Serialization.JsonExtensionData]
-    public virtual IDictionary<string, object>? ExtensionProperties { get; set; }
+    [DataMember(Order = 11, Name = "extensionData"), JsonExtensionData]
+    public virtual IDictionary<string, object>? ExtensionData { get; set; }
 
     /// <inheritdoc/>
     public override string? ToString()

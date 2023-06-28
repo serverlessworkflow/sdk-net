@@ -1,29 +1,19 @@
-﻿/*
- * Copyright 2021-Present The Serverless Workflow Specification Authors
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
-using Octokit;
-using ServerlessWorkflow.Sdk.Models;
+﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+using JsonCons.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Concurrent;
-using System.IO;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ServerlessWorkflow.Sdk.Services.Validation;
 
@@ -37,100 +27,58 @@ public class WorkflowSchemaValidator
     /// <summary>
     /// Initializes a new <see cref="WorkflowSchemaValidator"/>
     /// </summary>
-    /// <param name="serializer">The service used to serialize and deserialize JSON</param>
-    /// <param name="httpClientFactory">The service used to create <see cref="System.Net.Http.HttpClient"/>s</param>
-    public WorkflowSchemaValidator(IJsonSerializer serializer, IHttpClientFactory httpClientFactory)
+    /// <param name="httpClient">The service used to create <see cref="System.Net.Http.HttpClient"/>s</param>
+    public WorkflowSchemaValidator(IHttpClientFactory httpClientFactory)
     {
-        this.Serializer = serializer;
         this.HttpClient = httpClientFactory.CreateClient();
+        SchemaRegistry.Global.Fetch = GetExternalJsonSchema;
     }
 
     /// <summary>
-    /// Gets the service used to serialize and deserialize JSON
-    /// </summary>
-    protected IJsonSerializer Serializer { get; }
-
-    /// <summary>
-    /// Gets the <see cref="System.Net.Http.HttpClient"/> used to fetch the Serverless Workflow schema
+    /// Gets the service used to perform HTTP requests
     /// </summary>
     protected HttpClient HttpClient { get; }
 
     /// <summary>
-    /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the loaded Serverless Workflow spec <see cref="JSchema"/>s
+    /// Gets a <see cref="Dictionary{TKey, TValue}"/> containing the loaded Serverless Workflow spec <see cref="JsonSchema"/>s
     /// </summary>
-    protected ConcurrentDictionary<string, JSchema> Schemas { get;  } = new();
-
-    /// <summary>
-    /// Gets the service used to resolve <see cref="JSchema"/>s by <see cref="Uri"/>
-    /// </summary>
-    protected JSchemaPreloadedResolver SchemaResolver { get; } = new();
+    protected ConcurrentDictionary<string, JsonSchema> Schemas { get; } = new();
 
     /// <inheritdoc/>
-    public virtual async Task<IList<ValidationError>> ValidateAsync(string workflowJson, string specVersion, CancellationToken cancellationToken = default)
-    {
-        var workflow = this.Serializer.Deserialize<JObject>(workflowJson);
-        var schema = await this.LoadSpecificationSchemaAsync(specVersion, cancellationToken);
-        workflow.IsValid(schema, out IList<ValidationError> validationErrors);
-        return validationErrors;
-    }
-
-    /// <inheritdoc/>
-    public virtual async Task<IList<ValidationError>> ValidateAsync(WorkflowDefinition workflow, CancellationToken cancellationToken = default)
+    public async Task<EvaluationResults> ValidateAsync(WorkflowDefinition workflow, CancellationToken cancellationToken = default)
     {
         if (workflow == null) throw new ArgumentNullException(nameof(workflow));
-        var serializerSettings = JsonConvert.DefaultSettings?.Invoke();
-        if (serializerSettings == null) serializerSettings = new();
-        serializerSettings.DefaultValueHandling = DefaultValueHandling.Populate | DefaultValueHandling.Ignore;
-        var obj = JObject.FromObject(workflow, Newtonsoft.Json.JsonSerializer.Create(serializerSettings));
-        var schema = await this.LoadSpecificationSchemaAsync(workflow.SpecVersion, cancellationToken);
-        if(workflow.Extensions?.Any() == true)
+        var jsonDocument = Serialization.Serializer.Json.SerializeToDocument(workflow)!;
+        var jsonSchema = await this.GetOrLoadSpecificationSchemaAsync(workflow.SpecVersion, cancellationToken).ConfigureAwait(false);
+        if (workflow.Extensions?.Any() == true)
         {
-            var schemaObject = JObject.FromObject(schema, Newtonsoft.Json.JsonSerializer.Create(serializerSettings));
-            foreach(var extension in workflow.Extensions)
+            var jsonSchemaElement = Serialization.Serializer.Json.SerializeToElement(jsonSchema)!.Value;
+            var jsonSchemaDocument = Serialization.Serializer.Json.SerializeToDocument(jsonSchema)!;
+            foreach (var extension in workflow.Extensions)
             {
-                var extensionSchemaObject = await this.GetExtensionSchemaObjectAsync(extension, cancellationToken);
-                schemaObject.Merge(extensionSchemaObject);
+                var extensionSchemaElement = await this.GetExtensionSchemaAsync(extension, cancellationToken);
+                jsonSchemaDocument = JsonMergePatch.ApplyMergePatch(jsonSchemaElement, extensionSchemaElement);
             }
-            var json = JsonConvert.SerializeObject(schemaObject, serializerSettings);
-            schema = JSchema.Parse(json, this.SchemaResolver);
+            jsonSchema = Serialization.Serializer.Json.Deserialize<JsonSchema>(jsonSchemaDocument)!;
         }
-        obj.IsValid(schema, out IList<ValidationError> validationErrors);
-        return validationErrors;
+        var evaluationOptions = EvaluationOptions.Default;
+        evaluationOptions.OutputFormat = OutputFormat.List;
+        return jsonSchema.Evaluate(jsonDocument, evaluationOptions);
     }
 
     /// <summary>
-    /// Loads the Serverless Workflow <see cref="JSchema"/>
+    /// Loads the Serverless Workflow <see cref="JsonSchema"/>
     /// </summary>
-    /// <returns>The Serverless Workflow <see cref="JSchema"/></returns>
-    protected virtual async Task<JSchema> LoadSpecificationSchemaAsync(string specVersion, CancellationToken cancellationToken = default)
+    /// <returns>The Serverless Workflow <see cref="JsonSchema"/></returns>
+    protected virtual async Task<JsonSchema> GetOrLoadSpecificationSchemaAsync(string specVersion, CancellationToken cancellationToken = default)
     {
-        if (this.Schemas.TryGetValue(specVersion, out var schema)) return schema;
-        var client = new GitHubClient(new ProductHeaderValue("serverless-workflow-sdk-net"));
-        var specJson = null as string;
-        foreach (var content in await client.Repository.Content.GetAllContentsByRef("serverlessworkflow", "specification", "schema", $"{specVersion[..3]}.x"))
-        {
-            if (string.IsNullOrWhiteSpace(content.DownloadUrl)) continue;
-            var json = await this.GetSpecificationSchemaJsonAsync(new(content.DownloadUrl), specVersion, cancellationToken);
-            if (content.Name == "workflow.json") specJson = json;
-        }
-        schema = JSchema.Parse(specJson!, this.SchemaResolver);
+        if (this.Schemas.TryGetValue(specVersion, out var schema) && schema != null) return schema;
+        using var response = await this.HttpClient.GetAsync($"https://serverlessworkflow.io/schemas/{specVersion}/workflow.json", cancellationToken).ConfigureAwait(false);
+        using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+        schema = await JsonSchema.FromStream(stream).ConfigureAwait(false);
+        schema = schema.Bundle();
         this.Schemas.TryAdd(specVersion, schema);
         return schema;
-    }
-
-    /// <summary>
-    /// Retrieves the JSON content of the specified schema
-    /// </summary>
-    /// <param name="uri">The <see cref="Uri"/> of the referenced JSON schema</param>
-    /// <param name="specVersion">The Serverless Workflow specification version</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>The JSON content of the specified schema</returns>
-    protected virtual async Task<string> GetSpecificationSchemaJsonAsync(Uri uri, string specVersion, CancellationToken cancellationToken = default)
-    {
-        using HttpResponseMessage response = await this.HttpClient.GetAsync(uri, cancellationToken);
-        var json = await response.Content?.ReadAsStringAsync(cancellationToken)!;
-        this.SchemaResolver.Add(new($"https://serverlessworkflow.io/schemas/{specVersion[..3]}/{uri.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries).Last()}"), json);
-        return json;
     }
 
     /// <summary>
@@ -139,9 +87,9 @@ public class WorkflowSchemaValidator
     /// <param name="extension">The <see cref="ExtensionDefinition"/> that defines the referenced JSON schema</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The JSON content of the specified schema</returns>
-    protected virtual async Task<JObject> GetExtensionSchemaObjectAsync(ExtensionDefinition extension, CancellationToken cancellationToken = default)
+    protected virtual async Task<JsonElement> GetExtensionSchemaAsync(ExtensionDefinition extension, CancellationToken cancellationToken = default)
     {
-        if(extension == null) throw new ArgumentNullException(nameof(extension));
+        if (extension == null) throw new ArgumentNullException(nameof(extension));
         var uri = extension.Resource;
         if (!uri.IsAbsoluteUri) uri = this.ResolveRelativeUri(uri);
         string json;
@@ -154,7 +102,20 @@ public class WorkflowSchemaValidator
             using HttpResponseMessage response = await this.HttpClient.GetAsync(uri, cancellationToken);
             json = await response.Content?.ReadAsStringAsync(cancellationToken)!;
         }
-        return JObject.Parse(json)!;
+        return Serialization.Serializer.Json.Deserialize<JsonElement>(json);
+    }
+
+    /// <summary>
+    /// Retrieves the <see cref="JsonSchema"/> at the specified <see cref="Uri"/>
+    /// </summary>
+    /// <param name="uri">The <see cref="Uri"/> of the external <see cref="JsonSchema"/> to retrieve</param>
+    /// <returns>The <see cref="JsonSchema"/> referenced by the specified <see cref="Uri"/></returns>
+    protected virtual JsonSchema GetExternalJsonSchema(Uri uri)
+    {
+        using var response = this.HttpClient.GetAsync(uri).ConfigureAwait(false).GetAwaiter().GetResult();
+        using var stream = response.Content.ReadAsStream();
+        using var streamReader = new StreamReader(stream);
+        return JsonSchema.FromText(streamReader.ReadToEnd());
     }
 
     /// <summary>
@@ -166,8 +127,22 @@ public class WorkflowSchemaValidator
     {
         if (uri == null) throw new ArgumentNullException(nameof(uri));
         var localPath = uri.ToString();
-        if (localPath.StartsWith("//") || localPath.StartsWith("\\\\")) localPath = localPath.Substring(2);
+        if (localPath.StartsWith("//") || localPath.StartsWith("\\\\")) localPath = localPath[2..];
         return new Uri(Path.Combine(AppContext.BaseDirectory, localPath));
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="WorkflowSchemaValidator"/>
+    /// </summary>
+    /// <returns>A new <see cref="WorkflowSchemaValidator"/></returns>
+    public static WorkflowSchemaValidator Create()
+    {
+        var services = new ServiceCollection();
+        services.AddLogging();
+        services.AddHttpClient();
+        services.AddSingleton<WorkflowSchemaValidator>();
+        services.AddSingleton<IWorkflowSchemaValidator>(provider => provider.GetRequiredService<WorkflowSchemaValidator>());
+        return services.BuildServiceProvider().GetRequiredService<WorkflowSchemaValidator>();
     }
 
 }

@@ -1,49 +1,41 @@
-﻿/*
- * Copyright 2021-Present The Serverless Workflow Specification Authors
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
-/// Represents a reference to a sub <see cref="WorkflowDefinition"/>
+/// Represents a reference to a sub workflow definition
 /// </summary>
-[ProtoContract]
 [DataContract]
 public class SubflowReference
+    : IExtensible
 {
 
     /// <summary>
     /// Initializes a new <see cref="SubflowReference"/>
     /// </summary>
-    public SubflowReference()
-    {
-
-    }
+    public SubflowReference() { }
 
     /// <summary>
     /// Initializes a new <see cref="SubflowReference"/>
     /// </summary>
-    /// <param name="workflowId">The id of the <see cref="WorkflowDefinition"/> to run</param>
-    /// <param name="version">The version of the <see cref="WorkflowDefinition"/> to run. Defaults to 'latest'</param>
+    /// <param name="workflowId">The id of the workflow definition to run</param>
+    /// <param name="version">The version of the workflow definition to run. Defaults to 'latest'</param>
     /// <param name="invocationMode">The subflow's <see cref="Sdk.InvocationMode"/>. Defaults to <see cref="InvocationMode.Synchronous"/>.</param>
-    public SubflowReference(string workflowId, string version, string invocationMode = Sdk.InvocationMode.Synchronous)
+    public SubflowReference(string workflowId, string? version = null, string invocationMode = Sdk.InvocationMode.Synchronous)
         : this()
     {
-        if (string.IsNullOrWhiteSpace(workflowId))
-            throw new ArgumentNullException(nameof(workflowId));
+        if (string.IsNullOrWhiteSpace(workflowId)) throw new ArgumentNullException(nameof(workflowId));
         this.WorkflowId = workflowId;
         this.Version = version;
         this.InvocationMode = invocationMode;
@@ -52,28 +44,21 @@ public class SubflowReference
     /// <summary>
     /// Initializes a new <see cref="SubflowReference"/>
     /// </summary>
-    /// <param name="workflowId">The id of the <see cref="WorkflowDefinition"/> to run</param>
+    /// <param name="workflowId">The id of the workflow definition to run</param>
     /// <param name="invocationMode">The subflow's <see cref="Sdk.InvocationMode"/>. Defaults to <see cref="InvocationMode.Synchronous"/>.</param>
-    public SubflowReference(string workflowId, string invocationMode = Sdk.InvocationMode.Synchronous)
-        : this(workflowId, null!, invocationMode)
-    {
-
-    }
+    public SubflowReference(string workflowId, string invocationMode = Sdk.InvocationMode.Synchronous) : this(workflowId, null, invocationMode) { }
 
     /// <summary>
-    /// Gets/sets the id of the <see cref="WorkflowDefinition"/> to run
+    /// Gets/sets the id of the workflow definition to run
     /// </summary>
-    [Required]
-    [Newtonsoft.Json.JsonRequired]
-    [ProtoMember(1)]
-    [DataMember(Order = 1, IsRequired = true)]
+    [Required, MinLength(1)]
+    [DataMember(Order = 1, Name = "workflowId", IsRequired = true), JsonPropertyOrder(1), JsonPropertyName("workflowId"), YamlMember(Alias = "workflowId", Order = 1)]
     public virtual string WorkflowId { get; set; } = null!;
 
     /// <summary>
-    /// Gets/sets the version of the <see cref="WorkflowDefinition"/> to run. Defaults to 'latest'
+    /// Gets/sets the version of the workflow definition to run. Defaults to 'latest'
     /// </summary>
-    [ProtoMember(2)]
-    [DataMember(Order = 2)]
+    [DataMember(Order = 2, Name = "version"), JsonPropertyOrder(2), JsonPropertyName("version"), YamlMember(Alias = "version", Order = 2)]
     public virtual string? Version { get; set; } = "latest";
 
     /// <summary>
@@ -85,21 +70,23 @@ public class SubflowReference
     /// Subflows that are invoked async do not propagate their errors to the associated action definition and the workflow state, meaning that any errors that happen during their execution cannot be handled in the workflow states onErrors definition.<para></para>
     /// Note that errors raised during subflows that are invoked async should not fail workflow execution.
     /// </remarks>
-    [Newtonsoft.Json.JsonProperty(PropertyName = "invoke")]
-    [System.Text.Json.Serialization.JsonPropertyName("invoke")]
-    [YamlMember(Alias = "invoke")]
-    [ProtoMember(3, Name = "invoke")]
-    [DataMember(Order = 3, Name = "invoke")]
+    [DataMember(Order = 3, Name = "invoke"), JsonPropertyOrder(3), JsonPropertyName("invoke"), YamlMember(Alias = "invoke", Order = 3)]
     public virtual string InvocationMode { get; set; } = Sdk.InvocationMode.Synchronous;
+
+    /// <summary>
+    /// Gets/sets a value that defines how subflow execution that is invoked async should behave if the parent workflow completes execution before the subflow completes its own execution
+    /// </summary>
+    [DataMember(Order = 4, Name = "onParentComplete"), JsonPropertyOrder(4), JsonPropertyName("onParentComplete"), YamlMember(Alias = "onParentComplete", Order = 4)]
+    public virtual bool OnParentComplete { get; set; }
 
     /// <summary>
     /// Gets/sets an <see cref="IDictionary{TKey, TValue}"/> containing the <see cref="FunctionReference"/>'s extension properties
     /// </summary>
-    [ProtoMember(4)]
-    [DataMember(Order = 4)]
-    [Newtonsoft.Json.JsonExtensionData]
-    [System.Text.Json.Serialization.JsonExtensionData]
-    public virtual IDictionary<string, object>? ExtensionProperties { get; set; }
+    [DataMember(Order = 5, Name = "extensionData"), JsonExtensionData]
+    public IDictionary<string, object>? ExtensionData { get; set; }
+
+    /// <inheritdoc/>
+    public override string ToString() => string.IsNullOrWhiteSpace(this.Version) ? $"{this.WorkflowId}:latest" : $"{this.WorkflowId}:{this.Version}";
 
     /// <summary>
     /// Parses the specified input into a new <see cref="SubflowReference"/>

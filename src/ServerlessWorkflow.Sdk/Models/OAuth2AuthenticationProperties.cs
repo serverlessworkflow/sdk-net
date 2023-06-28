@@ -1,145 +1,246 @@
-﻿/*
- * Copyright 2021-Present The Serverless Workflow Specification Authors
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-namespace ServerlessWorkflow.Sdk.Models
+namespace ServerlessWorkflow.Sdk.Models;
+
+/// <summary>
+/// Represents an object used to configure an 'OAuth2' authentication scheme
+/// </summary>
+[DataContract]
+public class OAuth2AuthenticationProperties
+    : AuthenticationProperties
 {
 
+    /// <inheritdoc/>
+    public OAuth2AuthenticationProperties() { }
+
+    /// <inheritdoc/>
+    public OAuth2AuthenticationProperties(IDictionary<string, object> properties) : base(properties) { }
+
     /// <summary>
-    /// Represents an object used to configure an 'OAuth2' authentication scheme
+    /// Gets/sets the OAuth2 grant type to use
     /// </summary>
-    [ProtoContract]
-    [DataContract]
-    public class OAuth2AuthenticationProperties
-        : AuthenticationProperties
+    [Required, MinLength(1)]
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string GrantType
     {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(GrantType).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            this.Properties[nameof(GrantType).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets the OAuth2 grant type to use
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("grant_type")]
-        [System.Text.Json.Serialization.JsonPropertyName("grant_type")]
-        [ProtoMember(1)]
-        [DataMember(Name = "grant_type", Order = 1)]
-        public virtual string GrantType { get; set; } = null!;
+    /// <summary>
+    /// Gets/sets the uri of the OAuth2 authority to use to generate an access token
+    /// </summary>
+    [Required, MinLength(1)]
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual Uri Authority
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(Authority).ToCamelCase(), out var value)) return new((string)value);
+            else return null!;
+        }
+        set
+        {
+            this.Properties[nameof(Authority).ToCamelCase()] = value.ToString();
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets the uri of the OAuth2 authority to use to generate an access token
-        /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty("authority")]
-        [System.Text.Json.Serialization.JsonPropertyName("authority")]
-        [ProtoMember(2, IsRequired = true)]
-        [DataMember(Name = "authority", Order = 2, IsRequired = true)]
-        public virtual Uri Authority { get; set; } = null!;
+    /// <summary>
+    /// Gets/sets the id of the OAuth2 client to use
+    /// </summary>
+    [Required, MinLength(1)]
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string ClientId
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(ClientId).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            this.Properties[nameof(ClientId).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets the id of the OAuth2 client to use
-        /// </summary>
-        [Required]
-        [Newtonsoft.Json.JsonRequired, Newtonsoft.Json.JsonProperty("client_id")]
-        [System.Text.Json.Serialization.JsonPropertyName("client_id")]
-        [ProtoMember(3, IsRequired = true)]
-        [DataMember(Name = "client_id", Order = 3, IsRequired = true)]
-        public virtual string ClientId { get; set; } = null!;
+    /// <summary>
+    /// Gets/sets the secret of the non-public OAuth2 client to use. Required when <see cref="GrantType"/> has been set to <see cref="OAuth2GrantType.TokenExchange"/>
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? ClientSecret
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(ClientSecret).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            if (value == null) this.Properties.Remove(nameof(ClientSecret).ToCamelCase());
+            else this.Properties[nameof(ClientSecret).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets the secret of the non-public OAuth2 client to use. Required when <see cref="GrantType"/> has been set to <see cref="OAuth2GrantType.TokenExchange"/>
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("client_secret")]
-        [System.Text.Json.Serialization.JsonPropertyName("client_secret")]
-        [ProtoMember(4)]
-        [DataMember(Name = "client_secret", Order = 4)]
-        public virtual string? ClientSecret { get; set; }
+    /// <summary>
+    /// Gets/sets the username to use when authenticating
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? Username
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(Username).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            if (value == null) this.Properties.Remove(nameof(Username).ToCamelCase());
+            else this.Properties[nameof(Username).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets the username to use when authenticating
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("username")]
-        [System.Text.Json.Serialization.JsonPropertyName("username")]
-        [ProtoMember(5)]
-        [DataMember(Name = "username", Order = 5)]
-        public virtual string? Username { get; set; }
+    /// <summary>
+    /// Gets/sets the password to use when authenticating
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? Password
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(Password).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            if (value == null) this.Properties.Remove(nameof(Password).ToCamelCase());
+            else this.Properties[nameof(Password).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets the password to use when authenticating
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("password")]
-        [System.Text.Json.Serialization.JsonPropertyName("password")]
-        [ProtoMember(6)]
-        [DataMember(Name = "password", Order = 6)]
-        public virtual string? Password { get; set; }
+    /// <summary>
+    /// Gets/sets a space-separated list containing the authorized scopes to request
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? Scope
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(Scope).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            if (value == null) this.Properties.Remove(nameof(Scope).ToCamelCase());
+            else this.Properties[nameof(Scope).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets a space-separated list containing the authorized scopes to request
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("scope")]
-        [System.Text.Json.Serialization.JsonPropertyName("scope")]
-        [ProtoMember(7)]
-        [DataMember(Name = "scope", Order = 7)]
-        public virtual string? Scope { get; set; }
+    /// <summary>
+    /// Gets/sets a space-separated list containing the authorized audiences of the resulting token
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? Audience
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(Audience).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            if (value == null) this.Properties.Remove(nameof(Audience).ToCamelCase());
+            else this.Properties[nameof(Audience).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets a space-separated list containing the authorized audiences of the resulting token
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("audience")]
-        [System.Text.Json.Serialization.JsonPropertyName("audience")]
-        [ProtoMember(8)]
-        [DataMember(Name = "audience", Order = 8)]
-        public virtual string? Audience { get; set; }
+    /// <summary>
+    /// Gets/sets the token that represents the identity of the party on behalf of whom the request is being made.Typically, the subject of this token will be the subject of the security token issued in response to the request.
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? SubjectToken
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(SubjectToken).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            if (value == null) this.Properties.Remove(nameof(SubjectToken).ToCamelCase());
+            else this.Properties[nameof(SubjectToken).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets the token that represents the identity of the party on behalf of whom the request is being made.Typically, the subject of this token will be the subject of the security token issued in response to the request.
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("subject_token")]
-        [System.Text.Json.Serialization.JsonPropertyName("subject_token")]
-        [ProtoMember(9)]
-        [DataMember(Name = "subject_token", Order = 9)]
-        public virtual string? SubjectToken { get; set; }
+    /// <summary>
+    /// Gets/sets an identifie that indicates the type of the security token in the "subject_token" parameter.
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? SubjectTokenType
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(SubjectTokenType).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            if (value == null) this.Properties.Remove(nameof(SubjectTokenType).ToCamelCase());
+            else this.Properties[nameof(SubjectTokenType).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets an identifie that indicates the type of the security token in the "subject_token" parameter.
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("subject_token_type")]
-        [System.Text.Json.Serialization.JsonPropertyName("subject_token_type")]
-        [ProtoMember(10)]
-        [DataMember(Name = "subject_token_type", Order = 10)]
-        public virtual string? SubjectTokenType { get; set; }
+    /// <summary>
+    /// Gets/sets a token that represents the identity of the acting party.Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? ActorToken
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(ActorToken).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            if (value == null) this.Properties.Remove(nameof(ActorToken).ToCamelCase());
+            else this.Properties[nameof(ActorToken).ToCamelCase()] = value;
+        }
+    }
 
-        /// <summary>
-        /// Gets/sets a token that represents the identity of the acting party.Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("actor_token")]
-        [System.Text.Json.Serialization.JsonPropertyName("actor_token")]
-        [ProtoMember(11)]
-        [DataMember(Name = "actor_token", Order = 11)]
-        public virtual string? ActorToken { get; set; }
-
-        /// <summary>
-        /// Gets/sets an identifier, as described in Section 3, that indicates the type of the security token in the "actor_token" parameter. This is REQUIRED when the "actor_token" parameter is present in the request but MUST NOT be included otherwise.
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty("actor_token_type")]
-        [System.Text.Json.Serialization.JsonPropertyName("actor_token_type")]
-        [ProtoMember(11)]
-        [DataMember(Name = "actor_token_type", Order = 11)]
-        public virtual string? ActorTokenType { get; set; }
-
+    /// <summary>
+    /// Gets/sets an identifier, as described in Section 3, that indicates the type of the security token in the "actor_token" parameter. This is REQUIRED when the "actor_token" parameter is present in the request but MUST NOT be included otherwise.
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? ActorTokenType
+    {
+        get
+        {
+            if (this.Properties.TryGetValue(nameof(ActorTokenType).ToCamelCase(), out var value)) return (string)value;
+            else return null!;
+        }
+        set
+        {
+            if (value == null) this.Properties.Remove(nameof(ActorTokenType).ToCamelCase());
+            else this.Properties[nameof(ActorTokenType).ToCamelCase()] = value;
+        }
     }
 
 }

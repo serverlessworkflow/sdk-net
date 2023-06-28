@@ -1,83 +1,66 @@
-﻿/*
- * Copyright 2021-Present The Serverless Workflow Specification Authors
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
 /// Represents an object used to define a reusable function
 /// </summary>
-[ProtoContract]
 [DataContract]
 public class FunctionDefinition
+    : IMetadata, IExtensible
 {
 
     /// <summary>
     /// Gets/sets a unique function name
     /// </summary>
-    [Required]
-    [Newtonsoft.Json.JsonRequired]
-    [ProtoMember(1)]
-    [DataMember(Order = 1)]
+    [Required, MinLength(1)]
+    [DataMember(Order = 1, Name = "name", IsRequired = true), JsonPropertyName("name"), YamlMember(Alias = "name")]
     public virtual string Name { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the operation. If type '<see cref="FunctionType.Rest"/>', combination of the function/service OpenAPI definition URI and the operationID of the operation that needs to be invoked, separated by a '#'. 
     /// If type is `<see cref="FunctionType.Expression"/>` defines the workflow expression.
     /// </summary>
-    [Required]
-    [Newtonsoft.Json.JsonRequired]
-    [ProtoMember(2)]
-    [DataMember(Order = 2)]
+    [Required, MinLength(1)]
+    [DataMember(Order = 2, Name = "operation", IsRequired = true), JsonPropertyName("operation"), YamlMember(Alias = "operation")]
     public virtual string Operation { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the type of the defined function. Defaults to '<see cref="FunctionType.Rest"/>'
     /// </summary>
-    [ProtoMember(3)]
-    [DataMember(Order = 3)]
+    [DataMember(Order = 3, Name = "type", IsRequired = true), JsonPropertyName("type"), YamlMember(Alias = "type")]
     public virtual string Type { get; set; } = FunctionType.Rest;
 
     /// <summary>
-    /// Gets/sets the reference to the <see cref="AuthenticationDefinition"/> to use when invoking the function. Ignored when <see cref="Type"/> has been set to <see cref="FunctionType.Expression"/>
+    /// Gets/sets the reference to the authentication definition to use when invoking the function. Ignored when <see cref="Type"/> has been set to <see cref="FunctionType.Expression"/>
     /// </summary>
-    [ProtoMember(4)]
-    [DataMember(Order = 4)]
+    [DataMember(Order = 4, Name = "authRef", IsRequired = true), JsonPropertyName("authRef"), YamlMember(Alias = "authRef")]
     public virtual string? AuthRef { get; set; }
 
     /// <summary>
     /// Gets/sets the function's metadata
     /// </summary>
-    [ProtoMember(5)]
-    [DataMember(Order = 5)]
-    public virtual DynamicObject? Metadata { get; set; }
+    [DataMember(Order = 5, Name = "metadata", IsRequired = true), JsonPropertyName("metadata"), YamlMember(Alias = "metadata")]
+    public virtual DynamicMapping? Metadata { get; set; }
 
     /// <summary>
     /// Gets/sets an <see cref="IDictionary{TKey, TValue}"/> containing the <see cref="FunctionDefinition"/>'s extension properties
     /// </summary>
-    [ProtoMember(6)]
-    [DataMember(Order = 6)]
-    [Newtonsoft.Json.JsonExtensionData]
-    [System.Text.Json.Serialization.JsonExtensionData]
-    public virtual IDictionary<string, object>? ExtensionProperties { get; set; }
+    [DataMember(Order = 6, Name = "extensionData"), JsonExtensionData]
+    public virtual IDictionary<string, object>? ExtensionData { get; set; }
 
     /// <inheritdoc/>
-    public override string ToString()
-    {
-        return this.Name;
-    }
+    public override string ToString() => this.Name;
 
 }

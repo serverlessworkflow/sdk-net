@@ -1,0 +1,28 @@
+﻿{
+  "id": "ExternalRef",
+  "name": "ExternalRef",
+  "version": "0.1.0",
+  "dataInputSchema": "file://resources/schemas/externalref.json",
+  "constants": "file://resources/constants/petstore.json",
+  "events": "file://resources/events/petstore.json",
+  "functions": "file://resources/functions/petstore.json",
+  "retries": "file://resources/retries/default.json",
+  "secrets": "file://resources/secrets/default.json",
+  "auth": "file://resources/auths/default.json",
+  "states": [
+    {
+      "name": "CreatePet",
+      "type": "operation",
+      "actions": [
+        {
+          "name": "CreatePet",
+          "eventRef": {
+            "triggerEventRef": "PetCreated",
+            "resultEventRef": "PetCreated"
+          }
+        }
+      ],
+      "end": true
+    }
+  ]
+}

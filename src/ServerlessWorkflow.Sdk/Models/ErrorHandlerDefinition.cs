@@ -1,186 +1,97 @@
-﻿/*
- * Copyright 2021-Present The Serverless Workflow Specification Authors
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-using Newtonsoft.Json.Linq;
-using System.ComponentModel.DataAnnotations;
-using YamlDotNet.Serialization;
+﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-namespace ServerlessWorkflow.Sdk.Models
+namespace ServerlessWorkflow.Sdk.Models;
+
+/// <summary>
+/// Represents the definition of an error handler
+/// </summary>
+[DataContract]
+public class ErrorHandlerDefinition
+    : IExtensible
 {
 
     /// <summary>
-    /// Represents the definition of a workflow error handler
+    /// Gets/sets a domain-specific error name, or '*' to indicate all possible errors. If other handlers are declared, the <see cref="ErrorHandlerDefinition"/> will only be considered on errors that have NOT been handled by any other.
     /// </summary>
-    [ProtoContract]
-    [DataContract]
-    public class ErrorHandlerDefinition
+    [Required, MinLength(1)]
+    [DataMember(Order = 1, Name = "error"), JsonPropertyOrder(1), JsonPropertyName("error"), YamlMember(Alias = "error", Order = 1)]
+    public virtual string Error { get; set; } = null!;
+
+    /// <summary>
+    /// Gets/sets the error code. Can be used in addition to the name to help runtimes resolve to technical errors/exceptions. Should not be defined if error is set to '*'.
+    /// </summary>
+    [DataMember(Order = 2, Name = "code"), JsonPropertyOrder(2), JsonPropertyName("code"), YamlMember(Alias = "code", Order = 2)]
+    public virtual string? Code { get; set; }
+
+    /// <summary>
+    /// Gets/sets a reference to the <see cref="RetryDefinition"/> to use 
+    /// </summary>
+    [DataMember(Order = 3, Name = "retryRef"), JsonPropertyOrder(3), JsonPropertyName("retryRef"), YamlMember(Alias = "retryRef", Order = 3)]
+    public virtual string? RetryRef { get; set; } = null!;
+
+    /// <summary>
+    /// Gets/sets the object that represents the <see cref="ErrorHandlerDefinition"/>'s <see cref="TransitionDefinition"/>
+    /// </summary>
+    [DataMember(Order = 4, Name = "transition"), JsonPropertyOrder(4), JsonPropertyName("transition"), YamlMember(Alias = "transition", Order = 4)]
+    protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
+
+    /// <summary>
+    /// Gets/sets the object used to configure the state definition's transition to another state definition upon completion
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual TransitionDefinition? Transition
     {
-
-        /// <summary>
-        /// Gets/sets a domain-specific error name, or '*' to indicate all possible errors. If other handlers are declared, the <see cref="ErrorHandlerDefinition"/> will only be considered on errors that have NOT been handled by any other.
-        /// </summary>
-        [Newtonsoft.Json.JsonRequired]
-        [Required]
-        [ProtoMember(1)]
-        [DataMember(Order = 1)]
-        public virtual string Error { get; set; } = null!;
-
-        /// <summary>
-        /// Gets/sets the error code. Can be used in addition to the name to help runtimes resolve to technical errors/exceptions. Should not be defined if error is set to '*'.
-        /// </summary>
-        [ProtoMember(2)]
-        [DataMember(Order = 2)]
-        public virtual string? Code { get; set; }
-
-        /// <summary>
-        /// Gets/sets a reference to the <see cref="RetryDefinition"/> to use 
-        /// </summary>
-        [Newtonsoft.Json.JsonProperty(PropertyName = "retryRef")]
-        [System.Text.Json.Serialization.JsonPropertyName("retryRef")]
-        [YamlMember(Alias = "retryRef")]
-        [ProtoMember(3, Name = "retryRef")]
-        [DataMember(Order = 3, Name = "retryRef")]
-        public virtual string? Retry { get; set; } = null!;
-
-        /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="ErrorHandlerDefinition"/>'s <see cref="TransitionDefinition"/>
-        /// </summary>
-        [ProtoMember(4, Name = "transition")]
-        [DataMember(Order = 4, Name = "transition")]
-        [YamlMember(Alias = "transition")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "transition"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<TransitionDefinition, string>))]
-        [System.Text.Json.Serialization.JsonPropertyName("transition"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<TransitionDefinition, string>))]
-        protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
-
-        /// <summary>
-        /// Gets/sets the object used to configure the <see cref="StateDefinition"/>'s transition to another <see cref="StateDefinition"/> upon completion
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual TransitionDefinition? Transition
+        get
         {
-            get
-            {
-                if (this.TransitionValue?.T1Value == null
-                    && !string.IsNullOrWhiteSpace(this.TransitionValue?.T2Value))
-                    return new() { NextState = this.TransitionValue.T2Value };
-                else
-                    return this.TransitionValue?.T1Value;
-            }
-            set
-            {
-                if (value == null)
-                    this.TransitionValue = null;
-                else
-                    this.TransitionValue = value;
-            }
+            if (this.TransitionValue?.T1Value == null && !string.IsNullOrWhiteSpace(this.TransitionValue?.T2Value)) return new() { NextState = this.TransitionValue.T2Value };
+            else return this.TransitionValue?.T1Value;
         }
-
-        /// <summary>
-        /// Gets/sets the name of the <see cref="StateDefinition"/> to transition to upon completion
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual string? TransitionToStateName
+        set
         {
-            get
-            {
-                return this.TransitionValue?.T2Value;
-            }
-            set
-            {
-                if (value == null)
-                    this.TransitionValue = null;
-                else
-                    this.TransitionValue = value;
-            }
+            if (value == null) this.TransitionValue = null;
+            else this.TransitionValue = value;
         }
-
-        /// <summary>
-        /// Gets/sets the <see cref="JToken"/> that represents the <see cref="ErrorHandlerDefinition"/>'s <see cref="EndDefinition"/>
-        /// </summary>
-        [ProtoMember(5, Name = "end")]
-        [DataMember(Order = 5, Name = "end")]
-        [YamlMember(Alias = "end")]
-        [Newtonsoft.Json.JsonProperty(PropertyName = "end"), Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.OneOfConverter<EndDefinition, bool>))]
-        [System.Text.Json.Serialization.JsonPropertyName("end"), System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.Converters.OneOfConverter<EndDefinition, bool>))]
-        protected virtual OneOf<EndDefinition, bool>? EndValue { get; set; }
-
-        /// <summary>
-        /// Gets/sets the object used to configure the <see cref="StateDefinition"/>'s transition to another <see cref="StateDefinition"/> upon completion
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual EndDefinition? End
-        {
-            get
-            {
-                if (this.EndValue?.T1Value == null
-                    && !string.IsNullOrWhiteSpace(this.TransitionValue?.T2Value))
-                    return new() { };
-                else
-                    return this.EndValue?.T1Value;
-            }
-            set
-            {
-                if (value == null)
-                    this.EndValue = null;
-                else
-                    this.EndValue = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets/sets a boolean indicating whether or not the <see cref="StateDefinition"/> is the end of a logicial workflow path
-        /// </summary>
-        [Newtonsoft.Json.JsonIgnore]
-        [System.Text.Json.Serialization.JsonIgnore]
-        [YamlIgnore]
-        [ProtoIgnore]
-        [IgnoreDataMember]
-        public virtual bool IsEnd
-        {
-            get
-            {
-                if (this.EndValue == null)
-                    return false;
-                else
-                    return this.EndValue.T2Value;
-            }
-            set
-            {
-                this.EndValue = value;
-            }
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"{this.Error}{(string.IsNullOrWhiteSpace(this.Code) ? string.Empty : $" (code: '{this.Code}')")}";
-        }
-
     }
+
+    /// <summary>
+    /// Gets/sets the name of the state definition to transition to upon completion
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? TransitionToStateName
+    {
+        get
+        {
+            return this.TransitionValue?.T2Value;
+        }
+        set
+        {
+            if (value == null) this.TransitionValue = null;
+            else this.TransitionValue = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets/sets the object that represents the <see cref="ErrorHandlerDefinition"/>'s <see cref="EndDefinition"/>
+    /// </summary>
+    [DataMember(Order = 5, Name = "end"), JsonPropertyOrder(5), JsonPropertyName("end"), YamlMember(Alias = "end", Order = 5)]
+    public virtual object? End { get; set; }
+
+    /// <inheritdoc/>
+    [DataMember(Order = 6, Name = "extensionData"), JsonExtensionData]
+    public IDictionary<string, object>? ExtensionData { get; set; }
+
+    /// <inheritdoc/>
+    public override string ToString() => $"{this.Error}{(string.IsNullOrWhiteSpace(this.Code) ? string.Empty : $" (code: '{this.Code}')")}";
 
 }
