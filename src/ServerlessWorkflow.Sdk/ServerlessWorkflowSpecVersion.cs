@@ -22,11 +22,11 @@ public static class ServerlessWorkflowSpecVersion
     /// <summary>
     /// Gets the v0.8 version
     /// </summary>
-    public const string VZero8 = "0.8";
+    public const string V08 = "0.8";
 
     /// <summary>
     /// Gets the latest version
     /// </summary>
-    public const string Latest = VZero8;
+    public const string Latest = V08;
 
 }

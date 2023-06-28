@@ -15,7 +15,7 @@ With the SDK, you can:
 
 | Latest Releases | Conformance to spec version |
 | :---: | :---: |
-| [0.8.0.10](https://github.com/serverlessworkflow/sdk-net/releases/) | [0.8](https://github.com/serverlessworkflow/specification/tree/0.8.x) |
+| [0.8.7](https://github.com/serverlessworkflow/sdk-net/releases/) | [0.8](https://github.com/serverlessworkflow/specification/tree/0.8.x) |
 
 ### Getting Started
 
@@ -107,6 +107,7 @@ which is a dynamic name/value mapping of properties used to enrich the serverles
 It has the advantage of being an easy, cross-compatible way of declaring additional data, but lacks well-defined, well-documented schema of the data, thus loosing the ability to validate it
 without custom implementation.
 
+*Adding metadata to a workflow:*
 ```csharp
 var workflow = new WorkflowBuilder()
     ...
@@ -114,6 +115,18 @@ var workflow = new WorkflowBuilder()
     ...
     .Build();
 ```
+
+*Resulting workflow:*
+
+```yaml
+id: sample-workflow
+version: 1.0.0
+specVersion: 0.8
+metadata:
+  metadataPropertyName: metadataPropertyValue #added to the metadata property of supporting components
+...
+```
+
 
 #### Extension
 
@@ -203,8 +216,35 @@ A [Json Merge Patch](https://datatracker.ietf.org/doc/html/rfc7386) is performed
 *Extending a workflow:*
 ```csharp
 var workflow = new WorkflowBuilder()
-    ...
+    .WithId("sample-extended")
+    .WithName("Sample Extended Workflow")
+    .WithVersion("1.0.0")
+    .UseSpecVersion(ServerlessWorkflowSpecVersion.V08)
     .UseExtension("extensionId", new Uri("file://.../extensions/greet-function-type.json"))
+    .StartsWith("do-work", flow => flow.Execute("greet", action => action
+        .Invoke(function => function
+            .OfType("greet")
+            .WithName("greet")
+            .ForOperation("#"))))
+    .End()
+    .Build();
+```
+
+*Adding extension properties:*
+```csharp
+var workflow = new WorkflowBuilder()
+    ...
+    .WithExtensionProperty("extensionPropertyName", propertyValue } })
     ...
     .Build();
+```
+
+*Resulting workflow:*
+
+```yaml
+id: sample-workflow
+version: 1.0.0
+specVersion: 0.8
+extensionPropertyName: propertyValue #added as top level property of extended component, as opposed to metadata
+...
 ```

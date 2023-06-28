@@ -91,7 +91,7 @@ public class WorkflowBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowBuilder WithSpecVersion(string specVersion)
+    public virtual IWorkflowBuilder UseSpecVersion(string specVersion)
     {
         if (string.IsNullOrWhiteSpace(specVersion))
             throw new ArgumentNullException(nameof(specVersion));

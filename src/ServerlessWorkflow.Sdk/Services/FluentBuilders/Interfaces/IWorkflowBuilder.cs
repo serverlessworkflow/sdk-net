@@ -60,7 +60,7 @@ public interface IWorkflowBuilder
     /// </summary>
     /// <param name="specVersion">The Serverless Workflow specification version</param>
     /// <returns>The configured <see cref="IWorkflowBuilder"/></returns>
-    IWorkflowBuilder WithSpecVersion(string specVersion);
+    IWorkflowBuilder UseSpecVersion(string specVersion);
 
     /// <summary>
     /// Sets the workflow definition's data input <see cref="JSchema"/> uri

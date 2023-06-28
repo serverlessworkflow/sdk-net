@@ -22,7 +22,7 @@ public static class WorkflowDefinitionFactory
             .WithId("fake")
             .WithName("Fake Workflow")
             .WithDescription("Fake Workflow Description")
-            .WithSpecVersion(ServerlessWorkflowSpecVersion.Latest)
+            .UseSpecVersion(ServerlessWorkflowSpecVersion.Latest)
             .WithVersion("1.0.0")
             .WithAnnotation("fake-annotation: Fake value")
             .WithDataInputSchema(new Uri("https://tests.serverlessworkflow.io"))

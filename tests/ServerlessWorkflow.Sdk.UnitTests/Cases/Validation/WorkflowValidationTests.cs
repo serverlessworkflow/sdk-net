@@ -41,7 +41,7 @@ public class WorkflowValidationTests
             .WithId("fake")
             .WithName("Fake Workflow")
             .WithDescription("Fake Workflow Description")
-            .WithSpecVersion(ServerlessWorkflowSpecVersion.Latest)
+            .UseSpecVersion(ServerlessWorkflowSpecVersion.Latest)
             .WithVersion("1.0.0")
             .UseExtension("fake-extension", new($"file://{Path.Combine(AppContext.BaseDirectory, "Assets", "WorkflowExtensions", "condition-state-type.json")}"))
             .StartsWith("fake-state", flow => flow
@@ -68,7 +68,7 @@ public class WorkflowValidationTests
             .WithId("fake")
             .WithName("Fake Workflow")
             .WithDescription("Fake Workflow Description")
-            .WithSpecVersion(ServerlessWorkflowSpecVersion.Latest)
+            .UseSpecVersion(ServerlessWorkflowSpecVersion.Latest)
             .WithVersion("1.0.0")
             .UseExtension("fake-extension", new($"file://{Path.Combine(AppContext.BaseDirectory, "Assets", "WorkflowExtensions", "greet-function-type.json")}"))
             .StartsWith("fake-state", flow => flow
