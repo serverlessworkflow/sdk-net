@@ -24,7 +24,7 @@ public class WorkflowReaderTests
     public async Task Read_Yaml_ShouldWork()
     {
         //arrange
-        var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "operation.yaml"));
+        var yaml = File.ReadAllText(Path.Combine("Resources", "workflows", "operation.yaml"));
 
         //act
         var parsedWorkflow = await this.Reader.ParseAsync(yaml);
@@ -54,7 +54,7 @@ public class WorkflowReaderTests
     public async Task Read_Json_ShouldWork()
     {
         //arrange
-        var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "operation.json"));
+        var yaml = File.ReadAllText(Path.Combine("Resources", "workflows", "operation.json"));
 
         //act
         var parsedWorkflow = await this.Reader.ParseAsync(yaml);
@@ -84,7 +84,7 @@ public class WorkflowReaderTests
     public async Task Read_Yaml_ExternalDefinitions_ShouldWork()
     {
         //arrange
-        var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "externalref.yaml"));
+        var yaml = File.ReadAllText(Path.Combine("Resources", "workflows", "externalref.yaml"));
 
         //act
         var workflow = await this.Reader.ParseAsync(yaml);
@@ -117,7 +117,7 @@ public class WorkflowReaderTests
     public async Task Read_Json_ExternalDefinitions_ShouldWork()
     {
         //arrange
-        var yaml = File.ReadAllText(Path.Combine("Resources", "Workflows", "externalref.json"));
+        var yaml = File.ReadAllText(Path.Combine("Resources", "workflows", "externalref.json"));
 
         //act
         var workflow = await this.Reader.ParseAsync(yaml, new WorkflowReaderOptions() { LoadExternalDefinitions = true });
