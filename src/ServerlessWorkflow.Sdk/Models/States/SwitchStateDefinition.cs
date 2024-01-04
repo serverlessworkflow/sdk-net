@@ -65,7 +65,7 @@ public class SwitchStateDefinition
     /// Gets/sets an object used to configure the <see cref="SwitchStateDefinition"/>'s default condition, in case none of the specified conditions were met
     /// </summary>
     [Required, MinLength(1)]
-    [DataMember(Order = 9, Name = "name", IsRequired = true), JsonPropertyOrder(9), JsonPropertyName("name"), YamlMember(Alias = "name", Order = 9)]
+    [DataMember(Order = 9, Name = "defaultCondition", IsRequired = true), JsonPropertyOrder(9), JsonPropertyName("defaultCondition"), YamlMember(Alias = "defaultCondition", Order = 9)]
     public virtual DefaultCaseDefinition DefaultCondition { get; set; } = null!;
 
     /// <summary>
