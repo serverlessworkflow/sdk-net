@@ -85,7 +85,7 @@ public class ActionDefinition
     /// <summary>
     /// Gets/sets a <see cref="OneOf{T1, T2}"/> that references a subflow to run
     /// </summary>
-    [DataMember(Order = 4, Name = "eventRef"), JsonPropertyOrder(4), JsonPropertyName("eventRef"), YamlMember(Alias = "eventRef", Order = 4)]
+    [DataMember(Order = 4, Name = "subFlowRef"), JsonPropertyOrder(4), JsonPropertyName("subFlowRef"), YamlMember(Alias = "subFlowRef", Order = 4)]
     [JsonConverter(typeof(OneOfConverter<SubflowReference, string>))]
     protected virtual OneOf<SubflowReference, string>? SubflowValue { get; set; }
 
