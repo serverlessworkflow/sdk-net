@@ -1,250 +1,56 @@
-![Publish Packages](https://github.com/serverlessworkflow/sdk-net/workflows/Publish%20Packages/badge.svg) [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/serverlessworkflow/sdk-net)
+# Serverless Workflow .NET SDK
 
+The official .NET SDK for the [Serverless Workflow DSL](https://github.com/serverlessworkflow/specification/blob/main/dsl.md).
 
-# Serverless Workflow Specification - .NET SDK
+The SDK is composed of three Nuget packages:
 
-Provides .NET 7.0 API/SPI and Model Validation for the [Serverless Workflow Specification](https://github.com/serverlessworkflow/specification)
+- [Core](#), which contains the models of the Serverless Workflow DSL
+- [Builders](#), which contains service used to build workflow definitions programmatically
+- [IO](#), which contains the services used to read and write workflow definitions
 
-With the SDK, you can:
+## Installation
 
-- [x] Read and write workflow JSON and YAML definitions
-- [x] Programmatically build workflow definitions
-- [x] Validate workflow definitions (both schema and DSL integrity validation)
-
-### Status
-
-| Latest Releases | Conformance to spec version |
-| :---: | :---: |
-| [0.8.7](https://github.com/serverlessworkflow/sdk-net/releases/) | [0.8](https://github.com/serverlessworkflow/specification/tree/0.8.x) |
-
-### Getting Started
+Core:
 
 ```bash
-dotnet nuget add package ServerlessWorkflow.Sdk
+dotnet add package ServerlessWorkflow.Sdk
 ```
 
-```csharp
-services.AddServerlessWorkflow();
+Builders:
+
+```
+dotnet add package ServerlessWorkflow.Sdk.Builders
 ```
 
-### Usage
+IO:
 
-#### Build workflows programatically
-
-```csharp
-var workflow = WorkflowDefinition.Create("MyWorkflow", "MyWorkflow", "1.0")
-  .StartsWith("inject", flow => 
-      flow.Inject(new { username = "test", password = "123456" }))
-  .Then("operation", flow =>
-      flow.Execute("fakeApiFunctionCall", action =>
-      {
-          action.Invoke(function =>
-              function.WithName("fakeFunction")
-                  .SetOperationUri(new Uri("https://fake.com/swagger.json#fake")))
-              .WithArgument("username", "${ .username }")
-              .WithArgument("password", "${ .password }");
-      })      
-          .Execute("fakeEventTrigger", action =>
-          {
-               action
-                    .Consume(e =>
-                        e.WithName("fakeEvent")
-                            .WithSource(new Uri("https://fakesource.com"))
-                            .WithType("fakeType"))
-                    .ThenProduce(e =>
-                        e.WithName("otherEvent")
-                            .WithSource(new Uri("https://fakesource.com"))
-                            .WithType("fakeType"));
-          }))
-  .End()
-  .Build();
+```
+dotnet add package ServerlessWorkflow.Sdk.IO
 ```
 
-#### Read workflows
+## Example usage
 
-```csharp
-var reader = WorkflowReader.Create();
-using(Stream stream = File.OpenRead("myWorkflow.json"))
-{
-  var definition = reader.Read(stream, WorkflowDefinitionFormat.Json);
-}
-```
+Building a workflow definition programmatically:
 
-#### Write workflows
-
-```csharp
-  var writer = WorkflowWriter.Create();
-  using(Stream stream = new MemoryStream())
-  {
-      writer.Write(workflow, stream);
-      stream.Flush();
-      stream.Position = 0;
-      using(StreamReader reader = new StreamReader(stream))
-      {
-          var yaml = reader.ReadToEnd();
-          Console.WriteLine(yaml);
-          Console.ReadLine();
-      }
-  }
-```
-
-#### Validate workflows
-
-```csharp
-var validator = serviceProvider.GetRequiredService<IValidator<WorkflowDefinition>>();
-var validationResult = validator.Validate(myWorkflow);
-```
-
-#### Extend Workflows
-
-The SDK allows extending the Serverless Workflow in two ways, possibly combined: via metadata and via extensions.
-
-#### Metadata
-
-Workflow components that support metadata, such as `WorkflowDefinition` or `StateDefinition`, expose a `metadata` property, 
-which is a dynamic name/value mapping of properties used to enrich the serverless workflow model with information beyond its core definitions.
-
-It has the advantage of being an easy, cross-compatible way of declaring additional data, but lacks well-defined, well-documented schema of the data, thus loosing the ability to validate it
-without custom implementation.
-
-*Adding metadata to a workflow:*
-```csharp
-var workflow = new WorkflowBuilder()
-    ...
-    .WithMetadata(new Dictionary<string, object>() { { "metadataPropertyName", metadataPropertyValue } })
-    ...
+```c#
+var definition = new WorkflowDefinitionBuilder()
+    .WithName("fake-workflow")
+    .WithVersion("0.1.0:fake")
+    .Do("todo-1", task => task
+        .Call("http")
+        .With("method", "get")
+        .With("uri", "https://fake-api.com"))
     .Build();
 ```
 
-*Resulting workflow:*
+Reading and writing a workflow definition:
 
-```yaml
-id: sample-workflow
-version: 1.0.0
-specVersion: 0.8
-metadata:
-  metadataPropertyName: metadataPropertyValue #added to the metadata property of supporting components
-...
-```
+```c#
+using var inputStream = File.OpenRead("workflow.yaml");
+var reader = WorkflowDefinitionReader.Create();
+var workflow = await reader.ReadAsync(inputStream);
 
-
-#### Extension
-
-Users have the ability to define extensions, providing the ability to extend, override or replace parts of the Serverless Workflow schema.
-
-To do so, you must first create a file containing the JsonSchema of your extension, then reference it in your workflow definition.
-
-*Schema of a sample extension that adds a new `greet` `functionType`:*
-<table>
-<tr>
-    <th>JSON</th>
-    <th>YAML</th>
-</tr>
-<tr>
-<td valign="top">
-
-```json
-{
-  "$defs": {
-    "functions": {
-      "definitions": {
-        "function": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "description": "Defines the function type. Is either `rest`, `asyncapi, `rpc`, `graphql`, `odata`, `expression` or `greet`. Default is `rest`",
-              "enum": [
-                "rest",
-                "asyncapi",
-                "rpc",
-                "graphql",
-                "odata",
-                "expression",
-                "custom",
-                "greet"
-              ],
-              "default": "rest"
-            }
-          }
-        }
-      }
-    }
-  }
-}
-```
-
-</td>
-
-<td valign="top">
-
-```yaml
-'$defs':
-  functions:
-    definitions:
-      function:
-        type: object
-        properties:
-          type:
-            type: string
-            description: Defines the function type. Is either `rest`, `asyncapi, `rpc`,
-              `graphql`, `odata`, `expression` or `greet`. Default is `rest`
-            enum:
-            - rest
-            - asyncapi
-            - rpc
-            - graphql
-            - odata
-            - expression
-            - custom
-            - greet
-            default: rest
-```
-
-</td>
-</tr>
-</table>
-
-The above example refers to `/$defs/functions`, because upon validation the SDK bundles all the Serverless Workflow Specification's schemas into the `$defs` property of a single schema.
-
-*In this case, `functions` is the extensionless name of the schema file we want to override (https://serverlessworkflow.io/schemas/latest/functions.json).
-
-A [Json Merge Patch](https://datatracker.ietf.org/doc/html/rfc7386) is performed sequentially on the bundled schema with the defined extensions, in declaring order.
-
-*In this case, the above schema will patch the object defined at `/functions/definitions/function` in file https://serverlessworkflow.io/schemas/latest/functions.json*
-
-*Extending a workflow:*
-```csharp
-var workflow = new WorkflowBuilder()
-    .WithId("sample-extended")
-    .WithName("Sample Extended Workflow")
-    .WithVersion("1.0.0")
-    .UseSpecVersion(ServerlessWorkflowSpecVersion.V08)
-    .UseExtension("extensionId", new Uri("file://.../extensions/greet-function-type.json"))
-    .StartsWith("do-work", flow => flow.Execute("greet", action => action
-        .Invoke(function => function
-            .OfType("greet")
-            .WithName("greet")
-            .ForOperation("#"))))
-    .End()
-    .Build();
-```
-
-*Adding extension properties:*
-```csharp
-var workflow = new WorkflowBuilder()
-    ...
-    .WithExtensionProperty("extensionPropertyName", propertyValue } })
-    ...
-    .Build();
-```
-
-*Resulting workflow:*
-
-```yaml
-id: sample-workflow
-version: 1.0.0
-specVersion: 0.8
-extensionPropertyName: propertyValue #added as top level property of extended component, as opposed to metadata
-...
+using var outputStream = File.Create("workflow.yaml");
+var writer = WorkflowDefinitionWriter.Create();
+await writer.WriteAsync(workflow, stream, WorkflowDefinitionFormat.Yaml);
 ```

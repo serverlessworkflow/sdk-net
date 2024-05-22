@@ -1,8 +1,0 @@
-﻿- name: PetCreated
-  kind: produced
-  type: io.swagger.petstore.pets.created
-  source: https://petstore.swagger.io
-- name: PetDeleted
-  kind: produced
-  type: io.swagger.petstore.pets.deleted
-  source: https://petstore.swagger.io

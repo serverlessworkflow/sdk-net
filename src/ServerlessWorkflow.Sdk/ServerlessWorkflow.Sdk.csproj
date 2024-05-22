@@ -1,62 +1,40 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <VersionPrefix>0.8.8</VersionPrefix>
-    <NeutralLanguage>en</NeutralLanguage>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Company>Cloud Native Computing Foundation</Company>
-    <Authors>The Serverless Workflow Specification Authors</Authors>
-    <Product>Serverless Workflow Specification 0.8 - .NET 7.0 SDK</Product>
-    <Copyright>Copyright © 2021 The Serverless Workflow Specification Authors</Copyright>
-    <PackageProjectUrl>https://github.com/serverlessworkflow/sdk-net</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/serverlessworkflow/sdk-net</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    <PackageTags>serverless workflow sdk</PackageTags>
-    <Description>The .NET 7.0 SDK for the Serverless Workflow</Description>
-    <PackageIcon>icon.png</PackageIcon>
-    <Title>Serverless Workflow Specification 0.8 - .NET 7.0 SDK</Title>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
-    <FileVersion>$(VersionPrefix).0</FileVersion>
+	<Version>$(VersionPrefix)-alpha1</Version>
+	<VersionPrefix>1.0.0</VersionPrefix>
+	<AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+	<FileVersion>$(VersionPrefix)</FileVersion>
+	<NeutralLanguage>en</NeutralLanguage>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<IsPackable>true</IsPackable>
+	<Title>Serverless Workflow SDK</Title>
+	<Description>Contains Serverless Workflow DSL models</Description>
+	<PackageTags>serverless-workflow;serverless;workflow;dsl;sdk</PackageTags>
+	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	<PackageReadmeFile>readme.md</PackageReadmeFile>
+	<Copyright>Copyright © 2024-Present The Serverless Workflow Authors. All rights reserved.</Copyright>
+	<PackageProjectUrl>https://github.com/serverlessworkflow/sdk-net</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/serverlessworkflow/sdk-net</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="icon.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\..\media\logos\icon.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-    <None Include="..\..\README.md">
+    <None Include="..\..\readme.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cronos" Version="0.7.1" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.2" />
-    <PackageReference Include="Iso8601DurationHelper" Version="1.1.0" />
-    <PackageReference Include="JsonCons.Utilities" Version="1.0.0" />
-    <PackageReference Include="JsonSchema.Net" Version="4.1.5" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
-    <PackageReference Include="Neuroglia.Serialization.Json" Version="2.1.3" />
-    <PackageReference Include="YamlDotNet" Version="13.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EditorConfigFiles Remove="C:\Dev\ServerlessWorkflow\sdk-net\src\ServerlessWorkflow.Sdk\.editorconfig" />
+    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="4.9.14" />
+    <PackageReference Include="Semver" Version="2.3.0" />
   </ItemGroup>
 
 </Project>

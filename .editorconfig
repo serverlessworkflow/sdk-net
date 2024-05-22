@@ -66,6 +66,7 @@ dotnet_style_prefer_compound_assignment = true:suggestion
 dotnet_style_prefer_simplified_interpolation = true:suggestion
 dotnet_style_namespace_match_folder = true:suggestion
 dotnet_style_readonly_field = true:suggestion
+dotnet_style_prefer_collection_expression = when_types_loosely_match:suggestion
 
 [*.cs]
 csharp_indent_labels = one_less_than_current
@@ -98,4 +99,5 @@ csharp_style_deconstructed_variable_declaration = true:suggestion
 csharp_style_unused_value_assignment_preference = discard_variable:suggestion
 csharp_style_unused_value_expression_statement_preference = discard_variable:silent
 
-file_header_template = Copyright © 2023-Present The Serverless Workflow Specification Authors\n\nLicensed under the Apache License, Version 2.0 (the "License"),\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\nhttp://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an "AS IS" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.
+file_header_template = Copyright © 2024-Present The Serverless Workflow Specification Authors\n\nLicensed under the Apache License, Version 2.0 (the "License"),\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\nhttp://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an "AS IS" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.
+csharp_style_prefer_primary_constructors = true:suggestion

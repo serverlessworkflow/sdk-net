@@ -1,4 +1,4 @@
-﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -11,14 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-global using Json.Schema;
-global using ServerlessWorkflow.Sdk.Serialization.Json;
-global using System.ComponentModel;
-global using System.ComponentModel.DataAnnotations;
 global using System.Runtime.Serialization;
-global using System.Text.Json;
-global using System.Text.Json.Nodes;
 global using System.Text.Json.Serialization;
-global using YamlDotNet.Core;
 global using YamlDotNet.Serialization;
-global using ServerlessWorkflow.Sdk.Models;
+global using System.ComponentModel.DataAnnotations;
+global using Neuroglia;

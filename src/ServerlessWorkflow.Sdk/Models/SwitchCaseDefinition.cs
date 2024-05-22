@@ -1,4 +1,4 @@
-﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -14,116 +14,22 @@
 namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
-/// Represents the base class for all <see cref="SwitchStateDefinition"/> case implementations
+/// Represents the definition of a case within a switch task, defining a condition and corresponding tasks to execute if the condition is met
 /// </summary>
-[DataContract, KnownType(nameof(GetKnownTypes))]
-public abstract class SwitchCaseDefinition
+[DataContract]
+public record SwitchCaseDefinition
 {
 
     /// <summary>
-    /// Gets the <see cref="SwitchCaseDefinition"/>'s type
+    /// Gets/sets the condition that determines whether or not the case should be executed in a switch task
     /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public string OutcomeType => this.Transition == null ? SwitchCaseOutcomeType.End : SwitchCaseOutcomeType.Transition;
+    [DataMember(Name = "when", Order = 1), JsonPropertyName("when"), JsonPropertyOrder(1), YamlMember(Alias = "when", Order = 1)]
+    public virtual string? When { get; set; }
 
     /// <summary>
-    /// Gets/sets the <see cref="SwitchCaseDefinition"/>'s name
+    /// Gets/sets the transition to perform when the case matches
     /// </summary>
-    [DataMember(Order = 1, Name = "name"), JsonPropertyOrder(1), JsonPropertyName("name"), YamlMember(Alias = "name", Order = 1)]
-    public virtual string? Name { get; set; }
-
-    /// <summary>
-    /// Gets/sets the object that represents the <see cref="SwitchCaseDefinition"/>'s <see cref="TransitionDefinition"/>
-    /// </summary>
-    [DataMember(Order = 2, Name = "transition"), JsonPropertyOrder(2), JsonPropertyName("transition"), YamlMember(Alias = "transition", Order = 2)]
-    [JsonConverter(typeof(OneOfConverter<TransitionDefinition, string>))]
-    protected virtual OneOf<TransitionDefinition, string>? TransitionValue { get; set; }
-
-    /// <summary>
-    /// Gets/sets the object used to configure the state definition's transition to another state definition upon completion
-    /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual TransitionDefinition? Transition
-    {
-        get
-        {
-            if (this.TransitionValue?.T1Value == null && !string.IsNullOrWhiteSpace(this.TransitionValue?.T2Value)) return new() { NextState = this.TransitionValue.T2Value };
-            else return this.TransitionValue?.T1Value;
-        }
-        set
-        {
-            if (value == null) this.TransitionValue = null;
-            else this.TransitionValue = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets/sets the name of the state definition to transition to upon completion
-    /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual string? TransitionToStateName
-    {
-        get
-        {
-            return this.TransitionValue?.T2Value;
-        }
-        set
-        {
-            if (value == null) this.TransitionValue = null;
-            else this.TransitionValue = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets/sets the object that represents the <see cref="SwitchCaseDefinition"/>'s <see cref="EndDefinition"/>
-    /// </summary>
-    [DataMember(Order = 3, Name = "end"), JsonPropertyOrder(3), JsonPropertyName("end"), YamlMember(Alias = "end", Order = 3)]
-    [JsonConverter(typeof(OneOfConverter<EndDefinition, bool>))]
-    protected virtual OneOf<EndDefinition, bool>? EndValue { get; set; }
-
-    /// <summary>
-    /// Gets/sets the object used to configure the state definition's transition to another state definition upon completion
-    /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual EndDefinition? End
-    {
-        get
-        {
-            if (this.EndValue?.T1Value == null && (this.EndValue != null && this.EndValue.T2Value)) return new() { };
-            else return this.EndValue?.T1Value;
-        }
-        set
-        {
-            if (value == null) this.EndValue = null;
-            else this.EndValue = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets/sets a boolean indicating whether or not the state definition is the end of a logicial workflow path
-    /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual bool IsEnd
-    {
-        get
-        {
-            if (this.EndValue == null) return false;
-            else  return this.EndValue.T2Value;
-        }
-        set
-        {
-            this.EndValue = value;
-        }
-    }
-
-    /// <inheritdoc/>
-    public override string? ToString() => string.IsNullOrWhiteSpace(this.Name) ? base.ToString() : this.Name;
-
-    static IEnumerable<Type> GetKnownTypes()
-    {
-        yield return typeof(DataCaseDefinition);
-        yield return typeof(EventCaseDefinition);
-        yield return typeof(DefaultCaseDefinition);
-    }
+    [DataMember(Name = "then", Order = 2), JsonPropertyName("then"), JsonPropertyOrder(2), YamlMember(Alias = "then", Order = 2)]
+    public virtual string? Then { get; set; }
 
 }

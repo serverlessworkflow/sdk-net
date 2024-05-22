@@ -1,4 +1,4 @@
-﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -11,6 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using ServerlessWorkflow.Sdk.Models;
+using Json.Pointer;
+using Neuroglia;
+using Neuroglia.Serialization.Json;
+
 namespace ServerlessWorkflow.Sdk;
 
 /// <summary>
@@ -20,45 +25,59 @@ public static class WorkflowDefinitionExtensions
 {
 
     /// <summary>
-    /// Gets all the <see cref="ActionDefinition"/>s of the specified type declared in the <see cref="WorkflowDefinition"/>
+    /// Builds a reference to the specified <see cref="TaskDefinition"/>
     /// </summary>
-    /// <param name="workflow">The <see cref="WorkflowDefinition"/> to query</param>
-    /// <param name="type">The type of <see cref="ActionDefinition"/>s to get. A null value gets all <see cref="ActionDefinition"/>s</param>
-    /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="ActionDefinition"/>s of the specified type declared in the <see cref="WorkflowDefinition"/></returns>
-    public static IEnumerable<ActionDefinition> GetActions(this WorkflowDefinition workflow, string? type = null)
+    /// <param name="workflow">The extended <see cref="WorkflowDefinition"/></param>
+    /// <param name="task">The <see cref="TaskDefinition"/> to reference</param>
+    /// <param name="path">The name or path to the task to reference</param>
+    /// <param name="parentReference">A reference to the <see cref="TaskDefinition"/>'s parent, if any</param>
+    /// <returns>A new <see cref="Uri"/> used to reference the <see cref="TaskDefinition"/></returns>
+    public static Uri BuildReferenceTo(this WorkflowDefinition workflow, TaskDefinition task, string path, Uri? parentReference = null)
     {
-        var actions = workflow.States.SelectMany(s => s switch
-        {
-            CallbackStateDefinition callbackState => new ActionDefinition[] { callbackState.Action! },
-            EventStateDefinition eventState => eventState.OnEvents.SelectMany(t => t.Actions),
-            ForEachStateDefinition foreachState => foreachState.Actions,
-            OperationStateDefinition operationState => operationState.Actions,
-            ParallelStateDefinition parallelState => parallelState.Branches.SelectMany(b => b.Actions),
-            _ => Array.Empty<ActionDefinition>()
-        });
-        if (!string.IsNullOrWhiteSpace(type)) actions = actions.Where(a => a.Type == type);
-        return actions;
+        ArgumentNullException.ThrowIfNull(workflow);
+        ArgumentNullException.ThrowIfNull(task);
+        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        return parentReference == null
+            ? new Uri($"/{nameof(WorkflowDefinition.Do).ToCamelCase()}/{path}", UriKind.Relative)
+            : new Uri($"{parentReference.OriginalString}/{path}", UriKind.Relative);
     }
 
     /// <summary>
-    /// Gets all the <see cref="FunctionReference"/>s declared in the <see cref="WorkflowDefinition"/>
+    /// Builds a reference to the specified <see cref="TaskDefinition"/>
     /// </summary>
-    /// <param name="workflow">The <see cref="WorkflowDefinition"/> to query</param>
-    /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="FunctionReference"/>s declared in the <see cref="WorkflowDefinition"/></returns>
-    public static IEnumerable<FunctionReference> GetFunctionReferences(this WorkflowDefinition workflow) => workflow.GetActions(ActionType.Function).Select(a => a.Function)!;
+    /// <param name="workflow">The extended <see cref="WorkflowDefinition"/></param>
+    /// <param name="task">The <see cref="TaskDefinition"/> to reference</param>
+    /// <param name="parentReference">A reference to the <see cref="TaskDefinition"/>'s parent, if any</param>
+    /// <returns>A new <see cref="Uri"/> used to reference the <see cref="TaskDefinition"/></returns>
+    public static Uri BuildReferenceTo(this WorkflowDefinition workflow, KeyValuePair<string, TaskDefinition> task, Uri? parentReference = null) => workflow.BuildReferenceTo(task.Value, task.Key, parentReference);
 
     /// <summary>
-    /// Gets all the <see cref="EventReference"/>s declared in the <see cref="WorkflowDefinition"/>
+    /// Gets the <see cref="WorkflowDefinition"/>'s component at the specified path
     /// </summary>
-    /// <param name="workflow">The <see cref="WorkflowDefinition"/> to query</param>
-    /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="EventReference"/>s declared in the <see cref="WorkflowDefinition"/></returns>
-    public static IEnumerable<EventReference> GetEventReferences(this WorkflowDefinition workflow) => workflow.GetActions(ActionType.Event).Select(a => a.Event)!;
+    /// <typeparam name="TComponent">The type of component to get</typeparam>
+    /// <param name="workflow">The extended <see cref="WorkflowDefinition"/></param>
+    /// <param name="path">The path to the component to get</param>
+    /// <returns>The component at the specified path</returns>
+    public static TComponent GetComponent<TComponent>(this WorkflowDefinition workflow, string path)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        var jsonNode = JsonSerializer.Default.SerializeToNode(workflow)!;
+        var jsonPointer = JsonPointer.Parse(path);
+        if (!jsonPointer.TryEvaluate(jsonNode, out var matchNode) || matchNode == null) throw new NullReferenceException($"Failed to find a component definition of type '{typeof(TComponent).Name}' at '{path}'");
+        return JsonSerializer.Default.Deserialize<TComponent>(matchNode)!;
+    }
 
     /// <summary>
-    /// Gets all the <see cref="SubflowReference"/>s declared in the <see cref="WorkflowDefinition"/>
+    /// Gets the specified <see cref="AuthenticationPolicyDefinition"/>
     /// </summary>
-    /// <param name="workflow">The <see cref="WorkflowDefinition"/> to query</param>
-    /// <returns>A new <see cref="IEnumerable{T}"/> containing the <see cref="SubflowReference"/>s declared in the <see cref="WorkflowDefinition"/></returns>
-    public static IEnumerable<SubflowReference> GetSubflowReferences(this WorkflowDefinition workflow) => workflow.GetActions(ActionType.Subflow).Select(a => a.Subflow)!;
+    /// <param name="workflow">The <see cref="WorkflowDefinition"/> that defines the <see cref="AuthenticationPolicyDefinition"/> to get</param>
+    /// <param name="nameOrReference">The name of/the reference to the policy to get</param>
+    /// <returns>The specified <see cref="AuthenticationPolicyDefinition"/></returns>
+    public static AuthenticationPolicyDefinition GetAuthenticationPolicy(this WorkflowDefinition workflow, string nameOrReference)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(nameOrReference);
+        if (nameOrReference.StartsWith('/') && Uri.TryCreate(nameOrReference, UriKind.Relative, out var uri) && uri != null) return workflow.GetComponent<AuthenticationPolicyDefinition>(nameOrReference);
+        else return workflow.Use?.Authentications?.FirstOrDefault(a => string.Equals(a.Key, nameOrReference, StringComparison.OrdinalIgnoreCase)).Value ?? throw new NullReferenceException($"Failed to find an authentication policy definition with the specified name '{nameOrReference}'");
+    }
 
 }
