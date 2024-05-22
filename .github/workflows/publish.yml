@@ -1,0 +1,26 @@
+name: Manual publish of .NET packages
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+env:
+  SOLUTION: ./ServerlessWorkflow.Sdk.sln
+  REGISTRY: ghcr.io
+
+jobs:
+  publish-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore "${{ env.SOLUTION }}"
+      - name: Build
+        run: dotnet build "${{ env.SOLUTION }}" --configuration Release --no-restore 
+      - name: Push1
+        run: dotnet nuget push "./src/*/bin/Release/*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate

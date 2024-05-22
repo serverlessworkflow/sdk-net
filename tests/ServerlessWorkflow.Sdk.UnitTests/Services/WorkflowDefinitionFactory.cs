@@ -1,4 +1,4 @@
-﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -11,41 +11,163 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using ServerlessWorkflow.Sdk.Builders;
+
 namespace ServerlessWorkflow.Sdk.UnitTests.Services;
 
-public static class WorkflowDefinitionFactory
+internal static class WorkflowDefinitionFactory
 {
 
-    public static WorkflowDefinition Create()
+    internal static WorkflowDefinition Create()
     {
-        return new WorkflowBuilder()
-            .WithId("fake")
-            .WithName("Fake Workflow")
-            .WithDescription("Fake Workflow Description")
-            .UseSpecVersion(ServerlessWorkflowSpecVersion.Latest)
-            .WithVersion("1.0.0")
-            .WithAnnotation("fake-annotation: Fake value")
-            .WithDataInputSchema(new Uri("https://tests.serverlessworkflow.io"))
-            .WithMetadata(new Dictionary<string, object>() { { "fakeMetadataKey", "fakeMetadataValue" } })
-            .WithExecutionTimeout(time => time.Run("fake-workflow:1.0.1").After(TimeSpan.FromSeconds(30)))
-            .AddBasicAuthentication("fake-auth-basic", basic => basic.WithUserName("fake@email.com").WithPassword("0123456789"))
-            .AddBearerAuthentication("fake-auth-bearer", bearer => bearer.WithToken("fake-token"))
-            .AddOAuth2Authentication("fake-auth-oauth2", oauth2 => oauth2.UseGrantType(OAuth2GrantType.ClientCredentials).WithClientId("fake-client").WithPassword("fake-password"))
-            .AddConstant("fake-constant", "fakeValue")
-            .AddEvent(e => e.WithName("fake-event-consumed").WithSource(new Uri("https://tests.serverlessworkflow.io")).WithType("tests.serverlessworkflow.io").CorrelateUsing("subject").IsConsumed())
-            .AddEvent(e => e.WithName("fake-event-produced").WithSource(new Uri("https://tests.serverlessworkflow.io")).WithType("tests.serverlessworkflow.io").CorrelateUsing("subject").IsProduced())
-            .AddFunction(f => f.WithName("fake-function-asyncapi").UseAuthentication("fake-auth-basic").OfType(FunctionType.AsyncApi).ForOperation(new Uri("https://tests.serverlessworkflow.io#fakeOperationId")))
-            .AddFunction(f => f.WithName("fake-function-expression").UseAuthentication("fake-auth-bearer").OfType(FunctionType.Expression).ForOperation("${ . }"))
-            .AddFunction(f => f.WithName("fake-function-graphql").UseAuthentication("fake-auth-oauth2").OfType(FunctionType.GraphQL).ForOperation(new Uri("https://tests.serverlessworkflow.io#fakeOperationId")))
-            .AddFunction(f => f.WithName("fake-function-odata").UseAuthentication("fake-auth-basic").OfType(FunctionType.OData).ForOperation(new Uri("https://tests.serverlessworkflow.io#fakeOperationId")))
-            .AddFunction(f => f.WithName("fake-function-rest").UseAuthentication("fake-auth-bearer").OfType(FunctionType.Rest).ForOperation(new Uri("https://tests.serverlessworkflow.io#fakeOperationId")))
-            .AddFunction(f => f.WithName("fake-function-rpc").UseAuthentication("fake-auth-oauth2").OfType(FunctionType.Rpc).ForOperation(new Uri("https://tests.serverlessworkflow.io#fakeOperationId")))
-            .AddRetryStrategy(retry => retry.WithName("fakeRetry").WithDelayOf(TimeSpan.FromSeconds(2)).WithMaxDelay(TimeSpan.FromSeconds(10)).MaxAttempts(3))
-            .AddSecret("fake-secret")
-            .UseJq()
-            .StartsWith("fake-inject", state => state.Inject(new { foo = "bar" }))
-            .Then("fake-operation", state => state.Execute("fake-function-asyncapi", action => action.Invoke("fake-function-asyncapi").Invoke("fake-function-rest").WithArguments(new Dictionary<string, object>() { { "fake-argument-1", "fake-argument-1-value" }, { "fake-argument-2", "fake-argument-2-value" } })))
-            .End()
+        return new WorkflowDefinitionBuilder()
+            .WithName("fake-name")
+            .WithVersion("0.1.0")
+            .WithTitle("Fake Title")
+            .WithSummary("Fake MD summary")
+            .WithTag("fakeTagName", "fakeTagValue")
+            .UseAuthentication("fakeBasic", authentication => authentication
+                .Basic()
+                    .WithUsername("fake-user")
+                    .WithPassword("fake-password"))
+            .UseAuthentication("fakeBearer", authentication => authentication
+                .Bearer()
+                    .WithToken("fake-token"))
+            .UseAuthentication("fakeOAuth2", authentication => authentication
+                .OAuth2()
+                    .WithAuthority(new("https://fake-authority.com"))
+                    .WithGrantType(OAuth2GrantType.ClientCredentials)
+                    .WithClient(client => client
+                        .WithId("fake-client-id")
+                        .WithSecret("fake-client-secret")))
+            .UseFunction("fakeFunction1", function => function
+                .Function("http")
+                    .With("method", "post")
+                    .With("uri", "https://test.com"))
+            .UseFunction("fakeFunction2", function => function
+                .Shell()
+                    .WithCommand(@"echo ""Hello, World!"""))
+            .UseExtension("fakeLoggingExtension", extension => extension
+                .ExtendAll()
+                .When("fake-expression")
+                .Before(task => task
+                    .Call("http")
+                        .With("method", "post")
+                        .With("uri", "https://fake.log.collector.com")
+                        .With("body", new
+                        {
+                            message = @"${ ""Executing task '\($task.reference)'..."" }"
+                        }))
+                .After(task => task
+                    .Call("http")
+                        .With("method", "post")
+                        .With("uri", "https://fake.log.collector.com")
+                        .With("body", new
+                        {
+                            message = @"${ ""Executed task '\($task.reference)'..."" }"
+                        })))
+            .UseSecret("fake-secret")
+            .Do("todo-1", task => task
+                .Call("http")
+                .With("method", "get")
+                .With("uri", "https://unit-tests.serverlessworkflow.io"))
+            .Do("todo-2", task => task
+                .Emit(e => e
+                    .With("type", "io.serverlessworkflow.unit-tests.fake.event.type.v1")))
+            .Do("todo-3", task => task
+                .For()
+                    .Each("color")
+                    .In(".colors")
+                    .At("index")
+                    .Do(subtask => subtask
+                        .Set("processed", ".processed + [$color]")))
+            .Do("todo-4", task => task
+                .Listen()
+                    .To(to => to
+                        .Any()
+                            .Event(e => e
+                                .With("foo", "bar"))
+                            .Event(e => e
+                                .With(new Dictionary<string, object>() { { "foo", "bar" }, { "bar", "baz" } }))))
+            .Do("todo-5", task => task
+                .Raise(error => error
+                    .WithType("fake-error-type")
+                    .WithStatus("400")
+                    .WithTitle("fake-error-title")))
+            .Do("todo-6", task => task
+                .Run()
+                    .Container()
+                        .WithImage("fake-image:latest")
+                        .WithCommand("fake command --arg1 arg1")
+                        .WithEnvironment("ASPNET_ENVIRONMENT", "Development"))
+            .Do("todo-7", task => task
+                .Run()
+                    .Shell()
+                        .WithCommand("fake command --arg1 arg1")
+                        .WithArgument("--arg2 arg2")
+                        .WithEnvironment("ASPNET_ENVIRONMENT", "Development"))
+            .Do("todo-8", task => task
+                .Run()
+                    .Script()
+                        .WithLanguage("js")
+                        .WithCode(@"console.log(""Hello, World!"")"))
+            .Do("todo-9", task => task
+                .Run()
+                    .Workflow()
+                        .WithName("fake-workflow")
+                        .WithVersion("1.0.0")
+                        .WithInput(new { foo = "bar" }))
+            .Do("todo-10", task => task
+                .Set("foo", "bar")
+                .Set("bar", new { baz = "foo" }))
+            .Do("todo-11", task => task
+                .Switch()
+                    .Case("case-1", @case => @case
+                        .When("fake-condition")
+                        .Then(FlowDirective.Continue))
+                    .Case("case-2", @case => @case
+                        .When("another-fake-condition")
+                        .Then(FlowDirective.Exit))
+                    .Case("default", @case => @case
+                        .Then(FlowDirective.End)))
+            .Do("todo-12", task => task
+                .Try()
+                    .Do(subtask => subtask
+                        .Set("foo", "bar"))
+                .Catch(error => error
+                    .Errors(filter => filter
+                        .With("status", ". == 400"))
+                    .As("error")
+                    .When("fake-condition")
+                    .ExceptWhen("another-fake-condition")
+                    .Retry(retry => retry
+                        .When("fake-condition")
+                        .ExceptWhen("another-fake-condition")
+                        .Limit(limits => limits
+                            .Attempt()
+                                .Count(10)))
+                    .Do(subtask => subtask
+                        .Set("foo", "bar"))))
+            .Do("todo-13", task => task
+                .Wait()
+                    .For(Duration.FromMinutes(5)))
+            .Do("todo-14", task => task
+                .Execute()
+                    .Sequentially(tasks => tasks
+                        .Do("todo-14-1", task => task
+                            .Call("http")
+                                .With("method", "get")
+                                .With("uri", "https://unit-tests.serverlessworkflow.io"))
+                        .Do("todo-14-2", task => task
+                            .Emit(e => e
+                                .With("type", "io.serverlessworkflow.unit-tests.fake.event.type.v1")))
+                        .Do("todo-14-3", task => task
+                            .For()
+                                .Each("color")
+                                .In(".colors")
+                                .At("index")
+                            .Do(subtask => subtask
+                                .Set("processed", ".processed + [$color]")))))
             .Build();
     }
 

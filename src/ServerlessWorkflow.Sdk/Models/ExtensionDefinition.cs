@@ -1,4 +1,4 @@
-﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -14,45 +14,36 @@
 namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
-/// Represents the definition of a <see href="https://github.com/serverlessworkflow/specification/blob/main/specification.md#extensions">Serverless Workflow extension</see>
+/// Represents the definition of a an extension
 /// </summary>
 [DataContract]
-public class ExtensionDefinition
-    : IExtensible
+public record ExtensionDefinition
+    : Extendable
 {
 
     /// <summary>
-    /// Initializes a new <see cref="ExtensionDefinition"/>
+    /// Gets/sets the type of task to extend
     /// </summary>
-    public ExtensionDefinition() { }
+    [Required]
+    [DataMember(Name = "extend", Order = 1), JsonPropertyName("extend"), JsonPropertyOrder(1), YamlMember(Alias = "extend", Order = 1)]
+    public required virtual string Extend { get; set; }
 
     /// <summary>
-    /// Initializes a new <see cref="ExtensionDefinition"/>
+    /// Gets/sets a runtime expression, if any, used to determine whether or not the extension should apply in the specified context
     /// </summary>
-    /// <param name="extensionId">The id that uniquely identifies the extension to import</param>
-    /// <param name="resource">The uri that references the extension resource</param>
-    public ExtensionDefinition(string extensionId, Uri resource)
-    {
-        if(string.IsNullOrWhiteSpace(extensionId)) throw new ArgumentNullException(nameof(extensionId));
-        this.ExtensionId = extensionId;
-        this.Resource = resource ?? throw new ArgumentNullException(nameof(resource));
-    }
+    [DataMember(Name = "when", Order = 2), JsonPropertyName("when"), JsonPropertyOrder(2), YamlMember(Alias = "when", Order = 2)]
+    public virtual string? When { get; set; }
 
     /// <summary>
-    /// Gets/sets the extension's unique id
+    /// Gets/sets the task to execute before the extended task, if any
     /// </summary>
-    [Required, MinLength(1)]
-    [DataMember(Order = 1, Name = "extensionId", IsRequired = true), JsonPropertyName("extensionsId"), YamlMember(Alias = "extensionId")]
-    public virtual string ExtensionId { get; set; } = null!;
+    [DataMember(Name = "before", Order = 3), JsonPropertyName("before"), JsonPropertyOrder(3), YamlMember(Alias = "before", Order = 3)]
+    public virtual TaskDefinition? Before { get; set; }
 
     /// <summary>
-    /// Gets/sets an uri to a resource containing the workflow extension definition (json or yaml)
+    /// Gets/sets the task to execute after the extended task, if any
     /// </summary>
-    [DataMember(Order = 2, Name = "resource", IsRequired = true), JsonPropertyName("resource"), YamlMember(Alias = "resource")]
-    public virtual Uri Resource { get; set; } = null!;
-
-    /// <inheritdoc/>
-    [DataMember(Order = 3, Name = "extensionData"), JsonExtensionData]
-    public IDictionary<string, object>? ExtensionData { get; set; }
+    [DataMember(Name = "after", Order = 4), JsonPropertyName("after"), JsonPropertyOrder(4), YamlMember(Alias = "after", Order = 4)]
+    public virtual TaskDefinition? After { get; set; }
 
 }

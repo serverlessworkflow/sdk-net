@@ -1,4 +1,4 @@
-// Copyright � 2023-Present The Serverless Workflow Specification Authors
+﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-global using FluentAssertions;
 global using ServerlessWorkflow.Sdk.Models;
-global using ServerlessWorkflow.Sdk.Services.FluentBuilders;
 global using ServerlessWorkflow.Sdk.UnitTests.Services;
-global using Xunit;
+global using FluentAssertions;

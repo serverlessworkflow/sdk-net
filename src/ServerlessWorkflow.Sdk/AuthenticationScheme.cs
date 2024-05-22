@@ -1,4 +1,4 @@
-﻿// Copyright © 2023-Present The Serverless Workflow Specification Authors
+﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -14,22 +14,33 @@
 namespace ServerlessWorkflow.Sdk;
 
 /// <summary>
-/// Enumerates all supported authentication schemes
+/// Exposes all default authentication schemes
 /// </summary>
 public static class AuthenticationScheme
 {
 
     /// <summary>
-    /// Gets the 'basic' authentication scheme
+    /// Gets the 'Basic' authentication scheme
     /// </summary>
-    public const string Basic = "basic";
+    public const string Basic = "Basic";
     /// <summary>
-    /// Gets the 'bearer' authentication scheme
+    /// Gets the 'Bearer' authentication scheme
     /// </summary>
-    public const string Bearer = "bearer";
+    public const string Bearer = "Bearer";
     /// <summary>
-    /// Gets the 'oauth2' authentication scheme
+    /// Gets the 'OAuth2' authentication scheme
     /// </summary>
-    public const string OAuth2 = "oauth2";
+    public const string OAuth2 = "OAuth2";
+
+    /// <summary>
+    /// Gets a new <see cref="IEnumerable{T}"/> containing the authentication schemes supported by default
+    /// </summary>
+    /// <returns>A new <see cref="IEnumerable{T}"/> containing the authentication schemes supported by default</returns>
+    public static IEnumerable<string> AsEnumerable()
+    {
+        yield return Basic;
+        yield return Bearer;
+        yield return OAuth2;
+    }
 
 }
