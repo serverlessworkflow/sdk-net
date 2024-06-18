@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Neuroglia;
-
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
@@ -25,7 +23,7 @@ public class SwitchTaskDefinitionBuilder
     /// <summary>
     /// Gets a name/value mapping of the cases of the <see cref="SwitchTaskDefinition"/> to build
     /// </summary>
-    protected EquatableDictionary<string, SwitchCaseDefinition> Cases { get; } = [];
+    protected Map<string, SwitchCaseDefinition> Cases { get; } = [];
 
     /// <inheritdoc/>
     public ISwitchTaskDefinitionBuilder Case(string name, Action<ISwitchCaseDefinitionBuilder> setup)

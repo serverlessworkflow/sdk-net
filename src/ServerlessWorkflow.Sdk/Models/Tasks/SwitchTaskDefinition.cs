@@ -30,6 +30,6 @@ public record SwitchTaskDefinition
     /// </summary>
     [Required]
     [DataMember(Name = "switch", Order = 1), JsonPropertyName("switch"), JsonPropertyOrder(1), YamlMember(Alias = "switch", Order = 1)]
-    public required virtual EquatableDictionary<string, SwitchCaseDefinition> Switch { get; set; }
+    public required virtual Map<string, SwitchCaseDefinition> Switch { get; set; }
 
 }
