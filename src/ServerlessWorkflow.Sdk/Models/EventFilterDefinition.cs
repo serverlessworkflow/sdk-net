@@ -30,6 +30,6 @@ public record EventFilterDefinition
     /// Gets/sets a name/definition mapping of the correlation to attempt when filtering events.
     /// </summary>
     [DataMember(Name = "correlate", Order = 2), JsonPropertyName("correlate"), JsonPropertyOrder(2), YamlMember(Alias = "correlate", Order = 2)]
-    public virtual EquatableDictionary<string, CorrelationDefinition>? Correlate { get; set; }
+    public virtual EquatableDictionary<string, CorrelationKeyDefinition>? Correlate { get; set; }
 
 }

@@ -14,20 +14,20 @@
 namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
-/// Represents the definition of a event correlation
+/// Represents the definition of an event correlation key
 /// </summary>
 [DataContract]
-public record CorrelationDefinition
+public record CorrelationKeyDefinition
 {
 
     /// <summary>
-    /// Gets/sets a runtime expression used to extract the correlation value from events.
+    /// Gets/sets a runtime expression used to extract the correlation key value from events.
     /// </summary>
     [DataMember(Name = "from", Order = 1), JsonPropertyName("from"), JsonPropertyOrder(1), YamlMember(Alias = "from", Order = 1)]
     public required virtual string From { get; set; }
 
     /// <summary>
-    /// Gets/sets a constant or a runtime expression, if any, used to determine whether or not the extracted correlation value matches expectations and should be correlated. If not set, the first extracted value will be used as the correlation's expectation.
+    /// Gets/sets a constant or a runtime expression, if any, used to determine whether or not the extracted correlation key value matches expectations and should be correlated. If not set, the first extracted value will be used as the correlation key's expectation.
     /// </summary>
     [DataMember(Name = "expect", Order = 2), JsonPropertyName("expect"), JsonPropertyOrder(2), YamlMember(Alias = "expect", Order = 2)]
     public virtual string? Expect { get; set; }
