@@ -27,6 +27,13 @@ public interface IGenericTaskDefinitionBuilder
     ICallTaskDefinitionBuilder Call(string? function = null);
 
     /// <summary>
+    /// Configures the task to perform subtasks sequentially
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the tasks to perform sequentially</param>
+    /// <returns>A new <see cref="IDoTaskDefinitionBuilder"/></returns>
+    IDoTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup);
+
+    /// <summary>
     /// Configures the task to emit the specified event
     /// </summary>
     /// <param name="e">The event to emit</param>
@@ -47,16 +54,16 @@ public interface IGenericTaskDefinitionBuilder
     IForTaskDefinitionBuilder For();
 
     /// <summary>
+    /// Configures the task to execute branches concurrently
+    /// </summary>
+    /// <returns>A new <see cref="IForkTaskDefinitionBuilder"/></returns>
+    IForkTaskDefinitionBuilder Fork();
+
+    /// <summary>
     /// Configures the task to listen for events
     /// </summary>
     /// <returns>A new <see cref="IForTaskDefinitionBuilder"/></returns>
     IListenTaskDefinitionBuilder Listen();
-
-    /// <summary>
-    /// Configures the task to perform a list of subtasks
-    /// </summary>
-    /// <returns>A new <see cref="ICompositeTaskDefinitionBuilder"/></returns>
-    ICompositeTaskDefinitionBuilder Execute();
 
     /// <summary>
     /// Configures the task to raise the specified error

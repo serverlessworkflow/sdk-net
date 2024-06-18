@@ -38,8 +38,8 @@ public class WorkflowDefinitionWriter(IJsonSerializer jsonSerializer, IYamlSeria
     /// <inheritdoc/>
     public virtual async Task WriteAsync(WorkflowDefinition workflow, Stream stream, string format = WorkflowDefinitionFormat.Yaml, CancellationToken cancellationToken = default)
     {
-        if (workflow == null) throw new ArgumentNullException(nameof(workflow));
-        if (stream == null) throw new ArgumentNullException(nameof(stream));
+        ArgumentNullException.ThrowIfNull(workflow);
+        ArgumentNullException.ThrowIfNull(stream);
         var input = format switch
         {
             WorkflowDefinitionFormat.Json => this.JsonSerializer.SerializeToText(workflow),

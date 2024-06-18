@@ -51,9 +51,9 @@ public record ErrorCatcherDefinition
     public virtual RetryPolicyDefinition? Retry { get; set; }
 
     /// <summary>
-    /// Gets/sets the definition of the task to run when catching an error
+    /// Gets/sets a name/definition map of the tasks to run when catching an error
     /// </summary>
     [DataMember(Name = "do", Order = 6), JsonPropertyName("do"), JsonPropertyOrder(6), YamlMember(Alias = "do", Order = 6)]
-    public virtual TaskDefinition? Do { get; set; }
+    public virtual Map<string, TaskDefinition>? Do { get; set; }
 
 }

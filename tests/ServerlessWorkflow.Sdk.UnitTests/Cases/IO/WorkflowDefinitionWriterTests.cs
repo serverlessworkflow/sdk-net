@@ -31,6 +31,7 @@ public class WorkflowDefinitionWriterTests
         await writer.WriteAsync(toSerialize, stream, WorkflowDefinitionFormat.Yaml);
         await stream.FlushAsync();
         stream.Position = 0;
+        var yaml = new StreamReader(stream).ReadToEnd();
         var deserialized = await reader.ReadAsync(stream);
 
         //assert

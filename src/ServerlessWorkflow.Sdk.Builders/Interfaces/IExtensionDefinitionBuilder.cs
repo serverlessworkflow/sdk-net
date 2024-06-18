@@ -34,18 +34,18 @@ public interface IExtensionDefinitionBuilder
     IExtensionDefinitionBuilder When(string when);
 
     /// <summary>
-    /// Configures the extension to execute the specified task before running the extended one
+    /// Configures the tasks to run before the extended task type
     /// </summary>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup the task to execute</param>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the tasks to run before the extended task type</param>
     /// <returns>The configured <see cref="IExtensionDefinitionBuilder"/></returns>
-    IExtensionDefinitionBuilder Before(Action<IGenericTaskDefinitionBuilder> setup);
+    IExtensionDefinitionBuilder Before(Action<ITaskDefinitionMapBuilder> setup);
 
     /// <summary>
-    /// Configures the extension to execute the specified task after running the extended one
+    /// Configures the tasks to run after the extended task type
     /// </summary>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup the task to execute</param>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the tasks to run after the extended task type</param>
     /// <returns>The configured <see cref="IExtensionDefinitionBuilder"/></returns>
-    IExtensionDefinitionBuilder After(Action<IGenericTaskDefinitionBuilder> setup);
+    IExtensionDefinitionBuilder After(Action<ITaskDefinitionMapBuilder> setup);
 
     /// <summary>
     /// Builds the configured <see cref="ExtensionDefinition"/>

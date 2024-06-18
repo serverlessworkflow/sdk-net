@@ -36,9 +36,9 @@ public class ForTaskDefinitionBuilder
     protected virtual string? AtVariableName { get; set; }
 
     /// <summary>
-    /// Gets an <see cref="Action{T}"/> used to setup the task to perform for each iteration
+    /// Gets/sets a name/definition map of the tasks to perform for each element in the collection to enumerate
     /// </summary>
-    protected virtual Action<IGenericTaskDefinitionBuilder>? DoSetup { get; set; }
+    protected virtual Map<string, TaskDefinition>? Tasks { get; set; }
 
     /// <inheritdoc/>
     public virtual IForTaskDefinitionBuilder Each(string variableName)
@@ -65,10 +65,12 @@ public class ForTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IForTaskDefinitionBuilder Do(Action<IGenericTaskDefinitionBuilder> setup)
+    public virtual IForTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
-        this.DoSetup = setup;
+        var builder = new TaskDefinitionMapBuilder();
+        setup(builder);
+        this.Tasks = builder.Build();
         return this;
     }
 
@@ -77,9 +79,7 @@ public class ForTaskDefinitionBuilder
     {
         if (string.IsNullOrWhiteSpace(this.EachVariableName)) throw new NullReferenceException("The variable name used to store the iterated items must be set");
         if (string.IsNullOrWhiteSpace(this.InExpression)) throw new NullReferenceException("The runtime expression used to resolve the collection to iterate must be set");
-        if (this.DoSetup == null) throw new NullReferenceException("The task to perform at each iteration must be set");
-        var taskBuilder = new GenericTaskDefinitionBuilder();
-        this.DoSetup(taskBuilder);
+        if (this.Tasks == null || this.Tasks.Count < 1) throw new NullReferenceException("The task to perform at each iteration must be set");
         return new()
         {
             For = new()
@@ -88,7 +88,7 @@ public class ForTaskDefinitionBuilder
                 In = this.InExpression,
                 At = this.AtVariableName
             },
-            Do = taskBuilder.Build()
+            Do = this.Tasks
         };
     }
 

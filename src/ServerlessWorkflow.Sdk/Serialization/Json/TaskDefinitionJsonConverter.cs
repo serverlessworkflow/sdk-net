@@ -31,9 +31,9 @@ public class TaskDefinitionJsonConverter
         using var document = JsonDocument.ParseValue(ref reader);
         var root = document.RootElement;
         if (root.TryGetProperty(nameof(CallTaskDefinition.Call).ToCamelCase(), out _)) return JsonSerializer.Deserialize<CallTaskDefinition>(root.GetRawText(), options)!;
-        else if (root.TryGetProperty(nameof(CompositeTaskDefinition.Execute).ToCamelCase(), out _)) return JsonSerializer.Deserialize<CompositeTaskDefinition>(root.GetRawText(), options)!;
         else if (root.TryGetProperty(nameof(EmitTaskDefinition.Emit).ToCamelCase(), out _)) return JsonSerializer.Deserialize<EmitTaskDefinition>(root.GetRawText(), options)!;
         else if (root.TryGetProperty(nameof(ForTaskDefinition.For).ToCamelCase(), out _)) return JsonSerializer.Deserialize<ForTaskDefinition>(root.GetRawText(), options)!;
+        else if (root.TryGetProperty(nameof(ForkTaskDefinition.Fork).ToCamelCase(), out _)) return JsonSerializer.Deserialize<ForkTaskDefinition>(root.GetRawText(), options)!;
         else if (root.TryGetProperty(nameof(ListenTaskDefinition.Listen).ToCamelCase(), out _)) return JsonSerializer.Deserialize<ListenTaskDefinition>(root.GetRawText(), options)!;
         else if (root.TryGetProperty(nameof(RaiseTaskDefinition.Raise).ToCamelCase(), out _)) return JsonSerializer.Deserialize<RaiseTaskDefinition>(root.GetRawText(), options)!;
         else if (root.TryGetProperty(nameof(RunTaskDefinition.Run).ToCamelCase(), out _)) return JsonSerializer.Deserialize<RunTaskDefinition>(root.GetRawText(), options)!;
@@ -41,13 +41,11 @@ public class TaskDefinitionJsonConverter
         else if (root.TryGetProperty(nameof(SwitchTaskDefinition.Switch).ToCamelCase(), out _)) return JsonSerializer.Deserialize<SwitchTaskDefinition>(root.GetRawText(), options)!;
         else if (root.TryGetProperty(nameof(TryTaskDefinition.Try).ToCamelCase(), out _)) return JsonSerializer.Deserialize<TryTaskDefinition>(root.GetRawText(), options)!;
         else if (root.TryGetProperty(nameof(WaitTaskDefinition.Wait).ToCamelCase(), out _)) return JsonSerializer.Deserialize<WaitTaskDefinition>(root.GetRawText(), options)!;
+        else if (root.TryGetProperty(nameof(DoTaskDefinition.Do).ToCamelCase(), out _)) return JsonSerializer.Deserialize<DoTaskDefinition>(root.GetRawText(), options)!;
         else return JsonSerializer.Deserialize<ExtensionTaskDefinition>(root.GetRawText(), options)!;
     }
 
     /// <inheritdoc/>
-    public override void Write(Utf8JsonWriter writer, TaskDefinition value, JsonSerializerOptions options)
-    {
-        JsonSerializer.Serialize(writer, value, value.GetType(), options);
-    }
+    public override void Write(Utf8JsonWriter writer, TaskDefinition value, JsonSerializerOptions options) => JsonSerializer.Serialize(writer, value, value.GetType(), options);
 
 }

@@ -21,11 +21,11 @@ public interface ITryTaskDefinitionBuilder
 {
 
     /// <summary>
-    /// Configures the task to try executing the specified task
+    /// Configures the task to try executing the specified tasks
     /// </summary>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup the task to try</param>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the tasks to try</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ITryTaskDefinitionBuilder Do(Action<IGenericTaskDefinitionBuilder> setup);
+    ITryTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup);
 
     /// <summary>
     /// Configures the task to catch defined errors

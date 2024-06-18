@@ -33,12 +33,12 @@ public class ExtensionDefinitionBuilder
     /// <summary>
     /// Gets/sets the definition of the task to run before the extended one
     /// </summary>
-    protected TaskDefinition? BeforeTask { get; set; }
+    protected Map<string, TaskDefinition>? BeforeTasks { get; set; }
 
     /// <summary>
     /// Gets/sets the definition of the task to run after the extended one
     /// </summary>
-    protected TaskDefinition? AfterTask { get; set; }
+    protected Map<string, TaskDefinition>? AfterTasks { get; set; }
 
     /// <inheritdoc/>
     public virtual IExtensionDefinitionBuilder Extend(string taskType)
@@ -57,22 +57,22 @@ public class ExtensionDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IExtensionDefinitionBuilder Before(Action<IGenericTaskDefinitionBuilder> setup)
+    public virtual IExtensionDefinitionBuilder Before(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
-        var builder = new GenericTaskDefinitionBuilder();
+        var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        this.BeforeTask = builder.Build();
+        this.BeforeTasks = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IExtensionDefinitionBuilder After(Action<IGenericTaskDefinitionBuilder> setup)
+    public virtual IExtensionDefinitionBuilder After(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
-        var builder = new GenericTaskDefinitionBuilder();
+        var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        this.AfterTask = builder.Build();
+        this.AfterTasks = builder.Build();
         return this;
     }
 
@@ -84,8 +84,8 @@ public class ExtensionDefinitionBuilder
         {
             Extend = this.TaskType,
             When = this.WhenExpression,
-            Before = this.BeforeTask,
-            After = this.AfterTask
+            Before = this.BeforeTasks,
+            After = this.AfterTasks
         };
     }
 

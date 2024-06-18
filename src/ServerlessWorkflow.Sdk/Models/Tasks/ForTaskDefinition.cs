@@ -39,10 +39,10 @@ public record ForTaskDefinition
     public virtual string? While { get; set; }
 
     /// <summary>
-    /// Gets/sets the task to perform for each item in the collection
+    /// Gets/sets the tasks to perform for each item in the collection
     /// </summary>
     [Required]
     [DataMember(Name = "do", Order = 3), JsonPropertyName("do"), JsonPropertyOrder(3), YamlMember(Alias = "do", Order = 3)]
-    public required virtual TaskDefinition Do { get; set; }
+    public required virtual Map<string, TaskDefinition> Do { get; set; }
 
 }

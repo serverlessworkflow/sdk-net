@@ -11,10 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Serialization.Yaml;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Serialization;
 using Neuroglia.Serialization.Yaml;
+using ServerlessWorkflow.Sdk.Serialization.Yaml;
 
 namespace ServerlessWorkflow.Sdk.IO;
 
@@ -39,6 +39,7 @@ public static class IServiceCollectionExtensions
             options.Deserializer.WithNodeDeserializer(
                inner => new TaskDefinitionYamlDeserializer(inner),
                syntax => syntax.InsteadOf<JsonSchemaDeserializer>());
+            options.Serializer.WithTypeConverter(new MapEntryYamlConverter(() => options.Serializer.Build()));
         });
         services.AddSingleton<IWorkflowDefinitionReader, WorkflowDefinitionReader>();
         services.AddSingleton<IWorkflowDefinitionReader, WorkflowDefinitionReader>();

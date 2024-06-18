@@ -44,7 +44,7 @@ public record WorkflowDefinition
     /// </summary>
     [Required, MinLength(1)]
     [DataMember(Name = "do", Order = 4), JsonPropertyName("do"), JsonPropertyOrder(4), YamlMember(Alias = "do", Order = 4)]
-    public required virtual EquatableDictionary<string, TaskDefinition> Do { get; set; } = [];
+    public required virtual Map<string, TaskDefinition> Do { get; set; } = [];
 
     /// <summary>
     /// Gets/sets a name/value mapping of the tasks to perform

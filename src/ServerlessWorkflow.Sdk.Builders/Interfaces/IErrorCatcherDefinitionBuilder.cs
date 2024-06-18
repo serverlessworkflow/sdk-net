@@ -76,11 +76,11 @@ public interface IErrorCatcherDefinitionBuilder
     IErrorCatcherDefinitionBuilder Retry(Action<IRetryPolicyDefinitionBuilder> setup);
 
     /// <summary>
-    /// Configures the task to execute the specified task after catching or after retry exhaustion
+    /// Configures the tasks to execute the specified task after catching or after retry exhaustion
     /// </summary>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup the retry policy to use</param>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the tasks to execute</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    IErrorCatcherDefinitionBuilder Do(Action<IGenericTaskDefinitionBuilder> setup);
+    IErrorCatcherDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup);
 
     /// <summary>
     /// Builds the configured <see cref="ErrorCatcherDefinition"/>

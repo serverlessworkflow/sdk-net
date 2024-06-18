@@ -34,6 +34,15 @@ public class GenericTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IDoTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
+    {
+        var builder = new DoTaskDefinitionBuilder();
+        builder.Do(setup);
+        this.Builder = builder;
+        return builder;
+    }
+
+    /// <inheritdoc/>
     public virtual IEmitTaskDefinitionBuilder Emit(EventDefinition e)
     {
         ArgumentNullException.ThrowIfNull(e);
@@ -61,6 +70,14 @@ public class GenericTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IForkTaskDefinitionBuilder Fork()
+    {
+        var builder = new ForkTaskDefinitionBuilder();
+        this.Builder = builder;
+        return builder;
+    }
+
+    /// <inheritdoc/>
     public virtual IListenTaskDefinitionBuilder Listen()
     {
         var builder = new ListenTaskDefinitionBuilder();
@@ -69,9 +86,9 @@ public class GenericTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual ICompositeTaskDefinitionBuilder Execute()
+    public virtual IDoTaskDefinitionBuilder Execute()
     {
-        var builder = new CompositeTaskDefinitionBuilder();
+        var builder = new DoTaskDefinitionBuilder();
         this.Builder = builder;
         return builder;
     }

@@ -14,12 +14,17 @@
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Defines the fundamentals of a service used to build <see cref="CompositeTaskDefinition"/>s
+/// Defines the fundamentals of a service used to build <see cref="DoTaskDefinition"/>s
 /// </summary>
-public interface ICompositeTaskDefinitionBuilder
-    : ITaskDefinitionBuilder<CompositeTaskDefinition>, ITaskExecutionStrategyDefinitionBuilder<ICompositeTaskDefinitionBuilder>
+public interface IDoTaskDefinitionBuilder
+    : ITaskDefinitionBuilder<DoTaskDefinition>
 {
 
-
+    /// <summary>
+    /// Configures the tasks to perform sequentially
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the tasks to perform sequentially</param>
+    /// <returns>The configured <see cref="IDoTaskDefinitionBuilder"/></returns>
+    IDoTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup);
 
 }

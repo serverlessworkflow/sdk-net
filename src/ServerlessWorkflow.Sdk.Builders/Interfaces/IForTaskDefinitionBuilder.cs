@@ -42,10 +42,10 @@ public interface IForTaskDefinitionBuilder
     IForTaskDefinitionBuilder At(string variableName);
 
     /// <summary>
-    /// Configures the task to execute the specified task for each item in the specified collection
+    /// Configures the task to execute the specified tasks for each item in the specified collection
     /// </summary>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup the <see cref="TaskDefinition"/> to execute</param>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the <see cref="TaskDefinition"/>s to execute</param>
     /// <returns>The configured <see cref="IForTaskDefinitionBuilder"/></returns>
-    IForTaskDefinitionBuilder Do(Action<IGenericTaskDefinitionBuilder> setup);
+    IForTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup);
 
 }

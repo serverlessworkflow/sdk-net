@@ -53,7 +53,7 @@ public class ErrorCatcherDefinitionBuilder
     /// <summary>
     /// Gets/sets the definition of the task to run when catching an error
     /// </summary>
-    protected TaskDefinition? RetryDo { get; set; }
+    protected Map<string, TaskDefinition>? RetryDo { get; set; }
 
     /// <inheritdoc/>
     public virtual IErrorCatcherDefinitionBuilder Errors(ErrorFilterDefinition filter)
@@ -117,10 +117,11 @@ public class ErrorCatcherDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IErrorCatcherDefinitionBuilder Do(Action<IGenericTaskDefinitionBuilder> setup)
+    public IErrorCatcherDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
-        var builder = new GenericTaskDefinitionBuilder();
+        var builder = new TaskDefinitionMapBuilder();
+        setup(builder);
         this.RetryDo = builder.Build();
         return this;
     }

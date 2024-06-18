@@ -14,29 +14,22 @@
 namespace ServerlessWorkflow.Sdk.Models.Tasks;
 
 /// <summary>
-/// Represents the definition of a task used to try one or more subtasks, and to catch/handle the errors that can potentially be raised during execution
+/// Represents the configuration of a task that is composed of multiple subtasks to run sequentially
 /// </summary>
 [DataContract]
-public record TryTaskDefinition
+public record DoTaskDefinition
     : TaskDefinition
 {
 
     /// <inheritdoc/>
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public override string Type => TaskType.Try;
+    public override string Type => TaskType.Do;
 
     /// <summary>
-    /// Gets/sets a name/definition map of the tasks to try running
+    /// Gets/sets a name/definition mapping of the subtasks to perform sequentially
     /// </summary>
-    [Required]
-    [DataMember(Name = "try", Order = 1), JsonPropertyName("try"), JsonPropertyOrder(1), YamlMember(Alias = "try", Order = 1)]
-    public required virtual Map<string, TaskDefinition> Try { get; set; }
-
-    /// <summary>
-    /// Gets/sets the object used to define the errors to catch
-    /// </summary>
-    [Required]
-    [DataMember(Name = "catch", Order = 2), JsonPropertyName("catch"), JsonPropertyOrder(2), YamlMember(Alias = "catch", Order = 2)]
-    public required virtual ErrorCatcherDefinition Catch { get; set; }
+    [Required, MinLength(1)]
+    [DataMember(Name = "do", Order = 1), JsonPropertyName("do"), JsonPropertyOrder(1), YamlMember(Alias = "do", Order = 1)]
+    public required virtual Map<string, TaskDefinition> Do { get; set; }
 
 }

@@ -21,9 +21,9 @@ public class TryTaskDefinitionBuilder
 {
 
     /// <summary>
-    /// Gets/sets the task to try
+    /// Gets/sets the tasks to try
     /// </summary>
-    protected TaskDefinition? TryTask { get; set; }
+    protected Map<string, TaskDefinition>? TryTasks { get; set; }
 
     /// <summary>
     /// Gets/sets the definition of the error catcher to use
@@ -31,12 +31,12 @@ public class TryTaskDefinitionBuilder
     protected ErrorCatcherDefinition? ErrorCatcher { get; set; }
 
     /// <inheritdoc/>
-    public virtual ITryTaskDefinitionBuilder Do(Action<IGenericTaskDefinitionBuilder> setup)
+    public virtual ITryTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
-        var builder = new GenericTaskDefinitionBuilder();
+        var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        this.TryTask = builder.Build();
+        this.TryTasks = builder.Build();
         return this;
     }
 
@@ -52,11 +52,11 @@ public class TryTaskDefinitionBuilder
     /// <inheritdoc/>
     public override TryTaskDefinition Build()
     {
-        if (this.TryTask == null) throw new NullReferenceException("The task to try must be set");
+        if (this.TryTasks == null || this.TryTasks.Count < 1) throw new NullReferenceException("The task to try must be set");
         if (this.ErrorCatcher == null) throw new NullReferenceException("The catch clause must be set");
         return new()
         {
-            Try = this.TryTask,
+            Try = this.TryTasks,
             Catch = this.ErrorCatcher
         };
     }

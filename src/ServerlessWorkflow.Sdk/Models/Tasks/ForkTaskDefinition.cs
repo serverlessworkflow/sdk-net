@@ -14,22 +14,22 @@
 namespace ServerlessWorkflow.Sdk.Models.Tasks;
 
 /// <summary>
-/// Represents the configuration of a task that is composed of multiple subtasks
+/// Represents the configuration of a task that is composed of multiple subtasks to run concurrently
 /// </summary>
 [DataContract]
-public record CompositeTaskDefinition
+public record ForkTaskDefinition
     : TaskDefinition
 {
 
     /// <inheritdoc/>
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public override string Type => TaskType.Composite;
+    public override string Type => TaskType.Fork;
 
     /// <summary>
-    /// Gets/sets a name/definition mapping of the subtasks to execute
+    /// Gets/sets the configuration of the branches to perform concurrently
     /// </summary>
     [Required]
-    [DataMember(Name = "execute", Order = 1), JsonPropertyName("execute"), JsonPropertyOrder(1), YamlMember(Alias = "execute", Order = 1)]
-    public required virtual TaskExecutionStrategyDefinition Execute { get; set; }
+    [DataMember(Name = "fork", Order = 1), JsonPropertyName("fork"), JsonPropertyOrder(1), YamlMember(Alias = "fork", Order = 1)]
+    public required virtual BranchingDefinition Fork { get; set; }
 
 }

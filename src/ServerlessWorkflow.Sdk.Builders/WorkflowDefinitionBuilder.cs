@@ -13,7 +13,6 @@
 
 using Neuroglia;
 using Semver;
-using YamlDotNet.Serialization;
 
 namespace ServerlessWorkflow.Sdk.Builders;
 
@@ -62,7 +61,7 @@ public class WorkflowDefinitionBuilder
     /// <summary>
     /// Gets/sets a name/value mapping of the tasks the workflow is made out of
     /// </summary>
-    protected EquatableDictionary<string, TaskDefinition>? Tasks { get; set; }
+    protected Map<string, TaskDefinition>? Tasks { get; set; }
 
     /// <inheritdoc/>
     public virtual IWorkflowDefinitionBuilder WithNamespace(string @namespace)
@@ -270,6 +269,6 @@ public class WorkflowDefinitionBuilder
         };
     }
 
-    EquatableDictionary<string, TaskDefinition> ITaskDefinitionMappingBuilder<IWorkflowDefinitionBuilder>.Build() => this.Tasks!;
+    Map<string, TaskDefinition> ITaskDefinitionMapBuilder<IWorkflowDefinitionBuilder>.Build() => this.Tasks!;
 
 }

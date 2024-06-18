@@ -35,15 +35,15 @@ public record ExtensionDefinition
     public virtual string? When { get; set; }
 
     /// <summary>
-    /// Gets/sets the task to execute before the extended task, if any
+    /// Gets/sets a name/definition map of the tasks to execute before the extended task, if any
     /// </summary>
     [DataMember(Name = "before", Order = 3), JsonPropertyName("before"), JsonPropertyOrder(3), YamlMember(Alias = "before", Order = 3)]
-    public virtual TaskDefinition? Before { get; set; }
+    public virtual Map<string, TaskDefinition>? Before { get; set; }
 
     /// <summary>
-    /// Gets/sets the task to execute after the extended task, if any
+    /// Gets/sets a name/definition map of the tasks to execute after the extended task, if any
     /// </summary>
     [DataMember(Name = "after", Order = 4), JsonPropertyName("after"), JsonPropertyOrder(4), YamlMember(Alias = "after", Order = 4)]
-    public virtual TaskDefinition? After { get; set; }
+    public virtual Map<string, TaskDefinition>? After { get; set; }
 
 }

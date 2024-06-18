@@ -24,9 +24,9 @@ public static class TaskType
     /// </summary>
     public const string Call = "call";
     /// <summary>
-    /// Gets the 'composite' task type
+    /// Gets the 'do' task type
     /// </summary>
-    public const string Composite = "composite";
+    public const string Do = "do";
     /// <summary>
     /// Gets the 'emit' task type
     /// </summary>
@@ -39,6 +39,10 @@ public static class TaskType
     /// Gets the 'for' task type
     /// </summary>
     public const string For = "for";
+    /// <summary>
+    /// Gets the 'fork' task type
+    /// </summary>
+    public const string Fork = "fork";
     /// <summary>
     /// Gets the 'listen' task type
     /// </summary>
@@ -75,7 +79,7 @@ public static class TaskType
     public static IEnumerable<string> AsEnumerable()
     {
         yield return Call;
-        yield return Composite;
+        yield return Do;
         yield return Emit;
         yield return Extension;
         yield return For;

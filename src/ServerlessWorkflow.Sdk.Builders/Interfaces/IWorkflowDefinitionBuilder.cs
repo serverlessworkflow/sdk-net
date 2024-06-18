@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build and configure <see cref="WorkflowDefinition"/>s
 /// </summary>
 public interface IWorkflowDefinitionBuilder
-    : ITaskDefinitionMappingBuilder<IWorkflowDefinitionBuilder>
+    : ITaskDefinitionMapBuilder<IWorkflowDefinitionBuilder>
 {
 
     /// <summary>

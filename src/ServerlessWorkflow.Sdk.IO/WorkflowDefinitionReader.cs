@@ -11,10 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Serialization.Yaml;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Serialization;
-using Neuroglia.Serialization.Yaml;
 
 namespace ServerlessWorkflow.Sdk.IO;
 
@@ -41,7 +39,6 @@ public class WorkflowDefinitionReader(IJsonSerializer jsonSerializer, IYamlSeria
     public virtual Task<WorkflowDefinition> ReadAsync(Stream stream, WorkflowDefinitionReaderOptions? options = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(stream);
-        options ??= new WorkflowDefinitionReaderOptions();
         using var reader = new StreamReader(stream);
         var input = reader.ReadToEnd();
         var workflow = (input.TrimStart().StartsWith('{') && input.TrimEnd().EndsWith('}')

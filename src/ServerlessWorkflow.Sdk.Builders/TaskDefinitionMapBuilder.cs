@@ -17,19 +17,19 @@ using Neuroglia;
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="ITaskDefinitionMappingBuilder"/> interface
+/// Represents the default implementation of the <see cref="ITaskDefinitionMapBuilder"/> interface
 /// </summary>
-public class TaskDefinitionMappingBuilder
-    : ITaskDefinitionMappingBuilder
+public class TaskDefinitionMapBuilder
+    : ITaskDefinitionMapBuilder
 {
 
     /// <summary>
     /// Gets a name/value mapping of the tasks the workflow is made out of
     /// </summary>
-    protected EquatableDictionary<string, TaskDefinition>? Tasks { get; set; }
+    protected Map<string, TaskDefinition>? Tasks { get; set; }
 
     /// <inheritdoc/>
-    public virtual ITaskDefinitionMappingBuilder Do(string name, Action<IGenericTaskDefinitionBuilder> setup)
+    public virtual ITaskDefinitionMapBuilder Do(string name, Action<IGenericTaskDefinitionBuilder> setup)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(setup);
@@ -41,7 +41,7 @@ public class TaskDefinitionMappingBuilder
     }
 
     /// <inheritdoc/>
-    public virtual EquatableDictionary<string, TaskDefinition> Build()
+    public virtual Map<string, TaskDefinition> Build()
     {
         if (this.Tasks == null || this.Tasks.Count < 1) throw new NullReferenceException("The task must define at least one subtask");
         return this.Tasks;

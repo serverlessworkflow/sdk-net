@@ -11,16 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Neuroglia;
-
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
 /// Defines the fundamentals of a service used to build a configure <see cref="TaskDefinition"/> collections
 /// </summary>
-/// <typeparam name="TBuilder">The type of the <see cref="ITaskDefinitionMappingBuilder{TBuilder}"/></typeparam>
-public interface ITaskDefinitionMappingBuilder<TBuilder>
-    where TBuilder : ITaskDefinitionMappingBuilder<TBuilder>
+/// <typeparam name="TBuilder">The type of the <see cref="ITaskDefinitionMapBuilder{TBuilder}"/></typeparam>
+public interface ITaskDefinitionMapBuilder<TBuilder>
+    where TBuilder : ITaskDefinitionMapBuilder<TBuilder>
 {
 
     /// <summary>
@@ -35,15 +33,15 @@ public interface ITaskDefinitionMappingBuilder<TBuilder>
     /// Builds the configured <see cref="TaskDefinition"/> collection
     /// </summary>
     /// <returns>A new mapping of <see cref="TaskDefinition"/>s by name</returns>
-    EquatableDictionary<string, TaskDefinition> Build();
+    Map<string, TaskDefinition> Build();
 
 }
 
 /// <summary>
 /// Defines the fundamentals of a service used to build a configure <see cref="TaskDefinition"/> collections
 /// </summary>
-public interface ITaskDefinitionMappingBuilder
-    : ITaskDefinitionMappingBuilder<ITaskDefinitionMappingBuilder>
+public interface ITaskDefinitionMapBuilder
+    : ITaskDefinitionMapBuilder<ITaskDefinitionMapBuilder>
 {
 
 

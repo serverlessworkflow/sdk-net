@@ -61,22 +61,24 @@ public class WorkflowDefinitionBuilderTests
             .UseExtension("fakeLoggingExtension", extension => extension
                 .ExtendAll()
                 .When("fake-expression")
-                .Before(task => task
-                    .Call("http")
-                        .With("method", "post")
-                        .With("uri", "https://fake.log.collector.com")
-                        .With("body", new
-                        {
-                            message = @"${ ""Executing task '\($task.reference)'..."" }"
-                        }))
-                .After(task => task
-                    .Call("http")
-                        .With("method", "post")
-                        .With("uri", "https://fake.log.collector.com")
-                        .With("body", new
-                        {
-                            message = @"${ ""Executed task '\($task.reference)'..."" }"
-                        })))
+                .Before(tasks => tasks
+                    .Do("fake-http-call", task => task
+                        .Call("http")
+                            .With("method", "post")
+                            .With("uri", "https://fake.log.collector.com")
+                            .With("body", new
+                            {
+                                message = @"${ ""Executing task '\($task.reference)'..."" }"
+                            })))
+                .After(tasks => tasks
+                    .Do("fake-http-call", task => task
+                        .Call("http")
+                            .With("method", "post")
+                            .With("uri", "https://fake.log.collector.com")
+                            .With("body", new
+                            {
+                                message = @"${ ""Executed task '\($task.reference)'..."" }"
+                            }))))
             .UseSecret("fake-secret")
             .Do("todo-1", task => task
                 .Call("http")
@@ -90,8 +92,9 @@ public class WorkflowDefinitionBuilderTests
                     .Each("color")
                     .In(".colors")
                     .At("index")
-                    .Do(subtask => subtask
-                        .Set("processed", ".processed + [$color]")))
+                    .Do(tasks => tasks
+                        .Do("fake-http-call", subtask => subtask
+                            .Set("processed", ".processed + [$color]"))))
             .Do("todo-4", task => task
                 .Listen()
                     .To(to => to
@@ -143,8 +146,9 @@ public class WorkflowDefinitionBuilderTests
                         .Then(FlowDirective.End)))
             .Do("todo-12", task => task
                 .Try()
-                    .Do(subtask => subtask
-                        .Set("foo", "bar"))
+                    .Do(tasks => tasks
+                        .Do("setFoo", subtask => subtask
+                            .Set("foo", "bar")))
                 .Catch(error => error
                     .Errors(filter => filter
                         .With("status", ". == 400"))
@@ -157,28 +161,29 @@ public class WorkflowDefinitionBuilderTests
                         .Limit(limits => limits
                             .Attempt()
                                 .Count(10)))
-                    .Do(subtask => subtask
-                        .Set("foo", "bar"))))
+                    .Do(tasks => tasks
+                        .Do("setFoo", subtask => subtask
+                            .Set("foo", "bar")))))
             .Do("todo-13", task => task
                 .Wait()
                     .For(Duration.FromMinutes(5)))
             .Do("todo-14", task => task
-                .Execute()
-                    .Sequentially(tasks => tasks
-                        .Do("todo-14-1", task => task
-                            .Call("http")
-                                .With("method", "get")
-                                .With("uri", "https://unit-tests.serverlessworkflow.io"))
-                        .Do("todo-14-2", task => task
-                            .Emit(e => e
-                                .With("type", "io.serverlessworkflow.unit-tests.fake.event.type.v1")))
-                        .Do("todo-14-3", task => task
-                            .For()
-                                .Each("color")
-                                .In(".colors")
-                                .At("index")
-                            .Do(subtask => subtask
-                                .Set("processed", ".processed + [$color]")))))
+                .Do(tasks => tasks
+                    .Do("todo-14-1", task => task
+                        .Call("http")
+                            .With("method", "get")
+                            .With("uri", "https://unit-tests.serverlessworkflow.io"))
+                    .Do("todo-14-2", task => task
+                        .Emit(e => e
+                            .With("type", "io.serverlessworkflow.unit-tests.fake.event.type.v1")))
+                    .Do("todo-14-3", task => task
+                        .For()
+                            .Each("color")
+                            .In(".colors")
+                            .At("index")
+                        .Do(tasks => tasks
+                            .Do("setProcessed", subtask => subtask
+                                .Set("processed", ".processed + [$color]"))))))
             .Build();
 
         //assert
