@@ -14,22 +14,22 @@
 namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
-/// Represents the definition of a data model
+/// Represents the definition of a data context
 /// </summary>
 [DataContract]
-public abstract record DataModelDefinition
+public record ContextDataModelDefinition
 {
 
     /// <summary>
-    /// Gets/sets the schema, if any, that defines and describes the defined data model
+    /// Gets/sets the schema, if any, that defines and describes the context data
     /// </summary>
     [DataMember(Name = "schema", Order = 1), JsonPropertyName("schema"), JsonPropertyOrder(1), YamlMember(Alias = "schema", Order = 1)]
     public virtual SchemaDefinition? Schema { get; set; }
 
     /// <summary>
-    /// Gets/sets a runtime expression, if any, used to build the defined model using both input and scope data
+    /// Gets/sets a runtime expression, if any, used to export specific data to the context data
     /// </summary>
-    [DataMember(Name = "from", Order = 2), JsonPropertyName("from"), JsonPropertyOrder(2), JsonInclude, YamlMember(Alias = "from", Order = 2)]
-    public virtual object? From { get; set; }
+    [DataMember(Name = "as", Order = 3), JsonPropertyName("as"), JsonPropertyOrder(3), YamlMember(Alias = "as", Order = 3)]
+    public virtual object? As { get; set; }
 
 }

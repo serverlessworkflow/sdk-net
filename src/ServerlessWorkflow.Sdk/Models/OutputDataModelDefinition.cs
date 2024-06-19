@@ -18,13 +18,18 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// </summary>
 [DataContract]
 public record OutputDataModelDefinition
-    : DataModelDefinition
 {
+
+    /// <summary>
+    /// Gets/sets the schema, if any, that defines and describes the output data of a workflow or task
+    /// </summary>
+    [DataMember(Name = "schema", Order = 1), JsonPropertyName("schema"), JsonPropertyOrder(1), YamlMember(Alias = "schema", Order = 1)]
+    public virtual SchemaDefinition? Schema { get; set; }
 
     /// <summary>
     /// Gets/sets a runtime expression, if any, used to output specific data to the scope data
     /// </summary>
-    [DataMember(Name = "to", Order = 3), JsonPropertyName("to"), JsonPropertyOrder(3), YamlMember(Alias = "to", Order = 3)]
-    public virtual object? To { get; set; }
+    [DataMember(Name = "as", Order = 3), JsonPropertyName("as"), JsonPropertyOrder(3), YamlMember(Alias = "as", Order = 3)]
+    public virtual object? As { get; set; }
 
 }

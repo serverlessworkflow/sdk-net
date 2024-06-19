@@ -39,7 +39,9 @@ public static class IServiceCollectionExtensions
             options.Deserializer.WithNodeDeserializer(
                inner => new TaskDefinitionYamlDeserializer(inner),
                syntax => syntax.InsteadOf<JsonSchemaDeserializer>());
-            options.Serializer.WithTypeConverter(new MapEntryYamlConverter(() => options.Serializer.Build()));
+            var mapEntryConverter = new MapEntryYamlConverter(() => options.Serializer.Build(), () => options.Deserializer.Build());
+            options.Deserializer.WithTypeConverter(mapEntryConverter);
+            options.Serializer.WithTypeConverter(mapEntryConverter);
         });
         services.AddSingleton<IWorkflowDefinitionReader, WorkflowDefinitionReader>();
         services.AddSingleton<IWorkflowDefinitionReader, WorkflowDefinitionReader>();

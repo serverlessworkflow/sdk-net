@@ -12,7 +12,6 @@
 // limitations under the License.
 
 using ServerlessWorkflow.Sdk.Serialization.Json;
-using System.ComponentModel;
 
 namespace ServerlessWorkflow.Sdk.Models;
 
@@ -43,15 +42,21 @@ public abstract record TaskDefinition
     public virtual OutputDataModelDefinition? Output { get; set; }
 
     /// <summary>
+    /// Gets/sets the optional configuration for exporting data within the task's context
+    /// </summary>
+    [DataMember(Name = "export", Order = 12), JsonPropertyName("export"), JsonPropertyOrder(12), YamlMember(Alias = "export", Order = 12)]
+    public virtual OutputDataModelDefinition? Export { get; set; }
+
+    /// <summary>
     /// Gets/sets a boolean indicating whether or not to return the result, if any, of the defined task
     /// </summary>
-    [DataMember(Name = "timeout", Order = 12), JsonPropertyName("timeout"), JsonPropertyOrder(12), YamlMember(Alias = "timeout", Order = 12)]
+    [DataMember(Name = "timeout", Order = 13), JsonPropertyName("timeout"), JsonPropertyOrder(13), YamlMember(Alias = "timeout", Order = 13)]
     public virtual TimeoutDefinition? Timeout { get; set; }
 
     /// <summary>
     /// Gets/sets the flow directive to be performed upon completion of the task
     /// </summary>
-    [DataMember(Name = "then", Order = 13), JsonPropertyName("then"), JsonPropertyOrder(13), YamlMember(Alias = "then", Order = 13)]
+    [DataMember(Name = "then", Order = 14), JsonPropertyName("then"), JsonPropertyOrder(14), YamlMember(Alias = "then", Order = 14)]
     public virtual string? Then { get; set; }
 
 }

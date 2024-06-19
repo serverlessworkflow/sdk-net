@@ -12,26 +12,27 @@
 // limitations under the License.
 
 using ServerlessWorkflow.Sdk.IO;
-using Neuroglia.Serialization.Json;
-using Neuroglia.Serialization.Yaml;
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.IO;
 
-public class WorkflowDefinitionReaderTests
+public class WorkflowDefinitionIOTests
 {
 
     [Fact]
-    public async Task Read_Workflow_Definition_From_Json_Should_Work()
+    public async Task WriteThenRead_Workflow_Definition_ToFrom_Yaml_Should_Work()
     {
         //arrange
         var toSerialize = WorkflowDefinitionFactory.Create();
         using var stream = new MemoryStream();
-        JsonSerializer.Default.Serialize(toSerialize, stream);
-        await stream.FlushAsync();
-        stream.Position = 0;
+        var writer = WorkflowDefinitionWriter.Create();
         var reader = WorkflowDefinitionReader.Create();
 
         //act
+        await writer.WriteAsync(toSerialize, stream, WorkflowDefinitionFormat.Yaml);
+        await stream.FlushAsync();
+        stream.Position = 0;
+        var yaml = new StreamReader(stream).ReadToEnd();
+        stream.Position = 0;
         var deserialized = await reader.ReadAsync(stream);
 
         //assert
@@ -40,17 +41,18 @@ public class WorkflowDefinitionReaderTests
     }
 
     [Fact]
-    public async Task Read_Workflow_Definition_From_Yaml_Should_Work()
+    public async Task WriteThenRead_Workflow_Definition_ToFrom_Json_Should_Work()
     {
         //arrange
         var toSerialize = WorkflowDefinitionFactory.Create();
         using var stream = new MemoryStream();
-        YamlSerializer.Default.Serialize(toSerialize, stream);
-        await stream.FlushAsync();
-        stream.Position = 0;
+        var writer = WorkflowDefinitionWriter.Create();
         var reader = WorkflowDefinitionReader.Create();
 
         //act
+        await writer.WriteAsync(toSerialize, stream, WorkflowDefinitionFormat.Json);
+        await stream.FlushAsync();
+        stream.Position = 0;
         var deserialized = await reader.ReadAsync(stream);
 
         //assert

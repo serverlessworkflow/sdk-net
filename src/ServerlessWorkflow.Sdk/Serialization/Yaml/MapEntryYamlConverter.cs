@@ -21,7 +21,8 @@ namespace ServerlessWorkflow.Sdk.Serialization.Yaml;
 /// Represents the service used to serialize/deserialize <see cref="MapEntry{TKey, TValue}"/> values to/from YAML
 /// </summary>
 /// <param name="serializerFactory">A function used to create a new <see cref="ISerializer"/></param>
-public class MapEntryYamlConverter(Func<ISerializer> serializerFactory)
+/// <param name="deserializerFactory">A function used to create a new <see cref="IDeserializer"/></param>
+public class MapEntryYamlConverter(Func<ISerializer> serializerFactory, Func<IDeserializer> deserializerFactory)
     : IYamlTypeConverter
 {
 
@@ -43,10 +44,10 @@ public class MapEntryYamlConverter(Func<ISerializer> serializerFactory)
     {
         var typeArguments = type.GetGenericArguments();
         var converterType = typeof(MapEntryConverter<,>).MakeGenericType(typeArguments);
-        return (IYamlTypeConverter)Activator.CreateInstance(converterType, serializerFactory())!;
+        return (IYamlTypeConverter)Activator.CreateInstance(converterType, serializerFactory(), deserializerFactory())!;
     }
 
-    class MapEntryConverter<TKey, TValue> (ISerializer serializer)
+    class MapEntryConverter<TKey, TValue> (ISerializer serializer, IDeserializer deserializer)
         : IYamlTypeConverter 
         where TKey : notnull
     {
@@ -55,7 +56,14 @@ public class MapEntryYamlConverter(Func<ISerializer> serializerFactory)
         public bool Accepts(Type type) => type == typeof(MapEntry<TKey, TValue>);
 
         /// <inheritdoc/>
-        public virtual object ReadYaml(IParser parser, Type type) => throw new NotImplementedException();
+        public virtual object ReadYaml(IParser parser, Type type) 
+        {
+            parser.Consume<MappingStart>();
+            var key = deserializer.Deserialize<TKey>(parser);
+            var value = deserializer.Deserialize<TValue>(parser);
+            parser.Consume<MappingEnd>();
+            return new MapEntry<TKey, TValue>(key, value);
+        }
 
         /// <inheritdoc/>
         public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
