@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using ServerlessWorkflow.Sdk.IO;
+using System.Text;
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.IO;
 
@@ -30,8 +31,6 @@ public class WorkflowDefinitionIOTests
         //act
         await writer.WriteAsync(toSerialize, stream, WorkflowDefinitionFormat.Yaml);
         await stream.FlushAsync();
-        stream.Position = 0;
-        var yaml = new StreamReader(stream).ReadToEnd();
         stream.Position = 0;
         var deserialized = await reader.ReadAsync(stream);
 

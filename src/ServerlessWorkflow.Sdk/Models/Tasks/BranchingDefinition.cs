@@ -31,6 +31,6 @@ public record BranchingDefinition
     /// Gets/sets a boolean indicating whether or not the branches should compete each other. If `true` and if a branch completes, it will cancel all other branches then it will return its output as the task's output
     /// </summary>
     [DataMember(Name = "compete", Order = 1), JsonPropertyName("compete"), JsonPropertyOrder(1), YamlMember(Alias = "compete", Order = 1)]
-    public required virtual bool Compete { get; set; }
+    public virtual bool Compete { get; set; }
 
 }

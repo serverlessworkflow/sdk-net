@@ -12,9 +12,8 @@
 // limitations under the License.
 
 using ServerlessWorkflow.Sdk.Models;
-using Json.Pointer;
-using Neuroglia;
-using Neuroglia.Serialization.Json;
+using System.Collections;
+using System.Reflection;
 
 namespace ServerlessWorkflow.Sdk;
 
@@ -61,10 +60,24 @@ public static class WorkflowDefinitionExtensions
     public static TComponent GetComponent<TComponent>(this WorkflowDefinition workflow, string path)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(path);
-        var jsonNode = JsonSerializer.Default.SerializeToNode(workflow)!;
-        var jsonPointer = JsonPointer.Parse(path);
-        if (!jsonPointer.TryEvaluate(jsonNode, out var matchNode) || matchNode == null) throw new NullReferenceException($"Failed to find a component definition of type '{typeof(TComponent).Name}' at '{path}'");
-        return JsonSerializer.Default.Deserialize<TComponent>(matchNode)!;
+        var pathSegments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var currentObject = workflow as object;
+        foreach (var pathSegment in pathSegments)
+        {
+            if (currentObject!.GetType().IsEnumerable() && int.TryParse(pathSegment, out var index)) currentObject = ((IEnumerable)currentObject).OfType<object>().ToList().ElementAt(index);
+            else
+            {
+                var mapEntryType = currentObject.GetType().GetGenericType(typeof(MapEntry<,>));
+                if (mapEntryType == null)
+                {
+                    var property = currentObject.GetType().GetProperty(pathSegment, BindingFlags.Default | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.IgnoreCase) ?? throw new NullReferenceException($"Failed to find a component definition of type '{typeof(TComponent).Name}' at '{pathSegment}'");
+                    currentObject = property.GetValue(currentObject) ?? throw new NullReferenceException($"Failed to find a component definition of type '{typeof(TComponent).Name}' at '{path}'");
+                }
+                else currentObject = mapEntryType.GetProperty(nameof(MapEntry<string, object>.Value))!.GetValue(currentObject);
+            }
+        }
+        if (currentObject is not TComponent component) throw new InvalidCastException($"Component at '{path}' is not of type '{typeof(TComponent).Name}'");
+        return component;
     }
 
     /// <summary>
