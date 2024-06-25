@@ -27,6 +27,16 @@ public record Map<TKey, TValue>
 
     readonly Dictionary<TKey, TValue> _entries = [];
 
+    /// <summary>
+    /// Gets an <see cref="IReadOnlyList{T}"/> that contains all the map's keys
+    /// </summary>
+    public IReadOnlyList<TKey> Keys => [.. this._entries.Keys];
+
+    /// <summary>
+    /// Gets an <see cref="IReadOnlyList{T}"/> that contains all the map's values
+    /// </summary>
+    public IReadOnlyList<TValue> Values => [.. this._entries.Values];
+
     /// <inheritdoc/>
     public int Count => this._entries.Count;
 
@@ -49,6 +59,18 @@ public record Map<TKey, TValue>
         {
             if (!_entries.TryAdd(key, value)) this._entries[key] = value;
         }
+    }
+
+    /// <summary>
+    /// Gets the <see cref="MapEntry{TKey, TValue}"/> with the specified key
+    /// </summary>
+    /// <param name="key">The key of the <see cref="MapEntry{TKey, TValue}"/> to get</param>
+    /// <returns>The <see cref="MapEntry{TKey, TValue}"/> with the specified key</returns>
+    public virtual MapEntry<TKey, TValue>? GetEntry(TKey key)
+    {
+        var kvp = this._entries.FirstOrDefault(e => e.Key.Equals(key));
+        if (kvp.Key.Equals(default(TKey))) return null;
+        else return new(kvp.Key, kvp.Value);
     }
 
     /// <inheritdoc/>
