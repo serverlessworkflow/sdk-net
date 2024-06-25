@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="4.12.0" />
+    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="4.12.1" />
     <PackageReference Include="Semver" Version="2.3.0" />
   </ItemGroup>
 
