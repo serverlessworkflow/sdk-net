@@ -71,6 +71,7 @@ internal static class WorkflowDefinitionFactory
             .UseSecret("fake-secret")
             .Do("todo-1", task => task
                 .Call("http")
+                .If("fake-condition")
                 .With("method", "get")
                 .With("uri", "https://unit-tests.serverlessworkflow.io"))
             .Do("todo-2", task => task

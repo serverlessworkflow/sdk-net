@@ -16,11 +16,39 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the base class for all <see cref="ITaskDefinitionBuilder{TDefinition}"/> implementations
 /// </summary>
+/// <typeparam name="TBuilder">The type of the implementing <see cref="ITaskDefinitionBuilder{TBuilder}"/></typeparam>
 /// <typeparam name="TDefinition">The type of <see cref="TaskDefinition"/> to build</typeparam>
-public abstract class TaskDefinitionBuilder<TDefinition>
-    : ITaskDefinitionBuilder<TDefinition>
+public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
+    : ITaskDefinitionBuilder<TBuilder, TDefinition>
+    where TBuilder : ITaskDefinitionBuilder<TBuilder>
     where TDefinition : TaskDefinition
 {
+
+    /// <summary>
+    /// Gets/sets the runtime expression, if any, used to determine whether or not to run the task to build
+    /// </summary>
+    protected string? IfExpression { get; set; }
+
+    /// <summary>
+    /// Gets/sets the flow directive, if any, used to then execute
+    /// </summary>
+    protected string? ThenDirective { get; set; }
+
+    /// <inheritdoc/>
+    public virtual TBuilder If(string condition)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(condition);
+        this.IfExpression = condition;
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder Then(string directive)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(directive);
+        this.ThenDirective = directive;
+        return (TBuilder)(object)this;
+    }
 
     /// <summary>
     /// Applies the configuration common to all types of tasks
@@ -29,7 +57,8 @@ public abstract class TaskDefinitionBuilder<TDefinition>
     /// <returns>The configured task definition</returns>
     protected virtual TDefinition Configure(TDefinition definition)
     {
-        //todo: common properties (timeouts, etc)
+        definition.If = this.IfExpression;
+        definition.Then = this.ThenDirective;
         return definition;
     }
 

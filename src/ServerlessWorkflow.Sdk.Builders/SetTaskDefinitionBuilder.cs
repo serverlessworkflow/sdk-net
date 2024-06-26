@@ -20,8 +20,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// </summary>
 /// <param name="variables">A name/value mapping of the variables to set</param>
 public class SetTaskDefinitionBuilder(IDictionary<string, object>? variables = null)
-    : TaskDefinitionBuilder<SetTaskDefinition>,
-    ISetTaskDefinitionBuilder
+    : TaskDefinitionBuilder<ISetTaskDefinitionBuilder, SetTaskDefinition>, ISetTaskDefinitionBuilder
 {
 
     /// <summary>

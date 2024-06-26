@@ -31,6 +31,9 @@ public class WorkflowDefinitionIOTests
         //act
         await writer.WriteAsync(toSerialize, stream, WorkflowDefinitionFormat.Yaml);
         await stream.FlushAsync();
+
+        var yaml = Encoding.UTF8.GetString(stream.ToArray());
+
         stream.Position = 0;
         var deserialized = await reader.ReadAsync(stream);
 

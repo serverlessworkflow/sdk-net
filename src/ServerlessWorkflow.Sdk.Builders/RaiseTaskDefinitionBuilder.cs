@@ -18,7 +18,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// </summary>
 /// <param name="errorDefinition">The error to raise</param>
 public class RaiseTaskDefinitionBuilder(ErrorDefinition? errorDefinition = null)
-    : TaskDefinitionBuilder<RaiseTaskDefinition>, IRaiseTaskDefinitionBuilder
+    : TaskDefinitionBuilder<IRaiseTaskDefinitionBuilder, RaiseTaskDefinition>, IRaiseTaskDefinitionBuilder
 {
 
     /// <summary>

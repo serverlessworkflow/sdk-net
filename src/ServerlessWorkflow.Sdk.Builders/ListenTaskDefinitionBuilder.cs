@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="IListenTaskDefinitionBuilder"/> interface
 /// </summary>
 public class ListenTaskDefinitionBuilder
-    : TaskDefinitionBuilder<ListenTaskDefinition>, IListenTaskDefinitionBuilder
+    : TaskDefinitionBuilder<IListenTaskDefinitionBuilder, ListenTaskDefinition>, IListenTaskDefinitionBuilder
 {
 
     /// <summary>

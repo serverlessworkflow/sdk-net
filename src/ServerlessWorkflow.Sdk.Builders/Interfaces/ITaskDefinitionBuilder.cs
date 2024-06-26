@@ -30,9 +30,36 @@ public interface ITaskDefinitionBuilder
 /// <summary>
 /// Defines the fundamentals of a service used to build <see cref="TaskDefinition"/>s
 /// </summary>
-/// <typeparam name="TDefinition">The type of <see cref="TaskDefinition"/> to build and configure</typeparam>
-public interface ITaskDefinitionBuilder<TDefinition>
+/// <typeparam name="TBuilder">The type of the implementing <see cref="ITaskDefinitionBuilder{TBuilder}"/></typeparam>
+public interface ITaskDefinitionBuilder<TBuilder>
     : ITaskDefinitionBuilder
+    where TBuilder : ITaskDefinitionBuilder<TBuilder>
+{
+
+    /// <summary>
+    /// Configures the task to build to run only if the specified condition matches
+    /// </summary>
+    /// <param name="condition">A runtime expression that represents the condition to match for the task to run</param>
+    /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
+    TBuilder If(string condition);
+
+    /// <summary>
+    /// Configures the task to build to then execute the specified flow directive
+    /// </summary>
+    /// <param name="directive">The flow directive to then execute</param>
+    /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
+    TBuilder Then(string directive);
+
+}
+
+/// <summary>
+/// Defines the fundamentals of a service used to build <see cref="TaskDefinition"/>s
+/// </summary>
+/// <typeparam name="TBuilder">The type of the implementing <see cref="ITaskDefinitionBuilder{TBuilder}"/></typeparam>
+/// <typeparam name="TDefinition">The type of <see cref="TaskDefinition"/> to build and configure</typeparam>
+public interface ITaskDefinitionBuilder<TBuilder, TDefinition>
+    : ITaskDefinitionBuilder<TBuilder>
+    where TBuilder : ITaskDefinitionBuilder<TBuilder>
     where TDefinition : TaskDefinition
 {
 

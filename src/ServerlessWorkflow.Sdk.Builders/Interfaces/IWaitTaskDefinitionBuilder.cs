@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build <see cref="WaitTaskDefinition"/>s
 /// </summary>
 public interface IWaitTaskDefinitionBuilder
-    : ITaskDefinitionBuilder<WaitTaskDefinition>
+    : ITaskDefinitionBuilder<IWaitTaskDefinitionBuilder, WaitTaskDefinition>
 {
 
     /// <summary>

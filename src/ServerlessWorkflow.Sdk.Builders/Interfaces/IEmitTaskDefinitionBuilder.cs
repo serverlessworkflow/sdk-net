@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build <see cref="EmitTaskDefinition"/>s
 /// </summary>
 public interface IEmitTaskDefinitionBuilder
-    : ITaskDefinitionBuilder<EmitTaskDefinition>
+    : ITaskDefinitionBuilder<IEmitTaskDefinitionBuilder, EmitTaskDefinition>
 {
 
     /// <summary>

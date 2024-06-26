@@ -30,6 +30,12 @@ public abstract record TaskDefinition
     public abstract string Type { get; }
 
     /// <summary>
+    /// Gets/sets a runtime expression, if any, used to determine whether or not the execute the task in the current context
+    /// </summary>
+    [DataMember(Name = "if", Order = 0), JsonPropertyName("if"), JsonPropertyOrder(0), YamlMember(Alias = "if", Order = 0)]
+    public virtual string? If { get; set; }
+
+    /// <summary>
     /// Gets/sets the definition, if any, of the task's input data
     /// </summary>
     [DataMember(Name = "input", Order = 10), JsonPropertyName("input"), JsonPropertyOrder(10), YamlMember(Alias = "input", Order = 10)]

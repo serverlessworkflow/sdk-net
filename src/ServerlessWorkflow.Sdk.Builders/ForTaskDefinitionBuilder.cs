@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="IForTaskDefinitionBuilder"/> interface
 /// </summary>
 public class ForTaskDefinitionBuilder
-    : TaskDefinitionBuilder<ForTaskDefinition>, IForTaskDefinitionBuilder
+    : TaskDefinitionBuilder<IForTaskDefinitionBuilder, ForTaskDefinition>, IForTaskDefinitionBuilder
 {
 
     /// <summary>

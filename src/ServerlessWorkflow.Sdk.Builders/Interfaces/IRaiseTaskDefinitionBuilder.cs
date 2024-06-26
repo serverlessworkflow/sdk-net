@@ -17,6 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build <see cref="RaiseTaskDefinition"/>s
 /// </summary>
 public interface IRaiseTaskDefinitionBuilder
+    : ITaskDefinitionBuilder<IRaiseTaskDefinitionBuilder, RaiseTaskDefinition>
 {
 
     /// <summary>

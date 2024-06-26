@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="ISwitchTaskDefinitionBuilder"/> interface
 /// </summary>
 public class SwitchTaskDefinitionBuilder
-    : TaskDefinitionBuilder<SwitchTaskDefinition>, ISwitchTaskDefinitionBuilder
+    : TaskDefinitionBuilder<ISwitchTaskDefinitionBuilder, SwitchTaskDefinition>, ISwitchTaskDefinitionBuilder
 {
 
     /// <summary>

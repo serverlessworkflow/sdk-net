@@ -20,7 +20,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// </summary>
 /// <param name="functionName">The name of the function to call</param>
 public class CallTaskDefinitionBuilder(string? functionName = null)
-    : TaskDefinitionBuilder<CallTaskDefinition>, ICallTaskDefinitionBuilder
+    : TaskDefinitionBuilder<ICallTaskDefinitionBuilder, CallTaskDefinition>, ICallTaskDefinitionBuilder
 {
 
     /// <summary>

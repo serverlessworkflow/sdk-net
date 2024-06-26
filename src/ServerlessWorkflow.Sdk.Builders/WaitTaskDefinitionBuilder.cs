@@ -18,7 +18,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// </summary>
 /// <param name="duration">The amount of time to wait for</param>
 public class WaitTaskDefinitionBuilder(Duration? duration = null)
-    : TaskDefinitionBuilder<WaitTaskDefinition>, IWaitTaskDefinitionBuilder
+    : TaskDefinitionBuilder<IWaitTaskDefinitionBuilder, WaitTaskDefinition>, IWaitTaskDefinitionBuilder
 {
 
     /// <summary>

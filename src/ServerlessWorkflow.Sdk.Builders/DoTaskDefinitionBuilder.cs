@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="IDoTaskDefinitionBuilder"/> interface
 /// </summary>
 public class DoTaskDefinitionBuilder
-    : TaskDefinitionBuilder<DoTaskDefinition>, IDoTaskDefinitionBuilder
+    : TaskDefinitionBuilder<IDoTaskDefinitionBuilder, DoTaskDefinition>, IDoTaskDefinitionBuilder
 {
 
     /// <summary>

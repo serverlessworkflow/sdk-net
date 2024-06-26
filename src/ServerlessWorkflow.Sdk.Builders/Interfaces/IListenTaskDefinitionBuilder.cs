@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build <see cref="ListenTaskDefinition"/>s
 /// </summary>
 public interface IListenTaskDefinitionBuilder
-    : ITaskDefinitionBuilder<ListenTaskDefinition>
+    : ITaskDefinitionBuilder<IListenTaskDefinitionBuilder, ListenTaskDefinition>
 {
 
     /// <summary>

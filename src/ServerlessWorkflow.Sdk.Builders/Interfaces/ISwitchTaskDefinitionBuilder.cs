@@ -17,6 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build <see cref="SwitchTaskDefinition"/>s
 /// </summary>
 public interface ISwitchTaskDefinitionBuilder
+    : ITaskDefinitionBuilder<ISwitchTaskDefinitionBuilder, SwitchTaskDefinition>
 {
 
     /// <summary>

@@ -17,6 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build <see cref="CallTaskDefinition"/>s
 /// </summary>
 public interface ICallTaskDefinitionBuilder
+    : ITaskDefinitionBuilder<ICallTaskDefinitionBuilder, CallTaskDefinition>
 {
 
     /// <summary>

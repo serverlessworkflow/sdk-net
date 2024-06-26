@@ -31,13 +31,13 @@ public static class WorkflowDefinitionExtensions
     /// <param name="path">The name or path to the task to reference</param>
     /// <param name="parentReference">A reference to the <see cref="TaskDefinition"/>'s parent, if any</param>
     /// <returns>A new <see cref="Uri"/> used to reference the <see cref="TaskDefinition"/></returns>
-    public static Uri BuildReferenceTo(this WorkflowDefinition workflow, TaskDefinition task, string path, Uri? parentReference = null)
+    public static Uri BuildReferenceTo(this WorkflowDefinition workflow, TaskDefinition task, string? path, Uri? parentReference = null)
     {
         ArgumentNullException.ThrowIfNull(workflow);
         ArgumentNullException.ThrowIfNull(task);
-        ArgumentException.ThrowIfNullOrWhiteSpace(path);
+        if (string.IsNullOrWhiteSpace(path)) return parentReference ?? throw new ArgumentNullException(nameof(parentReference), "The parent must be set when the path to the task to execute is null (in case the task is a function)");
         return parentReference == null
-            ? new Uri($"/{nameof(WorkflowDefinition.Do).ToCamelCase()}/{path}", UriKind.Relative)
+            ? new Uri($"/{nameof(WorkflowDefinition.Do).ToCamelCase()}/{workflow.Do.Keys.ToList().IndexOf(path)}/{path}", UriKind.Relative)
             : new Uri($"{parentReference.OriginalString}/{path}", UriKind.Relative);
     }
 

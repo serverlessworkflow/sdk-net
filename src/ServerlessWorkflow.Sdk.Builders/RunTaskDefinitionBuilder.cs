@@ -19,7 +19,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="IRunTaskDefinitionBuilder"/> interface
 /// </summary>
 public class RunTaskDefinitionBuilder
-    : TaskDefinitionBuilder<RunTaskDefinition>, IRunTaskDefinitionBuilder
+    : TaskDefinitionBuilder<IRunTaskDefinitionBuilder, RunTaskDefinition>, IRunTaskDefinitionBuilder
 {
 
     /// <summary>

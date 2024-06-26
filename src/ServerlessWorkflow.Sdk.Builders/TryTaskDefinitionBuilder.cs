@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="ITryTaskDefinitionBuilder"/> interface
 /// </summary>
 public class TryTaskDefinitionBuilder
-    : TaskDefinitionBuilder<TryTaskDefinition>, ITryTaskDefinitionBuilder
+    : TaskDefinitionBuilder<ITryTaskDefinitionBuilder, TryTaskDefinition>, ITryTaskDefinitionBuilder
 {
 
     /// <summary>

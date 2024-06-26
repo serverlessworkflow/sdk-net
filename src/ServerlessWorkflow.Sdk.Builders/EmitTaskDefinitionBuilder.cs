@@ -18,7 +18,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// </summary>
 /// <param name="e">The definition of the event to emit</param>
 public class EmitTaskDefinitionBuilder(EventDefinition? e = null)
-    : IEmitTaskDefinitionBuilder
+    : TaskDefinitionBuilder<IEmitTaskDefinitionBuilder, EmitTaskDefinition>, IEmitTaskDefinitionBuilder
 {
 
     /// <summary>
@@ -45,7 +45,7 @@ public class EmitTaskDefinitionBuilder(EventDefinition? e = null)
     }
 
     /// <inheritdoc/>
-    public virtual EmitTaskDefinition Build()
+    public override EmitTaskDefinition Build()
     {
         if (this.EventDefinition == null) throw new NullReferenceException("The event to emit must be defined");
         return new() 
@@ -56,7 +56,5 @@ public class EmitTaskDefinitionBuilder(EventDefinition? e = null)
             } 
         };
     }
-
-    TaskDefinition ITaskDefinitionBuilder.Build() => this.Build();
 
 }

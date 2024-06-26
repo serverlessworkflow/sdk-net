@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build <see cref="ForkTaskDefinition"/>s
 /// </summary>
 public interface IForkTaskDefinitionBuilder
-    : ITaskDefinitionBuilder<ForkTaskDefinition>
+    : ITaskDefinitionBuilder<IForkTaskDefinitionBuilder, ForkTaskDefinition>
 {
 
     /// <summary>
