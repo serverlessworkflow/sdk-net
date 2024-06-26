@@ -52,12 +52,14 @@ public class WorkflowDefinitionBuilderTests
                         .WithId("fake-client-id")
                         .WithSecret("fake-client-secret")))
             .UseFunction("fakeFunction1", function => function
-                .Function("http")
-                    .With("method", "post")
-                    .With("uri", "https://test.com"))
+                .Call()
+                    .Function("http")
+                        .With("method", "post")
+                        .With("uri", "https://test.com"))
             .UseFunction("fakeFunction2", function => function
-                .Shell()
-                    .WithCommand(@"echo ""Hello, World!"""))
+                .Run()
+                    .Shell()
+                        .WithCommand(@"echo ""Hello, World!"""))
             .UseExtension("fakeLoggingExtension", extension => extension
                 .ExtendAll()
                 .When("fake-expression")

@@ -160,39 +160,20 @@ public class WorkflowDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseFunction(string name, CallTaskDefinition call)
+    public virtual IWorkflowDefinitionBuilder UseFunction(string name, TaskDefinition task)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        ArgumentNullException.ThrowIfNull(call);
+        ArgumentNullException.ThrowIfNull(task);
         this.Components ??= new();
         this.Components.Functions ??= [];
-        this.Components.Functions[name] = call;
+        this.Components.Functions[name] = task;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseFunction(string name, Action<ICallTaskDefinitionBuilder> setup)
+    public virtual IWorkflowDefinitionBuilder UseFunction(string name, Action<IGenericTaskDefinitionBuilder> setup)
     {
-        var builder = new CallTaskDefinitionBuilder();
-        setup(builder);
-        return this.UseFunction(name, builder.Build());
-    }
-
-    /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseFunction(string name, RunTaskDefinition run)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        ArgumentNullException.ThrowIfNull(run);
-        this.Components ??= new();
-        this.Components.Functions ??= [];
-        this.Components.Functions[name] = run;
-        return this;
-    }
-
-    /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseFunction(string name, Action<IRunTaskDefinitionBuilder> setup)
-    {
-        var builder = new RunTaskDefinitionBuilder();
+        var builder = new GenericTaskDefinitionBuilder();
         setup(builder);
         return this.UseFunction(name, builder.Build());
     }
@@ -236,15 +217,24 @@ public class WorkflowDefinitionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IWorkflowDefinitionBuilder Do(string name, TaskDefinition task)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentNullException.ThrowIfNull(task);
+        this.Tasks ??= [];
+        this.Tasks[name] = task;
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual IWorkflowDefinitionBuilder Do(string name, Action<IGenericTaskDefinitionBuilder> setup)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new GenericTaskDefinitionBuilder();
         setup(builder);
-        this.Tasks ??= [];
-        this.Tasks[name] = builder.Build();
-        return this;
+        var task = builder.Build();
+        return this.Do(name, task);
     }
 
     /// <inheritdoc/>

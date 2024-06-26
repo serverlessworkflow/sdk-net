@@ -28,10 +28,4 @@ public interface ISwitchTaskDefinitionBuilder
     /// <returns>The configured <see cref="ISwitchTaskDefinitionBuilder"/></returns>
     ISwitchTaskDefinitionBuilder Case(string name, Action<ISwitchCaseDefinitionBuilder> setup);
 
-    /// <summary>
-    /// Builds the configured <see cref="SwitchTaskDefinition"/>
-    /// </summary>
-    /// <returns>A new <see cref="SwitchTaskDefinition"/></returns>
-    SwitchTaskDefinition Build();
-
 }

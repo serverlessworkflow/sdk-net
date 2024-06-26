@@ -11,9 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-
-using Neuroglia;
-
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
@@ -29,15 +26,24 @@ public class TaskDefinitionMapBuilder
     protected Map<string, TaskDefinition>? Tasks { get; set; }
 
     /// <inheritdoc/>
+    public virtual ITaskDefinitionMapBuilder Do(string name, TaskDefinition task)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentNullException.ThrowIfNull(task);
+        this.Tasks ??= [];
+        this.Tasks[name] = task;
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual ITaskDefinitionMapBuilder Do(string name, Action<IGenericTaskDefinitionBuilder> setup)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new GenericTaskDefinitionBuilder();
         setup(builder);
-        this.Tasks ??= [];
-        this.Tasks[name] = builder.Build();
-        return this;
+        var task = builder.Build();
+        return this.Do(name, task);
     }
 
     /// <inheritdoc/>

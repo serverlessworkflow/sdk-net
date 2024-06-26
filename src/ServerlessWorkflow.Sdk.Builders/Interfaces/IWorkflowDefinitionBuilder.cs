@@ -106,33 +106,17 @@ public interface IWorkflowDefinitionBuilder
     /// Uses the specified function
     /// </summary>
     /// <param name="name">The name of the function to use</param>
-    /// <param name="call">The underlying call task the function performs</param>
+    /// <param name="task">The underlying task the function performs</param>
     /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
-    IWorkflowDefinitionBuilder UseFunction(string name, CallTaskDefinition call);
+    IWorkflowDefinitionBuilder UseFunction(string name, TaskDefinition task);
 
     /// <summary>
     /// Uses the specified function
     /// </summary>
     /// <param name="name">The name of the function to use</param>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup the underlying call task the function performs</param>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the underlying task the function performs</param>
     /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
-    IWorkflowDefinitionBuilder UseFunction(string name, Action<ICallTaskDefinitionBuilder> setup);
-
-    /// <summary>
-    /// Uses the specified function
-    /// </summary>
-    /// <param name="name">The name of the function to use</param>
-    /// <param name="run">The underlying run task the function performs</param>
-    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
-    IWorkflowDefinitionBuilder UseFunction(string name, RunTaskDefinition run);
-
-    /// <summary>
-    /// Uses the specified function
-    /// </summary>
-    /// <param name="name">The name of the function to use</param>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup the underlying run task the function performs</param>
-    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
-    IWorkflowDefinitionBuilder UseFunction(string name, Action<IRunTaskDefinitionBuilder> setup);
+    IWorkflowDefinitionBuilder UseFunction(string name, Action<IGenericTaskDefinitionBuilder> setup);
 
     /// <summary>
     /// Uses the specified retry policy

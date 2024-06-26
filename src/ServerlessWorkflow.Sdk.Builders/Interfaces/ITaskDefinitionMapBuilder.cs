@@ -22,6 +22,14 @@ public interface ITaskDefinitionMapBuilder<TBuilder>
 {
 
     /// <summary>
+    /// Adds a new task with the specified name to the builder.
+    /// </summary>
+    /// <param name="name">The name of the task to add.</param>
+    /// <param name="task">The task to add</param>
+    /// <returns>The current instance of the task definition mapping builder.</returns>
+    TBuilder Do(string name, TaskDefinition task);
+
+    /// <summary>
     /// Adds a new task with the specified name and configuration setup to the builder.
     /// </summary>
     /// <param name="name">The name of the task to add.</param>
