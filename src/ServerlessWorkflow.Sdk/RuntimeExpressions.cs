@@ -29,6 +29,10 @@ public static class RuntimeExpressions
         /// Gets the 'jq' runtime expression language
         /// </summary>
         public const string JQ = "jq";
+        /// <summary>
+        /// Gets the 'js' runtime expression language
+        /// </summary>
+        public const string JavaScript = "js";
 
     }
 
@@ -54,6 +58,10 @@ public static class RuntimeExpressions
         /// Gets the name of the 'index' argument, used to access the index of the current item of the collection being enumerated
         /// </summary>
         public const string Index = "index";
+        /// <summary>
+        /// Gets the name of the 'output' argument, used to access the task's output
+        /// </summary>
+        public const string Output = "output";
         /// <summary>
         /// Gets the name of the 'task' argument
         /// </summary>
