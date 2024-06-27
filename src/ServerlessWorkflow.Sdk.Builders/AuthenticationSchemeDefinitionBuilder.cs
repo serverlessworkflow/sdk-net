@@ -14,35 +14,28 @@
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IBearerAuthenticationSchemeDefinitionBuilder"/> interface
+/// Represents the base class for all <see cref="IAuthenticationSchemeDefinitionBuilder"/> implementations
 /// </summary>
-public class BearerAuthenticationSchemeDefinitionBuilder
-    : AuthenticationSchemeDefinitionBuilder<BearerAuthenticationSchemeDefinition>, IBearerAuthenticationSchemeDefinitionBuilder
+/// <typeparam name="TDefinition">The type of the <see cref="AuthenticationSchemeDefinition"/> to build</typeparam>
+public abstract class AuthenticationSchemeDefinitionBuilder<TDefinition>
+    : IAuthenticationSchemeDefinitionBuilder<TDefinition>
+    where TDefinition : AuthenticationSchemeDefinition
 {
 
     /// <summary>
-    /// Gets/sets the bearer token to use
+    /// Gets the name of the secret to load the authentication scheme definition from
     /// </summary>
-    protected string? Token { get; set; }
+    protected string? Secret { get; private set; }
 
     /// <inheritdoc/>
-    public virtual IBearerAuthenticationSchemeDefinitionBuilder WithToken(string token)
+    public virtual void Use(string secret)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(token);
-        this.Token = token;
-        return this;
+        ArgumentException.ThrowIfNullOrWhiteSpace(secret);
+        this.Secret = secret;
     }
 
     /// <inheritdoc/>
-    public override BearerAuthenticationSchemeDefinition Build()
-    {
-        if (string.IsNullOrWhiteSpace(this.Token)) throw new NullReferenceException("The token must be set");
-        return new()
-        {
-            Use = this.Secret,
-            Token = this.Token
-        };
-    }
+    public abstract TDefinition Build();
 
     AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => this.Build();
 

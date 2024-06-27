@@ -17,7 +17,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="IBasicAuthenticationSchemeDefinitionBuilder"/> interface
 /// </summary>
 public class BasicAuthenticationSchemeDefinitionBuilder
-    : IBasicAuthenticationSchemeDefinitionBuilder
+    : AuthenticationSchemeDefinitionBuilder<BasicAuthenticationSchemeDefinition>, IBasicAuthenticationSchemeDefinitionBuilder
 {
 
     /// <summary>
@@ -47,12 +47,13 @@ public class BasicAuthenticationSchemeDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual BasicAuthenticationSchemeDefinition Build()
+    public override BasicAuthenticationSchemeDefinition Build()
     {
         if (string.IsNullOrWhiteSpace(this.Username)) throw new NullReferenceException("The username must be set");
         if (string.IsNullOrWhiteSpace(this.Password)) throw new NullReferenceException("The password must be set");
         return new()
         {
+            Use = this.Secret,
             Username = this.Username,
             Password = this.Password
         };

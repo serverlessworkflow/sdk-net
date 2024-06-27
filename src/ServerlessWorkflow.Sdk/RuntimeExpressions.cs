@@ -63,6 +63,10 @@ public static class RuntimeExpressions
         /// </summary>
         public const string Output = "output";
         /// <summary>
+        /// Gets the name of the 'secret' argument
+        /// </summary>
+        public const string Secret = "secret";
+        /// <summary>
         /// Gets the name of the 'task' argument
         /// </summary>
         public const string Task = "task";

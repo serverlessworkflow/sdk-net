@@ -19,7 +19,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="IOAuth2AuthenticationSchemeDefinitionBuilder"/> interface
 /// </summary>
 public class OAuth2AuthenticationSchemeDefinitionBuilder
-    : IOAuth2AuthenticationSchemeDefinitionBuilder
+    : AuthenticationSchemeDefinitionBuilder<OAuth2AuthenticationSchemeDefinition>, IOAuth2AuthenticationSchemeDefinitionBuilder
 {
 
     /// <summary>
@@ -147,13 +147,14 @@ public class OAuth2AuthenticationSchemeDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual OAuth2AuthenticationSchemeDefinition Build()
+    public override OAuth2AuthenticationSchemeDefinition Build()
     {
         if (this.Authority == null) throw new NullReferenceException("The authority must be set");
         if (string.IsNullOrWhiteSpace(this.GrantType)) throw new NullReferenceException("The grant type must be set");
         if (this.Client == null) throw new NullReferenceException("The client must be set");
         return new()
         {
+            Use = this.Secret,
             Authority = this.Authority,
             Grant = this.GrantType,
             Client = this.Client,

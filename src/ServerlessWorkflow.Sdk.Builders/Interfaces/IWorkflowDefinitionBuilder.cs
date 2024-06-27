@@ -142,13 +142,6 @@ public interface IWorkflowDefinitionBuilder
     IWorkflowDefinitionBuilder UseSecret(string secret);
 
     /// <summary>
-    /// Uses the specified secrets
-    /// </summary>
-    /// <param name="secrets">A list containing the secrets to use</param>
-    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
-    IWorkflowDefinitionBuilder UseSecrets(params string[] secrets);
-
-    /// <summary>
     /// Builds the configured <see cref="WorkflowDefinition"/>
     /// </summary>
     /// <returns>A new <see cref="WorkflowDefinition"/></returns>

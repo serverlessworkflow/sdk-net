@@ -20,6 +20,12 @@ public interface IAuthenticationSchemeDefinitionBuilder
 {
 
     /// <summary>
+    /// Configures the authentication scheme to load from the specified secret
+    /// </summary>
+    /// <param name="secret">The name of the secret that defines the authentication scheme's definition</param>
+    void Use(string secret);
+
+    /// <summary>
     /// Builds the configured <see cref="AuthenticationSchemeDefinition"/>
     /// </summary>
     /// <returns>A new <see cref="AuthenticationSchemeDefinition"/></returns>
@@ -30,10 +36,10 @@ public interface IAuthenticationSchemeDefinitionBuilder
 /// <summary>
 /// Defines the fundamentals of a service used to builder <see cref="AuthenticationSchemeDefinition"/>s
 /// </summary>
+/// <typeparam name="TDefinition">The type of the <see cref="AuthenticationSchemeDefinition"/> to build</typeparam>
 public interface IAuthenticationSchemeDefinitionBuilder<TDefinition>
     : IAuthenticationSchemeDefinitionBuilder
     where TDefinition : AuthenticationSchemeDefinition
-
 {
 
     /// <summary>

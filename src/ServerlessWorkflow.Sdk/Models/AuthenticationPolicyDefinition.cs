@@ -30,6 +30,12 @@ public record AuthenticationPolicyDefinition
     public virtual string Scheme => this.Basic?.Scheme ?? this.Bearer?.Scheme ?? this.OAuth2?.Scheme ?? throw new NullReferenceException();
 
     /// <summary>
+    /// Gets/sets the name of the top level authentication policy to use, if any
+    /// </summary>
+    [DataMember(Name = "use", Order = 1), JsonPropertyName("use"), JsonPropertyOrder(1), YamlMember(Alias = "use", Order = 1)]
+    public virtual string? Use { get; set; }
+
+    /// <summary>
     /// Gets/sets the `basic` authentication scheme to use, if any
     /// </summary>
     [DataMember(Name = "basic", Order = 1), JsonPropertyName("basic"), JsonPropertyOrder(1), YamlMember(Alias = "basic", Order = 1)]

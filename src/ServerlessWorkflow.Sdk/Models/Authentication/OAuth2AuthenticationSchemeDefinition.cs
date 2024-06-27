@@ -28,21 +28,18 @@ public record OAuth2AuthenticationSchemeDefinition
     /// <summary>
     /// Gets/sets the uri that references the OAUTH2 authority to use
     /// </summary>
-    [Required]
     [DataMember(Name = "authority", Order = 1), JsonPropertyName("authority"), JsonPropertyOrder(1), YamlMember(Alias = "authority", Order = 1)]
     public required virtual Uri Authority { get; set; }
 
     /// <summary>
     /// Gets/sets the grant type to use
     /// </summary>
-    [Required]
     [DataMember(Name = "grant", Order = 2), JsonPropertyName("grant"), JsonPropertyOrder(2), YamlMember(Alias = "grant", Order = 2)]
     public required virtual string Grant { get; set; }
 
     /// <summary>
     /// Gets/sets the definition of the client to use
     /// </summary>
-    [Required]
     [DataMember(Name = "client", Order = 3), JsonPropertyName("client"), JsonPropertyOrder(3), YamlMember(Alias = "client", Order = 3)]
     public required virtual OAuth2AuthenticationClientDefinition Client { get; set; }
 

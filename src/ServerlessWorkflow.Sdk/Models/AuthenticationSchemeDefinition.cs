@@ -27,4 +27,10 @@ public abstract record AuthenticationSchemeDefinition
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
     public abstract string Scheme { get; }
 
+    /// <summary>
+    /// Gets/sets the name of the secret, if any, used to configure the authentication scheme
+    /// </summary>
+    [DataMember(Name = "use", Order = 1), JsonPropertyName("use"), JsonPropertyOrder(1), YamlMember(Alias = "use", Order = 1)]
+    public virtual string? Use { get; set; }
+
 }

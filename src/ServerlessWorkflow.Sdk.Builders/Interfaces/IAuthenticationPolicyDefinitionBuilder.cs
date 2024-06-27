@@ -20,6 +20,12 @@ public interface IAuthenticationPolicyDefinitionBuilder
 {
 
     /// <summary>
+    /// Gets the name of the top-level authentication policy to use
+    /// </summary>
+    /// <param name="policy">The name of the top-level authentication to use</param>
+    void Use(string policy);
+
+    /// <summary>
     /// Configures the policy to use 'Basic' authentication
     /// </summary>
     /// <returns>A new <see cref="IBasicAuthenticationSchemeDefinitionBuilder"/></returns>

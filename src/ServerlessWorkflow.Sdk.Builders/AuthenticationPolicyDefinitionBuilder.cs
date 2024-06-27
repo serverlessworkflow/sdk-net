@@ -21,9 +21,21 @@ public class AuthenticationPolicyDefinitionBuilder
 {
 
     /// <summary>
+    /// Gets/sets the name of the <see cref="AuthenticationPolicyDefinition"/> to use, if any
+    /// </summary>
+    protected string? Policy { get; set; }
+
+    /// <summary>
     /// Gets/sets the <see cref="AuthenticationSchemeDefinition"/> to use
     /// </summary>
     protected IAuthenticationSchemeDefinitionBuilder? SchemeBuilder { get; set; }
+
+    /// <inheritdoc/>
+    public virtual void Use(string policy)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(policy);
+        this.Policy = policy;
+    }
 
     /// <inheritdoc/>
     public virtual IBasicAuthenticationSchemeDefinitionBuilder Basic()
@@ -56,6 +68,7 @@ public class AuthenticationPolicyDefinitionBuilder
         var scheme = this.SchemeBuilder.Build();
         return new()
         {
+            Use = this.Policy,
             Basic = scheme is BasicAuthenticationSchemeDefinition basic ? basic : null,
             Bearer = scheme is BearerAuthenticationSchemeDefinition bearer ? bearer : null,
             OAuth2 = scheme is OAuth2AuthenticationSchemeDefinition oauth2 ? oauth2 : null,

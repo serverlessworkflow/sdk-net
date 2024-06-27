@@ -51,7 +51,7 @@ public record ComponentDefinitionCollection
     public virtual EquatableDictionary<string, RetryPolicyDefinition>? Retries { get; set; }
 
     /// <summary>
-    /// Gets/sets a list containing the names of the secrets to use
+    /// Gets/sets a list containing the workflow's secrets
     /// </summary>
     [DataMember(Name = "secrets", Order = 6), JsonPropertyName("secrets"), JsonPropertyOrder(6), YamlMember(Alias = "secrets", Order = 6)]
     public virtual EquatableList<string>? Secrets { get; set; }
