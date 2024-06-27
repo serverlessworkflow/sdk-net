@@ -63,7 +63,7 @@ public class MapEntryJsonConverter<TKey, TValue> : JsonConverter<MapEntry<TKey, 
         }
         writer.WriteStartObject();
         writer.WritePropertyName(value.Key.ToString()!);
-        writer.WriteRawValue(Neuroglia.Serialization.Json.JsonSerializer.Default.SerializeToText(value.Value));
+        JsonSerializer.Serialize(writer, value.Value, options);
         writer.WriteEndObject();
     }
 
