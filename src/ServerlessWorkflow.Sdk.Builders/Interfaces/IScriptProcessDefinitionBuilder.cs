@@ -50,4 +50,34 @@ public interface IScriptProcessDefinitionBuilder
     /// <returns>The configured <see cref="IScriptProcessDefinitionBuilder"/></returns>
     IScriptProcessDefinitionBuilder WithSource(Action<IExternalResourceDefinitionBuilder> setup);
 
+    /// <summary>
+    /// Adds a new argument to execute the script with
+    /// </summary>
+    /// <param name="name">The name of the argument to use</param>
+    /// <param name="value">The value of the argument to use</param>
+    /// <returns>The configured <see cref="IScriptProcessDefinitionBuilder"/></returns>
+    IScriptProcessDefinitionBuilder WithArgument(string name, object value);
+
+    /// <summary>
+    /// Sets the arguments of the script to execute
+    /// </summary>
+    /// <param name="arguments">A name/value mapping of the arguments to use</param>
+    /// <returns>The configured <see cref="IScriptProcessDefinitionBuilder"/></returns>
+    IScriptProcessDefinitionBuilder WithArguments(IDictionary<string, object> arguments);
+
+    /// <summary>
+    /// Adds the specified environment variable to the process
+    /// </summary>
+    /// <param name="name">The environment variable's name</param>
+    /// <param name="value">The environment variable's value</param>
+    /// <returns>The configured <see cref="IScriptProcessDefinitionBuilder"/></returns>
+    IScriptProcessDefinitionBuilder WithEnvironment(string name, string value);
+
+    /// <summary>
+    /// Sets the process's environment variables
+    /// </summary>
+    /// <param name="environment">A name/value mapping of the environment variables to use</param>
+    /// <returns>The configured <see cref="IScriptProcessDefinitionBuilder"/></returns>
+    IScriptProcessDefinitionBuilder WithEnvironment(IDictionary<string, string> environment);
+
 }

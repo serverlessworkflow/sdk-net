@@ -40,10 +40,15 @@ public record ScriptProcessDefinition
     public virtual ExternalResourceDefinition? Source { get; set; }
 
     /// <summary>
+    /// Gets/sets a key/value mapping of the arguments, if any, to pass to the script to run
+    /// </summary>
+    [DataMember(Name = "arguments", Order = 4), JsonPropertyName("arguments"), JsonPropertyOrder(4), YamlMember(Alias = "arguments", Order = 4)]
+    public virtual EquatableDictionary<string, object>? Arguments { get; set; }
+
+    /// <summary>
     /// Gets/sets a key/value mapping of the environment variables, if any, to use when running the configured process
     /// </summary>
-    [DataMember(Name = "environment", Order = 4), JsonPropertyName("environment"), JsonPropertyOrder(4), YamlMember(Alias = "environment", Order = 4)]
+    [DataMember(Name = "environment", Order = 5), JsonPropertyName("environment"), JsonPropertyOrder(5), YamlMember(Alias = "environment", Order = 5)]
     public virtual EquatableDictionary<string, string>? Environment { get; set; }
-
 
 }

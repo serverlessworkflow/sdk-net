@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Neuroglia;
 using ServerlessWorkflow.Sdk.Models.Processes;
 
 namespace ServerlessWorkflow.Sdk.Builders;
@@ -41,6 +42,16 @@ public class ScriptProcessDefinitionBuilder
     /// Gets/sets the uri that references the script's source.
     /// </summary>
     public Uri? SourceUri { get; set; }
+
+    /// <summary>
+    /// Gets the arguments, if any, of the command to execute
+    /// </summary>
+    protected virtual EquatableDictionary<string, object>? Arguments { get; set; }
+
+    /// <summary>
+    /// Gets/sets the environment variables, if any, of the shell command to execute
+    /// </summary>
+    protected virtual EquatableDictionary<string, string>? Environment { get; set; }
 
     /// <inheritdoc/>
     public virtual IScriptProcessDefinitionBuilder WithLanguage(string language)
@@ -77,6 +88,40 @@ public class ScriptProcessDefinitionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IScriptProcessDefinitionBuilder WithArgument(string name, object value)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        this.Arguments ??= [];
+        this.Arguments[name] = value;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IScriptProcessDefinitionBuilder WithArguments(IDictionary<string, object> arguments)
+    {
+        ArgumentNullException.ThrowIfNull(arguments);
+        this.Arguments = new(arguments);
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IScriptProcessDefinitionBuilder WithEnvironment(string name, string value)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        this.Environment ??= [];
+        this.Environment[name] = value;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IScriptProcessDefinitionBuilder WithEnvironment(IDictionary<string, string> environment)
+    {
+        ArgumentNullException.ThrowIfNull(environment);
+        this.Environment = new(environment);
+        return this;
+    }
+
+    /// <inheritdoc/>
     public override ScriptProcessDefinition Build()
     {
         if (string.IsNullOrWhiteSpace(this.Language)) throw new NullReferenceException("The language in which the script to run is expressed must be set");
@@ -85,6 +130,8 @@ public class ScriptProcessDefinitionBuilder
         {
             Language = this.Language,
             Code = this.Code,
+            Arguments = this.Arguments,
+            Environment = this.Environment
         };
         if(this.Source != null) process.Source = this.Source;
         else if(this.SourceUri != null) process.Source = new() { Uri = this.SourceUri };

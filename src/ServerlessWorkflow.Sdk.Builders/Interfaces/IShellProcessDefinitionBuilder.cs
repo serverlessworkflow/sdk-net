@@ -33,14 +33,14 @@ public interface IShellProcessDefinitionBuilder
     /// Adds a new argument to execute the shell command with
     /// </summary>
     /// <param name="argument">The argument to use</param>
-    /// <returns>The configured <see cref="IContainerProcessDefinitionBuilder"/></returns>
+    /// <returns>The configured <see cref="IShellProcessDefinitionBuilder"/></returns>
     IShellProcessDefinitionBuilder WithArgument(string argument);
 
     /// <summary>
     /// Sets the arguments of the shell command to execute
     /// </summary>
     /// <param name="arguments">A list of the arguments to use</param>
-    /// <returns>The configured <see cref="IContainerProcessDefinitionBuilder"/></returns>
+    /// <returns>The configured <see cref="IShellProcessDefinitionBuilder"/></returns>
     IShellProcessDefinitionBuilder WithArguments(IEnumerable<string> arguments);
 
     /// <summary>
@@ -48,14 +48,14 @@ public interface IShellProcessDefinitionBuilder
     /// </summary>
     /// <param name="name">The environment variable's name</param>
     /// <param name="value">The environment variable's value</param>
-    /// <returns>The configured <see cref="IContainerProcessDefinitionBuilder"/></returns>
+    /// <returns>The configured <see cref="IShellProcessDefinitionBuilder"/></returns>
     IShellProcessDefinitionBuilder WithEnvironment(string name, string value);
 
     /// <summary>
     /// Sets the process's environment variables
     /// </summary>
     /// <param name="environment">A name/value mapping of the environment variables to use</param>
-    /// <returns>The configured <see cref="IContainerProcessDefinitionBuilder"/></returns>
+    /// <returns>The configured <see cref="IShellProcessDefinitionBuilder"/></returns>
     IShellProcessDefinitionBuilder WithEnvironment(IDictionary<string, string> environment);
 
 }
