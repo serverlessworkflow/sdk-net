@@ -43,6 +43,10 @@ public static class RuntimeExpressions
     {
 
         /// <summary>
+        /// Gets the name of the 'runtime' argument, used to access information about the current runtime
+        /// </summary>
+        public const string Runtime = "runtime";
+        /// <summary>
         /// Gets the name of the 'workflow' argument, used to access the current workflow resource
         /// </summary>
         public const string Workflow = "workflow";
