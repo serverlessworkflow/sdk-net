@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<VersionPrefix>1.0.0</VersionPrefix>
-	<VersionSuffix>alpha2.8</VersionSuffix>
+	<VersionSuffix>alpha2.9</VersionSuffix>
 	<AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
 	<FileVersion>$(VersionPrefix)</FileVersion>
 	<NeutralLanguage>en</NeutralLanguage>
@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="4.12.1" />
+    <PackageReference Include="Neuroglia.Serialization.YamlDotNet" Version="4.14.0" />
     <PackageReference Include="Semver" Version="2.3.0" />
   </ItemGroup>
 

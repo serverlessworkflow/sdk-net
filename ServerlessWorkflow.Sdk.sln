@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerlessWorkflow.Sdk.Buil
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerlessWorkflow.Sdk.IO", "src\ServerlessWorkflow.Sdk.IO\ServerlessWorkflow.Sdk.IO.csproj", "{9993989F-B8D6-481C-A59C-A76070CA32F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CloudFlows.Sdk.UnitTests", "tests\ServerlessWorkflow.Sdk.UnitTests\CloudFlows.Sdk.UnitTests.csproj", "{7BFC0DDB-7864-4C5A-AC91-EB7B3E93242E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerlessWorkflow.Sdk.UnitTests", "tests\ServerlessWorkflow.Sdk.UnitTests\ServerlessWorkflow.Sdk.UnitTests.csproj", "{7BFC0DDB-7864-4C5A-AC91-EB7B3E93242E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -33,7 +33,7 @@ public record HttpCallDefinition
     /// </summary>
     [Required]
     [DataMember(Name = "endpoint", Order = 2), JsonPropertyName("endpoint"), JsonPropertyOrder(2), YamlMember(Alias = "endpoint", Order = 2)]
-    public required virtual EndpointDefinition Endpoint { get; set; }
+    public required virtual OneOf<EndpointDefinition, Uri> Endpoint { get; set; }
 
     /// <summary>
     /// Gets/sets a name/value mapping of the headers, if any, of the HTTP request to perform

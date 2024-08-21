@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using ServerlessWorkflow.Sdk.IO;
+using ServerlessWorkflow.Sdk.Models.Calls;
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.IO;
 
