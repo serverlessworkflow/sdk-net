@@ -26,19 +26,9 @@ public class ExternalResourceDefinitionBuilder
     protected virtual string? Name { get; set; }
 
     /// <summary>
-    /// Gets/sets the uri that references the external resource
+    /// Gets/sets the endpoint at which to get the defined resource
     /// </summary>
-    protected virtual Uri? Uri { get; set; }
-
-    /// <summary>
-    /// Gets/sets a reference to the authentication policy to use
-    /// </summary>
-    protected virtual Uri? AuthenticationReference { get; set; }
-
-    /// <summary>
-    /// Gets/sets the authentication policy to use
-    /// </summary>
-    protected virtual AuthenticationPolicyDefinition? Authentication { get; set; }
+    protected virtual OneOf<EndpointDefinition, Uri>? Endpoint { get; set; }
 
     /// <inheritdoc/>
     public virtual IExternalResourceDefinitionBuilder WithName(string name)
@@ -48,53 +38,33 @@ public class ExternalResourceDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IExternalResourceDefinitionBuilder WithUri(Uri uri)
+    public virtual IExternalResourceDefinitionBuilder WithEndpoint(OneOf<EndpointDefinition, Uri> endpoint)
     {
-        ArgumentNullException.ThrowIfNull(uri);
-        this.Uri = uri;
+        ArgumentNullException.ThrowIfNull(endpoint);
+        this.Endpoint = endpoint;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IExternalResourceDefinitionBuilder UseAuthentication(Uri reference)
-    {
-        ArgumentNullException.ThrowIfNull(reference);
-        this.AuthenticationReference = reference;
-        return this;
-    }
-
-    /// <inheritdoc/>
-    public virtual IExternalResourceDefinitionBuilder UseAuthentication(AuthenticationPolicyDefinition authentication)
-    {
-        ArgumentNullException.ThrowIfNull(authentication);
-        this.Authentication = authentication;
-        return this;
-    }
-
-    /// <inheritdoc/>
-    public virtual IExternalResourceDefinitionBuilder UseAuthentication(Action<IAuthenticationPolicyDefinitionBuilder> setup)
+    public virtual IExternalResourceDefinitionBuilder WithEndpoint(Action<IEndpointDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
-        var builder = new AuthenticationPolicyDefinitionBuilder();
+        var builder = new EndpointDefinitionBuilder();
         setup(builder);
-        this.Authentication = builder.Build();
+        this.Endpoint = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
     public virtual ExternalResourceDefinition Build()
     {
-        if (this.Uri == null) throw new NullReferenceException("The uri that references the external resource must be set");
-        var reference = new ExternalResourceDefinition()
+        if (this.Endpoint == null) throw new NullReferenceException("The endpoint at which to get the defined resource must be set");
+        var externalResource = new ExternalResourceDefinition()
         {
             Name = this.Name,
-            Uri = this.Uri
+            Endpoint = this.Endpoint
         };
-        if (this.AuthenticationReference == null) reference.Authentication = new() { Ref = this.AuthenticationReference };
-        else if (this.Authentication != null) reference.Authentication = this.Authentication;
-        return reference;
+        return externalResource;
     }
-
-    EndpointDefinition IEndpointDefinitionBuilder<IExternalResourceDefinitionBuilder>.Build() => this.Build();
 
 }

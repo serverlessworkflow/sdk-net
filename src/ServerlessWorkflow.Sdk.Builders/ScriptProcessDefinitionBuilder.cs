@@ -134,7 +134,7 @@ public class ScriptProcessDefinitionBuilder
             Environment = this.Environment
         };
         if(this.Source != null) process.Source = this.Source;
-        else if(this.SourceUri != null) process.Source = new() { Uri = this.SourceUri };
+        else if(this.SourceUri != null) process.Source = new() { Endpoint = this.SourceUri };
         return process;
     }
 

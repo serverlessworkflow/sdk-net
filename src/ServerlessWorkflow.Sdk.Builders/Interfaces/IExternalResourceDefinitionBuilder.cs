@@ -17,7 +17,6 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build <see cref="ExternalResourceDefinition"/>s
 /// </summary>
 public interface IExternalResourceDefinitionBuilder
-    : IEndpointDefinitionBuilder<IExternalResourceDefinitionBuilder>
 {
 
     /// <summary>
@@ -28,9 +27,23 @@ public interface IExternalResourceDefinitionBuilder
     IExternalResourceDefinitionBuilder WithName(string name);
 
     /// <summary>
+    /// Configures the endpoint at which to get the defined resource
+    /// </summary>
+    /// <param name="endpoint">The endpoint at which to get the defined resource</param>
+    /// <returns>The configured <see cref="IExternalResourceDefinitionBuilder"/></returns>
+    IExternalResourceDefinitionBuilder WithEndpoint(OneOf<EndpointDefinition, Uri> endpoint);
+
+    /// <summary>
+    /// Configures the endpoint at which to get the defined resource.
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the endpoint at which to get the defined resource.</param>
+    /// <returns>The configured <see cref="IExternalResourceDefinitionBuilder"/></returns>
+    IExternalResourceDefinitionBuilder WithEndpoint(Action<IEndpointDefinitionBuilder> setup);
+
+    /// <summary>
     /// Builds the configured <see cref="ExternalResourceDefinition"/>
     /// </summary>
     /// <returns>A new <see cref="ExternalResourceDefinition"/></returns>
-    new ExternalResourceDefinition Build();
+    ExternalResourceDefinition Build();
 
 }
