@@ -29,8 +29,28 @@ public record ExternalResourceDefinition
     /// <summary>
     /// Gets/sets the endpoint at which to get the defined resource
     /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual EndpointDefinition Endpoint
+    {
+        get => this.EndpointValue.T1Value ?? new() { Uri = this.EndpointUri };
+        set => this.EndpointValue = value;
+    }
+
+    /// <summary>
+    /// Gets/sets the endpoint at which to get the defined resource
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual Uri EndpointUri
+    {
+        get => this.EndpointValue.T1Value?.Uri ?? this.EndpointValue.T2Value!;
+        set => this.EndpointValue = value;
+    }
+
+    /// <summary>
+    /// Gets/sets the endpoint at which to get the defined resource
+    /// </summary>
     [Required]
-    [DataMember(Name = "endpoint", Order = 2), JsonPropertyName("endpoint"), JsonPropertyOrder(2), YamlMember(Alias = "endpoint", Order = 2)]
-    public virtual OneOf<EndpointDefinition, Uri> Endpoint { get; set; } = null!;
+    [DataMember(Name = "endpoint", Order = 2), JsonInclude, JsonPropertyName("endpoint"), JsonPropertyOrder(2), YamlMember(Alias = "endpoint", Order = 2)]
+    protected virtual OneOf<EndpointDefinition, Uri> EndpointValue { get; set; } = null!;
 
 }
