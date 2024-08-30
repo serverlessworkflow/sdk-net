@@ -42,10 +42,10 @@ public class ListenTaskDefinitionBuilder
     public override ListenTaskDefinition Build()
     {
         if (this.Listener == null) throw new NullReferenceException("The listener must be set");
-        return new()
+        return this.Configure(new()
         {
             Listen = this.Listener
-        };
+        });
     }
 
 }

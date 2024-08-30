@@ -64,7 +64,7 @@ public class RunTaskDefinitionBuilder
     {
         if (this.ProcessBuilder == null) throw new NullReferenceException("The process to run must be set");
         var process = this.ProcessBuilder.Build();
-        return new()
+        return this.Configure(new()
         {
             Run = new()
             {
@@ -73,7 +73,7 @@ public class RunTaskDefinitionBuilder
                 Shell = process is ShellProcessDefinition shell ? shell : null,
                 Workflow = process is WorkflowProcessDefinition workflow ? workflow : null
             }
-        };
+        });
     }
 
 }

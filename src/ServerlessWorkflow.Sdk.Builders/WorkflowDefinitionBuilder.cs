@@ -24,6 +24,11 @@ public class WorkflowDefinitionBuilder
 {
 
     /// <summary>
+    /// Gets/sets the version of the DSL used to define the workflow
+    /// </summary>
+    protected string Dsl { get; set; } = DslVersion.V1;
+
+    /// <summary>
     /// Gets/sets the workflow's namespace
     /// </summary>
     protected string? Namespace { get; set; }
@@ -54,6 +59,11 @@ public class WorkflowDefinitionBuilder
     protected EquatableDictionary<string, string>? Tags { get; set; }
 
     /// <summary>
+    /// Gets/sets the workflow's timeout, if any
+    /// </summary>
+    protected OneOf<TimeoutDefinition, string>? Timeout { get; set; }
+
+    /// <summary>
     /// Gets/sets a name/value mapping of the workflow's reusable components
     /// </summary>
     protected ComponentDefinitionCollection? Components { get; set; }
@@ -62,6 +72,15 @@ public class WorkflowDefinitionBuilder
     /// Gets/sets a name/value mapping of the tasks the workflow is made out of
     /// </summary>
     protected Map<string, TaskDefinition>? Tasks { get; set; }
+
+    /// <inheritdoc/>
+    public virtual IWorkflowDefinitionBuilder UseDsl(string version)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(version);
+        if (!SemVersion.TryParse(version, SemVersionStyles.Strict, out _)) throw new ArgumentException($"The specified value '{version}' is not a valid semantic version (SemVer 2.0)", nameof(version));
+        this.Dsl = version;
+        return this;
+    }
 
     /// <inheritdoc/>
     public virtual IWorkflowDefinitionBuilder WithNamespace(string @namespace)
@@ -118,6 +137,32 @@ public class WorkflowDefinitionBuilder
     {
         ArgumentNullException.ThrowIfNull(arguments);
         this.Tags = new(arguments);
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IWorkflowDefinitionBuilder WithTimeout(string name)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        this.Timeout = name;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IWorkflowDefinitionBuilder WithTimeout(TimeoutDefinition timeout)
+    {
+        ArgumentNullException.ThrowIfNull(timeout);
+        this.Timeout = timeout;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IWorkflowDefinitionBuilder WithTimeout(Action<ITimeoutDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new TimeoutDefinitionBuilder();
+        setup(builder);
+        this.Timeout = builder.Build();
         return this;
     }
 
@@ -240,14 +285,15 @@ public class WorkflowDefinitionBuilder
     /// <inheritdoc/>
     public virtual WorkflowDefinition Build()
     {
+        if (string.IsNullOrWhiteSpace(this.Dsl)) throw new NullReferenceException("The workflow DSL must be set");
         if (string.IsNullOrWhiteSpace(this.Name)) throw new NullReferenceException("The workflow name must be set");
         if (string.IsNullOrWhiteSpace(this.Version)) throw new NullReferenceException("The workflow version must be set");
         if (this.Tasks == null || this.Tasks.Count < 1) throw new NullReferenceException("The workflow must define at least one task");
-        return new()
+        var definition =  new WorkflowDefinition()
         {
             Document = new()
             {
-                Dsl = DslVersion.V010,
+                Dsl = this.Dsl,
                 Namespace = string.IsNullOrWhiteSpace(this.Namespace) ? WorkflowDefinitionMetadata.DefaultNamespace : this.Namespace,
                 Name = this.Name,
                 Version = this.Version,
@@ -258,6 +304,12 @@ public class WorkflowDefinitionBuilder
             Use = this.Components,
             Do = this.Tasks
         };
+        if(this.Timeout != null)
+        {
+            if (this.Timeout.T1Value != null) definition.Timeout = this.Timeout.T1Value;
+            else definition.TimeoutReference = this.Timeout.T2Value;
+        }
+        return definition;
     }
 
     Map<string, TaskDefinition> ITaskDefinitionMapBuilder<IWorkflowDefinitionBuilder>.Build() => this.Tasks!;

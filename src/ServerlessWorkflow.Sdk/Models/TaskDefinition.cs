@@ -59,7 +59,7 @@ public abstract record TaskDefinition
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
     public virtual TimeoutDefinition? Timeout
     {
-        get => this.TimeoutValue.T1Value;
+        get => this.TimeoutValue?.T1Value;
         set
         {
             ArgumentNullException.ThrowIfNull(value);
@@ -73,7 +73,7 @@ public abstract record TaskDefinition
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
     public virtual string? TimeoutReference
     {
-        get => this.TimeoutValue.T2Value;
+        get => this.TimeoutValue?.T2Value;
         set
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -85,7 +85,7 @@ public abstract record TaskDefinition
     /// Gets/sets the task's timeout, if any
     /// </summary>
     [DataMember(Name = "timeout", Order = 13), JsonPropertyName("timeout"), JsonPropertyOrder(13), YamlMember(Alias = "timeout", Order = 13)]
-    protected virtual OneOf<TimeoutDefinition, string> TimeoutValue { get; set; } = null!;
+    protected virtual OneOf<TimeoutDefinition, string>? TimeoutValue { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the flow directive to be performed upon completion of the task

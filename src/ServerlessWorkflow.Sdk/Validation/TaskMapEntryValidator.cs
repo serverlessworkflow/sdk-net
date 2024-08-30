@@ -30,7 +30,13 @@ public class TaskMapEntryValidator
         this.Components = components;
         this.Tasks = tasks;
         this.RuleFor(t => t.Value)
-            .SetValidator(t => new TaskDefinitionValidator(this.ServiceProvider, this.Components, this.Tasks));
+            .Custom((value, context) =>
+            {
+                var key = context.InstanceToValidate.Key;
+                var validator = new TaskDefinitionValidator(serviceProvider, components, tasks);
+                var validationResult = validator.Validate(value);
+                foreach (var error in validationResult.Errors) context.AddFailure($"{key}.{error.PropertyName}", error.ErrorMessage);
+            });
     }
 
     /// <summary>

@@ -11,12 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Neuroglia.Serialization;
 using Neuroglia.Serialization.Yaml;
+using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Serialization.Yaml;
+using ServerlessWorkflow.Sdk.Validation;
 
-namespace ServerlessWorkflow.Sdk.IO;
+namespace ServerlessWorkflow.Sdk;
 
 /// <summary>
 /// Defines extensions for <see cref="IServiceCollection"/>s
@@ -29,8 +32,9 @@ public static class IServiceCollectionExtensions
     /// </summary>
     /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddServerlessWorkflowIO(this IServiceCollection services) 
+    public static IServiceCollection AddServerlessWorkflowValidation(this IServiceCollection services) 
     {
+        services.AddHttpClient();
         services.AddJsonSerializer();
         services.AddYamlDotNetSerializer(options =>
         {
@@ -50,8 +54,10 @@ public static class IServiceCollectionExtensions
             options.Serializer.WithTypeConverter(mapEntryConverter);
             options.Serializer.WithTypeConverter(new OneOfConverter());
         });
-        services.AddSingleton<IWorkflowDefinitionReader, WorkflowDefinitionReader>();
-        services.AddSingleton<IWorkflowDefinitionWriter, WorkflowDefinitionWriter>();
+        services.AddSingleton<IWorkflowDefinitionValidator, WorkflowDefinitionValidator>();
+        services.AddValidatorsFromAssemblyContaining<WorkflowDefinition>();
+        var defaultPropertyNameResolver = ValidatorOptions.Global.PropertyNameResolver;
+        ValidatorOptions.Global.PropertyNameResolver = (type, member, lambda) => member == null ? defaultPropertyNameResolver(type, member, lambda) : member.Name.ToCamelCase();
         return services;
     }
 

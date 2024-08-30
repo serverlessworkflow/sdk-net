@@ -45,7 +45,7 @@ public record WorkflowDefinition
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
     public virtual TimeoutDefinition? Timeout
     {
-        get => this.TimeoutValue.T1Value;
+        get => this.TimeoutValue?.T1Value;
         set
         {
             ArgumentNullException.ThrowIfNull(value);
@@ -59,7 +59,7 @@ public record WorkflowDefinition
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
     public virtual string? TimeoutReference
     {
-        get => this.TimeoutValue.T2Value;
+        get => this.TimeoutValue?.T2Value;
         set
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(value);
@@ -71,7 +71,7 @@ public record WorkflowDefinition
     /// Gets/sets the workflow's timeout, if any
     /// </summary>
     [DataMember(Name = "timeout", Order = 4), JsonPropertyName("timeout"), JsonPropertyOrder(4), YamlMember(Alias = "timeout", Order = 4)]
-    protected virtual OneOf<TimeoutDefinition, string> TimeoutValue { get; set; } = null!;
+    protected virtual OneOf<TimeoutDefinition, string>? TimeoutValue { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the workflow's output definition, if any

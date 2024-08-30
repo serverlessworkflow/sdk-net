@@ -39,10 +39,10 @@ public class DoTaskDefinitionBuilder
     public override DoTaskDefinition Build()
     {
         if (this.Tasks == null || this.Tasks.Count < 2) throw new NullReferenceException("The execution strategy must define at least two subtasks");
-        return new()
+        return this.Configure(new()
         {
             Do = this.Tasks
-        };
+        });
     }
 
 }

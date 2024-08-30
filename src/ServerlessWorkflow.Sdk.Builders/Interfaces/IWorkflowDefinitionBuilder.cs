@@ -21,6 +21,13 @@ public interface IWorkflowDefinitionBuilder
 {
 
     /// <summary>
+    /// Sets the semantic version of the Serverless Workflow DSL used to define the workflow
+    /// </summary>
+    /// <param name="version">The semantic version of the Serverless Workflow DSL used to define the workflow</param>
+    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
+    IWorkflowDefinitionBuilder UseDsl(string version);
+
+    /// <summary>
     /// Sets the workflow's namespace
     /// </summary>
     /// <param name="namespace">The workflow's namespace</param>
@@ -60,15 +67,36 @@ public interface IWorkflowDefinitionBuilder
     /// </summary>
     /// <param name="name">The tag's name</param>
     /// <param name="value">The tag's value</param>
-    /// <returns>The configured <see cref="ICallTaskDefinitionBuilder"/></returns>
+    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
     IWorkflowDefinitionBuilder WithTag(string name, string value);
 
     /// <summary>
     /// Sets the tags of the workflow
     /// </summary>
     /// <param name="arguments">A name/value mapping of the workflow's tags</param>
-    /// <returns>The configured <see cref="ICallTaskDefinitionBuilder"/></returns>
+    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
     IWorkflowDefinitionBuilder WithTag(IDictionary<string, string> arguments);
+
+    /// <summary>
+    /// Sets the workflow's timeout
+    /// </summary>
+    /// <param name="name">The name of the workflow's timeout</param>
+    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
+    IWorkflowDefinitionBuilder WithTimeout(string name);
+
+    /// <summary>
+    /// Sets the workflow's timeout
+    /// </summary>
+    /// <param name="timeout">The workflow's timeout</param>
+    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
+    IWorkflowDefinitionBuilder WithTimeout(TimeoutDefinition timeout);
+
+    /// <summary>
+    /// Sets the workflow's timeout
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the workflow's timeout</param>
+    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
+    IWorkflowDefinitionBuilder WithTimeout(Action<ITimeoutDefinitionBuilder> setup);
 
     /// <summary>
     /// Uses the specified authentication policy

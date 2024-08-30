@@ -45,9 +45,9 @@ public class SetTaskDefinitionBuilder(IDictionary<string, object>? variables = n
     }
 
     /// <inheritdoc/>
-    public override SetTaskDefinition Build() => new()
+    public override SetTaskDefinition Build() => this.Configure(new()
     {
         Set = this.Variables
-    };
+    });
 
 }

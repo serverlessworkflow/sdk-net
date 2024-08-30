@@ -11,24 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace ServerlessWorkflow.Sdk;
+namespace ServerlessWorkflow.Sdk.Validation;
 
 /// <summary>
-/// Exposes supported Serverless Workflow DSL versions
+/// Defines the fundamentals of a validation attempt
 /// </summary>
-public static class DslVersion
+public interface IValidationResult
 {
+
     /// <summary>
-    /// Gets the Serverless Workflow DSL version '1.0.0-alpha1'
+    /// Gets a boolean indicating whether or not the workflow definition is valid
     /// </summary>
-    public const string V1Alpha1 = "1.0.0-alpha1";
+    bool IsValid { get; }
+
     /// <summary>
-    /// Gets the Serverless Workflow DSL version '1.0.0-alpha2'
+    /// Gets an <see cref="IReadOnlyCollection{T}"/> containing the errors, if any, that have occurred during validation
     /// </summary>
-    public const string V1Alpha2 = "1.0.0-alpha2";
-    /// <summary>
-    /// Gets the Serverless Workflow DSL version '1.0.0'
-    /// </summary>
-    public const string V1 = "1.0.0";
+    IReadOnlyCollection<ValidationError>? Errors { get; }
 
 }

@@ -13,6 +13,7 @@
 
 using FluentValidation;
 using ServerlessWorkflow.Sdk.Models;
+using ServerlessWorkflow.Sdk.Properties;
 
 namespace ServerlessWorkflow.Sdk.Validation;
 
@@ -31,7 +32,9 @@ public class SwitchCaseDefinitionValidator
         this.Tasks = tasks;
         this.RuleFor(c => c.Value.Then)
             .Must(ReferenceAnExistingTask)
-            .When(NotAFlowDirective);
+            .When(NotAFlowDirective)
+            .WithName(c => c.Key)
+            .WithMessage(ValidationErrors.UndefinedTask);
     }
 
     /// <summary>
@@ -54,7 +57,7 @@ public class SwitchCaseDefinitionValidator
     /// </summary>
     /// <param name="name">The name of the task to check</param>
     /// <returns>A boolean indicating whether or not the specified task is defined in the actual scope</returns>
-    protected virtual bool ReferenceAnExistingTask(string? name) => string.IsNullOrWhiteSpace(name) || this.Tasks == null ? false : this.Tasks.ContainsKey(name);
+    protected virtual bool ReferenceAnExistingTask(string? name) => !string.IsNullOrWhiteSpace(name) && this.Tasks != null && this.Tasks.ContainsKey(name);
 
     /// <summary>
     /// Determines whether or not the case's then is a flow directive
@@ -63,9 +66,9 @@ public class SwitchCaseDefinitionValidator
     /// <returns>A boolean indicating whether or not the case's then is a flow directive</returns>
     protected virtual bool NotAFlowDirective(MapEntry<string, SwitchCaseDefinition> @case)
     {
-        return @case.Then switch
+        return @case.Value.Then switch
         {
-            FlowDirective.Continue or FlowDirective.End or FlowDirective.End => false,
+            null or "" or FlowDirective.Continue or FlowDirective.End or FlowDirective.End => false,
             _ => true
         };
     }

@@ -11,19 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Models;
-
 namespace ServerlessWorkflow.Sdk.Validation;
 
 /// <summary>
-/// Defines the fundamentals of an object used to describe a <see cref="WorkflowDefinition"/>'s validation results
+/// Represents the result of a validation attempt
 /// </summary>
-public interface IWorkflowValidationResult
+[DataContract]
+public record ValidationResult
+    : IValidationResult
 {
 
-    /// <summary>
-    /// Gets a boolean indicating whether or not the <see cref="WorkflowDefinition"/> is valid
-    /// </summary>
-    bool IsValid { get; }
+    /// <inheritdoc/>
+    [DataMember(Name = "isValid", Order = 1), JsonPropertyName("isValid"), JsonPropertyOrder(1), YamlMember(Alias = "isValid", Order = 1)]
+    public virtual bool IsValid => this.Errors?.Count < 1;
+
+    /// <inheritdoc/>
+    [DataMember(Name = "errors", Order = 2), JsonPropertyName("errors"), JsonPropertyOrder(2), YamlMember(Alias = "errors", Order = 2)]
+    public virtual IReadOnlyCollection<ValidationError>? Errors { get; set; }
 
 }

@@ -48,13 +48,13 @@ public class EmitTaskDefinitionBuilder(EventDefinition? e = null)
     public override EmitTaskDefinition Build()
     {
         if (this.EventDefinition == null) throw new NullReferenceException("The event to emit must be defined");
-        return new() 
+        return this.Configure(new() 
         { 
             Emit = new() 
             { 
                 Event = this.EventDefinition 
             } 
-        };
+        });
     }
 
 }

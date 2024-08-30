@@ -11,37 +11,46 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Xml;
+
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IWaitTaskDefinitionBuilder"/> interface
+/// Represents the default implementation of the <see cref="ITimeoutDefinitionBuilder"/> interface
 /// </summary>
-/// <param name="duration">The amount of time to wait for</param>
-public class WaitTaskDefinitionBuilder(Duration? duration = null)
-    : TaskDefinitionBuilder<IWaitTaskDefinitionBuilder, WaitTaskDefinition>, IWaitTaskDefinitionBuilder
+public class TimeoutDefinitionBuilder
+    : ITimeoutDefinitionBuilder
 {
 
     /// <summary>
-    /// Gets/sets the amount of time to wait for
+    /// Gets/sets the duration after which to timeout
     /// </summary>
-    protected Duration? Duration { get; set; } = duration;
+    protected Duration? AfterValue { get; set; }
 
     /// <inheritdoc/>
-    public virtual IWaitTaskDefinitionBuilder For(Duration duration)
+    public virtual ITimeoutDefinitionBuilder After(string duration)
     {
-        ArgumentNullException.ThrowIfNull(duration);
-        this.Duration = duration;
+        ArgumentException.ThrowIfNullOrWhiteSpace(duration);
+        this.AfterValue = XmlConvert.ToTimeSpan(duration);
         return this;
     }
 
     /// <inheritdoc/>
-    public override WaitTaskDefinition Build()
+    public virtual ITimeoutDefinitionBuilder After(Duration duration)
     {
-        if (this.Duration == null) throw new NullReferenceException("The amount of time to wait for must be set");
-        return this.Configure(new()
+        ArgumentNullException.ThrowIfNull(duration);
+        this.AfterValue = duration;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TimeoutDefinition Build()
+    {
+        if (this.AfterValue == null) throw new NullReferenceException("The duration after which to timeout must be set");
+        return new()
         {
-            Wait = this.Duration
-        });
+            After = this.AfterValue
+        };
     }
 
 }

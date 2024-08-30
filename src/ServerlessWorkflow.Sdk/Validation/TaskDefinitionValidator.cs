@@ -14,6 +14,7 @@
 using FluentValidation;
 using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Models.Tasks;
+using ServerlessWorkflow.Sdk.Properties;
 
 namespace ServerlessWorkflow.Sdk.Validation;
 
@@ -32,10 +33,12 @@ public class TaskDefinitionValidator
         this.Tasks = tasks;
         this.RuleFor(t => t.Then)
             .Must(ReferenceAnExistingTask)
-            .When(NotAFlowDirective);
+            .When(NotAFlowDirective)
+            .WithMessage(ValidationErrors.UndefinedTask);
         this.RuleFor(t => t.TimeoutReference!)
             .Must(ReferenceAnExistingTimeout)
-            .When(t => !string.IsNullOrWhiteSpace(t.TimeoutReference));
+            .When(t => !string.IsNullOrWhiteSpace(t.TimeoutReference))
+            .WithMessage(ValidationErrors.UndefinedTimeout);
         this.When(t => t is CallTaskDefinition, () =>
         {
             this.RuleFor(t => (CallTaskDefinition)t)
@@ -88,7 +91,7 @@ public class TaskDefinitionValidator
     /// </summary>
     /// <param name="name">The name of the task to check</param>
     /// <returns>A boolean indicating whether or not the specified task is defined in the actual scope</returns>
-    protected virtual bool ReferenceAnExistingTask(string? name) => string.IsNullOrWhiteSpace(name) || this.Tasks == null ? false : this.Tasks.ContainsKey(name);
+    protected virtual bool ReferenceAnExistingTask(string? name) => !string.IsNullOrWhiteSpace(name) && this.Tasks != null && this.Tasks.ContainsKey(name);
 
     /// <summary>
     /// Determines whether or not the task's then is a flow directive
@@ -99,7 +102,7 @@ public class TaskDefinitionValidator
     {
         return task.Then switch
         {
-            FlowDirective.Continue or FlowDirective.End or FlowDirective.End => false,
+            null or "" or FlowDirective.Continue or FlowDirective.End or FlowDirective.End => false,
             _ => true
         };
     }

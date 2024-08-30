@@ -54,11 +54,11 @@ public class TryTaskDefinitionBuilder
     {
         if (this.TryTasks == null || this.TryTasks.Count < 1) throw new NullReferenceException("The task to try must be set");
         if (this.ErrorCatcher == null) throw new NullReferenceException("The catch clause must be set");
-        return new()
+        return this.Configure(new()
         {
             Try = this.TryTasks,
             Catch = this.ErrorCatcher
-        };
+        });
     }
 
 }

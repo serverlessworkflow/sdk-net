@@ -30,6 +30,11 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     protected string? IfExpression { get; set; }
 
     /// <summary>
+    /// Gets/sets the task's timeout, if any
+    /// </summary>
+    protected OneOf<TimeoutDefinition, string>? Timeout { get; set; }
+
+    /// <summary>
     /// Gets/sets the flow directive, if any, used to then execute
     /// </summary>
     protected string? ThenDirective { get; set; }
@@ -39,6 +44,32 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(condition);
         this.IfExpression = condition;
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder WithTimeout(string name)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        this.Timeout = name;
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder WithTimeout(TimeoutDefinition timeout)
+    {
+        ArgumentNullException.ThrowIfNull(timeout);
+        this.Timeout = timeout;
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder WithTimeout(Action<ITimeoutDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new TimeoutDefinitionBuilder();
+        setup(builder);
+        this.Timeout = builder.Build();
         return (TBuilder)(object)this;
     }
 
@@ -58,6 +89,11 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     protected virtual TDefinition Configure(TDefinition definition)
     {
         definition.If = this.IfExpression;
+        if (this.Timeout != null)
+        {
+            if (this.Timeout.T1Value != null) definition.Timeout = this.Timeout.T1Value;
+            else definition.TimeoutReference = this.Timeout.T2Value;
+        }
         definition.Then = this.ThenDirective;
         return definition;
     }

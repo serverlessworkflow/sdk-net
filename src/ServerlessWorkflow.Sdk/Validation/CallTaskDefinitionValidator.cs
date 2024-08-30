@@ -17,6 +17,7 @@ using Neuroglia.Serialization;
 using ServerlessWorkflow.Sdk.Models;
 using ServerlessWorkflow.Sdk.Models.Calls;
 using ServerlessWorkflow.Sdk.Models.Tasks;
+using ServerlessWorkflow.Sdk.Properties;
 
 namespace ServerlessWorkflow.Sdk.Validation;
 
@@ -34,7 +35,8 @@ public class CallTaskDefinitionValidator
         this.Components = components;
         this.RuleFor(c => c.Call)
             .Must(ReferenceAnExistingFunction)
-            .When(c => !Uri.TryCreate(c.Call, UriKind.Absolute, out _));
+            .When(c => !Uri.TryCreate(c.Call, UriKind.Absolute, out _))
+            .WithMessage(ValidationErrors.UndefinedFunction);
         this.When(c => c.Call == Function.AsyncApi, () =>
         {
             this.RuleFor(c => (AsyncApiCallDefinition)this.JsonSerializer.Convert(c.With, typeof(AsyncApiCallDefinition))!)

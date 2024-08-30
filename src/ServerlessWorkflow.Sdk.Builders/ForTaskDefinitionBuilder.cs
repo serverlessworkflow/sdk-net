@@ -80,7 +80,7 @@ public class ForTaskDefinitionBuilder
         if (string.IsNullOrWhiteSpace(this.EachVariableName)) throw new NullReferenceException("The variable name used to store the iterated items must be set");
         if (string.IsNullOrWhiteSpace(this.InExpression)) throw new NullReferenceException("The runtime expression used to resolve the collection to iterate must be set");
         if (this.Tasks == null || this.Tasks.Count < 1) throw new NullReferenceException("The task to perform at each iteration must be set");
-        return new()
+        return this.Configure(new()
         {
             For = new()
             {
@@ -89,7 +89,7 @@ public class ForTaskDefinitionBuilder
                 At = this.AtVariableName
             },
             Do = this.Tasks
-        };
+        });
     }
 
 }

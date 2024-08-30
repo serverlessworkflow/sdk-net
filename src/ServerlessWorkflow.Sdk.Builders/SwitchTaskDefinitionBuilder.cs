@@ -38,9 +38,9 @@ public class SwitchTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public override SwitchTaskDefinition Build() => new()
+    public override SwitchTaskDefinition Build() => this.Configure(new()
     {
         Switch = this.Cases
-    };
+    });
 
 }

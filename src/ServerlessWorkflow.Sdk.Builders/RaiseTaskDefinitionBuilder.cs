@@ -47,13 +47,13 @@ public class RaiseTaskDefinitionBuilder(ErrorDefinition? errorDefinition = null)
     public override RaiseTaskDefinition Build()
     {
         if (this.ErrorDefinition == null) throw new NullReferenceException("The error to raise must be set");
-        return new() 
+        return this.Configure(new() 
         { 
             Raise = new() 
             { 
                 Error = this.ErrorDefinition 
             } 
-        };
+        });
     }
 
 }

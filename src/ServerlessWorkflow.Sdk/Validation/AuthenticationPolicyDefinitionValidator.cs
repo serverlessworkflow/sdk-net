@@ -13,6 +13,7 @@
 
 using FluentValidation;
 using ServerlessWorkflow.Sdk.Models;
+using ServerlessWorkflow.Sdk.Properties;
 
 namespace ServerlessWorkflow.Sdk.Validation;
 
@@ -30,25 +31,32 @@ public class AuthenticationPolicyDefinitionValidator
         this.Components = components;
         this.RuleFor(auth => auth.Use!)
             .Must(ReferenceAnExistingAuthentication)
-            .When(auth => !string.IsNullOrWhiteSpace(auth.Use));
+            .When(auth => !string.IsNullOrWhiteSpace(auth.Use))
+            .WithMessage(ValidationErrors.UndefinedAuthenticationPolicy);
         this.RuleFor(auth => auth.Basic!.Use!)
             .Must(ReferenceAnExistingSecret)
-            .When(auth => !string.IsNullOrWhiteSpace(auth.Basic?.Use));
+            .When(auth => !string.IsNullOrWhiteSpace(auth.Basic?.Use))
+            .WithMessage(ValidationErrors.UndefinedSecret);
         this.RuleFor(auth => auth.Bearer!.Use!)
             .Must(ReferenceAnExistingSecret)
-            .When(auth => !string.IsNullOrWhiteSpace(auth.Bearer?.Use));
+            .When(auth => !string.IsNullOrWhiteSpace(auth.Bearer?.Use))
+            .WithMessage(ValidationErrors.UndefinedSecret);
         this.RuleFor(auth => auth.Certificate!.Use!)
             .Must(ReferenceAnExistingSecret)
-            .When(auth => !string.IsNullOrWhiteSpace(auth.Certificate?.Use));
+            .When(auth => !string.IsNullOrWhiteSpace(auth.Certificate?.Use))
+            .WithMessage(ValidationErrors.UndefinedSecret);
         this.RuleFor(auth => auth.Digest!.Use!)
             .Must(ReferenceAnExistingSecret)
-            .When(auth => !string.IsNullOrWhiteSpace(auth.Digest?.Use));
+            .When(auth => !string.IsNullOrWhiteSpace(auth.Digest?.Use))
+            .WithMessage(ValidationErrors.UndefinedSecret);
         this.RuleFor(auth => auth.OAuth2!.Use!)
             .Must(ReferenceAnExistingSecret)
-            .When(auth => !string.IsNullOrWhiteSpace(auth.OAuth2?.Use));
+            .When(auth => !string.IsNullOrWhiteSpace(auth.OAuth2?.Use))
+            .WithMessage(ValidationErrors.UndefinedSecret);
         this.RuleFor(auth => auth.Oidc!.Use!)
             .Must(ReferenceAnExistingSecret)
-            .When(auth => !string.IsNullOrWhiteSpace(auth.Oidc?.Use));
+            .When(auth => !string.IsNullOrWhiteSpace(auth.Oidc?.Use))
+            .WithMessage(ValidationErrors.UndefinedSecret);
     }
 
     /// <summary>
