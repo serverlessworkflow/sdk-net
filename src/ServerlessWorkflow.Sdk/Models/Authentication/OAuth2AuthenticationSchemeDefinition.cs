@@ -18,7 +18,7 @@ namespace ServerlessWorkflow.Sdk.Models.Authentication;
 /// </summary>
 [DataContract]
 public record OAuth2AuthenticationSchemeDefinition
-    : AuthenticationSchemeDefinition
+    : OAuth2AuthenticationSchemeDefinitionBase
 {
 
     /// <inheritdoc/>
@@ -26,76 +26,9 @@ public record OAuth2AuthenticationSchemeDefinition
     public override string Scheme => AuthenticationScheme.OAuth2;
 
     /// <summary>
-    /// Gets/sets the uri that references the OAUTH2 authority to use
-    /// </summary>
-    [DataMember(Name = "authority", Order = 1), JsonPropertyName("authority"), JsonPropertyOrder(1), YamlMember(Alias = "authority", Order = 1)]
-    public required virtual Uri Authority { get; set; }
-
-    /// <summary>
     /// Gets/sets the configuration of the OAUTH2 endpoints to use
     /// </summary>
     [DataMember(Name = "endpoints", Order = 2), JsonPropertyName("endpoints"), JsonPropertyOrder(2), YamlMember(Alias = "endpoints", Order = 2)]
     public virtual OAuth2AuthenticationEndpointsDefinition Endpoints { get; set; } = new();
-
-    /// <summary>
-    /// Gets/sets the grant type to use. See <see cref="OAuth2GrantType"/>
-    /// </summary>
-    [DataMember(Name = "grant", Order = 3), JsonPropertyName("grant"), JsonPropertyOrder(3), YamlMember(Alias = "grant", Order = 3)]
-    public required virtual string Grant { get; set; }
-
-    /// <summary>
-    /// Gets/sets the definition of the client to use
-    /// </summary>
-    [DataMember(Name = "client", Order = 4), JsonPropertyName("client"), JsonPropertyOrder(4), YamlMember(Alias = "client", Order = 4)]
-    public virtual OAuth2AuthenticationClientDefinition? Client { get; set; }
-
-    /// <summary>
-    /// Gets/sets the configuration of the authentication request to perform
-    /// </summary>
-    [DataMember(Name = "request", Order = 5), JsonPropertyName("request"), JsonPropertyOrder(5), YamlMember(Alias = "request", Order = 5)]
-    public virtual OAuth2AuthenticationRequestDefinition Request { get; set; } = new();
-
-    /// <summary>
-    /// Gets/sets a list, if any, that contains valid issuers that will be used to check against the issuer of generated tokens
-    /// </summary>
-    [DataMember(Name = "issuers", Order = 6), JsonPropertyName("issuers"), JsonPropertyOrder(6), YamlMember(Alias = "issuers", Order = 6)]
-    public virtual EquatableList<string>? Issuers { get; set; }
-
-    /// <summary>
-    /// Gets/sets the scopes, if any, to request the token for
-    /// </summary>
-    [DataMember(Name = "scopes", Order = 7), JsonPropertyName("scopes"), JsonPropertyOrder(7), YamlMember(Alias = "scopes", Order = 7)]
-    public virtual EquatableList<string>? Scopes { get; set; }
-
-    /// <summary>
-    /// Gets/sets the audiences, if any, to request the token for
-    /// </summary>
-    [DataMember(Name = "audiences", Order = 8), JsonPropertyName("audiences"), JsonPropertyOrder(8), YamlMember(Alias = "audiences", Order = 8)]
-    public virtual EquatableList<string>? Audiences { get; set; }
-
-    /// <summary>
-    /// Gets/sets the username to use. Used only if <see cref="Grant"/> is <see cref="OAuth2GrantType.Password"/>
-    /// </summary>
-    [DataMember(Name = "username", Order = 9), JsonPropertyName("username"), JsonPropertyOrder(9), YamlMember(Alias = "username", Order = 9)]
-    public virtual string? Username { get; set; }
-
-    /// <summary>
-    /// Gets/sets the password to use. Used only if <see cref="Grant"/> is <see cref="OAuth2GrantType.Password"/>
-    /// </summary>
-    [DataMember(Name = "password", Order = 10), JsonPropertyName("password"), JsonPropertyOrder(10), YamlMember(Alias = "password", Order = 10)]
-    public virtual string? Password { get; set; }
-
-    /// <summary>
-    /// Gets/sets the security token that represents the identity of the party on behalf of whom the request is being made. Used only if <see cref="Grant"/> is <see cref="OAuth2GrantType.TokenExchange"/>, in which case it is required
-    /// </summary>
-    [DataMember(Name = "subject", Order = 11), JsonPropertyName("subject"), JsonPropertyOrder(11), YamlMember(Alias = "subject", Order = 11)]
-    public virtual OAuth2TokenDefinition? Subject { get; set; }
-
-    /// <summary>
-    /// Gets/sets the security token that represents the identity of the acting party. Typically, this will be the party that is authorized to use the requested security token and act on behalf of the subject.
-    /// Used only if <see cref="Grant"/> is <see cref="OAuth2GrantType.TokenExchange"/>, in which case it is required
-    /// </summary>
-    [DataMember(Name = "actor", Order = 12), JsonPropertyName("actor"), JsonPropertyOrder(12), YamlMember(Alias = "actor", Order = 12)]
-    public virtual OAuth2TokenDefinition? Actor { get; set; }
 
 }

@@ -54,9 +54,33 @@ public class AuthenticationPolicyDefinitionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual ICertificateAuthenticationSchemeDefinitionBuilder Certificate()
+    {
+        var builder = new CertificateAuthenticationSchemeDefinitionBuilder();
+        this.SchemeBuilder = builder;
+        return builder;
+    }
+
+    /// <inheritdoc/>
+    public virtual IDigestAuthenticationSchemeDefinitionBuilder Digest()
+    {
+        var builder = new DigestAuthenticationSchemeDefinitionBuilder();
+        this.SchemeBuilder = builder;
+        return builder;
+    }
+
+    /// <inheritdoc/>
     public virtual IOAuth2AuthenticationSchemeDefinitionBuilder OAuth2()
     {
         var builder = new OAuth2AuthenticationSchemeDefinitionBuilder();
+        this.SchemeBuilder = builder;
+        return builder;
+    }
+
+    /// <inheritdoc/>
+    public virtual IOpenIDConnectAuthenticationSchemeDefinitionBuilder OpenIDConnect()
+    {
+        var builder = new OpenIDConnectAuthenticationSchemeDefinitionBuilder();
         this.SchemeBuilder = builder;
         return builder;
     }
@@ -72,6 +96,7 @@ public class AuthenticationPolicyDefinitionBuilder
             Basic = scheme is BasicAuthenticationSchemeDefinition basic ? basic : null,
             Bearer = scheme is BearerAuthenticationSchemeDefinition bearer ? bearer : null,
             OAuth2 = scheme is OAuth2AuthenticationSchemeDefinition oauth2 ? oauth2 : null,
+            Oidc = scheme is OpenIDConnectSchemeDefinition oidc ? oidc : null
         };
     }
 

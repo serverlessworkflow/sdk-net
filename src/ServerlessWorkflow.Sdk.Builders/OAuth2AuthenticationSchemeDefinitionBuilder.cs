@@ -18,8 +18,10 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IOAuth2AuthenticationSchemeDefinitionBuilder"/> interface
 /// </summary>
-public class OAuth2AuthenticationSchemeDefinitionBuilder
-    : AuthenticationSchemeDefinitionBuilder<OAuth2AuthenticationSchemeDefinition>, IOAuth2AuthenticationSchemeDefinitionBuilder
+public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, TBuilder>
+    : AuthenticationSchemeDefinitionBuilder<TDefinition>, IOAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, TBuilder>
+    where TDefinition : OAuth2AuthenticationSchemeDefinitionBase
+    where TBuilder : IOAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, TBuilder>
 {
 
     /// <summary>
@@ -36,6 +38,16 @@ public class OAuth2AuthenticationSchemeDefinitionBuilder
     /// Gets/sets the definition of the client to use
     /// </summary>
     protected OAuth2AuthenticationClientDefinition? Client { get; set; }
+
+    /// <summary>
+    /// Gets/sets the configuration of the authentication request to perform
+    /// </summary>
+    protected OAuth2AuthenticationRequestDefinition Request { get; set; } = new();
+
+    /// <summary>
+    /// Gets/sets a list, if any, that contains valid issuers that will be used to check against the issuer of generated tokens
+    /// </summary>
+    protected EquatableList<string>? Issuers { get; set; }
 
     /// <summary>
     /// Gets/sets the scopes, if any, to request the token for
@@ -69,80 +81,140 @@ public class OAuth2AuthenticationSchemeDefinitionBuilder
     protected OAuth2TokenDefinition? Actor { get; set; }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithAuthority(Uri uri)
+    public virtual TBuilder WithAuthority(Uri uri)
     {
         ArgumentNullException.ThrowIfNull(uri);
         this.Authority = uri;
-        return this;
+        return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithGrantType(string grantType)
+    public virtual TBuilder WithGrantType(string grantType)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(grantType);
         this.GrantType = grantType;
-        return this;
+        return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithClient(OAuth2AuthenticationClientDefinition client)
+    public virtual TBuilder WithClient(OAuth2AuthenticationClientDefinition client)
     {
         ArgumentNullException.ThrowIfNull(client);
         this.Client = client;
-        return this;
+        return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithClient(Action<IOAuth2AuthenticationClientDefinitionBuilder> setup)
+    public virtual TBuilder WithClient(Action<IOAuth2AuthenticationClientDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OAuth2AuthenticationClientDefinitionBuilder();
         setup(builder);
         this.Client = builder.Build();
-        return this;
+        return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithAudiences(params string[] audiences)
+    public virtual TBuilder WithRequest(OAuth2AuthenticationRequestDefinition request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+        this.Request = request;
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder WithRequest(Action<IOAuth2AuthenticationRequestDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new OAuth2AuthenticationRequestDefinitionBuilder();
+        setup(builder);
+        this.Request = builder.Build();
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder WithIssuers(params string[] issuers)
+    {
+        ArgumentNullException.ThrowIfNull(issuers);
+        this.Issuers = new(issuers);
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder WithAudiences(params string[] audiences)
     {
         ArgumentNullException.ThrowIfNull(audiences);
         this.Audiences = new(audiences);
-        return this;
+        return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithScopes(params string[] scopes)
+    public virtual TBuilder WithScopes(params string[] scopes)
     {
         this.Scopes = new(scopes);
-        return this;
+        return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithActor(OAuth2TokenDefinition actor)
+    public virtual TBuilder WithActor(OAuth2TokenDefinition actor)
     {
         ArgumentNullException.ThrowIfNull(actor);
         this.Actor = actor;
-        return this;
+        return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithUsername(string username)
+    public virtual TBuilder WithUsername(string username)
     {
         this.Username = username;
-        return this;
+        return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithPassword(string password)
+    public virtual TBuilder WithPassword(string password)
     {
         this.Password = password;
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder WithSubject(OAuth2TokenDefinition subject)
+    {
+        this.Subject = subject;
+        return (TBuilder)(object)this;
+    }
+
+    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => this.Build();
+
+}
+
+/// <summary>
+/// Represents the default implementation of the <see cref="IOAuth2AuthenticationSchemeDefinitionBuilder"/> interface
+/// </summary>
+public class OAuth2AuthenticationSchemeDefinitionBuilder
+    : OAuth2AuthenticationSchemeDefinitionBuilder<OAuth2AuthenticationSchemeDefinition, IOAuth2AuthenticationSchemeDefinitionBuilder>, IOAuth2AuthenticationSchemeDefinitionBuilder
+{
+
+    /// <summary>
+    /// Gets/sets the configuration of the OAUTH2 endpoints to use
+    /// </summary>
+    protected OAuth2AuthenticationEndpointsDefinition Endpoints { get; set; } = new();
+
+    /// <inheritdoc/>
+    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithEndpoints(OAuth2AuthenticationEndpointsDefinition endpoints)
+    {
+        ArgumentNullException.ThrowIfNull(endpoints);
+        this.Endpoints = endpoints;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithSubject(OAuth2TokenDefinition subject)
+    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithEndpoints(Action<IOAuth2AuthenticationEndpointsDefinitionBuilder> setup)
     {
-        this.Subject = subject;
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new OAuth2AuthenticationEndpointsDefinitionBuilder();
+        setup(builder);
+        this.Endpoints = builder.Build();
         return this;
     }
 
@@ -151,13 +223,15 @@ public class OAuth2AuthenticationSchemeDefinitionBuilder
     {
         if (this.Authority == null) throw new NullReferenceException("The authority must be set");
         if (string.IsNullOrWhiteSpace(this.GrantType)) throw new NullReferenceException("The grant type must be set");
-        if (this.Client == null) throw new NullReferenceException("The client must be set");
         return new()
         {
             Use = this.Secret,
             Authority = this.Authority,
+            Endpoints = this.Endpoints,
             Grant = this.GrantType,
             Client = this.Client,
+            Request = this.Request,
+            Issuers = this.Issuers,
             Audiences = this.Audiences,
             Scopes = this.Scopes,
             Actor = this.Actor,
@@ -167,5 +241,4 @@ public class OAuth2AuthenticationSchemeDefinitionBuilder
         };
     }
 
-    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => this.Build();
 }

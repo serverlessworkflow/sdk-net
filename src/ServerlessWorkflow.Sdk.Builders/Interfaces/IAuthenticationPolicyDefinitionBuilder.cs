@@ -38,10 +38,28 @@ public interface IAuthenticationPolicyDefinitionBuilder
     IBearerAuthenticationSchemeDefinitionBuilder Bearer();
 
     /// <summary>
+    /// Configures the policy to use 'Certificate' authentication
+    /// </summary>
+    /// <returns>A new <see cref="ICertificateAuthenticationSchemeDefinitionBuilder"/></returns>
+    ICertificateAuthenticationSchemeDefinitionBuilder Certificate();
+
+    /// <summary>
+    /// Configures the policy to use 'Digest' authentication
+    /// </summary>
+    /// <returns>A new <see cref="IDigestAuthenticationSchemeDefinitionBuilder"/></returns>
+    IDigestAuthenticationSchemeDefinitionBuilder Digest();
+
+    /// <summary>
     /// Configures the policy to use 'OAuth2' authentication
     /// </summary>
     /// <returns>A new <see cref="IBasicAuthenticationSchemeDefinitionBuilder"/></returns>
     IOAuth2AuthenticationSchemeDefinitionBuilder OAuth2();
+
+    /// <summary>
+    /// Configures the policy to use 'OpenIDConnect' authentication
+    /// </summary>
+    /// <returns>A new <see cref="IOpenIDConnectAuthenticationSchemeDefinitionBuilder"/></returns>
+    IOpenIDConnectAuthenticationSchemeDefinitionBuilder OpenIDConnect();
 
     /// <summary>
     /// Builds the configured <see cref="AuthenticationPolicyDefinition"/>

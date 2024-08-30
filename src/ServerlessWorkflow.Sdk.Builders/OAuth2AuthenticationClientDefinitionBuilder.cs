@@ -30,6 +30,16 @@ public class OAuth2AuthenticationClientDefinitionBuilder
     /// </summary>
     protected string? Secret { get; set; }
 
+    /// <summary>
+    /// Gets/sets a JWT containing a signed assertion with the application credentials
+    /// </summary>
+    protected string? Assertion { get; set; }
+
+    /// <summary>
+    /// Gets/sets the authentication method to use to authenticate the client
+    /// </summary>
+    protected string? Authentication { get; set; }
+
     /// <inheritdoc/>
     public virtual IOAuth2AuthenticationClientDefinitionBuilder WithId(string id)
     {
@@ -47,13 +57,30 @@ public class OAuth2AuthenticationClientDefinitionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IOAuth2AuthenticationClientDefinitionBuilder WithAssertion(string assertion)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(assertion);
+        this.Assertion = assertion;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IOAuth2AuthenticationClientDefinitionBuilder WithAuthenticationMethod(string method)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(method);
+        this.Authentication = method;
+        return this;
+    }
+
+    /// <inheritdoc/>
     public virtual OAuth2AuthenticationClientDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(this.Id)) throw new NullReferenceException("The client id must be set");
         return new()
         {
-            Id = this.Id!,
-            Secret = this.Secret
+            Id = this.Id,
+            Secret = this.Secret,
+            Assertion = this.Assertion,
+            Authentication = this.Authentication
         };
     }
 

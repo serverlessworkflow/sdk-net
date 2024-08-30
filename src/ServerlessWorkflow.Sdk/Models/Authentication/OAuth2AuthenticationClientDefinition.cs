@@ -33,7 +33,7 @@ public record OAuth2AuthenticationClientDefinition
     public virtual string? Secret { get; set; }
 
     /// <summary>
-    /// Gets/sets a JWT containing a signed assertion with your application credentials
+    /// Gets/sets a JWT containing a signed assertion with the application credentials
     /// </summary>
     [DataMember(Name = "assertion", Order = 3), JsonPropertyName("assertion"), JsonPropertyOrder(3), YamlMember(Alias = "assertion", Order = 3)]
     public virtual string? Assertion { get; set; }

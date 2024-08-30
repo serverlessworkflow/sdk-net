@@ -11,18 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace ServerlessWorkflow.Sdk.Models.Authentication;
+namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Represents the definition of an OpenIDConnect authentication scheme
+/// Defines the fundamentals of a service used to build <see cref="CertificateAuthenticationSchemeDefinition"/>s
 /// </summary>
-[DataContract]
-public record OpenIDConnectSchemeDefinition
-    : OAuth2AuthenticationSchemeDefinitionBase
+public interface ICertificateAuthenticationSchemeDefinitionBuilder
+    : IAuthenticationSchemeDefinitionBuilder<CertificateAuthenticationSchemeDefinition>
 {
 
-    /// <inheritdoc/>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public override string Scheme => AuthenticationScheme.OpenIDConnect;
+
 
 }

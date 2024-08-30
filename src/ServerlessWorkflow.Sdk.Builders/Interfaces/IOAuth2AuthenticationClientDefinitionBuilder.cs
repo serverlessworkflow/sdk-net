@@ -34,6 +34,20 @@ public interface IOAuth2AuthenticationClientDefinitionBuilder
     IOAuth2AuthenticationClientDefinitionBuilder WithSecret(string secret);
 
     /// <summary>
+    /// Sets the OAUTH2 client's assertion
+    /// </summary>
+    /// <param name="assertion">A JWT containing a signed assertion with the application credentials</param>
+    /// <returns>The configured <see cref="IOAuth2AuthenticationClientDefinitionBuilder"/></returns>
+    IOAuth2AuthenticationClientDefinitionBuilder WithAssertion(string assertion);
+
+    /// <summary>
+    /// Sets the OAUTH2 client's authentication method
+    /// </summary>
+    /// <param name="method">The authentication method to use to authenticate the client</param>
+    /// <returns>The configured <see cref="IOAuth2AuthenticationClientDefinitionBuilder"/></returns>
+    IOAuth2AuthenticationClientDefinitionBuilder WithAuthenticationMethod(string method);
+
+    /// <summary>
     /// Builds the configured <see cref="OAuth2AuthenticationClientDefinition"/>
     /// </summary>
     /// <returns>A new <see cref="OAuth2AuthenticationClientDefinition"/></returns>
