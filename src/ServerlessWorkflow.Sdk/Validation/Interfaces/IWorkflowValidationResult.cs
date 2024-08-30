@@ -11,20 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace ServerlessWorkflow.Sdk.Models;
+using ServerlessWorkflow.Sdk.Models;
+
+namespace ServerlessWorkflow.Sdk.Validation;
 
 /// <summary>
-/// Represents the base class for all ServerlessWorkflow referenceable workflow components
+/// Defines the fundamentals of an object used to describe a <see cref="WorkflowDefinition"/>'s validation results
 /// </summary>
-[DataContract]
-public abstract record ReferenceableComponentDefinition
-    : ComponentDefinition, IReferenceable
+public interface IWorkflowValidationResult
 {
 
     /// <summary>
-    /// Gets/sets an URI, if any, that reference the component's definition
+    /// Gets a boolean indicating whether or not the <see cref="WorkflowDefinition"/> is valid
     /// </summary>
-    [DataMember(Order = 1, Name = "$ref"), JsonPropertyOrder(1), JsonPropertyName("$ref"), YamlMember(Order = 1, Alias = "$ref")]
-    public virtual Uri? Ref { get; set; }
+    bool IsValid { get; }
 
 }

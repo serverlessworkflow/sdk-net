@@ -18,6 +18,7 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// </summary>
 [DataContract]
 public record ErrorDefinition
+    : ReferenceableComponentDefinition
 {
 
     /// <summary>

@@ -45,10 +45,39 @@ public record ErrorCatcherDefinition
     public virtual string? ExceptWhen { get; set; }
 
     /// <summary>
-    /// Gets/sets the endpoint's retry policy, if any
+    /// Gets/sets the retry policy to use, if any
     /// </summary>
-    [DataMember(Name = "retry", Order = 5), JsonPropertyName("retry"), JsonPropertyOrder(5), YamlMember(Alias = "retry", Order = 5)]
-    public virtual RetryPolicyDefinition? Retry { get; set; }
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual RetryPolicyDefinition? Retry
+    {
+        get => this.RetryValue.T1Value;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            this.RetryValue = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets/sets the reference of the retry policy to use, if any
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? RetryReference
+    {
+        get => this.RetryValue.T2Value;
+        set
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            this.RetryValue = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets/sets the retry policy to use, if any
+    /// </summary>
+    [Required]
+    [DataMember(Name = "retry", Order = 5), JsonInclude, JsonPropertyName("retry"), JsonPropertyOrder(5), YamlMember(Alias = "retry", Order = 5)]
+    protected virtual OneOf<RetryPolicyDefinition, string> RetryValue { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets a name/definition map of the tasks to run when catching an error

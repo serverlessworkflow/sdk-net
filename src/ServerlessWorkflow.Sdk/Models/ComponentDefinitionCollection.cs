@@ -56,4 +56,10 @@ public record ComponentDefinitionCollection
     [DataMember(Name = "secrets", Order = 6), JsonPropertyName("secrets"), JsonPropertyOrder(6), YamlMember(Alias = "secrets", Order = 6)]
     public virtual EquatableList<string>? Secrets { get; set; }
 
+    /// <summary>
+    /// Gets/sets a name/value mapping of the workflow's reusable timeouts
+    /// </summary>
+    [DataMember(Name = "timeouts", Order = 7), JsonPropertyName("timeouts"), JsonPropertyOrder(7), YamlMember(Alias = "timeouts", Order = 7)]
+    public virtual EquatableDictionary<string, TimeoutDefinition>? Timeouts { get; set; }
+
 }

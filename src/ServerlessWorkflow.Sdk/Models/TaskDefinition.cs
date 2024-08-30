@@ -54,10 +54,38 @@ public abstract record TaskDefinition
     public virtual OutputDataModelDefinition? Export { get; set; }
 
     /// <summary>
-    /// Gets/sets a boolean indicating whether or not to return the result, if any, of the defined task
+    /// Gets/sets the task's timeout, if any
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual TimeoutDefinition? Timeout
+    {
+        get => this.TimeoutValue.T1Value;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            this.TimeoutValue = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets/sets the reference to the task's timeout, if any
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? TimeoutReference
+    {
+        get => this.TimeoutValue.T2Value;
+        set
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            this.TimeoutValue = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets/sets the task's timeout, if any
     /// </summary>
     [DataMember(Name = "timeout", Order = 13), JsonPropertyName("timeout"), JsonPropertyOrder(13), YamlMember(Alias = "timeout", Order = 13)]
-    public virtual TimeoutDefinition? Timeout { get; set; }
+    protected virtual OneOf<TimeoutDefinition, string> TimeoutValue { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the flow directive to be performed upon completion of the task

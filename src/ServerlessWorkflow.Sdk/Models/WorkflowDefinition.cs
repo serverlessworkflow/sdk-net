@@ -40,10 +40,38 @@ public record WorkflowDefinition
     public virtual ComponentDefinitionCollection? Use { get; set; }
 
     /// <summary>
-    /// Gets/sets a name/value mapping of the tasks to perform
+    /// Gets/sets the workflow's timeout, if any
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual TimeoutDefinition? Timeout
+    {
+        get => this.TimeoutValue.T1Value;
+        set
+        {
+            ArgumentNullException.ThrowIfNull(value);
+            this.TimeoutValue = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets/sets the reference to the workflow's timeout, if any
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? TimeoutReference
+    {
+        get => this.TimeoutValue.T2Value;
+        set
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(value);
+            this.TimeoutValue = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets/sets the workflow's timeout, if any
     /// </summary>
     [DataMember(Name = "timeout", Order = 4), JsonPropertyName("timeout"), JsonPropertyOrder(4), YamlMember(Alias = "timeout", Order = 4)]
-    public virtual TimeoutDefinition? Timeout { get; set; }
+    protected virtual OneOf<TimeoutDefinition, string> TimeoutValue { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the workflow's output definition, if any
