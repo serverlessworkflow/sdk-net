@@ -42,32 +42,38 @@ public record WorkflowDefinition
     /// <summary>
     /// Gets/sets a name/value mapping of the tasks to perform
     /// </summary>
-    [Required, MinLength(1)]
-    [DataMember(Name = "do", Order = 4), JsonPropertyName("do"), JsonPropertyOrder(4), YamlMember(Alias = "do", Order = 4)]
-    public required virtual Map<string, TaskDefinition> Do { get; set; } = [];
-
-    /// <summary>
-    /// Gets/sets a name/value mapping of the tasks to perform
-    /// </summary>
-    [DataMember(Name = "timeout", Order = 5), JsonPropertyName("timeout"), JsonPropertyOrder(5), YamlMember(Alias = "timeout", Order = 5)]
+    [DataMember(Name = "timeout", Order = 4), JsonPropertyName("timeout"), JsonPropertyOrder(4), YamlMember(Alias = "timeout", Order = 4)]
     public virtual TimeoutDefinition? Timeout { get; set; }
 
     /// <summary>
     /// Gets/sets the workflow's output definition, if any
     /// </summary>
-    [DataMember(Name = "output", Order = 6), JsonPropertyName("output"), JsonPropertyOrder(6), YamlMember(Alias = "output", Order = 6)]
+    [DataMember(Name = "output", Order = 5), JsonPropertyName("output"), JsonPropertyOrder(5), YamlMember(Alias = "output", Order = 5)]
     public virtual OutputDataModelDefinition? Output { get; set; }
 
     /// <summary>
     /// Gets/sets the definition of the workflow's schedule, if any
     /// </summary>
-    [DataMember(Name = "schedule", Order = 7), JsonPropertyName("schedule"), JsonPropertyOrder(7), YamlMember(Alias = "schedule", Order = 7)]
+    [DataMember(Name = "schedule", Order = 6), JsonPropertyName("schedule"), JsonPropertyOrder(6), YamlMember(Alias = "schedule", Order = 6)]
     public virtual WorkflowScheduleDefinition? Schedule { get; set; }
 
     /// <summary>
     /// Gets/sets the configuration of how the runtime expressions
     /// </summary>
-    [DataMember(Name = "evaluate", Order = 8), JsonPropertyName("evaluate"), JsonPropertyOrder(8), YamlMember(Alias = "evaluate", Order = 8)]
+    [DataMember(Name = "evaluate", Order = 7), JsonPropertyName("evaluate"), JsonPropertyOrder(7), YamlMember(Alias = "evaluate", Order = 7)]
     public virtual RuntimeExpressionEvaluationConfiguration? Evaluate { get; set; }
+
+    /// <summary>
+    /// Gets/sets a name/value mapping of the tasks to perform
+    /// </summary>
+    [Required, MinLength(1)]
+    [DataMember(Name = "do", Order = 8), JsonPropertyName("do"), JsonPropertyOrder(8), YamlMember(Alias = "do", Order = 8)]
+    public required virtual Map<string, TaskDefinition> Do { get; set; } = [];
+
+    /// <summary>
+    /// Gets/sets a key/value mapping of additional information associated with the workflow
+    /// </summary>
+    [DataMember(Name = "metadata", Order = 9), JsonPropertyName("metadata"), JsonPropertyOrder(9), YamlMember(Alias = "metadata", Order = 9)]
+    public virtual EquatableDictionary<string, object>? Metadata { get; set; }
 
 }

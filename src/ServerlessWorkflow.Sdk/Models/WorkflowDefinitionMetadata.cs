@@ -48,11 +48,11 @@ public record WorkflowDefinitionMetadata
     public required virtual string Name { get; set; } = null!;
 
     /// <summary>
-    /// Gets/sets the workflow's semantic version. Defaults to `latest`
+    /// Gets/sets the workflow's semantic version
     /// </summary>
     [Required, MinLength(1)]
     [DataMember(Name = "version", Order = 4), JsonPropertyName("version"), JsonPropertyOrder(4), YamlMember(Alias = "version", Order = 4, ScalarStyle = ScalarStyle.SingleQuoted)]
-    public required virtual string Version { get; set; } = "latest";
+    public required virtual string Version { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the workflow's title, if any

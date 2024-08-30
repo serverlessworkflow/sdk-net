@@ -65,5 +65,11 @@ public abstract record TaskDefinition
     [DataMember(Name = "then", Order = 14), JsonPropertyName("then"), JsonPropertyOrder(14), YamlMember(Alias = "then", Order = 14)]
     public virtual string? Then { get; set; }
 
+    /// <summary>
+    /// Gets/sets a key/value mapping of additional information associated with the task
+    /// </summary>
+    [DataMember(Name = "metadata", Order = 15), JsonPropertyName("metadata"), JsonPropertyOrder(15), YamlMember(Alias = "metadata", Order = 15)]
+    public virtual EquatableDictionary<string, object>? Metadata { get; set; }
+
 }
 

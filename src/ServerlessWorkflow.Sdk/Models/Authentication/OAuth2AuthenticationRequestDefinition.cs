@@ -14,21 +14,15 @@
 namespace ServerlessWorkflow.Sdk.Models.Authentication;
 
 /// <summary>
-/// Represents the definition of a bearer authentication scheme
+/// Represents the configuration of an OAUTH2 authentication request
 /// </summary>
 [DataContract]
-public record BearerAuthenticationSchemeDefinition
-    : AuthenticationSchemeDefinition
+public record OAuth2AuthenticationRequestDefinition
 {
 
-    /// <inheritdoc/>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public override string Scheme => AuthenticationScheme.Bearer;
-
     /// <summary>
-    /// Gets/sets the bearer token used for authentication
+    /// Gets/sets the encoding of the authentication request. Defaults to 'application/x-www-form-urlencoded'. See <see cref="OAuth2RequestEncoding"/>
     /// </summary>
-    [DataMember(Name = "token", Order = 1), JsonPropertyName("token"), JsonPropertyOrder(1), YamlMember(Alias = "token", Order = 1)]
-    public required virtual string Token { get; set; }
+    public virtual string Encoding { get; set; } = OAuth2RequestEncoding.FormUrl;
 
 }

@@ -14,21 +14,15 @@
 namespace ServerlessWorkflow.Sdk.Models.Authentication;
 
 /// <summary>
-/// Represents the definition of a bearer authentication scheme
+/// Represents the definition of a certificate authentication scheme
 /// </summary>
 [DataContract]
-public record BearerAuthenticationSchemeDefinition
+public record CertificateAuthenticationSchemeDefinition
     : AuthenticationSchemeDefinition
 {
 
     /// <inheritdoc/>
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public override string Scheme => AuthenticationScheme.Bearer;
-
-    /// <summary>
-    /// Gets/sets the bearer token used for authentication
-    /// </summary>
-    [DataMember(Name = "token", Order = 1), JsonPropertyName("token"), JsonPropertyOrder(1), YamlMember(Alias = "token", Order = 1)]
-    public required virtual string Token { get; set; }
+    public override string Scheme => AuthenticationScheme.Certificate;
 
 }

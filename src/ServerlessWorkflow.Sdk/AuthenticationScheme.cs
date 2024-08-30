@@ -28,9 +28,21 @@ public static class AuthenticationScheme
     /// </summary>
     public const string Bearer = "Bearer";
     /// <summary>
-    /// Gets the 'OAuth2' authentication scheme
+    /// Gets the 'Certificate' authentication scheme
+    /// </summary>
+    public const string Certificate = "Certificate";
+    /// <summary>
+    /// Gets the 'Digest' authentication scheme
+    /// </summary>
+    public const string Digest = "Digest";
+    /// <summary>
+    /// Gets the 'OAUTH2' authentication scheme
     /// </summary>
     public const string OAuth2 = "OAuth2";
+    /// <summary>
+    /// Gets the 'OpenIDConnect' authentication scheme
+    /// </summary>
+    public const string OpenIDConnect = "OpenIDConnect";
 
     /// <summary>
     /// Gets a new <see cref="IEnumerable{T}"/> containing the authentication schemes supported by default
@@ -40,7 +52,10 @@ public static class AuthenticationScheme
     {
         yield return Basic;
         yield return Bearer;
+        yield return Certificate;
+        yield return Digest;
         yield return OAuth2;
+        yield return OpenIDConnect;
     }
 
 }

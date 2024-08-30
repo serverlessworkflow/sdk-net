@@ -48,9 +48,27 @@ public record AuthenticationPolicyDefinition
     public virtual BearerAuthenticationSchemeDefinition? Bearer { get; set; }
 
     /// <summary>
-    /// Gets/sets the OAUTH2 authentication scheme to use, if any
+    /// Gets/sets the `Certificate` authentication scheme to use, if any
     /// </summary>
-    [DataMember(Name = "oauth2", Order = 3), JsonPropertyName("oauth2"), JsonPropertyOrder(3), YamlMember(Alias = "oauth2", Order = 3)]
+    [DataMember(Name = "certificate", Order = 3), JsonPropertyName("certificate"), JsonPropertyOrder(3), YamlMember(Alias = "certificate", Order = 3)]
+    public virtual CertificateAuthenticationSchemeDefinition? Certificate { get; set; }
+
+    /// <summary>
+    /// Gets/sets the `Digest` authentication scheme to use, if any
+    /// </summary>
+    [DataMember(Name = "digest", Order = 4), JsonPropertyName("digest"), JsonPropertyOrder(4), YamlMember(Alias = "digest", Order = 4)]
+    public virtual DigestAuthenticationSchemeDefinition? Digest { get; set; }
+
+    /// <summary>
+    /// Gets/sets the `OAUTH2` authentication scheme to use, if any
+    /// </summary>
+    [DataMember(Name = "oauth2", Order = 5), JsonPropertyName("oauth2"), JsonPropertyOrder(5), YamlMember(Alias = "oauth2", Order = 5)]
     public virtual OAuth2AuthenticationSchemeDefinition? OAuth2 { get; set; }
+
+    /// <summary>
+    /// Gets/sets the `OIDC` authentication scheme to use, if any
+    /// </summary>
+    [DataMember(Name = "oidc", Order = 6), JsonPropertyName("oidc"), JsonPropertyOrder(6), YamlMember(Alias = "oidc", Order = 6)]
+    public virtual OpenIDConnectSchemeDefinition? Oidc { get; set; }
 
 }

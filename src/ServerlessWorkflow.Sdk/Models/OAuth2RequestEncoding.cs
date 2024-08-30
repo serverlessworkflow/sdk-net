@@ -11,28 +11,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Models;
-
 namespace ServerlessWorkflow.Sdk;
 
 /// <summary>
-/// Exposes all supported HTTP call output formats
+/// Exposes all supported request encodings for OAUTH2 requests
 /// </summary>
-public static class HttpOutputFormat
+public static class OAuth2RequestEncoding
 {
-
     /// <summary>
-    /// Indicates that the HTTP call should output the HTTP response's raw content
+    /// Represents the "application/x-www-form-urlencoded" content type
     /// </summary>
-    public const string Raw = "raw";
+    public const string FormUrl = "application/x-www-form-urlencoded";
     /// <summary>
-    /// Indicates that the HTTP call should output the HTTP response's content, possibly deserialized
+    /// Represents the "application/json" content type
     /// </summary>
-    public const string Content = "content";
-    /// <summary>
-    /// Indicates that the HTTP call should output an <see cref="HttpResponse"/>
-    /// </summary>
-    public const string Response = "response";
+    public const string Json = "application/json";
 
     /// <summary>
     /// Gets a new <see cref="IEnumerable{T}"/> containing all supported values
@@ -40,9 +33,8 @@ public static class HttpOutputFormat
     /// <returns>A new <see cref="IEnumerable{T}"/> containing all supported values</returns>
     public static IEnumerable<string> AsEnumerable()
     {
-        yield return Raw;
-        yield return Content;
-        yield return Response;
+        yield return FormUrl;
+        yield return Json;
     }
 
 }

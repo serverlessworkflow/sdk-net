@@ -241,6 +241,7 @@ public class WorkflowDefinitionBuilder
     public virtual WorkflowDefinition Build()
     {
         if (string.IsNullOrWhiteSpace(this.Name)) throw new NullReferenceException("The workflow name must be set");
+        if (string.IsNullOrWhiteSpace(this.Version)) throw new NullReferenceException("The workflow version must be set");
         if (this.Tasks == null || this.Tasks.Count < 1) throw new NullReferenceException("The workflow must define at least one task");
         return new()
         {
@@ -249,7 +250,7 @@ public class WorkflowDefinitionBuilder
                 Dsl = DslVersion.V010,
                 Namespace = string.IsNullOrWhiteSpace(this.Namespace) ? WorkflowDefinitionMetadata.DefaultNamespace : this.Namespace,
                 Name = this.Name,
-                Version = string.IsNullOrWhiteSpace(this.Version) ? "latest" : this.Version,
+                Version = this.Version,
                 Title = this.Title,
                 Summary = this.Summary,
                 Tags = this.Tags
