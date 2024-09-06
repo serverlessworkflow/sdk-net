@@ -25,13 +25,13 @@ public abstract record OAuth2AuthenticationSchemeDefinitionBase
     /// Gets/sets the uri that references the OAUTH2 authority to use
     /// </summary>
     [DataMember(Name = "authority", Order = 1), JsonPropertyName("authority"), JsonPropertyOrder(1), YamlMember(Alias = "authority", Order = 1)]
-    public required virtual Uri Authority { get; set; }
+    public virtual Uri? Authority { get; set; }
 
     /// <summary>
     /// Gets/sets the grant type to use. See <see cref="OAuth2GrantType"/>
     /// </summary>
     [DataMember(Name = "grant", Order = 2), JsonPropertyName("grant"), JsonPropertyOrder(2), YamlMember(Alias = "grant", Order = 2)]
-    public required virtual string Grant { get; set; }
+    public virtual string? Grant { get; set; }
 
     /// <summary>
     /// Gets/sets the definition of the client to use

@@ -29,12 +29,12 @@ public record DigestAuthenticationSchemeDefinition
     /// Gets/sets the username used for authentication
     /// </summary>
     [DataMember(Name = "username", Order = 1), JsonPropertyName("username"), JsonPropertyOrder(1), YamlMember(Alias = "username", Order = 1)]
-    public required virtual string Username { get; set; }
+    public virtual string Username { get; set; } = null!;
 
     /// <summary>
     /// Gets/sets the password used for authentication
     /// </summary>
     [DataMember(Name = "password", Order = 2), JsonPropertyName("password"), JsonPropertyOrder(2), YamlMember(Alias = "password", Order = 2)]
-    public required virtual string Password { get; set; }
+    public virtual string Password { get; set; } = null!;
 
 }

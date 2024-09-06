@@ -29,6 +29,6 @@ public record BearerAuthenticationSchemeDefinition
     /// Gets/sets the bearer token used for authentication
     /// </summary>
     [DataMember(Name = "token", Order = 1), JsonPropertyName("token"), JsonPropertyOrder(1), YamlMember(Alias = "token", Order = 1)]
-    public required virtual string Token { get; set; }
+    public virtual string Token { get; set; } = null!;
 
 }

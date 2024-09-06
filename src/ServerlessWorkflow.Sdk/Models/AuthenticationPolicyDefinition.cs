@@ -27,7 +27,7 @@ public record AuthenticationPolicyDefinition
     /// Gets the configured authentication scheme
     /// </summary>
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual string Scheme => this.Basic?.Scheme ?? this.Bearer?.Scheme ?? this.OAuth2?.Scheme ?? throw new NullReferenceException();
+    public virtual string Scheme => this.Basic?.Scheme ?? this.Bearer?.Scheme ?? this.Certificate?.Scheme ?? this.Digest?.Scheme ?? this.OAuth2?.Scheme ?? this.Oidc?.Scheme ?? throw new NullReferenceException();
 
     /// <summary>
     /// Gets/sets the name of the top level authentication policy to use, if any
