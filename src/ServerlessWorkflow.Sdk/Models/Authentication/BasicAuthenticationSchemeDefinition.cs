@@ -29,12 +29,12 @@ public record BasicAuthenticationSchemeDefinition
     /// Gets/sets the username used for authentication
     /// </summary>
     [DataMember(Name = "username", Order = 1), JsonPropertyName("username"), JsonPropertyOrder(1), YamlMember(Alias = "username", Order = 1)]
-    public virtual string Username { get; set; } = null!;
+    public virtual string? Username { get; set; }
 
     /// <summary>
     /// Gets/sets the password used for authentication
     /// </summary>
     [DataMember(Name = "password", Order = 2), JsonPropertyName("password"), JsonPropertyOrder(2), YamlMember(Alias = "password", Order = 2)]
-    public virtual string Password { get; set; } = null!;
+    public virtual string? Password { get; set; }
 
 }
