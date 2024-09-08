@@ -25,20 +25,20 @@ public record OAuth2AuthenticationEndpointsDefinition
     /// </summary>
     [Required]
     [DataMember(Name = "authority", Order = 1), JsonPropertyName("authority"), JsonPropertyOrder(1), YamlMember(Alias = "authority", Order = 1)]
-    public virtual Uri Token { get; set; } = new("/oauth2/token");
+    public virtual Uri Token { get; set; } = new("/oauth2/token", UriKind.RelativeOrAbsolute);
 
     /// <summary>
     /// Gets/sets the relative path to the revocation endpoint. Defaults to `/oauth2/revoke`
     /// </summary>
     [Required]
     [DataMember(Name = "revocation", Order = 2), JsonPropertyName("revocation"), JsonPropertyOrder(2), YamlMember(Alias = "revocation", Order = 2)]
-    public virtual Uri Revocation { get; set; } = new("/oauth2/revoke");
+    public virtual Uri Revocation { get; set; } = new("/oauth2/revoke", UriKind.RelativeOrAbsolute);
 
     /// <summary>
     /// Gets/sets the relative path to the introspection endpoint. Defaults to `/oauth2/introspect`
     /// </summary>
     [Required]
     [DataMember(Name = "introspection", Order = 3), JsonPropertyName("introspection"), JsonPropertyOrder(3), YamlMember(Alias = "introspection", Order = 3)]
-    public virtual Uri Introspection { get; set; } = new("/oauth2/introspect");
+    public virtual Uri Introspection { get; set; } = new("/oauth2/introspect", UriKind.RelativeOrAbsolute);
 
 }

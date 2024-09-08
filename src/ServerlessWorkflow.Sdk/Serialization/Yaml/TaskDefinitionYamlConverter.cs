@@ -34,10 +34,10 @@ public class TaskDefinitionYamlDeserializer(INodeDeserializer inner)
     protected INodeDeserializer Inner { get; } = inner;
     
     /// <inheritdoc/>
-    public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value)
+    public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value, ObjectDeserializer rootDeserializer)
     {
-        if (!typeof(TaskDefinition).IsAssignableFrom(expectedType)) return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value);
-        if (!this.Inner.Deserialize(reader, typeof(Dictionary<object, object>), nestedObjectDeserializer, out value)) return false;
+        if (!typeof(TaskDefinition).IsAssignableFrom(expectedType)) return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value, rootDeserializer);
+        if (!this.Inner.Deserialize(reader, typeof(Dictionary<object, object>), nestedObjectDeserializer, out value, rootDeserializer)) return false;
         value = JsonSerializer.Default.Deserialize<TaskDefinition>(JsonSerializer.Default.SerializeToText(value!));
         return true;
     }

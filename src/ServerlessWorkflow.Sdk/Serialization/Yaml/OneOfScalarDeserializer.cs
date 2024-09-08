@@ -31,10 +31,10 @@ public class OneOfScalarDeserializer(INodeDeserializer inner)
     protected INodeDeserializer Inner { get; } = inner;
 
     /// <inheritdoc/>
-    public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value)
+    public virtual bool Deserialize(IParser reader, Type expectedType, Func<IParser, Type, object?> nestedObjectDeserializer, out object? value, ObjectDeserializer rootDeserializer)
     {
-        if (!typeof(IOneOf).IsAssignableFrom(expectedType)) return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value);
-        if (!this.Inner.Deserialize(reader, typeof(object), nestedObjectDeserializer, out value)) return false;
+        if (!typeof(IOneOf).IsAssignableFrom(expectedType)) return this.Inner.Deserialize(reader, expectedType, nestedObjectDeserializer, out value, rootDeserializer);
+        if (!this.Inner.Deserialize(reader, typeof(object), nestedObjectDeserializer, out value, rootDeserializer)) return false;
         value = JsonSerializer.Default.Deserialize(JsonSerializer.Default.SerializeToText(value!), expectedType);
         return true;
     }

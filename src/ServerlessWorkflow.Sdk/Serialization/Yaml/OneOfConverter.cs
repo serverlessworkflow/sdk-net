@@ -30,10 +30,10 @@ public class OneOfConverter
     public virtual bool Accepts(Type type) => type.GetGenericType(typeof(OneOf<,>)) != null;
 
     /// <inheritdoc/>
-    public virtual object? ReadYaml(IParser parser, Type type) => throw new NotImplementedException();
+    public virtual object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer) => throw new NotImplementedException();
 
     /// <inheritdoc/>
-    public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
+    public virtual void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer rootSerializer)
     {
         if (value == null || value is not IOneOf oneOf)
         {
@@ -47,7 +47,7 @@ public class OneOfConverter
             return;
         }
         var jsonNode = JsonSerializer.Default.SerializeToNode(toSerialize);
-        new JsonNodeTypeConverter().WriteYaml(emitter, jsonNode, toSerialize.GetType());
+        new JsonNodeTypeConverter().WriteYaml(emitter, jsonNode, toSerialize.GetType(), rootSerializer);
     }
 
 }
