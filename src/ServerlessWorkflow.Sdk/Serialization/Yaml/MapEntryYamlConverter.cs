@@ -30,10 +30,10 @@ public class MapEntryYamlConverter(Func<ISerializer> serializerFactory, Func<IDe
     public virtual bool Accepts(Type type) => type.IsGenericType && type.GetGenericTypeDefinition() == typeof(MapEntry<,>);
 
     /// <inheritdoc/>
-    public virtual object? ReadYaml(IParser parser, Type type) => this.CreateGenericConverter(type).ReadYaml(parser, type);
+    public virtual object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer) => this.CreateGenericConverter(type).ReadYaml(parser, type, rootDeserializer);
 
     /// <inheritdoc/>
-    public virtual void WriteYaml(IEmitter emitter, object? value, Type type) => this.CreateGenericConverter(type).WriteYaml(emitter, value, type);
+    public virtual void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer rootSerializer) => this.CreateGenericConverter(type).WriteYaml(emitter, value, type, rootSerializer);
 
     /// <summary>
     /// Creates a new generic <see cref="MapEntryConverter{TKey, TValue}"/>
@@ -56,7 +56,7 @@ public class MapEntryYamlConverter(Func<ISerializer> serializerFactory, Func<IDe
         public bool Accepts(Type type) => type == typeof(MapEntry<TKey, TValue>);
 
         /// <inheritdoc/>
-        public virtual object ReadYaml(IParser parser, Type type) 
+        public virtual object ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer) 
         {
             parser.Consume<MappingStart>();
             var key = deserializer.Deserialize<TKey>(parser);
@@ -66,7 +66,7 @@ public class MapEntryYamlConverter(Func<ISerializer> serializerFactory, Func<IDe
         }
 
         /// <inheritdoc/>
-        public virtual void WriteYaml(IEmitter emitter, object? value, Type type)
+        public virtual void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer rootSerializer)
         {
             if (value == null)
             {

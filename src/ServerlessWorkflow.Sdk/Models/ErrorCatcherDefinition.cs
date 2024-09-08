@@ -53,7 +53,6 @@ public record ErrorCatcherDefinition
         get => this.RetryValue?.T1Value;
         set
         {
-            ArgumentNullException.ThrowIfNull(value);
             this.RetryValue = value;
         }
     }
