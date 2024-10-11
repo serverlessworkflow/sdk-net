@@ -51,10 +51,7 @@ public record ErrorCatcherDefinition
     public virtual RetryPolicyDefinition? Retry
     {
         get => this.RetryValue?.T1Value;
-        set
-        {
-            this.RetryValue = value;
-        }
+        set => this.RetryValue = value!;
     }
 
     /// <summary>
@@ -64,11 +61,7 @@ public record ErrorCatcherDefinition
     public virtual string? RetryReference
     {
         get => this.RetryValue?.T2Value;
-        set
-        {
-            ArgumentException.ThrowIfNullOrWhiteSpace(value);
-            this.RetryValue = value;
-        }
+        set => this.RetryValue = value!;
     }
 
     /// <summary>

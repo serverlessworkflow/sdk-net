@@ -28,7 +28,7 @@ public class ExternalResourceDefinitionBuilder
     /// <summary>
     /// Gets/sets the endpoint at which to get the defined resource
     /// </summary>
-    protected virtual OneOf<EndpointDefinition, Uri>? Endpoint { get; set; }
+    protected virtual EndpointDefinition? Endpoint { get; set; }
 
     /// <inheritdoc/>
     public virtual IExternalResourceDefinitionBuilder WithName(string name)

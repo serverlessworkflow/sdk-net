@@ -43,7 +43,7 @@ public abstract record OAuth2AuthenticationSchemeDefinitionBase
     /// Gets/sets the configuration of the authentication request to perform
     /// </summary>
     [DataMember(Name = "request", Order = 4), JsonPropertyName("request"), JsonPropertyOrder(4), YamlMember(Alias = "request", Order = 4)]
-    public virtual OAuth2AuthenticationRequestDefinition Request { get; set; } = new();
+    public virtual OAuth2AuthenticationRequestDefinition? Request { get; set; }
 
     /// <summary>
     /// Gets/sets a list, if any, that contains valid issuers that will be used to check against the issuer of generated tokens
