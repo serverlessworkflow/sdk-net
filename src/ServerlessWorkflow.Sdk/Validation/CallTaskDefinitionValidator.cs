@@ -35,7 +35,7 @@ public class CallTaskDefinitionValidator
         this.Components = components;
         this.RuleFor(c => c.Call)
             .Must(ReferenceAnExistingFunction)
-            .When(c => !Uri.TryCreate(c.Call, UriKind.Absolute, out _))
+            .When(c => !Uri.TryCreate(c.Call, UriKind.Absolute, out _) || c.Call.Contains('@'))
             .WithMessage(ValidationErrors.UndefinedFunction);
         this.When(c => c.Call == Function.AsyncApi, () =>
         {
