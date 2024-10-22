@@ -132,4 +132,10 @@
   <data name="UndefinedTimeout" xml:space="preserve">
     <value>Undefined timeout</value>
   </data>
+  <data name="UndefinedCatalog" xml:space="preserve">
+    <value>Undefined catalog</value>
+  </data>
+  <data name="InvalidCatalogedFunctionCallFormat" xml:space="preserve">
+    <value>Invalid cataloged function call format. Expected format '{functionName}:{functionSemanticVersion}@{catalogName}'</value>
+  </data>
 </root>

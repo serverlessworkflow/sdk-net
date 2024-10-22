@@ -13,27 +13,26 @@
 
 using FluentValidation;
 using ServerlessWorkflow.Sdk.Models;
-using ServerlessWorkflow.Sdk.Properties;
 
 namespace ServerlessWorkflow.Sdk.Validation;
 
 /// <summary>
-/// Represents the <see cref="IValidator"/> used to validate <see cref="ComponentDefinitionCollection"/>s
+/// Represents the <see cref="IValidator"/> used to validate <see cref="CatalogDefinition"/>s
 /// </summary>
-public class ComponentDefinitionCollectionValidator
-    : AbstractValidator<ComponentDefinitionCollection>
+public class CatalogDefinitionValidator
+    : AbstractValidator<CatalogDefinition>
 {
 
     /// <inheritdoc/>
-    public ComponentDefinitionCollectionValidator(IServiceProvider serviceProvider)
+    public CatalogDefinitionValidator(IServiceProvider serviceProvider)
     {
         this.ServiceProvider = serviceProvider;
-        this.RuleForEach(c => c.Authentications)
-            .SetValidator(c => new AuthenticationPolicyKeyValuePairValidator(this.ServiceProvider, c));
-        this.RuleForEach(c => c.Catalogs)
-            .SetValidator(c => new CatalogKeyValuePairValidator(this.ServiceProvider));
-        this.RuleForEach(c => c.Functions)
-            .SetValidator(c => new TaskKeyValuePairValidator(this.ServiceProvider, c, c.Functions));
+        this.RuleFor(c => c.Endpoint)
+            .NotNull()
+            .When(c => c.EndpointUri == null);
+        this.RuleFor(c => c.EndpointUri)
+            .NotNull()
+            .When(c => c.Endpoint == null);
     }
 
     /// <summary>
