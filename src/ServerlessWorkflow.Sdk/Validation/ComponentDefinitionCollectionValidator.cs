@@ -27,6 +27,8 @@ public class ComponentDefinitionCollectionValidator
     public ComponentDefinitionCollectionValidator(IServiceProvider serviceProvider)
     {
         this.ServiceProvider = serviceProvider;
+        this.RuleForEach(c => c.Authentications)
+            .SetValidator(c => new AuthenticationPolicyKeyValuePairValidator(this.ServiceProvider, c));
         this.RuleForEach(c => c.Functions)
             .SetValidator(c => new TaskKeyValuePairValidator(this.ServiceProvider, c, c.Functions));
     }
