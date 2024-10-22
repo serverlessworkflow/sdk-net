@@ -13,27 +13,28 @@
 
 using FluentValidation;
 using ServerlessWorkflow.Sdk.Models;
-using ServerlessWorkflow.Sdk.Properties;
 
 namespace ServerlessWorkflow.Sdk.Validation;
 
 /// <summary>
-/// Represents the <see cref="IValidator"/> used to validate <see cref="ComponentDefinitionCollection"/>s
+/// Represents the <see cref="IValidator"/> used to validate <see cref="CatalogDefinition"/> key/value pairs
 /// </summary>
-public class ComponentDefinitionCollectionValidator
-    : AbstractValidator<ComponentDefinitionCollection>
+public class CatalogKeyValuePairValidator
+    : AbstractValidator<KeyValuePair<string, CatalogDefinition>>
 {
 
     /// <inheritdoc/>
-    public ComponentDefinitionCollectionValidator(IServiceProvider serviceProvider)
+    public CatalogKeyValuePairValidator(IServiceProvider serviceProvider)
     {
         this.ServiceProvider = serviceProvider;
-        this.RuleForEach(c => c.Authentications)
-            .SetValidator(c => new AuthenticationPolicyKeyValuePairValidator(this.ServiceProvider, c));
-        this.RuleForEach(c => c.Catalogs)
-            .SetValidator(c => new CatalogKeyValuePairValidator(this.ServiceProvider));
-        this.RuleForEach(c => c.Functions)
-            .SetValidator(c => new TaskKeyValuePairValidator(this.ServiceProvider, c, c.Functions));
+        this.RuleFor(t => t.Value)
+            .Custom((value, context) =>
+            {
+                var key = context.InstanceToValidate.Key;
+                var validator = new CatalogDefinitionValidator(serviceProvider);
+                var validationResult = validator.Validate(value);
+                foreach (var error in validationResult.Errors) context.AddFailure($"{key}.{error.PropertyName}", error.ErrorMessage);
+            });
     }
 
     /// <summary>

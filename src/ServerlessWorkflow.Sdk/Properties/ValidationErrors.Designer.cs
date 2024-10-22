@@ -61,11 +61,29 @@ namespace ServerlessWorkflow.Sdk.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid cataloged function call format. Expected format &apos;{functionName}:{functionSemanticVersion}@{catalogName}&apos;.
+        /// </summary>
+        internal static string InvalidCatalogedFunctionCallFormat {
+            get {
+                return ResourceManager.GetString("InvalidCatalogedFunctionCallFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Undefined authentication policy.
         /// </summary>
         internal static string UndefinedAuthenticationPolicy {
             get {
                 return ResourceManager.GetString("UndefinedAuthenticationPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undefined catalog.
+        /// </summary>
+        internal static string UndefinedCatalog {
+            get {
+                return ResourceManager.GetString("UndefinedCatalog", resourceCulture);
             }
         }
         
