@@ -44,4 +44,11 @@ public interface IRunTaskDefinitionBuilder
     /// <returns>A new <see cref="IWorkflowProcessDefinitionBuilder"/></returns>
     IWorkflowProcessDefinitionBuilder Workflow();
 
+    /// <summary>
+    /// Configures whether the task to build should await the execution of the defined process
+    /// </summary>
+    /// <param name="await">A boolean indicating whether or not the task to build should await the execution of the defined process</param>
+    /// <returns>The configured <see cref="IRunTaskDefinitionBuilder"/></returns>
+    IRunTaskDefinitionBuilder Await(bool await);
+
 }

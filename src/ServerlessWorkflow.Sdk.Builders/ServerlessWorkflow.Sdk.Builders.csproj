@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	<VersionPrefix>1.0.0</VersionPrefix>
-	<VersionSuffix>alpha5</VersionSuffix>
+	<VersionSuffix>alpha5.1</VersionSuffix>
 	<AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
 	<FileVersion>$(VersionPrefix)</FileVersion>
 	<NeutralLanguage>en</NeutralLanguage>

@@ -23,6 +23,11 @@ public class RunTaskDefinitionBuilder
 {
 
     /// <summary>
+    /// Gets/sets a boolean indicating whether or not the task to build should await the execution of the defined process
+    /// </summary>
+    protected bool? AwaitProcess { get; set; }
+
+    /// <summary>
     /// Gets/sets the process to run
     /// </summary>
     protected IProcessDefinitionBuilder? ProcessBuilder { get; set; }
@@ -60,6 +65,13 @@ public class RunTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual IRunTaskDefinitionBuilder Await(bool await)
+    {
+        this.AwaitProcess = await;
+        return this;
+    }
+
+    /// <inheritdoc/>
     public override RunTaskDefinition Build()
     {
         if (this.ProcessBuilder == null) throw new NullReferenceException("The process to run must be set");
@@ -71,7 +83,8 @@ public class RunTaskDefinitionBuilder
                 Container = process is ContainerProcessDefinition container ? container : null,
                 Script = process is ScriptProcessDefinition script ? script : null,
                 Shell = process is ShellProcessDefinition shell ? shell : null,
-                Workflow = process is WorkflowProcessDefinition workflow ? workflow : null
+                Workflow = process is WorkflowProcessDefinition workflow ? workflow : null,
+                Await = this.AwaitProcess
             }
         });
     }
