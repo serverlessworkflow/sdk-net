@@ -47,6 +47,12 @@ public record ProcessTypeDefinition
     public virtual WorkflowProcessDefinition? Workflow { get; set; }
 
     /// <summary>
+    /// Gets/sets a boolean indicating whether or not to await the process completion before continuing. Defaults to 'true'.
+    /// </summary>
+    [DataMember(Name = "await", Order = 5), JsonPropertyName("await"), JsonPropertyOrder(5), YamlMember(Alias = "await", Order = 5)]
+    public virtual bool? Await { get; set; }
+
+    /// <summary>
     /// Gets the type of the defined process tasks
     /// </summary>
     [IgnoreDataMember, JsonIgnore, YamlIgnore]
