@@ -68,7 +68,7 @@ public class SwitchCaseDefinitionValidator
     {
         return @case.Value.Then switch
         {
-            null or "" or FlowDirective.Continue or FlowDirective.End or FlowDirective.End => false,
+            null or "" or FlowDirective.Continue or FlowDirective.End or FlowDirective.Exit => false,
             _ => true
         };
     }
