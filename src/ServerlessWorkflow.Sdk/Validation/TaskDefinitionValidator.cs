@@ -102,7 +102,7 @@ public class TaskDefinitionValidator
     {
         return task.Then switch
         {
-            null or "" or FlowDirective.Continue or FlowDirective.End or FlowDirective.End => false,
+            null or "" or FlowDirective.Continue or FlowDirective.End or FlowDirective.Exit => false,
             _ => true
         };
     }
