@@ -24,7 +24,7 @@ public record OAuth2AuthenticationEndpointsDefinition
     /// Gets/sets the relative path to the token endpoint. Defaults to `/oauth2/token`
     /// </summary>
     [Required]
-    [DataMember(Name = "authority", Order = 1), JsonPropertyName("authority"), JsonPropertyOrder(1), YamlMember(Alias = "authority", Order = 1)]
+    [DataMember(Name = "token", Order = 1), JsonPropertyName("token"), JsonPropertyOrder(1), YamlMember(Alias = "token", Order = 1)]
     public virtual Uri Token { get; set; } = new("/oauth2/token", UriKind.RelativeOrAbsolute);
 
     /// <summary>
