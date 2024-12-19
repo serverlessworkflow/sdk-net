@@ -30,6 +30,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerlessWorkflow.Sdk.IO",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerlessWorkflow.Sdk.UnitTests", "tests\ServerlessWorkflow.Sdk.UnitTests\ServerlessWorkflow.Sdk.UnitTests.csproj", "{7BFC0DDB-7864-4C5A-AC91-EB7B3E93242E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{A8E842C3-60C4-46A7-A2D7-57C28BA151E6}"
+	ProjectSection(SolutionItems) = preProject
+		.github\PULL_REQUEST_TEMPLATE.md = .github\PULL_REQUEST_TEMPLATE.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEMPLATE", "{3327DDB8-87C1-4A08-9221-A8CD1450DD12}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8BA94EDE-CE8B-4476-A58F-50162B06EE71}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build-dotnet.yml = .github\workflows\build-dotnet.yml
+		.github\workflows\ci-pipeline.yml = .github\workflows\ci-pipeline.yml
+		.github\workflows\publish.yml = .github\workflows\publish.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\test-dotnet.yml = .github\workflows\test-dotnet.yml
+		.github\workflows\versioning.yml = .github\workflows\versioning.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +78,8 @@ Global
 		{53A4A0D8-E2F4-43BC-808F-37B1EB7837DE} = {9016CF88-4100-425F-9E1A-B6099F55A35B}
 		{9993989F-B8D6-481C-A59C-A76070CA32F4} = {9016CF88-4100-425F-9E1A-B6099F55A35B}
 		{7BFC0DDB-7864-4C5A-AC91-EB7B3E93242E} = {60FE2678-84CF-492C-950D-3485582F6712}
+		{3327DDB8-87C1-4A08-9221-A8CD1450DD12} = {A8E842C3-60C4-46A7-A2D7-57C28BA151E6}
+		{8BA94EDE-CE8B-4476-A58F-50162B06EE71} = {A8E842C3-60C4-46A7-A2D7-57C28BA151E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1402FB0B-4169-41A6-A372-DA260E79481B}
