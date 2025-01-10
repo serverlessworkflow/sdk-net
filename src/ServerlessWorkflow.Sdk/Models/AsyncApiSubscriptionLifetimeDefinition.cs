@@ -38,13 +38,13 @@ public record AsyncApiSubscriptionLifetimeDefinition
     /// Required if <see cref="Amount"/> and <see cref="Until"/> have not been set.
     /// /// </summary>
     [DataMember(Name = "while", Order = 3), JsonPropertyName("while"), JsonPropertyOrder(3), YamlMember(Alias = "while", Order = 3)]
-    public virtual int? While { get; set; }
+    public virtual string? While { get; set; }
 
     /// <summary>
     /// Gets/sets a runtime expression, if any, used to determine until when to consume messages..<para></para>
     /// Required if <see cref="Amount"/> and <see cref="While"/> have not been set.
     /// /// </summary>
     [DataMember(Name = "until", Order = 4), JsonPropertyName("until"), JsonPropertyOrder(4), YamlMember(Alias = "until", Order = 4)]
-    public virtual int? Until { get; set; }
+    public virtual string? Until { get; set; }
 
 }
