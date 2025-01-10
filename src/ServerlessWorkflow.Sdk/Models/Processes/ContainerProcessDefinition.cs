@@ -29,7 +29,7 @@ public record ContainerProcessDefinition
     public required virtual string Image { get; set; }
 
     /// <summary>
-    /// Gets/sets the name of the container image to run
+    /// Gets/sets a runtime expression, if any, used to give specific name to the container
     /// </summary>
     [DataMember(Name = "name", Order = 2), JsonPropertyName("name"), JsonPropertyOrder(2), YamlMember(Alias = "name", Order = 2)]
     public virtual string? Name { get; set; }
