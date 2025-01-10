@@ -26,30 +26,42 @@ public record ContainerProcessDefinition
     /// </summary>
     [Required, MinLength(1)]
     [DataMember(Name = "image", Order = 1), JsonPropertyName("image"), JsonPropertyOrder(1), YamlMember(Alias = "image", Order = 1)]
-    public required virtual string Image { get; set; } = null!;
+    public required virtual string Image { get; set; }
+
+    /// <summary>
+    /// Gets/sets a runtime expression, if any, used to give specific name to the container
+    /// </summary>
+    [DataMember(Name = "name", Order = 2), JsonPropertyName("name"), JsonPropertyOrder(2), YamlMember(Alias = "name", Order = 2)]
+    public virtual string? Name { get; set; }
 
     /// <summary>
     /// Gets/sets the command, if any, to execute on the container
     /// </summary>
-    [DataMember(Name = "command", Order = 2), JsonPropertyName("command"), JsonPropertyOrder(2), YamlMember(Alias = "command", Order = 2)]
+    [DataMember(Name = "command", Order = 3), JsonPropertyName("command"), JsonPropertyOrder(3), YamlMember(Alias = "command", Order = 3)]
     public virtual string? Command { get; set; }
 
     /// <summary>
     /// Gets/sets a list containing the container's port mappings, if any
     /// </summary>
-    [DataMember(Name = "ports", Order = 3), JsonPropertyName("ports"), JsonPropertyOrder(3), YamlMember(Alias = "ports", Order = 3)]
+    [DataMember(Name = "ports", Order = 4), JsonPropertyName("ports"), JsonPropertyOrder(4), YamlMember(Alias = "ports", Order = 4)]
     public virtual EquatableDictionary<ushort, ushort>? Ports { get; set; }
 
     /// <summary>
     /// Gets/sets the volume mapping for the container, if any
     /// </summary>
-    [DataMember(Name = "volumes", Order = 4), JsonPropertyName("volumes"), JsonPropertyOrder(4), YamlMember(Alias = "volumes", Order = 4)]
+    [DataMember(Name = "volumes", Order = 5), JsonPropertyName("volumes"), JsonPropertyOrder(5), YamlMember(Alias = "volumes", Order = 5)]
     public virtual EquatableDictionary<string, string>? Volumes { get; set; }
 
     /// <summary>
     /// Gets/sets a key/value mapping of the environment variables, if any, to use when running the configured process
     /// </summary>
-    [DataMember(Name = "environment", Order = 5), JsonPropertyName("environment"), JsonPropertyOrder(5), YamlMember(Alias = "environment", Order = 5)]
+    [DataMember(Name = "environment", Order = 6), JsonPropertyName("environment"), JsonPropertyOrder(6), YamlMember(Alias = "environment", Order = 6)]
     public virtual EquatableDictionary<string, string>? Environment { get; set; }
+
+    /// <summary>
+    /// Gets/sets an object object used to configure the container's lifetime
+    /// </summary>
+    [DataMember(Name = "lifetime", Order = 7), JsonPropertyName("lifetime"), JsonPropertyOrder(7), YamlMember(Alias = "lifetime", Order = 7)]
+    public virtual ContainerLifetimeDefinition? Lifetime { get; set; }
 
 }

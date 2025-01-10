@@ -29,40 +29,51 @@ public record AsyncApiCallDefinition
     public required virtual ExternalResourceDefinition Document { get; set; }
 
     /// <summary>
-    /// Gets/sets a reference to the AsyncAPI operation to call
+    /// Gets/sets the name of the channel on which to perform the operation. The operation to perform is defined by declaring either message, in which case the channel's publish operation will be executed, or subscription, in which case the channel's subscribe operation will be executed.<para></para>
+    /// Used only in case the referenced document uses AsyncAPI v2.6.0
     /// </summary>
-    [Required]
-    [DataMember(Name = "operationRef", Order = 2), JsonPropertyName("operationRef"), JsonPropertyOrder(2), JsonInclude, YamlMember(Alias = "operationRef", Order = 2)]
-    public required virtual string OperationRef { get; set; }
+    [DataMember(Name = "channel", Order = 2), JsonPropertyName("channel"), JsonPropertyOrder(2), JsonInclude, YamlMember(Alias = "channel", Order = 2)]
+    public required virtual string? Channel { get; set; }
 
     /// <summary>
-    /// Gets/sets a reference to the server to call the specified AsyncAPI operation on. If not set, default to the first server matching the operation's channel.
+    /// Gets/sets a reference to the AsyncAPI operation to call.<para></para>
+    /// Used only in case the referenced document uses AsyncAPI v3.0.0.
     /// </summary>
-    [DataMember(Name = "server", Order = 3), JsonPropertyName("server"), JsonPropertyOrder(3), JsonInclude, YamlMember(Alias = "server", Order = 3)]
+    [DataMember(Name = "operation", Order = 3), JsonPropertyName("operation"), JsonPropertyOrder(3), JsonInclude, YamlMember(Alias = "operation", Order = 3)]
+    public required virtual string? Operation { get; set; }
+
+    /// <summary>
+    /// Gets/sets a object used to configure to the server to call the specified AsyncAPI operation on.<para></para>
+    /// If not set, default to the first server matching the operation's channel.
+    /// </summary>
+    [DataMember(Name = "server", Order = 4), JsonPropertyName("server"), JsonPropertyOrder(4), JsonInclude, YamlMember(Alias = "server", Order = 4)]
     public virtual string? Server { get; set; }
 
     /// <summary>
-    /// Gets/sets the name of the message to use. If not set, defaults to the first message defined by the operation
+    /// Gets/sets the protocol to use to select the target server.<para></para>
+    /// Ignored if <see cref="Server"/> has been set.
     /// </summary>
-    [DataMember(Name = "message", Order = 4), JsonPropertyName("message"), JsonPropertyOrder(4), JsonInclude, YamlMember(Alias = "message", Order = 4)]
-    public virtual string? Message { get; set; }
+    [DataMember(Name = "protocol", Order = 5), JsonPropertyName("protocol"), JsonPropertyOrder(5), JsonInclude, YamlMember(Alias = "protocol", Order = 5)]
+    public virtual string? Protocol { get; set; }
 
     /// <summary>
-    /// Gets/sets the name of the binding to use. If not set, defaults to the first binding defined by the operation
+    /// Gets/sets an object used to configure the message to publish using the target operation.<para></para>
+    /// Required if <see cref="Subscription"/> has not been set.
     /// </summary>
-    [DataMember(Name = "binding", Order = 5), JsonPropertyName("binding"), JsonPropertyOrder(5), JsonInclude, YamlMember(Alias = "binding", Order = 5)]
-    public virtual string? Binding { get; set; }
+    [DataMember(Name = "message", Order = 6), JsonPropertyName("message"), JsonPropertyOrder(6), JsonInclude, YamlMember(Alias = "message", Order = 6)]
+    public virtual AsyncApiMessageDefinition? Message { get; set; }
 
     /// <summary>
-    /// Gets/sets the payload to call the AsyncAPI operation with
+    /// Gets/sets an object used to configure the subscription to messages consumed using the target operation.<para></para>
+    /// Required if <see cref="Message"/> has not been set.
     /// </summary>
-    [DataMember(Name = "payload", Order = 6), JsonPropertyName("payload"), JsonPropertyOrder(6), JsonInclude, YamlMember(Alias = "payload", Order = 6)]
-    public virtual object? Payload { get; set; }
+    [DataMember(Name = "subscription", Order = 7), JsonPropertyName("subscription"), JsonPropertyOrder(7), JsonInclude, YamlMember(Alias = "subscription", Order = 7)]
+    public virtual AsyncApiSubscriptionDefinition? Subscription { get; set; }
 
     /// <summary>
     /// Gets/sets the authentication policy, if any, to use when calling the AsyncAPI operation
     /// </summary>
-    [DataMember(Name = "authentication", Order = 7), JsonPropertyName("authentication"), JsonPropertyOrder(7), JsonInclude, YamlMember(Alias = "authentication", Order = 7)]
+    [DataMember(Name = "authentication", Order = 8), JsonPropertyName("authentication"), JsonPropertyOrder(8), JsonInclude, YamlMember(Alias = "authentication", Order = 8)]
     public virtual AuthenticationPolicyDefinition? Authentication { get; set; }
 
 }

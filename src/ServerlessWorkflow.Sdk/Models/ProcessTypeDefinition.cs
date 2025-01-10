@@ -53,6 +53,14 @@ public record ProcessTypeDefinition
     public virtual bool? Await { get; set; }
 
     /// <summary>
+    /// Gets/sets the output of the process.<para></para>
+    /// See <see cref="ProcessReturnType"/><para></para>
+    /// Defaults to <see cref="ProcessReturnType.Stdout"/>
+    /// </summary>
+    [DataMember(Name = "return", Order = 6), JsonPropertyName("return"), JsonPropertyOrder(6), YamlMember(Alias = "return", Order = 6)]
+    public virtual string? Return { get; set; }
+
+    /// <summary>
     /// Gets the type of the defined process tasks
     /// </summary>
     [IgnoreDataMember, JsonIgnore, YamlIgnore]

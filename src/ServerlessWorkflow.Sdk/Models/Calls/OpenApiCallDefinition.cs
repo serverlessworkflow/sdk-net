@@ -53,4 +53,12 @@ public record OpenApiCallDefinition
     [DataMember(Name = "output", Order = 6), JsonPropertyName("output"), JsonPropertyOrder(6), YamlMember(Alias = "output", Order = 6)]
     public virtual string? Output { get; set; }
 
+    /// <summary>
+    /// Gets/sets a boolean indicating whether redirection status codes (300–399) should be treated as errors.<para></para>
+    /// If set to 'false', runtimes must raise an error for response status codes outside the 200–299 range.<para></para>
+    /// If set to 'true', they must raise an error for status codes outside the 200–399 range.
+    /// </summary>
+    [DataMember(Name = "redirect", Order = 7), JsonPropertyName("redirect"), JsonPropertyOrder(7), YamlMember(Alias = "redirect", Order = 7)]
+    public virtual bool Redirect { get; set; }
+
 }
