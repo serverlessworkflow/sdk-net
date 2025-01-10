@@ -82,6 +82,29 @@ public static class RuntimeExpressions
         /// Gets the name of the 'error' argument, used to access the current error, if any
         /// </summary>
         public const string Error = "error";
+        /// <summary>
+        /// Gets the name of the 'authorization' argument, used to access a task's resolved authorization
+        /// </summary>
+        public const string Authorization = "authorization";
+
+        /// <summary>
+        /// Gets an <see cref="IEnumerable{T}"/> that contains all supported runtime expression arguments
+        /// </summary>
+        /// <returns>A new <see cref="IEnumerable{T}"/> that contains all supported runtime expression arguments</returns>
+        public static IEnumerable<string> AsEnumerable()
+        {
+            yield return Runtime;
+            yield return Workflow;
+            yield return Context;
+            yield return Each;
+            yield return Index;
+            yield return Output;
+            yield return Secret;
+            yield return Task;
+            yield return Input;
+            yield return Error;
+            yield return Authorization;
+        }
 
     }
 

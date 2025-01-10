@@ -52,4 +52,10 @@ public record ContainerProcessDefinition
     [DataMember(Name = "environment", Order = 5), JsonPropertyName("environment"), JsonPropertyOrder(5), YamlMember(Alias = "environment", Order = 5)]
     public virtual EquatableDictionary<string, string>? Environment { get; set; }
 
+    /// <summary>
+    /// Gets/sets an object object used to configure the container's lifetime
+    /// </summary>
+    [DataMember(Name = "lifetime", Order = 6), JsonPropertyName("lifetime"), JsonPropertyOrder(6), YamlMember(Alias = "lifetime", Order = 6)]
+    public virtual ContainerLifetimeDefinition? Lifetime { get; set; }
+
 }

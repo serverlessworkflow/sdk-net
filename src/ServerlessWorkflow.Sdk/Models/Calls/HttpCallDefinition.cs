@@ -73,4 +73,12 @@ public record HttpCallDefinition
     [DataMember(Name = "output", Order = 5), JsonPropertyName("output"), JsonPropertyOrder(5), YamlMember(Alias = "output", Order = 5)]
     public virtual string? Output { get; set; }
 
+    /// <summary>
+    /// Gets/sets a boolean indicating whether redirection status codes (300–399) should be treated as errors.<para></para>
+    /// If set to 'false', runtimes must raise an error for response status codes outside the 200–299 range.<para></para>
+    /// If set to 'true', they must raise an error for status codes outside the 200–399 range.
+    /// </summary>
+    [DataMember(Name = "redirect", Order = 6), JsonPropertyName("redirect"), JsonPropertyOrder(6), YamlMember(Alias = "redirect", Order = 6)]
+    public virtual bool Redirect { get; set; }
+
 }
