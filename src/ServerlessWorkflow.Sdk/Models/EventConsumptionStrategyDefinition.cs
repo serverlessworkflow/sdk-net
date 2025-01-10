@@ -27,7 +27,8 @@ public record EventConsumptionStrategyDefinition
     public virtual EquatableList<EventFilterDefinition>? All { get; set; }
 
     /// <summary>
-    /// Gets/sets a list containing any of the events to consume, if any
+    /// Gets/sets a list containing any of the events to consume, if any.<para></para>
+    /// If empty, listens to all incoming events, and requires <see cref="Until"/> to be set.
     /// </summary>
     [DataMember(Name = "any", Order = 2), JsonPropertyName("any"), JsonPropertyOrder(2), YamlMember(Alias = "any", Order = 2)]
     public virtual EquatableList<EventFilterDefinition>? Any { get; set; }
@@ -37,5 +38,31 @@ public record EventConsumptionStrategyDefinition
     /// </summary>
     [DataMember(Name = "one", Order = 3), JsonPropertyName("one"), JsonPropertyOrder(3), YamlMember(Alias = "one", Order = 3)]
     public virtual EventFilterDefinition? One { get; set; }
+
+    /// <summary>
+    /// Gets/sets the condition or the consumption strategy that defines the events that must be consumed to stop listening
+    /// </summary>
+    [DataMember(Name = "until", Order = 4), JsonInclude, JsonPropertyName("until"), JsonPropertyOrder(4), YamlMember(Alias = "until", Order = 4)]
+    protected virtual OneOf<EventConsumptionStrategyDefinition, string>? UntilValue { get; set; }
+
+    /// <summary>
+    /// Gets/sets the consumption strategy, if any, that defines the events that must be consumed to stop listening
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual EventConsumptionStrategyDefinition? Until
+    {
+        get => this.UntilValue?.T1Value;
+        set => this.UntilValue = value!;
+    }
+
+    /// <summary>
+    /// Gets/sets a runtime expression, if any, that represents the condition that must be met to stop listening
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    public virtual string? UntilExpression
+    {
+        get => this.UntilValue?.T2Value;
+        set => this.UntilValue = value!;
+    }
 
 }
