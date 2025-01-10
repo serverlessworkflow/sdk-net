@@ -33,14 +33,14 @@ public record AsyncApiCallDefinition
     /// Used only in case the referenced document uses AsyncAPI v2.6.0
     /// </summary>
     [DataMember(Name = "channel", Order = 2), JsonPropertyName("channel"), JsonPropertyOrder(2), JsonInclude, YamlMember(Alias = "channel", Order = 2)]
-    public required virtual string? Channel { get; set; }
+    public virtual string? Channel { get; set; }
 
     /// <summary>
     /// Gets/sets a reference to the AsyncAPI operation to call.<para></para>
     /// Used only in case the referenced document uses AsyncAPI v3.0.0.
     /// </summary>
     [DataMember(Name = "operation", Order = 3), JsonPropertyName("operation"), JsonPropertyOrder(3), JsonInclude, YamlMember(Alias = "operation", Order = 3)]
-    public required virtual string? Operation { get; set; }
+    public virtual string? Operation { get; set; }
 
     /// <summary>
     /// Gets/sets a object used to configure to the server to call the specified AsyncAPI operation on.<para></para>
