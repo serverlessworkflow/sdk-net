@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace ServerlessWorkflow.Sdk.Models.Tasks;
+namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
 /// Represents an object used to configure branches to perform concurrently

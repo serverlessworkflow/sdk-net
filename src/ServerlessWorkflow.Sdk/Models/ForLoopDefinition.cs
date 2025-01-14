@@ -20,7 +20,7 @@ namespace ServerlessWorkflow.Sdk.Models;
 public record ForLoopDefinition
 {
 
-     /// <summary>
+    /// <summary>
     /// Gets/sets the name of the variable that represents each element in the collection during iteration
     /// </summary>
     [Required]

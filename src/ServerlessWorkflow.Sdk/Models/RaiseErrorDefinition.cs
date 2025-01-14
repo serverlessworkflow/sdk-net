@@ -49,7 +49,7 @@ public record RaiseErrorDefinition
     }
 
     /// <summary>
-    /// Gets/sets the endpoint at which to get the defined resource
+    /// Gets/sets the error to raise
     /// </summary>
     [Required]
     [DataMember(Name = "error", Order = 1), JsonInclude, JsonPropertyName("error"), JsonPropertyOrder(1), YamlMember(Alias = "error", Order = 1)]

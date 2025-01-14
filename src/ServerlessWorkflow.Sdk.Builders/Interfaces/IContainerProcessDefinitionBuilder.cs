@@ -30,6 +30,13 @@ public interface IContainerProcessDefinitionBuilder
     IContainerProcessDefinitionBuilder WithImage(string image);
 
     /// <summary>
+    /// Configures the container to use the specified name
+    /// </summary>
+    /// <param name="name">The container's name</param>
+    /// <returns>The configured <see cref="IContainerProcessDefinitionBuilder"/></returns>
+    IContainerProcessDefinitionBuilder WithName(string name);
+
+    /// <summary>
     /// Configures the command, if any, to execute on the container
     /// </summary>
     /// <param name="command">The command to execute</param>

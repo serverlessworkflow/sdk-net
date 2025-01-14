@@ -35,6 +35,16 @@ public class ListenerTargetDefinitionBuilder
     /// </summary>
     protected IEventFilterDefinitionBuilder? SingleEvent { get; set; }
 
+    /// <summary>
+    /// Gets the runtime expression that represents the condition that must match for the task to stop consuming events
+    /// </summary>
+    protected string? UntilExpression { get; private set; }
+
+    /// <summary>
+    /// Gets the strategy used to configure the events to consume for the task to stop consuming events
+    /// </summary>
+    protected EventConsumptionStrategyDefinition? UntilEvents { get; private set; }
+
     /// <inheritdoc/>
     public virtual IEventFilterDefinitionCollectionBuilder All()
     {
@@ -57,6 +67,24 @@ public class ListenerTargetDefinitionBuilder
     }
 
     /// <inheritdoc/>
+    public virtual void Until(string expression)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(expression);
+        if (this.AnyEvents == null) throw new Exception("The until clause can only be specified when the strategy is used to consume any events");
+        this.UntilExpression = expression;
+    }
+
+    /// <inheritdoc/>
+    public virtual void Until(Action<IListenerTargetDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        if (this.AnyEvents == null) throw new Exception("The until clause can only be specified when the strategy is used to consume any events");
+        var builder = new ListenerTargetDefinitionBuilder();
+        setup(builder);
+        this.UntilEvents = builder.Build();
+    }
+
+    /// <inheritdoc/>
     public virtual EventConsumptionStrategyDefinition Build()
     {
         if (this.AllEvents == null && this.AnyEvents == null && this.SingleEvent == null) throw new NullReferenceException("The target must be defined");
@@ -64,7 +92,9 @@ public class ListenerTargetDefinitionBuilder
         {
             All = this.AllEvents?.Build(),
             Any = this.AnyEvents?.Build(),
-            One = this.SingleEvent?.Build()
+            One = this.SingleEvent?.Build(),
+            UntilExpression = this.UntilExpression,
+            Until = this.UntilEvents
         };
     }
 

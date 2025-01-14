@@ -29,6 +29,11 @@ public class ContainerProcessDefinitionBuilder
     protected virtual string? Image { get; set; }
 
     /// <summary>
+    /// Gets/sets the name of the container to run
+    /// </summary>
+    protected virtual string? Name { get; set; }
+
+    /// <summary>
     /// Gets/sets the command, if any, to execute on the container
     /// </summary>
     protected virtual string? Command { get; set; }
@@ -53,6 +58,14 @@ public class ContainerProcessDefinitionBuilder
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(image);
         this.Image = image;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IContainerProcessDefinitionBuilder WithName(string name)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        this.Name = name;
         return this;
     }
 
@@ -122,6 +135,7 @@ public class ContainerProcessDefinitionBuilder
         return new()
         {
             Image = this.Image,
+            Name = this.Name,
             Command = this.Command,
             Ports = this.Ports,
             Volumes = this.Volumes,

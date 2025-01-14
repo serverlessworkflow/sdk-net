@@ -38,6 +38,18 @@ public interface IListenerTargetDefinitionBuilder
     IEventFilterDefinitionBuilder One();
 
     /// <summary>
+    /// Configures the task to listen to any events until the specified condition expression matches
+    /// </summary>
+    /// <param name="expression">A runtime expression that represents the condition that must match for the task to stop consuming events</param>
+    void Until(string expression);
+
+    /// <summary>
+    /// Configures the task to listen to any events until the specified events are consumed
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to configure the events to consume for the task to stop consuming events</param>
+    void Until(Action<IListenerTargetDefinitionBuilder> setup);
+
+    /// <summary>
     /// Builds the configured <see cref="EventConsumptionStrategyDefinition"/>
     /// </summary>
     /// <returns>A new <see cref="EventConsumptionStrategyDefinition"/></returns>
