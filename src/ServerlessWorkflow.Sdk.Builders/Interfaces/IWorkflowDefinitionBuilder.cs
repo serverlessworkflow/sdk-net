@@ -99,6 +99,20 @@ public interface IWorkflowDefinitionBuilder
     IWorkflowDefinitionBuilder WithTimeout(Action<ITimeoutDefinitionBuilder> setup);
 
     /// <summary>
+    /// Sets the workflow's input data
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to configure the workflow's input</param>
+    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
+    IWorkflowDefinitionBuilder WithInput(Action<IInputDataModelDefinitionBuilder> setup);
+
+    /// <summary>
+    /// Sets the workflow's output data
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to configure the workflow's output</param>
+    /// <returns>The configured <see cref="IWorkflowDefinitionBuilder"/></returns>
+    IWorkflowDefinitionBuilder WithOutput(Action<IOutputDataModelDefinitionBuilder> setup);
+
+    /// <summary>
     /// Uses the specified authentication policy
     /// </summary>
     /// <param name="name">The name of the authentication policy to register</param>

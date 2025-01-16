@@ -44,25 +44,46 @@ public interface ITaskDefinitionBuilder<TBuilder>
     TBuilder If(string condition);
 
     /// <summary>
-    /// Sets the workflow's timeout
+    /// Sets the task's timeout
     /// </summary>
-    /// <param name="name">The name of the workflow's timeout</param>
+    /// <param name="name">The name of the task's timeout</param>
     /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
     TBuilder WithTimeout(string name);
 
     /// <summary>
-    /// Sets the workflow's timeout
+    /// Sets the task's timeout
     /// </summary>
-    /// <param name="timeout">The workflow's timeout</param>
+    /// <param name="timeout">The task's timeout</param>
     /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
     TBuilder WithTimeout(TimeoutDefinition timeout);
 
     /// <summary>
-    /// Sets the workflow's timeout
+    /// Sets the task's timeout
     /// </summary>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup the workflow's timeout</param>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the task's timeout</param>
     /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
     TBuilder WithTimeout(Action<ITimeoutDefinitionBuilder> setup);
+
+    /// <summary>
+    /// Sets the task's input data
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to configure the task's input</param>
+    /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
+    TBuilder WithInput(Action<IInputDataModelDefinitionBuilder> setup);
+
+    /// <summary>
+    /// Sets the task's output data
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to configure the task's output</param>
+    /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
+    TBuilder WithOutput(Action<IOutputDataModelDefinitionBuilder> setup);
+
+    /// <summary>
+    /// Sets the data exported by the task
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to configure the data exported by the task</param>
+    /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
+    TBuilder WithExport(Action<IOutputDataModelDefinitionBuilder> setup);
 
     /// <summary>
     /// Configures the task to build to then execute the specified flow directive

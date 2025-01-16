@@ -33,4 +33,10 @@ public record AsyncApiSubscriptionDefinition
     [DataMember(Name = "consume", Order = 2), JsonPropertyName("consume"), JsonPropertyOrder(2), YamlMember(Alias = "consume", Order = 2)]
     public required virtual AsyncApiSubscriptionLifetimeDefinition Consume { get; set; }
 
+    /// <summary>
+    /// Gets/sets the configuration of the iterator, if any, used to process each consumed message
+    /// </summary>
+    [DataMember(Name = "foreach", Order = 3), JsonPropertyName("foreach"), JsonPropertyOrder(3), YamlMember(Alias = "foreach", Order = 3)]
+    public virtual SubscriptionIteratorDefinition? Foreach { get; set; }
+
 }

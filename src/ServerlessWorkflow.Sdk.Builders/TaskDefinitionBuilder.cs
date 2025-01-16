@@ -35,6 +35,21 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     protected OneOf<TimeoutDefinition, string>? Timeout { get; set; }
 
     /// <summary>
+    /// Gets/sets the task's input data, if any
+    /// </summary>
+    protected InputDataModelDefinition? Input { get; set; }
+
+    /// <summary>
+    /// Gets/sets the task's output data, if any
+    /// </summary>
+    protected OutputDataModelDefinition? Output { get; set; }
+
+    /// <summary>
+    /// Gets/sets the task's export data, if any
+    /// </summary>
+    protected OutputDataModelDefinition? Export { get; set; }
+
+    /// <summary>
     /// Gets/sets the flow directive, if any, used to then execute
     /// </summary>
     protected string? ThenDirective { get; set; }
@@ -74,6 +89,36 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     }
 
     /// <inheritdoc/>
+    public virtual TBuilder WithInput(Action<IInputDataModelDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new InputDataModelDefinitionBuilder();
+        setup(builder);
+        this.Input = builder.Build();
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder WithOutput(Action<IOutputDataModelDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new OutputDataModelDefinitionBuilder();
+        setup(builder);
+        this.Output = builder.Build();
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
+    public virtual TBuilder WithExport(Action<IOutputDataModelDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new OutputDataModelDefinitionBuilder();
+        setup(builder);
+        this.Export = builder.Build();
+        return (TBuilder)(object)this;
+    }
+
+    /// <inheritdoc/>
     public virtual TBuilder Then(string directive)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(directive);
@@ -95,6 +140,9 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
             else definition.TimeoutReference = this.Timeout.T2Value;
         }
         definition.Then = this.ThenDirective;
+        definition.Input = this.Input;
+        definition.Output = this.Output;
+        definition.Export = this.Export;
         return definition;
     }
 

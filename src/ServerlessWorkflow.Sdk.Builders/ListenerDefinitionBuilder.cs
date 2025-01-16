@@ -16,33 +16,31 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IListenerDefinitionBuilder"/> interface
 /// </summary>
-/// <param name="target">The listener's target</param>
-public class ListenerDefinitionBuilder(EventConsumptionStrategyDefinition? target = null)
-    : IListenerDefinitionBuilder
+/// <param name="to">The listener's target</param>
+public class ListenerDefinitionBuilder(EventConsumptionStrategyDefinition? to = null)
+    : ListenerTargetDefinitionBuilder, IListenerDefinitionBuilder
 {
 
     /// <summary>
-    /// Gets/sets the listener's target
+    /// Gets/sets the <see cref="ListenerDefinition"/> to configure
     /// </summary>
-    protected EventConsumptionStrategyDefinition? Target { get; set; } = target;
+    protected ListenerDefinition Listener { get; } = new() { To = to! };
 
     /// <inheritdoc/>
-    public virtual IListenerDefinitionBuilder To(Action<IListenerTargetDefinitionBuilder> setup)
+    public virtual IListenerDefinitionBuilder Read(string readMode)
     {
-        var builder = new ListenerTargetDefinitionBuilder();
-        setup(builder);
-        this.Target = builder.Build();
+        ArgumentException.ThrowIfNullOrWhiteSpace(readMode);
+        this.Listener.Read = readMode;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ListenerDefinition Build()
+    public virtual new ListenerDefinition Build()
     {
-        if (this.Target == null) throw new NullReferenceException("The listener's target must be set");
-        return new()
-        {
-            To = this.Target
-        };
+        var to = base.Build();
+        if (to == null) throw new NullReferenceException("The listener's target must be set");
+        this.Listener.To = to;
+        return this.Listener;
     }
 
 }

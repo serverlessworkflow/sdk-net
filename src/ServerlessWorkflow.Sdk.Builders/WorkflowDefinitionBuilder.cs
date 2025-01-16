@@ -64,6 +64,16 @@ public class WorkflowDefinitionBuilder
     protected OneOf<TimeoutDefinition, string>? Timeout { get; set; }
 
     /// <summary>
+    /// Gets/sets the workflow's input data, if any
+    /// </summary>
+    protected InputDataModelDefinition? Input { get; set; }
+
+    /// <summary>
+    /// Gets/sets the workflow's output data, if any
+    /// </summary>
+    protected OutputDataModelDefinition? Output { get; set; }
+
+    /// <summary>
     /// Gets/sets a name/value mapping of the workflow's reusable components
     /// </summary>
     protected ComponentDefinitionCollection? Components { get; set; }
@@ -163,6 +173,26 @@ public class WorkflowDefinitionBuilder
         var builder = new TimeoutDefinitionBuilder();
         setup(builder);
         this.Timeout = builder.Build();
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IWorkflowDefinitionBuilder WithInput(Action<IInputDataModelDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new InputDataModelDefinitionBuilder();
+        setup(builder);
+        this.Input = builder.Build();
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public virtual IWorkflowDefinitionBuilder WithOutput(Action<IOutputDataModelDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new OutputDataModelDefinitionBuilder();
+        setup(builder);
+        this.Output = builder.Build();
         return this;
     }
 
