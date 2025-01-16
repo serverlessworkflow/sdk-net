@@ -21,31 +21,31 @@ public class ListenTaskDefinitionBuilder
 {
 
     /// <summary>
-    /// Gets/sets the task's listener configuration
+    /// Gets/sets the <see cref="ListenTaskDefinition"/> to configure
     /// </summary>
-    protected ListenerDefinition? Listener { get; set; }
+    protected ListenTaskDefinition Task { get; } = new() { Listen = null! };
 
     /// <inheritdoc/>
-    public virtual IListenTaskDefinitionBuilder To(Action<IListenerTargetDefinitionBuilder> setup)
+    public virtual IListenTaskDefinitionBuilder To(Action<IListenerDefinitionBuilder> setup)
     {
-        var builder = new ListenerTargetDefinitionBuilder();
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new ListenerDefinitionBuilder();
         setup(builder);
-        var target = builder.Build();
-        this.Listener = new()
-        {
-            To = target
-        };
+        this.Task.Listen = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public override ListenTaskDefinition Build()
+    public virtual IListenTaskDefinitionBuilder Foreach(Action<ISubscriptionIteratorDefinitionBuilder> setup)
     {
-        if (this.Listener == null) throw new NullReferenceException("The listener must be set");
-        return this.Configure(new()
-        {
-            Listen = this.Listener
-        });
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new SubscriptionIteratorDefinitionBuilder();
+        setup(builder);
+        this.Task.Foreach = builder.Build();    
+        return this;
     }
+
+    /// <inheritdoc/>
+    public override ListenTaskDefinition Build() => this.Configure(this.Task);
 
 }

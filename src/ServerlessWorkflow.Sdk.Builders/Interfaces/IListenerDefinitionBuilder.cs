@@ -17,19 +17,20 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Defines the fundamentals of a service used to build <see cref="ListenerDefinition"/>s
 /// </summary>
 public interface IListenerDefinitionBuilder
+    : IListenerTargetDefinitionBuilder
 {
 
     /// <summary>
-    /// Configures the 
+    /// Configures how to read consumed events
     /// </summary>
-    /// <param name="setup"></param>
-    /// <returns></returns>
-    IListenerDefinitionBuilder To(Action<IListenerTargetDefinitionBuilder> setup);
+    /// <param name="readMode">Specifies how consumed events should be read. See <see cref="EventReadMode"/>s</param>
+    /// <returns>The configured <see cref="IListenerDefinitionBuilder"/></returns>
+    IListenerDefinitionBuilder Read(string readMode);
 
     /// <summary>
     /// Builds the configured <see cref="ListenerDefinition"/>
     /// </summary>
     /// <returns>A new <see cref="ListenerDefinition"/></returns>
-    ListenerDefinition Build();
+    new ListenerDefinition Build();
 
 }

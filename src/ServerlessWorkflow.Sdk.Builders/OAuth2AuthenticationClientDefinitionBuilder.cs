@@ -43,7 +43,7 @@ public class OAuth2AuthenticationClientDefinitionBuilder
     /// <inheritdoc/>
     public virtual IOAuth2AuthenticationClientDefinitionBuilder WithId(string id)
     {
-        ArgumentException.ThrowIfNullOrEmpty(id);
+        ArgumentException.ThrowIfNullOrWhiteSpace(id);
         this.Id = id;
         return this;
     }
@@ -51,7 +51,7 @@ public class OAuth2AuthenticationClientDefinitionBuilder
     /// <inheritdoc/>
     public virtual IOAuth2AuthenticationClientDefinitionBuilder WithSecret(string secret)
     {
-        ArgumentException.ThrowIfNullOrEmpty(secret);
+        ArgumentException.ThrowIfNullOrWhiteSpace(secret);
         this.Secret = secret;
         return this;
     }

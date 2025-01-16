@@ -25,6 +25,13 @@ public interface IListenTaskDefinitionBuilder
     /// </summary>
     /// <param name="setup">An <see cref="Action{T}"/> used to setup the task's listener target</param>
     /// <returns>The configured <see cref="IListenTaskDefinitionBuilder"/></returns>
-    IListenTaskDefinitionBuilder To(Action<IListenerTargetDefinitionBuilder> setup);
+    IListenTaskDefinitionBuilder To(Action<IListenerDefinitionBuilder> setup);
+
+    /// <summary>
+    /// Configures the iterator used to process each consumed event
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to configure the <see cref="SubscriptionIteratorDefinition"/> to use</param>
+    /// <returns>The configured <see cref="IListenTaskDefinitionBuilder"/></returns>
+    IListenTaskDefinitionBuilder Foreach(Action<ISubscriptionIteratorDefinitionBuilder> setup);
 
 }

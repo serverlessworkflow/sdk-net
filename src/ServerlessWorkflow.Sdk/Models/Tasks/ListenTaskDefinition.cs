@@ -32,4 +32,10 @@ public record ListenTaskDefinition
     [DataMember(Name = "listen", Order = 1), JsonPropertyName("listen"), JsonPropertyOrder(1), YamlMember(Alias = "listen", Order = 1)]
     public required virtual ListenerDefinition Listen { get; set; }
 
+    /// <summary>
+    /// Gets/sets the configuration of the iterator, if any, used to process each consumed event
+    /// </summary>
+    [DataMember(Name = "foreach", Order = 2), JsonPropertyName("foreach"), JsonPropertyOrder(2), YamlMember(Alias = "foreach", Order = 2)]
+    public virtual SubscriptionIteratorDefinition? Foreach { get; set; }
+
 }
