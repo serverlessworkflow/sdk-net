@@ -37,8 +37,7 @@ public class ListenerDefinitionBuilder(EventConsumptionStrategyDefinition? to = 
     /// <inheritdoc/>
     public virtual new ListenerDefinition Build()
     {
-        var to = base.Build();
-        if (to == null) throw new NullReferenceException("The listener's target must be set");
+        var to = base.Build() ?? throw new NullReferenceException("The listener's target must be set");
         this.Listener.To = to;
         return this.Listener;
     }

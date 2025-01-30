@@ -27,12 +27,4 @@ public record EventEmissionDefinition
     [DataMember(Name = "event", Order = 1), JsonPropertyName("event"), JsonPropertyOrder(1), YamlMember(Alias = "event", Order = 1)]
     public required virtual EventDefinition Event { get; set; }
 
-    /// <summary>
-    /// Gets/sets an additional endpoint for emitting a carbon copy of the event. 
-    /// While the runtime's default cloud event endpoint remains the primary destination, setting this property ensures that the event is also published to the specified endpoint. 
-    /// Ideally, this property is left unset so that event delivery relies solely on the runtime's configured endpoint, but when provided, the event will be sent to both endpoints concurrently.
-    /// </summary>
-    [DataMember(Name = "cc", Order = 2), JsonPropertyName("cc"), JsonPropertyOrder(2), YamlMember(Alias = "cc", Order = 2)]
-    public virtual EndpointDefinition? Cc { get; set; }
-
 }
