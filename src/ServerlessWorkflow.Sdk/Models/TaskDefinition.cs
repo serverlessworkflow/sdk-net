@@ -99,5 +99,10 @@ public abstract record TaskDefinition
     [DataMember(Name = "metadata", Order = 15), JsonPropertyName("metadata"), JsonPropertyOrder(15), YamlMember(Alias = "metadata", Order = 15)]
     public virtual EquatableDictionary<string, object>? Metadata { get; set; }
 
+    /// <summary>
+    /// Gets/sets the object used to define the errors to catch
+    /// </summary>
+    [DataMember(Name = "catch", Order = 16), JsonPropertyName("catch"), JsonPropertyOrder(16), YamlMember(Alias = "catch", Order = 16)]
+    public virtual ErrorCatcherDefinition? Catch { get; set; }
 }
 

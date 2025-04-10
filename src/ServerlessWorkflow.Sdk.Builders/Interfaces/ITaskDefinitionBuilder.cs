@@ -92,6 +92,12 @@ public interface ITaskDefinitionBuilder<TBuilder>
     /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
     TBuilder Then(string directive);
 
+    /// <summary>
+    /// Configures the task to catch defined errors
+    /// </summary>
+    /// <param name="setup">An <see cref="Action{T}"/> used to setup the <see cref="ErrorCatcherDefinition"/> to use</param>
+    /// <returns>The configured <see cref="ITaskDefinitionBuilder{TBuilder}"/></returns>
+    TBuilder Catch(Action<IErrorCatcherDefinitionBuilder> setup);
 }
 
 /// <summary>

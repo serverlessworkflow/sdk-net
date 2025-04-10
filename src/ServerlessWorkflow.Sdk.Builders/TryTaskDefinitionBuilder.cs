@@ -25,11 +25,6 @@ public class TryTaskDefinitionBuilder
     /// </summary>
     protected Map<string, TaskDefinition>? TryTasks { get; set; }
 
-    /// <summary>
-    /// Gets/sets the definition of the error catcher to use
-    /// </summary>
-    protected ErrorCatcherDefinition? ErrorCatcher { get; set; }
-
     /// <inheritdoc/>
     public virtual ITryTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
@@ -37,15 +32,6 @@ public class TryTaskDefinitionBuilder
         var builder = new TaskDefinitionMapBuilder();
         setup(builder);
         this.TryTasks = builder.Build();
-        return this;
-    }
-
-    /// <inheritdoc/>
-    public virtual ITryTaskDefinitionBuilder Catch(Action<IErrorCatcherDefinitionBuilder> setup)
-    {
-        ArgumentNullException.ThrowIfNull(setup);
-        var builder = new ErrorCatcherDefinitionBuilder();
-        this.ErrorCatcher = builder.Build();
         return this;
     }
 

@@ -54,6 +54,11 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     /// </summary>
     protected string? ThenDirective { get; set; }
 
+    /// <summary>
+    /// Gets/sets the definition of the catch node, if any
+    /// </summary>
+    protected ErrorCatcherDefinition? ErrorCatcher { get; set; }
+
     /// <inheritdoc/>
     public virtual TBuilder If(string condition)
     {
@@ -126,6 +131,16 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
         return (TBuilder)(object)this;
     }
 
+    /// <inheritdoc/>
+    public virtual TBuilder Catch(Action<IErrorCatcherDefinitionBuilder> setup)
+    {
+        ArgumentNullException.ThrowIfNull(setup);
+        var builder = new ErrorCatcherDefinitionBuilder();
+        setup(builder);
+        this.ErrorCatcher = builder.Build();
+        return (TBuilder)(object)this;
+    }
+
     /// <summary>
     /// Applies the configuration common to all types of tasks
     /// </summary>
@@ -143,6 +158,7 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
         definition.Input = this.Input;
         definition.Output = this.Output;
         definition.Export = this.Export;
+        definition.Catch = this.ErrorCatcher;
         return definition;
     }
 
