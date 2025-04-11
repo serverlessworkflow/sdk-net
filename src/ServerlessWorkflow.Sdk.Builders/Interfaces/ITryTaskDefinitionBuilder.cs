@@ -27,11 +27,4 @@ public interface ITryTaskDefinitionBuilder
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
     ITryTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup);
 
-    /// <summary>
-    /// Configures the task to catch defined errors
-    /// </summary>
-    /// <param name="setup">An <see cref="Action{T}"/> used to setup the <see cref="ErrorCatcherDefinition"/> to use</param>
-    /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ITryTaskDefinitionBuilder Catch(Action<IErrorCatcherDefinitionBuilder> setup);
-
 }

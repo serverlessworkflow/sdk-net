@@ -39,6 +39,9 @@ public class TaskDefinitionValidator
             .Must(ReferenceAnExistingTimeout)
             .When(t => !string.IsNullOrWhiteSpace(t.TimeoutReference))
             .WithMessage(ValidationErrors.UndefinedTimeout);
+        this.RuleFor(t => t.Catch!)
+           .SetValidator(t => new ErrorCatcherDefinitionValidator(this.ServiceProvider, this.Components))
+           .When(t => t.Catch != null);
         this.When(t => t is CallTaskDefinition, () =>
         {
             this.RuleFor(t => (CallTaskDefinition)t)

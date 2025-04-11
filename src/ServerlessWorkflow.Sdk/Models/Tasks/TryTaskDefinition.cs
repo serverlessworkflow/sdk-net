@@ -37,6 +37,6 @@ public record TryTaskDefinition
     /// </summary>
     [Required]
     [DataMember(Name = "catch", Order = 2), JsonPropertyName("catch"), JsonPropertyOrder(2), YamlMember(Alias = "catch", Order = 2)]
-    public required virtual ErrorCatcherDefinition Catch { get; set; }
+    public override ErrorCatcherDefinition? Catch { get; set; }
 
 }
