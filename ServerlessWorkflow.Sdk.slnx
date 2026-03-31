@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Abstractions/ServerlessWorkflow.Sdk.Runtime.Abstractions.csproj" />
+    <Project Path="src/ServerlessWorkflow.Sdk/ServerlessWorkflow.Sdk.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ServerlessWorkflow.Sdk.UnitTests/ServerlessWorkflow.Sdk.UnitTests.csproj" Id="e9c6b522-c1a1-4385-b0ba-bc973f616cf5" />
+  </Folder>
+</Solution>

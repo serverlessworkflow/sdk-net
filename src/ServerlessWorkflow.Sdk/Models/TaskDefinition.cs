@@ -1,103 +1,61 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
-//
-// Licensed under the Apache License, Version 2.0 (the "License"),
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-using ServerlessWorkflow.Sdk.Serialization.Json;
-
-namespace ServerlessWorkflow.Sdk.Models;
+﻿namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
-/// Represents the definition of a task
+/// Represents the definition of a task.
 /// </summary>
+[Description("Represents the definition of a task.")]
 [DataContract, JsonConverter(typeof(TaskDefinitionJsonConverter))]
 public abstract record TaskDefinition
     : ComponentDefinition
 {
 
     /// <summary>
-    /// Gets the type of the defined task
-    /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public abstract string Type { get; }
-
-    /// <summary>
     /// Gets/sets a runtime expression, if any, used to determine whether or not the execute the task in the current context
     /// </summary>
-    [DataMember(Name = "if", Order = 0), JsonPropertyName("if"), JsonPropertyOrder(0), YamlMember(Alias = "if", Order = 0)]
-    public virtual string? If { get; set; }
+    [Description("A runtime expression, if any, used to determine whether or not the execute the task in the current context")]
+    [DataMember(Order = 0, Name = "if"), JsonPropertyOrder(0), JsonPropertyName("if")]
+    public string? If { get; init; }
 
     /// <summary>
     /// Gets/sets the definition, if any, of the task's input data
     /// </summary>
-    [DataMember(Name = "input", Order = 10), JsonPropertyName("input"), JsonPropertyOrder(10), YamlMember(Alias = "input", Order = 10)]
-    public virtual InputDataModelDefinition? Input { get; set; }
+    [Description("The definition, if any, of the task's input data")]
+    [DataMember(Order = 90, Name = "input"), JsonPropertyOrder(90), JsonPropertyName("input")]
+    public InputDataModelDefinition? Input { get; init; }
 
     /// <summary>
     /// Gets/sets the definition, if any, of the task's output data
     /// </summary>
-    [DataMember(Name = "output", Order = 11), JsonPropertyName("output"), JsonPropertyOrder(11), YamlMember(Alias = "output", Order = 11)]
-    public virtual OutputDataModelDefinition? Output { get; set; }
+    [Description("The definition, if any, of the task's output data")]
+    [DataMember(Order = 91, Name = "output"), JsonPropertyOrder(91), JsonPropertyName("output")]
+    public OutputDataModelDefinition? Output { get; init; }
 
     /// <summary>
     /// Gets/sets the optional configuration for exporting data within the task's context
     /// </summary>
-    [DataMember(Name = "export", Order = 12), JsonPropertyName("export"), JsonPropertyOrder(12), YamlMember(Alias = "export", Order = 12)]
-    public virtual OutputDataModelDefinition? Export { get; set; }
+    [Description("The optional configuration for exporting data within the task's context")]
+    [DataMember(Order = 92, Name = "export"), JsonPropertyOrder(92), JsonPropertyName("export")]
+    public OutputDataModelDefinition? Export { get; init; }
 
     /// <summary>
     /// Gets/sets the task's timeout, if any
     /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual TimeoutDefinition? Timeout
-    {
-        get => this.TimeoutValue?.T1Value;
-        set
-        {
-            ArgumentNullException.ThrowIfNull(value);
-            this.TimeoutValue = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets/sets the reference to the task's timeout, if any
-    /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual string? TimeoutReference
-    {
-        get => this.TimeoutValue?.T2Value;
-        set
-        {
-            ArgumentException.ThrowIfNullOrWhiteSpace(value);
-            this.TimeoutValue = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets/sets the task's timeout, if any
-    /// </summary>
-    [DataMember(Name = "timeout", Order = 13), JsonPropertyName("timeout"), JsonPropertyOrder(13), YamlMember(Alias = "timeout", Order = 13)]
-    protected virtual OneOf<TimeoutDefinition, string>? TimeoutValue { get; set; } = null!;
+    [Description("The task's timeout, if any")]
+    [DataMember(Order = 93, Name = "timeout"), JsonPropertyOrder(93), JsonPropertyName("timeout"), JsonConverter(typeof(OneOfJsonConverter<TimeoutDefinition, string>))]
+    protected OneOf<TimeoutDefinition, string>? Timeout { get; init; }
 
     /// <summary>
     /// Gets/sets the flow directive to be performed upon completion of the task
     /// </summary>
-    [DataMember(Name = "then", Order = 14), JsonPropertyName("then"), JsonPropertyOrder(14), YamlMember(Alias = "then", Order = 14)]
-    public virtual string? Then { get; set; }
+    [Description("The flow directive to be performed upon completion of the task")]
+    [DataMember(Order = 94, Name = "then"), JsonPropertyOrder(94), JsonPropertyName("then")]
+    public string? Then { get; init; }
 
     /// <summary>
     /// Gets/sets a key/value mapping of additional information associated with the task
     /// </summary>
-    [DataMember(Name = "metadata", Order = 15), JsonPropertyName("metadata"), JsonPropertyOrder(15), YamlMember(Alias = "metadata", Order = 15)]
-    public virtual EquatableDictionary<string, object>? Metadata { get; set; }
+    [Description("A key/value mapping of additional information associated with the task")]
+    [DataMember(Order = 95, Name = "metadata"), JsonPropertyOrder(95), JsonPropertyName("metadata")]
+    public JsonObject? Metadata { get; init; }
 
 }
-

@@ -1,96 +1,108 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
-//
-// Licensed under the Apache License, Version 2.0 (the "License"),
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-using ServerlessWorkflow.Sdk.Serialization.Json;
-
-namespace ServerlessWorkflow.Sdk.Models;
+﻿namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
-/// Gets an object that is one of the specified types
+/// Represents a value that can be one of two possible types.
 /// </summary>
-/// <typeparam name="T1">A first type alternative</typeparam>
-/// <typeparam name="T2">A second type alternative</typeparam>
-[DataContract, JsonConverter(typeof(OneOfConverter))]
-public class OneOf<T1, T2>
-    : IOneOf
+/// <typeparam name="T1">The first possible type.</typeparam>
+/// <typeparam name="T2">The second possible type.</typeparam>
+public sealed record OneOf<T1, T2>
 {
 
+    readonly byte tag;
+    readonly T1? t1;
+    readonly T2? t2;
+
     /// <summary>
-    /// Initializes a new <see cref="OneOf{T1, T2}"/>
+    /// Initializes a new <see cref="OneOf{T1, T2}"/>.
     /// </summary>
-    /// <param name="value">The value of the <see cref="OneOf{T1, T2}"/></param>
+    /// <param name="value">The value.</param>
     public OneOf(T1 value)
     {
-        this.TypeIndex = 1;
-        this.T1Value = value!;
+        tag = 1;
+        t1 = value;
+        t2 = default;
     }
 
     /// <summary>
-    /// Initializes a new <see cref="OneOf{T1, T2}"/>
+    /// Initializes a new <see cref="OneOf{T1, T2}"/>.
     /// </summary>
-    /// <param name="value">The value of the <see cref="OneOf{T1, T2}"/></param>
+    /// <param name="value">The value.</param>
     public OneOf(T2 value)
     {
-        this.TypeIndex = 2;
-        this.T2Value = value!;
+        tag = 2;
+        t1 = default;
+        t2 = value;
     }
 
     /// <summary>
-    /// Gets the index of the discriminated type
+    /// Attempts to get the value as <typeparamref name="T1"/>.
     /// </summary>
-    public int TypeIndex { get; }
-
-    /// <summary>
-    /// Gets the first possible value
-    /// </summary>
-    [DataMember(Order = 1), JsonIgnore, YamlIgnore]
-    public T1? T1Value { get; }
-
-    /// <summary>
-    /// Gets the second possible value
-    /// </summary>
-    [DataMember(Order = 2), JsonIgnore, YamlIgnore]
-    public T2? T2Value { get; }
-
-    object? IOneOf.GetValue() => this.TypeIndex switch
+    /// <param name="value">The output value.</param>
+    /// <returns>A boolean indicating whether the value was of type <typeparamref name="T1"/>.</returns>
+    public bool TryGetAsT1(out T1? value)
     {
-        1 => this.T1Value,
-        2 => this.T2Value,
-        _ => null
+        value = t1;
+        if (tag is not 1) return false;
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to get the value as <typeparamref name="T2"/>.
+    /// </summary>
+    /// <param name="value">The output value.</param>
+    /// <returns>A boolean indicating whether the value was of type <typeparamref name="T2"/>.</returns>
+    public bool TryGetAsT2(out T2? value)
+    {
+        value = t2;
+        if (tag is not 2) return false;
+
+        return true;
+    }
+
+    /// <summary>
+    /// Matches the value and invokes the corresponding function.
+    /// </summary>
+    /// <typeparam name="T">The return type of the functions.</typeparam>
+    /// <param name="f1">The function to invoke if the value is of type <typeparamref name="T1"/>.</param>
+    /// <param name="f2">The function to invoke if the value is of type <typeparamref name="T2"/>.</param>
+    /// <returns>TA value of type <typeparamref name="T"/>.</returns>
+    public T Match<T>(Func<T1, T> f1, Func<T2, T> f2) => tag switch
+    {
+        1 => f1(t1!),
+        2 => f2(t2!),
+        _ => throw new InvalidOperationException("Invalid OneOf state."),
     };
 
     /// <summary>
-    /// Implicitly convert the specified value into a new <see cref="OneOf{T1, T2}"/>
+    /// Switches the value and invokes the corresponding action.
     /// </summary>
-    /// <param name="value">The value to convert</param>
+    /// <param name="a1">The action to invoke if the value is of type <typeparamref name="T1"/>.</param>
+    /// <param name="a2">The action to invoke if the value is of type <typeparamref name="T2"/>.</param>
+    public void Switch(Action<T1> a1, Action<T2> a2)
+    {
+        switch (tag)
+        {
+            case 1:
+                a1(t1!);
+                break;
+            case 2:
+                a2(t2!);
+                break;
+            default:
+                throw new InvalidOperationException("Invalid OneOf state.");
+        }
+    }
+
+    /// <summary>
+    /// Implicitly converts a <typeparamref name="T1"/> to a <see cref="OneOf{T1, T2}"/>.
+    /// </summary>
+    /// <param name="value">The value to convert.</param>
     public static implicit operator OneOf<T1, T2>(T1 value) => new(value);
 
     /// <summary>
-    /// Implicitly convert the specified value into a new <see cref="OneOf{T1, T2}"/>
+    /// Implicitly converts a <typeparamref name="T2"/> to a <see cref="OneOf{T1, T2}"/>.
     /// </summary>
-    /// <param name="value">The value to convert</param>
+    /// <param name="value">The value to convert.</param>
     public static implicit operator OneOf<T1, T2>(T2 value) => new(value);
-
-    /// <summary>
-    /// Implicitly convert the specified <see cref="OneOf{T1, T2}"/> into a new value
-    /// </summary>
-    /// <param name="value">The <see cref="OneOf{T1, T2}"/> to convert</param>
-    public static implicit operator T1?(OneOf<T1, T2> value) => value.T1Value;
-
-    /// <summary>
-    /// Implicitly convert the specified <see cref="OneOf{T1, T2}"/> into a new value
-    /// </summary>
-    /// <param name="value">The <see cref="OneOf{T1, T2}"/> to convert</param>
-    public static implicit operator T2?(OneOf<T1, T2> value) => value.T2Value;
 
 }
