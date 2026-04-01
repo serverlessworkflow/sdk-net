@@ -14,6 +14,6 @@ public abstract record Extendable
     /// </summary>
     [Description("A key/value mapping of the object's extension data, if any")]
     [DataMember(Order = 100, Name = "extensions"), JsonPropertyOrder(100), JsonPropertyName("extensions")]
-    public virtual JsonObject? Extensions { get; set; }
+    public virtual JsonObject? Extensions { get; init; }
 
 }

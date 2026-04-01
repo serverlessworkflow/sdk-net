@@ -2,6 +2,7 @@
 global using ServerlessWorkflow.Sdk.Models.Authentication;
 global using ServerlessWorkflow.Sdk.Models.Tasks;
 global using ServerlessWorkflow.Sdk.Serialization.Json;
+global using System.Collections;
 global using System.ComponentModel;
 global using System.ComponentModel.DataAnnotations;
 global using System.Runtime.Serialization;

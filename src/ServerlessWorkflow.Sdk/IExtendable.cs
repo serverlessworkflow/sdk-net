@@ -9,6 +9,6 @@ public interface IExtendable
     /// <summary>
     /// Gets/sets a name/definition mapping of the component's extensions, if any
     /// </summary>
-    JsonObject? Extensions { get; set; }
+    JsonObject? Extensions { get; init; }
 
 }
