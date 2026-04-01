@@ -9,6 +9,10 @@ public sealed record ListenTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Listen;
+
     /// <summary>
     /// Gets/sets the configuration of the listener to use
     /// </summary>

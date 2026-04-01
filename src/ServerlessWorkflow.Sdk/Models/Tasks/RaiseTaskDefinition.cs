@@ -9,6 +9,10 @@ public sealed record RaiseTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Raise;
+
     /// <summary>
     /// Gets/sets the definition of the error to raise
     /// </summary>

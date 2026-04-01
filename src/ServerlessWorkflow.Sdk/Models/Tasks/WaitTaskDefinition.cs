@@ -9,6 +9,10 @@ public sealed record WaitTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Wait;
+
     /// <summary>
     /// Gets/sets the amount of time to wait before resuming workflow
     /// </summary>

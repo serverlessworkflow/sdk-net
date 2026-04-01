@@ -9,6 +9,10 @@ public sealed record EmitTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Emit;
+
     /// <summary>
     /// Gets/sets the configuration of an event's emission
     /// </summary>

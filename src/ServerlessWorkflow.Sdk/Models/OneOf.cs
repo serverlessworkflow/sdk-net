@@ -74,6 +74,21 @@ public sealed record OneOf<T1, T2>
     };
 
     /// <summary>
+    /// Matches the value and invokes the corresponding function.
+    /// </summary>
+    /// <typeparam name="T">The return type of the functions.</typeparam>
+    /// <param name="f1">The function to invoke if the value is of type <typeparamref name="T1"/>.</param>
+    /// <param name="f2">The function to invoke if the value is of type <typeparamref name="T2"/>.</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/>.</param>
+    /// <returns>TA value of type <typeparamref name="T"/>.</returns>
+    public async Task<T> MatchAsync<T>(Func<T1, CancellationToken, Task<T>> f1, Func<T2, CancellationToken, Task<T>> f2, CancellationToken cancellationToken = default) => tag switch
+    {
+        1 => await f1(t1!, cancellationToken),
+        2 => await f2(t2!, cancellationToken),
+        _ => throw new InvalidOperationException("Invalid OneOf state."),
+    };
+
+    /// <summary>
     /// Switches the value and invokes the corresponding action.
     /// </summary>
     /// <param name="a1">The action to invoke if the value is of type <typeparamref name="T1"/>.</param>

@@ -6,7 +6,18 @@
       "Bash(grep -E \"\\\\.cs$\")",
       "Bash(dotnet build:*)",
       "Bash(dotnet test:*)",
-      "Bash(ls -la src/ServerlessWorkflow.Sdk/Models/*.cs)"
+      "Bash(ls -la src/ServerlessWorkflow.Sdk/Models/*.cs)",
+      "Bash(grep -h \"^namespace\" \"C:\\\\Users\\\\User\\\\source\\\\repos\\\\sdk-net/src/ServerlessWorkflow.Sdk/Models\"/*.cs)",
+      "Bash(find \"C:\\\\Users\\\\User\\\\source\\\\repos\\\\sdk-net/src/ServerlessWorkflow.Sdk/Models\" -name \"*.cs\" -type f -exec grep -h \"^namespace\" {})",
+      "Bash(find \"C:\\\\Users\\\\User\\\\source\\\\repos\\\\sdk-net/src/\" -name \"*.cs\" -type f -exec grep -l \"JsonConverter\\\\|JsonSerializable\" {})",
+      "Bash(ls /c/Users/User/source/repos/sdk-net/src/ServerlessWorkflow.Sdk/bin/*/net*/)",
+      "Bash(ls /c/Users/User/source/repos/sdk-net/src/ServerlessWorkflow.Sdk/bin/Release/net9.0/*.dll)",
+      "Bash(ls /c/Users/User/source/repos/sdk-net/src/ServerlessWorkflow.Sdk/bin/Release/net8.0/*.dll)",
+      "Bash(dotnet nuget:*)",
+      "Bash(dotnet package:*)",
+      "Bash(find \"C:\\\\Users\\\\User\\\\source\\\\repos\\\\sdk-net\\\\src\\\\ServerlessWorkflow.Sdk\" -name \"*.cs\" -type f -exec grep -l \"EquatableDictionary\" {})",
+      "Bash(xargs -I {} head -50 {})",
+      "Bash(dotnet run:*)"
     ]
   }
 }

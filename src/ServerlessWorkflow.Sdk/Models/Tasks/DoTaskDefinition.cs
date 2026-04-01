@@ -9,6 +9,10 @@ public sealed record DoTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Do;
+
     /// <summary>
     /// Gets/sets a name/definition mapping of the subtasks to perform sequentially
     /// </summary>

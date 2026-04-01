@@ -9,6 +9,10 @@ public sealed record RunTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Run;
+
     /// <summary>
     /// Gets/sets the configuration of the process to execute
     /// </summary>

@@ -9,6 +9,10 @@ public sealed record SwitchTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Switch;
+
     /// <summary>
     /// Gets/sets the definition of the switch to use
     /// </summary>

@@ -9,6 +9,10 @@ public sealed record ForTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.For;
+
     /// <summary>
     /// Gets/sets the definition of the loop that iterates over a range of values
     /// </summary>

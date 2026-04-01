@@ -9,6 +9,10 @@ public sealed record ExtensionTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Extension;
+
     /// <summary>
     /// Gets/sets the task definition's extension data, if any
     /// </summary>

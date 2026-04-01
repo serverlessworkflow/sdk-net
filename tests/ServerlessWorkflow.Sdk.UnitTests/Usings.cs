@@ -2,7 +2,7 @@
 global using AwesomeAssertions.Primitives;
 global using Json.More;
 global using Json.Patch;
-global using ServerlessWorkflow.Sdk;
+global using Json.Pointer;
 global using ServerlessWorkflow.Sdk.Models;
 global using ServerlessWorkflow.Sdk.Models.Authentication;
 global using ServerlessWorkflow.Sdk.Models.Tasks;

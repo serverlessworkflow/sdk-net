@@ -9,6 +9,10 @@ public sealed record ForkTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Fork;
+
     /// <summary>
     /// Gets/sets the configuration of the branches to perform concurrently
     /// </summary>

@@ -10,6 +10,12 @@ public abstract record TaskDefinition
 {
 
     /// <summary>
+    /// Gets the type of the defined task
+    /// </summary>
+    [IgnoreDataMember, JsonIgnore]
+    public abstract string Type { get; }
+
+    /// <summary>
     /// Gets/sets a runtime expression, if any, used to determine whether or not the execute the task in the current context
     /// </summary>
     [Description("A runtime expression, if any, used to determine whether or not the execute the task in the current context")]
@@ -42,7 +48,7 @@ public abstract record TaskDefinition
     /// </summary>
     [Description("The task's timeout, if any")]
     [DataMember(Order = 93, Name = "timeout"), JsonPropertyOrder(93), JsonPropertyName("timeout"), JsonConverter(typeof(OneOfJsonConverter<TimeoutDefinition, string>))]
-    protected OneOf<TimeoutDefinition, string>? Timeout { get; init; }
+    public OneOf<TimeoutDefinition, string>? Timeout { get; init; }
 
     /// <summary>
     /// Gets/sets the flow directive to be performed upon completion of the task

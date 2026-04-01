@@ -9,6 +9,10 @@ public sealed record CallTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Call;
+
     /// <summary>
     /// Gets/sets the reference to the function to call
     /// </summary>

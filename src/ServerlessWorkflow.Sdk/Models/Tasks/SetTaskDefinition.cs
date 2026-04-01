@@ -9,6 +9,10 @@ public sealed record SetTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Set;
+
     /// <summary>
     /// Gets/sets the data to set
     /// </summary>

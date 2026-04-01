@@ -9,6 +9,10 @@ public sealed record TryTaskDefinition
     : TaskDefinition
 {
 
+    /// <inheritdoc/>
+    [IgnoreDataMember, JsonIgnore]
+    public override string Type => TaskType.Try;
+
     /// <summary>
     /// Gets/sets a name/definition map of the tasks to try running
     /// </summary>
