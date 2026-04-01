@@ -49,6 +49,6 @@ public sealed record ErrorDefinition
     /// </summary>
     [Description("A mapping containing error details extension data, if any")]
     [DataMember(Order = 6, Name = "extensionData"), JsonExtensionData]
-    public JsonObject? ExtensionData { get; init; }
+    public IDictionary<string, JsonElement>? ExtensionData { get; set; }
 
 }

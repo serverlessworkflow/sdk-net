@@ -5,7 +5,8 @@
       "Bash(xargs cat:*)",
       "Bash(grep -E \"\\\\.cs$\")",
       "Bash(dotnet build:*)",
-      "Bash(dotnet test:*)"
+      "Bash(dotnet test:*)",
+      "Bash(ls -la src/ServerlessWorkflow.Sdk/Models/*.cs)"
     ]
   }
 }

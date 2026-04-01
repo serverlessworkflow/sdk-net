@@ -1,4 +1,13 @@
 <Solution>
+  <Folder Name="/docs/">
+    <File Path="CODE_OF_CONDUCT.md" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="LICENSE" />
+    <File Path="MAINTAINERS.md" />
+    <File Path="maintainer_guidelines.md" />
+    <File Path="README.md" />
+    <File Path="SECURITY.md" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Abstractions/ServerlessWorkflow.Sdk.Runtime.Abstractions.csproj" />
     <Project Path="src/ServerlessWorkflow.Sdk/ServerlessWorkflow.Sdk.csproj" />
