@@ -6,7 +6,7 @@
 /// <typeparam name="TKey">The type of keys contained by the dictionary</typeparam>
 /// <typeparam name="TValue">The type of values contained by the dictionary</typeparam>
 [CollectionDataContract]
-public record EquatableDictionary<TKey, TValue>
+public sealed record EquatableDictionary<TKey, TValue>
     : IDictionary<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>
     where TKey : notnull
 {
@@ -25,7 +25,7 @@ public record EquatableDictionary<TKey, TValue>
     /// <summary>
     /// Gets the underlying <see cref="IDictionary"/>
     /// </summary>
-    protected IDictionary<TKey, TValue> Items { get; init; }
+    IDictionary<TKey, TValue> Items { get; init; }
 
     /// <inheritdoc/>
     public TValue this[TKey key] { get => this.Items[key]; set => this.Items[key] = value; }
@@ -87,7 +87,7 @@ public record EquatableDictionary<TKey, TValue>
     }
 
     /// <inheritdoc/>
-    public virtual bool Equals(EquatableDictionary<TKey, TValue>? other)
+    public bool Equals(EquatableDictionary<TKey, TValue>? other)
     {
         if (other == null || other.Count != this.Count) return false;
         for (var i = 0; i < this.Count; i++)

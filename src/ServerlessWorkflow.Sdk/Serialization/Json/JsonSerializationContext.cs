@@ -11,9 +11,11 @@
 [JsonSerializable(typeof(BasicAuthenticationSchemeDefinition))]
 [JsonSerializable(typeof(BearerAuthenticationSchemeDefinition))]
 [JsonSerializable(typeof(BranchingDefinition))]
+[JsonSerializable(typeof(CatalogDefinition))]
 [JsonSerializable(typeof(CallTaskDefinition))]
 [JsonSerializable(typeof(CertificateAuthenticationSchemeDefinition))]
 [JsonSerializable(typeof(ComponentDefinition))]
+[JsonSerializable(typeof(ComponentDefinitionCollection))]
 [JsonSerializable(typeof(ContainerLifetimeDefinition))]
 [JsonSerializable(typeof(ContainerProcessDefinition))]
 [JsonSerializable(typeof(ConstantBackoffDefinition))]
@@ -31,6 +33,7 @@
 [JsonSerializable(typeof(EventEmissionDefinition))]
 [JsonSerializable(typeof(EventFilterDefinition))]
 [JsonSerializable(typeof(ExponentialBackoffDefinition))]
+[JsonSerializable(typeof(ExtensionDefinition))]
 [JsonSerializable(typeof(ExtensionTaskDefinition))]
 [JsonSerializable(typeof(ExternalResourceDefinition))]
 [JsonSerializable(typeof(ForkTaskDefinition))]
@@ -65,6 +68,7 @@
 [JsonSerializable(typeof(RetryPolicyDefinition))]
 [JsonSerializable(typeof(RetryPolicyLimitDefinition))]
 [JsonSerializable(typeof(RunTaskDefinition))]
+[JsonSerializable(typeof(RuntimeExpressionEvaluationConfiguration))]
 [JsonSerializable(typeof(SchemaDefinition))]
 [JsonSerializable(typeof(ScriptProcessDefinition))]
 [JsonSerializable(typeof(SetTaskDefinition))]
@@ -77,7 +81,9 @@
 [JsonSerializable(typeof(TryTaskDefinition))]
 [JsonSerializable(typeof(WaitTaskDefinition))]
 [JsonSerializable(typeof(WorkflowDefinition))]
+[JsonSerializable(typeof(WorkflowDefinitionMetadata))]
 [JsonSerializable(typeof(WorkflowProcessDefinition))]
+[JsonSerializable(typeof(WorkflowScheduleDefinition))]
 public partial class JsonSerializationContext
     : JsonSerializerContext
 {
