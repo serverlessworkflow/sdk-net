@@ -44,7 +44,7 @@ public interface IWorkflowState
     /// <summary>
     /// Gets the error, if any, that has occurred during the workflow's execution
     /// </summary>
-    Error? Error { get; }
+    IRuntimeError? Error { get; }
 
     /// <summary>
     /// Gets a value indicating whether the workflow is in an operative state

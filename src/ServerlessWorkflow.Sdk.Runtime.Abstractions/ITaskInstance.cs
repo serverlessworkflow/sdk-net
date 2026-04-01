@@ -45,7 +45,7 @@ public interface ITaskInstance
     /// <param name="cause">The error that caused the retry attempt</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task RetryAsync(Error cause, CancellationToken cancellationToken = default);
+    Task RetryAsync(IRuntimeError cause, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sets an error that has occurred during the task's execution
@@ -53,7 +53,7 @@ public interface ITaskInstance
     /// <param name="error">The error that has occurred</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SetErrorAsync(Error error, CancellationToken cancellationToken = default);
+    Task SetErrorAsync(IRuntimeError error, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sets the task's context data

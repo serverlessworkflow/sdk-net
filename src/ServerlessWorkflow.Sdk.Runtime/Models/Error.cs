@@ -6,6 +6,7 @@
 [Description("Represents an object used to describe an error or problem, as defined by RFC 7807")]
 [DataContract]
 public sealed record Error
+    : IRuntimeError
 {
 
     /// <summary>

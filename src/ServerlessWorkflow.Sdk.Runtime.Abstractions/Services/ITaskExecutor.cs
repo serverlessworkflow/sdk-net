@@ -39,7 +39,7 @@ public interface ITaskExecutor
     /// <param name="cause">The <see cref="Error"/> that caused the retry attempt</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
-    Task RetryAsync(Error cause, CancellationToken cancellationToken = default);
+    Task RetryAsync(IRuntimeError cause, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Faults the handled <see cref="ITaskInstance"/>
@@ -47,7 +47,7 @@ public interface ITaskExecutor
     /// <param name="error"></param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
-    Task SetErrorAsync(Error error, CancellationToken cancellationToken = default);
+    Task SetErrorAsync(IRuntimeError error, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sets the <see cref="ITaskInstance"/>'s result and transitions to '<see cref="TaskInstanceStatus.Completed"/>'.

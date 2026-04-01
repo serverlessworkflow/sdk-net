@@ -1,16 +1,5 @@
 ﻿global using Json.Pointer;
-global using Microsoft.Extensions.Logging;
 global using ServerlessWorkflow.Sdk.Models;
-global using ServerlessWorkflow.Sdk.Models.Tasks;
-global using ServerlessWorkflow.Sdk.Runtime.Models;
 global using ServerlessWorkflow.Sdk.Runtime.Services;
-global using System.ComponentModel;
-global using System.ComponentModel.DataAnnotations;
-global using System.Diagnostics;
-global using System.Net;
-global using System.Reactive.Concurrency;
-global using System.Reactive.Subjects;
-global using System.Runtime.Serialization;
 global using System.Text.Json;
 global using System.Text.Json.Nodes;
-global using System.Text.Json.Serialization;

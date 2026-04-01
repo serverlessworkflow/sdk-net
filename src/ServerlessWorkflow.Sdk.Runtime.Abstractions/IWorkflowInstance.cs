@@ -81,7 +81,7 @@ public interface IWorkflowInstance
     /// <param name="error">The error that has faulted the workflow</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SetErrorAsync(Error error, CancellationToken cancellationToken = default);
+    Task SetErrorAsync(IRuntimeError error, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sets the workflow's result

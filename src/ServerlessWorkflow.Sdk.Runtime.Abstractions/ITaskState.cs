@@ -59,7 +59,7 @@ public interface ITaskState
     /// <summary>
     /// Gets the error, if any, that has occurred during the task's execution
     /// </summary>
-    Error? Error { get; }
+    IRuntimeError? Error { get; }
 
     /// <summary>
     /// Gets the task's input data
