@@ -3,6 +3,7 @@ global using ServerlessWorkflow.Sdk.Models;
 global using ServerlessWorkflow.Sdk.Models.Tasks;
 global using ServerlessWorkflow.Sdk.Runtime.Models;
 global using System.ComponentModel;
+global using System.ComponentModel.DataAnnotations;
 global using System.Diagnostics;
 global using System.Net;
 global using System.Reactive.Concurrency;

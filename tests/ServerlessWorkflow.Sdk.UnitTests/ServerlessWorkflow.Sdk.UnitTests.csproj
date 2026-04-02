@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\ServerlessWorkflow.Sdk\ServerlessWorkflow.Sdk.csproj" />
+    <ProjectReference Include="..\..\src\ServerlessWorkflow.Sdk.Runtime\ServerlessWorkflow.Sdk.Runtime.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -61,7 +61,7 @@ public interface ITaskInstance
     /// <param name="context">The updated context data</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SetContextDataAsync(IDictionary<string, object> context, CancellationToken cancellationToken = default);
+    Task SetContextDataAsync(JsonObject context, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sets the task's result
@@ -70,7 +70,7 @@ public interface ITaskInstance
     /// <param name="then">The flow directive to perform next</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SetResultAsync(object? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
+    Task SetResultAsync(JsonObject? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Skips the task
@@ -79,7 +79,7 @@ public interface ITaskInstance
     /// <param name="then">The flow directive to perform next</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SkipAsync(object? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
+    Task SkipAsync(JsonObject? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Cancels the task's execution
