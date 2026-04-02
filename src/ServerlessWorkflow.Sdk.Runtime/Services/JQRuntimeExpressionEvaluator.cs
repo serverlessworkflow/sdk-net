@@ -5,8 +5,7 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services;
 /// <summary>
 /// Represents an <see cref="IRuntimeExpressionEvaluator"/> that uses the JQ language to evaluate expressions
 /// </summary>
-/// <param name="logger">The service used perform logging</param>
-public sealed class JQRuntimeExpressionEvaluator(ILogger<JQRuntimeExpressionEvaluator> logger)
+public sealed class JQRuntimeExpressionEvaluator
     : IRuntimeExpressionEvaluator
 {
 

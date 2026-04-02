@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Jint" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ServerlessWorkflow.Sdk.Runtime.Abstractions\ServerlessWorkflow.Sdk.Runtime.Abstractions.csproj" />
   </ItemGroup>
 
