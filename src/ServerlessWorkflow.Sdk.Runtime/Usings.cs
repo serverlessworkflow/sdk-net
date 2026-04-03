@@ -1,5 +1,7 @@
 ﻿global using Json.Schema;
+global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
@@ -9,6 +11,7 @@ global using ServerlessWorkflow.Sdk.Models.Tasks;
 global using ServerlessWorkflow.Sdk.Runtime.Configuration;
 global using ServerlessWorkflow.Sdk.Runtime.Models;
 global using ServerlessWorkflow.Sdk.Runtime.Services;
+global using ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 global using System.Collections.Concurrent;
 global using System.ComponentModel;
 global using System.ComponentModel.DataAnnotations;

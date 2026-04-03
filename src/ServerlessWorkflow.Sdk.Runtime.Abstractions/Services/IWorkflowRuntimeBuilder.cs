@@ -30,6 +30,28 @@ public interface IWorkflowRuntimeBuilder
         where THandler : class, IAuthenticationHandler;
 
     /// <summary>
+    /// Configures the <see cref="IAuthenticationHandler"/> implementation to use
+    /// </summary>
+    /// <param name="factory">A factory function used to create the <see cref="IAuthenticationHandler"/></param>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseAuthenticationHandler(Func<IServiceProvider, IAuthenticationHandler> factory);
+
+    /// <summary>
+    /// Configures the <see cref="IAuthenticationHandler"/> implementation to use
+    /// </summary>
+    /// <typeparam name="TBus">The type of <see cref="ICloudEventBus"/> to use</typeparam>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseCloudEventBus<TBus>()
+        where TBus : class, ICloudEventBus;
+
+    /// <summary>
+    /// Configures the <see cref="ICloudEventBus"/> implementation to use
+    /// </summary>
+    /// <param name="factory">A factory function used to create the <see cref="ICloudEventBus"/></param>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseCloudEventBus(Func<IServiceProvider, ICloudEventBus> factory);
+
+    /// <summary>
     /// Configures the <see cref="IOAuth2TokenManager"/> implementation to use
     /// </summary>
     /// <typeparam name="TManager">The type of <see cref="IOAuth2TokenManager"/> to use</typeparam>
@@ -173,15 +195,6 @@ public interface IWorkflowRuntimeBuilder
     IWorkflowRuntimeBuilder UseTaskExecutor<TDefinition, TExecutor>()
         where TDefinition : TaskDefinition
         where TExecutor : class, ITaskExecutor<TDefinition>;
-
-    /// <summary>
-    /// Registers a <see cref="ITaskExecutor{TDefinition}"/> for the specified <see cref="TaskDefinition"/> type
-    /// </summary>
-    /// <typeparam name="TDefinition">The type of <see cref="TaskDefinition"/> handled by the executor</typeparam>
-    /// <param name="factory">A factory function used to create the <see cref="ITaskExecutor{TDefinition}"/></param>
-    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
-    IWorkflowRuntimeBuilder UseTaskExecutor<TDefinition>(Func<IServiceProvider, ITaskExecutor<TDefinition>> factory)
-        where TDefinition : TaskDefinition;
 
     /// <summary>
     /// Configures the <see cref="ITaskExecutorFactory"/> implementation to use

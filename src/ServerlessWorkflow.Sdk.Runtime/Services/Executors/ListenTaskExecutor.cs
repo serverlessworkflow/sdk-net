@@ -16,8 +16,7 @@ public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger
     /// <inheritdoc/>
     protected override Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
-        //todo: implement event listening when event bus infrastructure is available
-        throw new NotImplementedException("The listen task executor requires event bus infrastructure");
+        throw new NotImplementedException(); //todo: implement
     }
 
 }

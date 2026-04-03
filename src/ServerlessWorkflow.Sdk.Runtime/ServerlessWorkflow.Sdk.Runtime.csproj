@@ -12,7 +12,7 @@
     <PackageReference Include="Apache.Avro" Version="1.12.1" />
     <PackageReference Include="Duende.IdentityModel" Version="8.1.0" />
     <PackageReference Include="Jint" Version="4.7.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.17.0" />

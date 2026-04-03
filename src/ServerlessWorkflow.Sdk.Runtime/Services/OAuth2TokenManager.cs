@@ -114,12 +114,12 @@ public sealed class OAuth2TokenManager(ILogger<OAuth2TokenManager> logger, HttpC
         return token;
     }
 
-    void ThrowIfInvalidClientCredentials(OAuth2AuthenticationClientDefinition? client)
+    static void ThrowIfInvalidClientCredentials(OAuth2AuthenticationClientDefinition? client)
     {
         if (string.IsNullOrWhiteSpace(client?.Id) || string.IsNullOrWhiteSpace(client?.Secret)) throw new NullReferenceException($"The client id and client secret must be configured when using the '{client?.Authentication}' OAUTH2 authentication method");
     }
 
-    string CreateClientAssertionJwt(string clientId, string audience, SigningCredentials signingCredentials)
+    static string CreateClientAssertionJwt(string clientId, string audience, SigningCredentials signingCredentials)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(clientId);
         ArgumentException.ThrowIfNullOrWhiteSpace(audience);

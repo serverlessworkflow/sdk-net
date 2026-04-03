@@ -5,6 +5,7 @@
 /// </summary>
 [JsonSourceGenerationOptions(DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
 [JsonSerializable(typeof(AuthenticationResult))]
+[JsonSerializable(typeof(CloudEvent))]
 [JsonSerializable(typeof(OAuth2Token))]
 [JsonSerializable(typeof(RuntimeError))]
 [JsonSerializable(typeof(SchemaValidationResult))]
