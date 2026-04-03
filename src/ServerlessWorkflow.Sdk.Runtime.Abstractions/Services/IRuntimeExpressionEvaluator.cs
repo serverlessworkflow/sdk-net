@@ -21,6 +21,6 @@ public interface IRuntimeExpressionEvaluator
     /// <param name="arguments">The arguments, if an, to evaluate the expression with</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The result, if any, of the expression evaluation</returns>
-    Task<JsonNode?> EvaluateAsync(string expression, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default);
+    Task<JsonNode?> EvaluateAsync(string expression, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default);
 
 }

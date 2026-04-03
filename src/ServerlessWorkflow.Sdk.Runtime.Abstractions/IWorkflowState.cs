@@ -39,7 +39,7 @@ public interface IWorkflowState
     /// <summary>
     /// Gets the workflow's output data, if any
     /// </summary>
-    JsonObject? Output { get; }
+    JsonNode? Output { get; }
 
     /// <summary>
     /// Gets the error, if any, that has occurred during the workflow's execution

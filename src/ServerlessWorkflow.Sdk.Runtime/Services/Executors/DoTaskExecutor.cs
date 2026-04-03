@@ -76,7 +76,7 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
     async Task OnSubtaskCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
         var lastState = executor.Task.Instance.State;
-        var output = executor.Task.Output ?? [];
+        var output = executor.Task.Output ?? new JsonObject();
         Executors.Remove(executor);
         if (Task.ContextData != executor.Task.ContextData) await Task.Instance.SetContextDataAsync(executor.Task.ContextData, cancellationToken).ConfigureAwait(false);
         var nextEntry = GetNextTask(lastState.Name);

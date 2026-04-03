@@ -8,15 +8,143 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 /// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
 /// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
 /// <param name="schemaHandlerProvider">The service used to provide <see cref="ISchemaHandler"/> implementations</param>
+/// <param name="cloudEventBus">The service used to publish and subscribe to cloud events</param>
 /// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
-public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger<ListenTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, ITaskExecutionContext<ListenTaskDefinition> task)
+public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger<ListenTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, ICloudEventBus cloudEventBus, ITaskExecutionContext<ListenTaskDefinition> task)
     : TaskExecutor<ListenTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
 {
 
+    IDisposable? subscription;
+    uint eventOffset;
+
+    static string GetPathFor(uint offset) => $"foreach/{offset - 1}/do";
+
     /// <inheritdoc/>
-    protected override Task ExecuteCoreAsync(CancellationToken cancellationToken)
+    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskInstance instance, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException(); //todo: implement
+        var executor = await base.CreateTaskExecutorAsync(instance, definition, contextData, arguments, cancellationToken).ConfigureAwait(false);
+        executor.SubscribeAsync(
+            _ => System.Threading.Tasks.Task.CompletedTask,
+            async ex => await OnEventProcessingErrorAsync(executor, CancellationTokenSource!.Token).ConfigureAwait(false),
+            async () => await OnEventProcessingCompletedAsync(executor, CancellationTokenSource!.Token).ConfigureAwait(false)
+        );
+        return executor;
+    }
+
+    /// <inheritdoc/>
+    protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
+    {
+        if (Task.Definition.Foreach == null)
+        {
+            var events = await cloudEventBus.SubscribeAsync(cancellationToken).ConfigureAwait(false);
+            var collected = new List<JsonNode?>();
+            var tcs = new TaskCompletionSource();
+            events.Subscribe(
+                onNext: e =>
+                {
+                    var eventData = Task.Definition.Listen.Read switch
+                    {
+                        EventReadMode.Envelope => JsonSerializer.SerializeToNode(e),
+                        _ => JsonSerializer.SerializeToNode(e)
+                    };
+                    collected.Add(eventData);
+                    tcs.TrySetResult();
+                },
+                onError: ex => tcs.TrySetException(ex),
+                onCompleted: () => tcs.TrySetResult()
+            );
+            await tcs.Task.ConfigureAwait(false);
+            var result = new JsonObject { ["events"] = new JsonArray([.. collected]) };
+            await SetResultAsync(result, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+        }
+        else
+        {
+            ITaskInstance? lastSubtask = null;
+            await foreach (var subtask in Task.Instance.GetSubTasksAsync(cancellationToken).ConfigureAwait(false)) lastSubtask = subtask;
+            if (lastSubtask != null && lastSubtask.State.IsOperative && Task.Definition.Foreach.Do != null)
+            {
+                var taskDefinition = new DoTaskDefinition() { Do = Task.Definition.Foreach.Do };
+                var arguments = GetExpressionEvaluationArguments();
+                var taskExecutor = await CreateTaskExecutorAsync(lastSubtask, taskDefinition, Task.ContextData, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
+                await taskExecutor.ExecuteAsync(CancellationTokenSource!.Token).ConfigureAwait(false);
+            }
+            var events = await cloudEventBus.SubscribeAsync(cancellationToken).ConfigureAwait(false);
+            subscription = events.SubscribeAsync(OnStreamingEventAsync, OnStreamingErrorAsync, OnStreamingCompletedAsync);
+        }
+    }
+
+    async Task OnStreamingEventAsync(ICloudEvent e)
+    {
+        eventOffset++;
+        if (Task.Definition.Foreach?.Do == null)
+        {
+            return;
+        }
+        var taskDefinition = new DoTaskDefinition() { Do = Task.Definition.Foreach.Do };
+        var arguments = GetExpressionEvaluationArguments() ?? [];
+        JsonNode? eventData = Task.Definition.Listen.Read switch
+        {
+            EventReadMode.Envelope => JsonSerializer.SerializeToNode(e),
+            _ => JsonSerializer.SerializeToNode(e)
+        };
+        if (Task.Definition.Foreach.Output?.As != null)
+        {
+            eventData = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Foreach.Output.As, eventData ?? new JsonObject(), arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
+        }
+        if (Task.Definition.Foreach.Export?.As != null)
+        {
+            var context = (await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Foreach.Export.As, eventData ?? new JsonObject(), arguments, CancellationTokenSource!.Token).ConfigureAwait(false))?.AsObject();
+            if (context != null) await Task.Instance.SetContextDataAsync(context, CancellationTokenSource!.Token).ConfigureAwait(false);
+        }
+        arguments[Task.Definition.Foreach.Item ?? RuntimeExpressions.Arguments.Each] = eventData!;
+        arguments[Task.Definition.Foreach.At ?? RuntimeExpressions.Arguments.Index] = eventOffset - 1;
+        var taskInstance = await Task.Workflow.Instance.CreateTaskAsync(taskDefinition, GetPathFor(eventOffset), Task.Input, null, Task.Instance, false, CancellationTokenSource!.Token).ConfigureAwait(false);
+        var taskExecutor = await CreateTaskExecutorAsync(taskInstance, taskDefinition, Task.ContextData, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
+        await taskExecutor.ExecuteAsync(CancellationTokenSource!.Token).ConfigureAwait(false);
+    }
+
+    Task OnStreamingErrorAsync(Exception ex) => SetErrorAsync(new RuntimeError()
+    {
+        Type = ErrorType.Communication,
+        Title = ErrorTitle.Communication,
+        Status = ErrorStatus.Communication,
+        Detail = ex.Message,
+        Instance = new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute)
+    }, CancellationTokenSource!.Token);
+
+    async Task OnStreamingCompletedAsync()
+    {
+        ITaskInstance? last = null;
+        await foreach (var subtask in Task.Instance.GetSubTasksAsync(CancellationTokenSource!.Token).ConfigureAwait(false)) last = subtask;
+        var output = last?.State.Output;
+        await SetResultAsync(output, Task.Definition.Then, CancellationTokenSource!.Token).ConfigureAwait(false);
+    }
+
+    async Task OnEventProcessingErrorAsync(ITaskExecutor executor, CancellationToken cancellationToken)
+    {
+        var error = executor.Task.Instance.State.Error ?? throw new NullReferenceException();
+        Executors.Remove(executor);
+        await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
+    }
+
+    async Task OnEventProcessingCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
+    {
+        Executors.Remove(executor);
+        if (Task.ContextData != executor.Task.ContextData) await Task.Instance.SetContextDataAsync(executor.Task.ContextData, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    protected override ValueTask DisposeAsync(bool disposing)
+    {
+        if (disposing) subscription?.Dispose();
+        return base.DisposeAsync(disposing);
+    }
+
+    /// <inheritdoc/>
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing) subscription?.Dispose();
+        base.Dispose(disposing);
     }
 
 }

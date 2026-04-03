@@ -36,14 +36,14 @@ public sealed record TaskDescriptor
     /// </summary>
     [Description("The task's raw, untransformed input.")]
     [DataMember(Order = 3, Name = "input"), JsonPropertyOrder(3), JsonPropertyName("input")]
-    public JsonObject? Input { get; init; }
+    public JsonNode? Input { get; init; }
 
     /// <summary>
     /// Gets/sets the task's raw, untransformed output
     /// </summary>
     [Description("The task's raw, untransformed output.")]
     [DataMember(Order = 4, Name = "output"), JsonPropertyOrder(4), JsonPropertyName("output")]
-    public JsonObject? Output { get; init; }
+    public JsonNode? Output { get; init; }
 
     /// <summary>
     /// Gets/sets the date and time at which the task has started

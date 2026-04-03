@@ -21,7 +21,7 @@ public sealed class EmitTaskExecutor(IServiceProvider serviceProvider, ILogger<E
         if (!attributes.ContainsKey(CloudEventAttributes.Id)) attributes[CloudEventAttributes.Id] = Guid.NewGuid().ToString();
         if (!attributes.ContainsKey(CloudEventAttributes.SpecVersion)) attributes[CloudEventAttributes.SpecVersion] = CloudEvent.DefaultVersion;
         if (!attributes.ContainsKey(CloudEventAttributes.Time)) attributes[CloudEventAttributes.Time] = DateTimeOffset.Now.ToString("o");
-        var result = (await Task.Workflow.Expressions.EvaluateAsync(attributes, Task.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false))?.AsObject();
+        var result = await Task.Workflow.Expressions.EvaluateAsync(attributes, Task.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
         var cloudEvent = JsonSerializer.Deserialize(result, Serialization.Json.JsonSerializationContext.Default.CloudEvent);
         await cloudEventBus.PublishAsync(cloudEvent!, cancellationToken).ConfigureAwait(false);
         await SetResultAsync(result, Task.Definition.Then, cancellationToken).ConfigureAwait(false);

@@ -13,7 +13,7 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
     : TaskExecutor<ForkTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
 {
 
-    string GetPathFor(int index, string name) => $"fork/branches/{index}/{name}";
+    static string GetPathFor(int index, string name) => $"fork/branches/{index}/{name}";
 
     /// <inheritdoc/>
     protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskInstance instance, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
@@ -87,7 +87,7 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
                     break;
                 }
             }
-            if (allDone) await SetResultAsync([], Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+            if (allDone) await SetResultAsync(new JsonObject(), Task.Definition.Then, cancellationToken).ConfigureAwait(false);
         }
     }
 

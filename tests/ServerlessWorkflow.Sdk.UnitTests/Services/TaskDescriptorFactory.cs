@@ -7,11 +7,11 @@ internal static class TaskDescriptorFactory
         Name = "test",
         Definition = TaskDefinitionFactory.CreateSetTask(),
         Reference = JsonPointer.Parse("/test"),
-        Input = new()
+        Input = new JsonObject()
         {
             ["key"] = "value"
         },
-        Output = new()
+        Output = new JsonObject()
         {
             ["key"] = "value"
         },

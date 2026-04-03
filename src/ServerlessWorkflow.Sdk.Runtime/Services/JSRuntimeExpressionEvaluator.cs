@@ -15,7 +15,7 @@ public sealed class JSRuntimeExpressionEvaluator
     public bool Supports(string language) => language.Trim().Equals(RuntimeExpressions.Languages.JavaScript, StringComparison.OrdinalIgnoreCase);
 
     /// <inheritdoc/>
-    public async Task<JsonNode?> EvaluateAsync(string expression, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    public async Task<JsonNode?> EvaluateAsync(string expression, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(expression);
         ArgumentNullException.ThrowIfNull(input);

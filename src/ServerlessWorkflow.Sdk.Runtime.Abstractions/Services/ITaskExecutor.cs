@@ -56,7 +56,7 @@ public interface ITaskExecutor
     /// <param name="then">The <see cref="FlowDirective"/> to perform next</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
-    Task SetResultAsync(JsonObject? result = null, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
+    Task SetResultAsync(JsonNode? result = null, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Cancels the <see cref="ITaskInstance"/>

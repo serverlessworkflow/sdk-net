@@ -69,7 +69,7 @@ public interface ITaskState
     /// <summary>
     /// Gets the task's input data
     /// </summary>
-    JsonObject? Input { get; }
+    JsonNode? Input { get; }
 
     /// <summary>
     /// Gets the task's context data
@@ -79,7 +79,7 @@ public interface ITaskState
     /// <summary>
     /// Gets the task's output data, if any
     /// </summary>
-    JsonObject? Output { get; }
+    JsonNode? Output { get; }
 
     /// <summary>
     /// Gets the flow directive that must be performed next, if the task ran to completion

@@ -225,7 +225,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
                 await SetResultAsync(executor.Task.Output, executor.Task.Definition.Then, cancellationToken).ConfigureAwait(false);
                 return;
             }
-            input = executor.Task.Output ?? [];
+            input = executor.Task.Output ?? new JsonObject();
             Executors.Remove(executor);
         }
     }
@@ -244,7 +244,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     protected virtual async Task AfterExecuteAsync(CancellationToken cancellationToken)
     {
         if (Task.Instance.State.IsExtension || Extensions == null) return;
-        var output = Task.Instance.State.Output ?? [];
+        var output = Task.Instance.State.Output ?? new JsonObject();
         foreach (var extension in Extensions.Where(ex => ex.Value.After != null).Reverse())
         {
             var taskDefinition = new DoTaskDefinition()
@@ -255,7 +255,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
             var executor = await CreateTaskExecutorAsync(task, taskDefinition, Task.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
             await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
             if (executor.Task.Instance.State.Next == FlowDirective.Exit) break;
-            output = executor.Task.Output ?? [];
+            output = executor.Task.Output ?? new JsonObject();
             Executors.Remove(executor);
             await executor.DisposeAsync().ConfigureAwait(false);
         }
@@ -321,7 +321,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     protected virtual Task SetErrorCoreAsync(IRuntimeError error, CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>
-    public async Task SetResultAsync(JsonObject? result = null, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default)
+    public async Task SetResultAsync(JsonNode? result = null, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default)
     {
         if (Task.Instance.State.Status != TaskInstanceStatus.Running) return;
         Stopwatch.Stop();
@@ -329,10 +329,10 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         var output = result;
         var arguments = GetExpressionEvaluationArguments() ?? [];
         arguments[RuntimeExpressions.Arguments.Output] = output!;
-        output = (await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Output?.As, output ?? [], arguments, cancellationToken).ConfigureAwait(false))?.AsObject();
+        output = (await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Output?.As, output ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false))?.AsObject();
         if (Task.Definition.Export?.As is not null)
         {
-            var context = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Export.As, output ?? [], arguments, cancellationToken).ConfigureAwait(false);
+            var context = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Export.As, output ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false);
             if (context is JsonObject jsonObject) await Task.Instance.SetContextDataAsync(jsonObject, cancellationToken).ConfigureAwait(false);
         }
         await AfterExecuteAsync(cancellationToken).ConfigureAwait(false);
@@ -350,7 +350,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     /// <param name="then">The <see cref="FlowDirective"/> to perform next</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
-    protected virtual Task SetResultCoreAsync(JsonObject? result, string then, CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
+    protected virtual Task SetResultCoreAsync(JsonNode? result, string then, CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>
     public async Task CancelAsync(CancellationToken cancellationToken = default)
@@ -375,7 +375,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     protected virtual Task DoCancelAsync(CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>
-    public virtual async Task SkipAsync(JsonObject? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default)
+    public virtual async Task SkipAsync(JsonNode? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default)
     {
         if (Task.Instance.State.Status != null) return;
         Stopwatch.Stop();

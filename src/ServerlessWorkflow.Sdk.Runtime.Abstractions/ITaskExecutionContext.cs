@@ -24,7 +24,7 @@ public interface ITaskExecutionContext
     /// <summary>
     /// Gets/sets the task's input data
     /// </summary>
-    JsonObject Input { get; }
+    JsonNode Input { get; }
 
     /// <summary>
     /// Gets/sets the task's context data, if any
@@ -39,7 +39,7 @@ public interface ITaskExecutionContext
     /// <summary>
     /// Gets/sets the task's output data, if any, in case the task ran to completion
     /// </summary>
-    JsonObject? Output { get; }
+    JsonNode? Output { get; }
 
 }
 

@@ -13,7 +13,7 @@ public sealed class JSRuntimeExpressionEvaluatorTests
         var expression = "1 + 2";
 
         // act
-        var result = await ExpressionEvaluator.EvaluateAsync(expression, [], null, TestContext.Current.CancellationToken);
+        var result = await ExpressionEvaluator.EvaluateAsync(expression, new JsonObject(), null, TestContext.Current.CancellationToken);
 
         // assert
         result.Should().NotBeNull();

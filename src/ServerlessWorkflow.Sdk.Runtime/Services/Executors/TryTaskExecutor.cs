@@ -103,7 +103,7 @@ public sealed class TryTaskExecutor(IServiceProvider serviceProvider, ILogger<Tr
     {
         if (Task.ContextData != executor.Task.ContextData)
             await Task.Instance.SetContextDataAsync(executor.Task.ContextData, cancellationToken).ConfigureAwait(false);
-        var output = executor.Task.Output ?? [];
+        var output = executor.Task.Output ?? new JsonObject();
         Executors.Remove(executor);
         var then = executor.Task.Instance.State.Next == FlowDirective.End ? FlowDirective.End : Task.Definition.Then;
         await SetResultAsync(output, then, cancellationToken).ConfigureAwait(false);

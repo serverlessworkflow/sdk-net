@@ -17,7 +17,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
     /// <param name="arguments">The arguments, if any, to evaluate the expression with</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A boolean indicating whether the condition specified by the expression is satisfied or not</returns>
-    public static async Task<bool> EvaluateConditionAsync(this IRuntimeExpressionEvaluator expressionEvaluator, string expression, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    public static async Task<bool> EvaluateConditionAsync(this IRuntimeExpressionEvaluator expressionEvaluator, string expression, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         var node = await expressionEvaluator.EvaluateAsync(expression, input, arguments, cancellationToken);
         if (node is null) return false;
@@ -33,7 +33,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
     /// <param name="arguments">The arguments, if any, to evaluate the value with</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The result, if any, of the value evaluation</returns>
-    public static async Task<Duration?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, OneOf<TimeoutDefinition, string>? value, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    public static async Task<Duration?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, OneOf<TimeoutDefinition, string>? value, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         return value is null ? null : await value.MatchAsync
         (
@@ -58,7 +58,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
     /// <param name="arguments">The arguments, if any, to evaluate the value with</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The result, if any, of the value evaluation</returns>
-    public static async Task<Duration?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, OneOf<Duration, string>? value, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    public static async Task<Duration?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, OneOf<Duration, string>? value, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         return value is null ? null : await value.MatchAsync
         (
@@ -83,7 +83,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
     /// <param name="arguments">The arguments, if any, to evaluate the value with</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The result, if any, of the value evaluation</returns>
-    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, OneOf<JsonObject, string>? value, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, OneOf<JsonObject, string>? value, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         if (value is null) return null;
         return await value.MatchAsync
@@ -107,7 +107,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
     /// <param name="arguments">The arguments, if any, to evaluate the value with</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The result, if any, of the value evaluation</returns>
-    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, JsonNode? value, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, JsonNode? value, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         if (value is null) return null;
         return value switch
@@ -128,7 +128,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
     /// <param name="arguments">The arguments, if any, to evaluate the value with</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The result, if any, of the value evaluation</returns>
-    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, JsonArray? value, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, JsonArray? value, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         if (value is null) return null;
         var nodes = new List<JsonNode>(value.Count);
@@ -145,7 +145,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
     /// <param name="arguments">The arguments, if any, to evaluate the value with</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The result, if any, of the value evaluation</returns>
-    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, JsonObject? value, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, JsonObject? value, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         if (value is null) return null;
         var properties = new List<KeyValuePair<string, JsonNode?>>(value.Count);
@@ -162,7 +162,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
     /// <param name="arguments">The arguments, if any, to evaluate the value with</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The result, if any, of the value evaluation</returns>
-    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, JsonValue? value, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    public static async Task<JsonNode?> EvaluateAsync(this IRuntimeExpressionEvaluator expressionEvaluator, JsonValue? value, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         if (value is null) return null;
         if (value.TryGetValue<string>(out var expression) && expression.IsRuntimeExpression()) return await expressionEvaluator.EvaluateAsync(expression, input, arguments, cancellationToken).ConfigureAwait(false);

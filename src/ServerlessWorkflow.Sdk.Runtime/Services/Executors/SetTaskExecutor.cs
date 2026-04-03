@@ -16,7 +16,7 @@ public sealed class SetTaskExecutor(IServiceProvider serviceProvider, ILogger<Se
     /// <inheritdoc/>
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
-        var result = (await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Set, Task.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false))?.AsObject();
+        var result = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Set, Task.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
         await SetResultAsync(result, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
     }
 

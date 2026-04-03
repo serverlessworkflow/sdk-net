@@ -22,7 +22,7 @@ public interface IWorkflowInstance
     /// <param name="isExtension">Indicates whether or not the task is part of an extension</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>The newly created <see cref="ITaskInstance{TState}"/></returns>
-    Task<ITaskInstance<ITaskState>> CreateTaskAsync(TaskDefinition definition, string? path, JsonObject input, JsonObject? context = null, ITaskInstance? parent = null, bool isExtension = false, CancellationToken cancellationToken = default);
+    Task<ITaskInstance<ITaskState>> CreateTaskAsync(TaskDefinition definition, string? path, JsonNode input, JsonObject? context = null, ITaskInstance? parent = null, bool isExtension = false, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the workflow's tasks

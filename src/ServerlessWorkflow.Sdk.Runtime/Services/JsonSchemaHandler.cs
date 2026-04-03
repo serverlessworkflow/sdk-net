@@ -12,7 +12,7 @@ public sealed class JsonSchemaHandler(IExternalResourceReader externalResourceRe
     public bool Supports(string format) => format.Equals(SchemaFormat.Json, StringComparison.OrdinalIgnoreCase);
 
     /// <inheritdoc/>
-    public async Task<ISchemaValidationResult> ValidateAsync(JsonObject graph, SchemaDefinition schema, CancellationToken cancellationToken = default)
+    public async Task<ISchemaValidationResult> ValidateAsync(JsonNode graph, SchemaDefinition schema, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(graph);
         ArgumentNullException.ThrowIfNull(schema);

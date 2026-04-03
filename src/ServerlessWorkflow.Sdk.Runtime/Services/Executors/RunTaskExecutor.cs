@@ -70,7 +70,7 @@ public sealed class RunTaskExecutor(IServiceProvider serviceProvider, ILogger<Ru
         {
             if (Task.Definition.Run.Await == false)
             {
-                await SetResultAsync([], Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+                await SetResultAsync(new JsonObject(), Task.Definition.Then, cancellationToken).ConfigureAwait(false);
                 return;
             }
             await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);

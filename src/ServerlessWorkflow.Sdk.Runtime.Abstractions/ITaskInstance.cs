@@ -70,7 +70,7 @@ public interface ITaskInstance
     /// <param name="then">The flow directive to perform next</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SetResultAsync(JsonObject? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
+    Task SetResultAsync(JsonNode? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Skips the task
@@ -79,7 +79,7 @@ public interface ITaskInstance
     /// <param name="then">The flow directive to perform next</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SkipAsync(JsonObject? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
+    Task SkipAsync(JsonNode? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Cancels the task's execution
