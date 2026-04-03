@@ -1,4 +1,6 @@
-﻿namespace ServerlessWorkflow.Sdk.Runtime.Models;
+﻿using System.Xml.Serialization;
+
+namespace ServerlessWorkflow.Sdk.Runtime.Models;
 
 /// <summary>
 /// Represents an object used to describe an error or problem, as defined by <see href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807</see>

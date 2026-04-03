@@ -72,7 +72,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     protected AsyncLock Lock { get; } = new();
 
     /// <summary>
-    /// Gets the <see cref="TaskExecutor{TDefinition}"/>'s <see cref="System.Diagnostics.Stopwatch"/>, used to clock the <see cref="TaskInstance"/>'s execution
+    /// Gets the <see cref="TaskExecutor{TDefinition}"/>'s <see cref="System.Diagnostics.Stopwatch"/>, used to clock the <see cref="ITaskInstance"/>'s execution
     /// </summary>
     protected Stopwatch Stopwatch { get; } = new();
 
@@ -120,7 +120,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     /// <summary>
     /// Initializes the <see cref="ITaskInstance"/>
     /// </summary>
-    /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task.Task"/></returns>
+    /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
     protected virtual Task InitializeCoreAsync(CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>
@@ -233,7 +233,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     /// <summary>
     /// Executes the <see cref="ITaskInstance"/>
     /// </summary>
-    /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task.Task"/></returns>
+    /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
     protected virtual Task ExecuteCoreAsync(CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <summary>
@@ -297,7 +297,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     /// </summary>
     /// <param name="cause">The <see cref="IRuntimeError"/> that caused the retry attempt</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task."/></returns>
+    /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
     protected virtual Task RetryCoreAsync(IRuntimeError cause, CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>

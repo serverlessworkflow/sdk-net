@@ -17,7 +17,8 @@
       "Bash(dotnet package:*)",
       "Bash(find \"C:\\\\Users\\\\User\\\\source\\\\repos\\\\sdk-net\\\\src\\\\ServerlessWorkflow.Sdk\" -name \"*.cs\" -type f -exec grep -l \"EquatableDictionary\" {})",
       "Bash(xargs -I {} head -50 {})",
-      "Bash(dotnet run:*)"
+      "Bash(dotnet run:*)",
+      "Bash(dotnet list:*)"
     ]
   }
 }

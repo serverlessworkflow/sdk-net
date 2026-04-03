@@ -4,11 +4,17 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Apache.Avro" Version="1.12.1" />
+    <PackageReference Include="Duende.IdentityModel" Version="8.1.0" />
     <PackageReference Include="Jint" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.17.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.17.0" />
   </ItemGroup>
 
   <ItemGroup>

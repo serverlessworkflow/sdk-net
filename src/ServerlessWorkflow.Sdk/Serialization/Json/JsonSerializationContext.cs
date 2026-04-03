@@ -21,6 +21,7 @@
 [JsonSerializable(typeof(ConstantBackoffDefinition))]
 [JsonSerializable(typeof(CorrelationKeyDefinition))]
 [JsonSerializable(typeof(DateTimeDescriptor))]
+[JsonSerializable(typeof(Dictionary<string, string>))]
 [JsonSerializable(typeof(DigestAuthenticationSchemeDefinition))]
 [JsonSerializable(typeof(DoTaskDefinition))]
 [JsonSerializable(typeof(Duration))]
