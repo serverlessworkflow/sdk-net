@@ -30,7 +30,7 @@ public sealed record OpenApiCallDefinition
     /// </summary>
     [Description("A name/value mapping of the parameters of the OpenAPI operation to call")]
     [DataMember(Order = 3, Name = "parameters"), JsonPropertyOrder(3), JsonPropertyName("parameters")]
-    public EquatableDictionary<string, object>? Parameters { get; set; }
+    public JsonObject? Parameters { get; set; }
 
     /// <summary>
     /// Gets/sets the authentication policy, if any, to use when calling the OpenAPI operation

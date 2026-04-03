@@ -51,7 +51,7 @@ public sealed record RuntimeError
     /// </summary>
     [Description("A mapping containing problem details extension data, if any")]
     [DataMember(Name = "extensionData", Order = 6), JsonExtensionData]
-    public IDictionary<string, JsonElement>? ExtensionData { get; init; }
+    public IDictionary<string, JsonElement>? ExtensionData { get; set; }
 
     /// <summary>
     /// Creates a new communication <see cref="RuntimeError"/>
