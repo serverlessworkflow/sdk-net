@@ -1,4 +1,5 @@
-﻿global using Microsoft.Extensions.Logging;
+﻿global using Json.Schema;
+global using Microsoft.Extensions.Logging;
 global using ServerlessWorkflow.Sdk.Models;
 global using ServerlessWorkflow.Sdk.Models.Tasks;
 global using ServerlessWorkflow.Sdk.Runtime.Models;

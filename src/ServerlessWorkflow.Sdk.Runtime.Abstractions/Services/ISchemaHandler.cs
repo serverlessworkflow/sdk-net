@@ -20,6 +20,6 @@ public interface ISchemaHandler
     /// <param name="schema">The schema to validate the graph against</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>An object that describes the validation result</returns>
-    Task<ISchemaValidationResult> ValidateAsync(object graph, SchemaDefinition schema, CancellationToken cancellationToken = default);
+    Task<ISchemaValidationResult> ValidateAsync(JsonObject graph, SchemaDefinition schema, CancellationToken cancellationToken = default);
 
 }

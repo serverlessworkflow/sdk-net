@@ -27,7 +27,7 @@ public sealed record SchemaDefinition
     /// Gets/sets the inline definition of the schema to use. Required if <see cref="Resource"/> has not been set.
     /// </summary>
     [Description("The inline definition of the schema to use. Required if Resource has not been set.")]
-    [DataMember(Order = 3, Name = "document"), JsonPropertyOrder(3), JsonPropertyName("document")]
-    public JsonObject? Document { get; init; }
+    [DataMember(Order = 3, Name = "document"), JsonPropertyOrder(3), JsonPropertyName("document"), JsonConverter(typeof(OneOfJsonConverter<JsonObject, string>))]
+    public OneOf<JsonObject, string>? Document { get; init; }
 
 }
