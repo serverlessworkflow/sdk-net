@@ -1,6 +1,7 @@
 ﻿global using Json.Pointer;
 global using ServerlessWorkflow.Sdk.Models;
 global using ServerlessWorkflow.Sdk.Models.Authentication;
+global using ServerlessWorkflow.Sdk.Models.Calls;
 global using ServerlessWorkflow.Sdk.Models.Tasks;
 global using ServerlessWorkflow.Sdk.Serialization.Json;
 global using System.Collections;

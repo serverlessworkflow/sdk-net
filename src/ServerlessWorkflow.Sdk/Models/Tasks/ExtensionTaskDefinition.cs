@@ -18,6 +18,6 @@ public sealed record ExtensionTaskDefinition
     /// </summary>
     [Description("The task definition's extension data, if any")]
     [DataMember(Order = 1, Name = "extensionData"), JsonExtensionData]
-    public IDictionary<string, JsonElement>? ExtensionData { get; set; }
+    public IDictionary<string, JsonElement>? ExtensionData { get; init; }
 
 }

@@ -16,7 +16,7 @@ global using System.Diagnostics;
 global using System.Net;
 global using System.Net.Http.Headers;
 global using System.Net.Mime;
-global using System.Reactive.Concurrency;
+global using System.Reactive.Linq;
 global using System.Reactive.Subjects;
 global using System.Runtime.InteropServices;
 global using System.Runtime.Serialization;
