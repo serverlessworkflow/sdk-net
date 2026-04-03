@@ -9,6 +9,7 @@
     <File Path="SECURITY.md" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/ServerlessWorkflow.Sdk.Builders/ServerlessWorkflow.Sdk.Builders.csproj" Id="861e7c93-d882-47c6-819c-1b6bb24bb383" />
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Abstractions/ServerlessWorkflow.Sdk.Runtime.Abstractions.csproj" />
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Docker/ServerlessWorkflow.Sdk.Runtime.Docker.csproj" Id="75437264-81aa-4a4b-9fb5-07a80bd176e2" />
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime/ServerlessWorkflow.Sdk.Runtime.csproj" Id="ff379ac7-32ea-48b7-a3d2-921c7b04b8ab" />

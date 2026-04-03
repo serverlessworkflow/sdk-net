@@ -1,9 +1,8 @@
-﻿namespace ServerlessWorkflow.Sdk.Models;
+﻿namespace ServerlessWorkflow.Sdk.Models.Processes;
 
 /// <summary>
 /// Represents the definition of a (sub)workflow process
 /// </summary>
-[Description("Represents the definition of a (sub)workflow process")]
 [DataContract]
 public sealed record WorkflowProcessDefinition
     : ProcessDefinition
@@ -13,7 +12,7 @@ public sealed record WorkflowProcessDefinition
     /// Gets/sets the namespace the workflow to run belongs to
     /// </summary>
     [Description("The namespace the workflow to run belongs to")]
-    [Required, MinLength(1), MaxLength(63)]
+    [Required, StringLength(63, MinimumLength = 1)]
     [DataMember(Order = 1, Name = "namespace"), JsonPropertyOrder(1), JsonPropertyName("namespace")]
     public required string Namespace { get; init; }
 
@@ -21,7 +20,7 @@ public sealed record WorkflowProcessDefinition
     /// Gets/sets the name of the workflow to run
     /// </summary>
     [Description("The name of the workflow to run")]
-    [Required, MinLength(1), MaxLength(63)]
+    [Required, StringLength(63, MinimumLength = 1)]
     [DataMember(Order = 2, Name = "name"), JsonPropertyOrder(2), JsonPropertyName("name")]
     public required string Name { get; init; }
 

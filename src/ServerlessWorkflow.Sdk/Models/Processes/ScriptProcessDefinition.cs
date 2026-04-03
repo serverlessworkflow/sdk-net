@@ -1,4 +1,4 @@
-﻿namespace ServerlessWorkflow.Sdk.Models;
+﻿namespace ServerlessWorkflow.Sdk.Models.Processes;
 
 /// <summary>
 /// Represents the definition of a script evaluation process

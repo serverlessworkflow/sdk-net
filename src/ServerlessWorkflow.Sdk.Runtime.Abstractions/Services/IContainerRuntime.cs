@@ -1,4 +1,6 @@
-﻿namespace ServerlessWorkflow.Sdk.Runtime.Services;
+﻿using ServerlessWorkflow.Sdk.Models.Processes;
+
+namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
 /// Defines the fundamentals of a service used to create, run and manage the lifecycle of <see cref="IContainer"/>s.

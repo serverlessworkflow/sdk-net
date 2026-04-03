@@ -1,4 +1,6 @@
-﻿namespace ServerlessWorkflow.Sdk.Runtime.Services;
+﻿using ServerlessWorkflow.Sdk.Models.Processes;
+
+namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
 /// Represents a Docker implementation of the <see cref="IContainerRuntime"/> interface

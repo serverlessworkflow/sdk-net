@@ -1,3 +1,5 @@
+using ServerlessWorkflow.Sdk.Models.Processes;
+
 namespace ServerlessWorkflow.Sdk.UnitTests.Services;
 
 internal static class ContainerProcessDefinitionFactory
