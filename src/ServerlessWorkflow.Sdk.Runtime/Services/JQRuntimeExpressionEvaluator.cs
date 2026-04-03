@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace ServerlessWorkflow.Sdk.Runtime.Services;
+﻿namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
 /// Represents an <see cref="IRuntimeExpressionEvaluator"/> that uses the JQ language to evaluate expressions
@@ -8,6 +6,9 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services;
 public sealed class JQRuntimeExpressionEvaluator
     : IRuntimeExpressionEvaluator
 {
+
+    /// <inheritdoc/>
+    public bool Supports(string language) => language.Trim().Equals(RuntimeExpressions.Languages.JQ, StringComparison.OrdinalIgnoreCase);
 
     /// <inheritdoc/>
     public async Task<JsonNode?> EvaluateAsync(string expression, JsonObject input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
@@ -26,7 +27,7 @@ public sealed class JQRuntimeExpressionEvaluator
             RedirectStandardError = true
         };
         startInfo.ArgumentList.Add(expression);
-        if (arguments is not null) foreach(var property in arguments)
+        if (arguments is not null) foreach (var property in arguments)
         {
             startInfo.ArgumentList.Add("--argjson");
             startInfo.ArgumentList.Add(property.Key);
@@ -53,9 +54,9 @@ public sealed class JQRuntimeExpressionEvaluator
             }
         }
         startInfo.ArgumentList.Add("-c");
-        using var process = new Process() 
-        { 
-            StartInfo = startInfo 
+        using var process = new Process()
+        {
+            StartInfo = startInfo
         };
         var cancellationRegistration = cancellationToken.Register(() =>
         {
@@ -76,14 +77,8 @@ public sealed class JQRuntimeExpressionEvaluator
         foreach (var file in files) try { File.Delete(file); } catch { }
         if (process.ExitCode != 0) throw new Exception($"An error occurred while evaluating the specified expression: {error}");
         if (string.IsNullOrWhiteSpace(output)) return null;
-        try
-        {
-            return JsonSerializer.Deserialize(output, Sdk.Serialization.Json.JsonSerializationContext.Default.JsonNode);
-        }
-        catch (JsonException ex)
-        {
-            throw new Exception($"An error occurred while deserializing the output of the expression evaluation: {ex.Message}");
-        }
+        try { return JsonSerializer.Deserialize(output, Sdk.Serialization.Json.JsonSerializationContext.Default.JsonNode); }
+        catch (JsonException ex) { throw new Exception($"An error occurred while deserializing the output of the expression evaluation: {ex.Message}"); }
     }
 
 }

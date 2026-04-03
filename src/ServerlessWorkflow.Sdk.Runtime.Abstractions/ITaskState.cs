@@ -7,9 +7,14 @@ public interface ITaskState
 {
 
     /// <summary>
-    /// Gets the task's id
+    /// Gets the task's unique identifier
     /// </summary>
     string Id { get; }
+
+    /// <summary>
+    /// Gets the unique identifier of the workflow the task belongs to.
+    /// </summary>
+    string WorkflowId { get; }
 
     /// <summary>
     /// Gets the task's name, if any

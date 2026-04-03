@@ -1,4 +1,6 @@
-﻿namespace ServerlessWorkflow.Sdk.Runtime;
+﻿using System.Reflection.Metadata;
+
+namespace ServerlessWorkflow.Sdk.Runtime;
 
 /// <summary>
 /// Defines the fundamentals of an OAUTH2 token

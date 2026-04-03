@@ -21,6 +21,6 @@ public sealed record ExternalResourceDefinition
     [Description("The endpoint at which to get the defined resource")]
     [Required]
     [DataMember(Order = 2, Name = "endpoint"), JsonPropertyOrder(2), JsonPropertyName("endpoint"), JsonConverter(typeof(OneOfJsonConverter<EndpointDefinition, Uri>))]
-    public required OneOf<EndpointDefinition, Uri> EndpointValue { get; init; }
+    public required OneOf<EndpointDefinition, Uri> Endpoint { get; init; }
 
 }

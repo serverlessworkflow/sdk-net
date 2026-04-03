@@ -7,6 +7,13 @@ public interface IRuntimeExpressionEvaluator
 {
 
     /// <summary>
+    /// Determines whether the specified language is supported by the expression evaluator
+    /// </summary>
+    /// <param name="language">The expression language to check</param>
+    /// <returns>A boolean indicating whether the specified language is supported by the expression evaluator</returns>
+    bool Supports(string language);
+
+    /// <summary>
     /// Evaluates the specified expression with the given input and arguments, if any
     /// </summary>
     /// <param name="expression">The expression to evaluate</param>

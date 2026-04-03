@@ -420,7 +420,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(contextData);
         var context = ExecutionContextFactory.Create(Task.Workflow, instance, definition, contextData, arguments);
-        var executor = ExecutorFactory.Create(ServiceProvider, context);
+        var executor = ExecutorFactory.Create(context);
         await executor.InitializeAsync(cancellationToken).ConfigureAwait(false);
         Executors.Add(executor);
         return executor;
