@@ -30,7 +30,11 @@
       "Bash(ls src/ServerlessWorkflow.Sdk.Builders/*.cs)",
       "Bash(ls tests/ServerlessWorkflow.Sdk.UnitTests/Cases/Builders/*.cs)",
       "Bash(grep -v '//')",
-      "Bash(grep -v '^\\\\s*//')"
+      "Bash(grep -v '^\\\\s*//')",
+      "Bash(ls tests/ServerlessWorkflow.Sdk.UnitTests/Cases/Runtime/Services/*.cs)",
+      "Bash(sed 's|.*/||')",
+      "Bash(ls src/ServerlessWorkflow.Sdk.IO/*.cs)",
+      "Bash(ls src/ServerlessWorkflow.Sdk.Runtime.Abstractions/*.cs src/ServerlessWorkflow.Sdk.Runtime.Abstractions/Services/*.cs)"
     ]
   }
 }
