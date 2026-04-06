@@ -169,4 +169,23 @@ public static class IRuntimeExpressionEvaluatorExtensions
         return value;
     }
 
+    /// <summary>
+    /// Evaluates the specified expression with the given input and arguments, if any, and returns the result as a value of the specified type.
+    /// </summary>
+    /// <typeparam name="T">The type to deserialize the result of the expression evaluation to</typeparam>
+    /// <param name="expressionEvaluator">The <see cref="IRuntimeExpressionEvaluator"/> to use to evaluate the expression</param>
+    /// <param name="expression">The expression to evaluate</param>
+    /// <param name="input">The input to evaluate the expression with</param>
+    /// <param name="arguments">The arguments, if any, to evaluate the expression with</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The result of the expression evaluation deserialized to the specified type, if any</returns>
+    public static async Task<T?> EvaluateAsync<T>(this IRuntimeExpressionEvaluator expressionEvaluator, string expression, JsonNode input, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    {
+        var node = await expressionEvaluator.EvaluateAsync(expression, input, arguments, cancellationToken).ConfigureAwait(false);
+        if (node is null) return default;
+        var typeInfo = Serialization.Json.JsonSerializationContext.Default.GetTypeInfo(typeof(T));
+        if (typeInfo is null) return JsonSerializer.Deserialize<T>(node);
+        return (T?)JsonSerializer.Deserialize(node, typeInfo);
+    }
+
 }

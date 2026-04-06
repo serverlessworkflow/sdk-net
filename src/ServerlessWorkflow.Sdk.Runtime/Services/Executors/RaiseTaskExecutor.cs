@@ -16,23 +16,38 @@ public sealed class RaiseTaskExecutor(IServiceProvider serviceProvider, ILogger<
     /// <inheritdoc/>
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
-        var errorDefinition = Task.Definition.Raise.Error.Match<ErrorDefinition?>(
-            error => error,
+        var input = Task.Input;
+        var errorDefinition = Task.Definition.Raise.Error.Match(
+            e => e,
             reference =>
             {
-                if (Task.Workflow.Definition.Use?.Errors?.TryGetValue(reference, out var referencedError) == true && referencedError != null) return referencedError;
-                throw new NullReferenceException($"Failed to find the referenced error definition '{reference}'");
-            }
-        ) ?? throw new NullReferenceException("The error to raise must be defined (or referenced)");
-        var error = new RuntimeError()
+                if (string.IsNullOrWhiteSpace(reference)) throw new NullReferenceException("The error to raise must be defined (or referenced)");
+                if (Task.Workflow.Definition.Use is null || Task.Workflow.Definition.Use.Errors is null || !Task.Workflow.Definition.Use.Errors!.TryGetValue(reference, out var error) || error is null) throw new NullReferenceException($"Failed to find the referenced error definition '{reference}'");
+                return error;
+            });
+        var status = errorDefinition.Status is string expression
+            ? expression.IsRuntimeExpression()
+                ? await Task.Workflow.Expressions.EvaluateAsync<ushort>(errorDefinition.Status, input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false)
+                : ushort.Parse(expression)
+            : ushort.Parse(errorDefinition.Status.ToString()!);
+        var type = errorDefinition.Type.IsRuntimeExpression()
+            ? (await Task.Workflow.Expressions.EvaluateAsync<Uri>(errorDefinition.Type, input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false))!
+            : new(errorDefinition.Type, UriKind.RelativeOrAbsolute);
+        var title = errorDefinition.Title.IsRuntimeExpression()
+            ? (await Task.Workflow.Expressions.EvaluateAsync<string>(errorDefinition.Title, input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false))!
+            : errorDefinition.Title;
+        var detail = string.IsNullOrWhiteSpace(errorDefinition.Detail) ? null : errorDefinition.Detail!.IsRuntimeExpression()
+            ? await Task.Workflow.Expressions.EvaluateAsync<string>(errorDefinition.Detail!, input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false)
+            : errorDefinition.Detail;
+        var errorInstance = new RuntimeError()
         {
-            Status = (ushort)errorDefinition.Status,
-            Type = new(errorDefinition.Type, UriKind.RelativeOrAbsolute),
-            Title = errorDefinition.Title,
-            Detail = errorDefinition.Detail,
-            Instance = new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute)
+            Status = status,
+            Type = type,
+            Title = title,
+            Detail = detail,
+            Instance = new(Task.Instance.State.Reference.ToString(), UriKind.Relative)
         };
-        await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
+        await SetErrorAsync(errorInstance, cancellationToken).ConfigureAwait(false);
     }
 
 }

@@ -1,8 +1,4 @@
-﻿using System.ComponentModel;
-using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
-
-namespace ServerlessWorkflow.Sdk.Runtime;
+﻿namespace ServerlessWorkflow.Sdk.Runtime;
 
 /// <summary>
 /// Defines the fundamentals of a runtime error

@@ -23,7 +23,8 @@
       "Bash(grep -r \"public.*class\" /c/Dev/ServerlessWorkflow/sdk-net/src/ServerlessWorkflow.Sdk.Runtime/Services/*.cs)",
       "Bash(cp -r /c/Users/User/source/repos/sdk-net/src/ServerlessWorkflow.Sdk.Builders/Interfaces /c/Dev/ServerlessWorkflow/sdk-net/src/ServerlessWorkflow.Sdk.Builders/Interfaces)",
       "Bash(cp /c/Users/User/source/repos/sdk-net/src/ServerlessWorkflow.Sdk.Builders/*.cs /c/Dev/ServerlessWorkflow/sdk-net/src/ServerlessWorkflow.Sdk.Builders/)",
-      "Bash(grep -oP '[^\\\\\\\\]+\\\\.cs')"
+      "Bash(grep -oP '[^\\\\\\\\]+\\\\.cs')",
+      "Bash(dotnet add:*)"
     ]
   }
 }

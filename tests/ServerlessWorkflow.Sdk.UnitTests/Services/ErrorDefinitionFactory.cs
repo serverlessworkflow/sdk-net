@@ -6,7 +6,7 @@ internal static class ErrorDefinitionFactory
     {
         Type = "https://example.com/errors/not-found",
         Title = "Not Found",
-        Status = 404,
+        Status = "404",
         Detail = "The requested resource was not found",
         Instance = "https://example.com/errors/not-found/12345"
     };
