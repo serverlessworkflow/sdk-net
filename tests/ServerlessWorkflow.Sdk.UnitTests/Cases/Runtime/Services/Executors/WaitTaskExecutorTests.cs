@@ -71,7 +71,7 @@ public class WaitTaskExecutorTests
     public async Task Execute_Should_Be_Cancellable()
     {
         // Arrange
-        var definition = new WaitTaskDefinition { Wait = Duration.FromSeconds(60) };
+        var definition = new WaitTaskDefinition { Wait = Duration.FromSeconds(5) };
         var taskContext = CreateTaskExecutionContext(definition);
 
         Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);

@@ -24,7 +24,9 @@
       "Bash(cp -r /c/Users/User/source/repos/sdk-net/src/ServerlessWorkflow.Sdk.Builders/Interfaces /c/Dev/ServerlessWorkflow/sdk-net/src/ServerlessWorkflow.Sdk.Builders/Interfaces)",
       "Bash(cp /c/Users/User/source/repos/sdk-net/src/ServerlessWorkflow.Sdk.Builders/*.cs /c/Dev/ServerlessWorkflow/sdk-net/src/ServerlessWorkflow.Sdk.Builders/)",
       "Bash(grep -oP '[^\\\\\\\\]+\\\\.cs')",
-      "Bash(dotnet add:*)"
+      "Bash(dotnet add:*)",
+      "Bash(taskkill //F //PID 8608)",
+      "Bash(taskkill //F //IM ServerlessWorkflow.Sdk.UnitTests.exe)"
     ]
   }
 }

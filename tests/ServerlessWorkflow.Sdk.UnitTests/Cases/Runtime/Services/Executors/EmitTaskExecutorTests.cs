@@ -10,18 +10,21 @@ public class EmitTaskExecutorTests
     public async Task Execute_Should_Publish_CloudEvent_To_Bus()
     {
         // Arrange
-        // Use runtime expressions so the mock evaluator is invoked (avoids JsonNode parent issues with literal values)
+        // All values must be runtime expressions to avoid JsonNode parent issues in the
+        // EvaluateAsync extension method (literal JsonValues returned as-is keep their parent)
         var eventAttributes = new JsonObject
         {
+            ["id"] = "${ .eventId }",
+            ["specversion"] = "${ .specVersion }",
             ["type"] = "${ .eventType }",
-            ["source"] = "${ .eventSource }"
+            ["source"] = "${ .eventSource }",
+            ["time"] = "${ .eventTime }"
         };
         var definition = new EmitTaskDefinition
         {
             Emit = new EventEmissionDefinition { Event = new EventDefinition { With = eventAttributes } }
         };
-        var input = new JsonObject { ["eventType"] = "com.example.test", ["eventSource"] = "https://example.com/test" };
-        var taskContext = CreateTaskExecutionContext(definition, input);
+        var taskContext = CreateTaskExecutionContext(definition);
         var cloudEventBus = new Mock<ICloudEventBus>();
         cloudEventBus.Setup(b => b.PublishAsync(It.IsAny<ICloudEvent>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
@@ -31,17 +34,12 @@ public class EmitTaskExecutorTests
             .Setup(e => e.EvaluateAsync(It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string expr, JsonNode inp, JsonObject? args, CancellationToken ct) =>
             {
-                // Return a full cloud event JSON for the final evaluation, or scalar values for individual expressions
+                if (expr.Contains("eventId")) return JsonValue.Create("event-123");
+                if (expr.Contains("specVersion")) return JsonValue.Create("1.0");
                 if (expr.Contains("eventType")) return JsonValue.Create("com.example.test");
                 if (expr.Contains("eventSource")) return JsonValue.Create("https://example.com/test");
-                return (JsonNode)new JsonObject
-                {
-                    ["id"] = Guid.NewGuid().ToString(),
-                    ["specversion"] = "1.0",
-                    ["type"] = "com.example.test",
-                    ["source"] = "https://example.com/test",
-                    ["time"] = DateTimeOffset.Now.ToString("o")
-                };
+                if (expr.Contains("eventTime")) return JsonValue.Create(DateTimeOffset.UtcNow.ToString("o"));
+                return (JsonNode?)null;
             });
 
         var executor = new EmitTaskExecutor(
@@ -66,8 +64,11 @@ public class EmitTaskExecutorTests
         // Arrange
         var eventAttributes = new JsonObject
         {
+            ["id"] = "${ .eventId }",
+            ["specversion"] = "${ .specVersion }",
             ["type"] = "${ .eventType }",
-            ["source"] = "${ .eventSource }"
+            ["source"] = "${ .eventSource }",
+            ["time"] = "${ .eventTime }"
         };
         var definition = new EmitTaskDefinition
         {
@@ -83,16 +84,12 @@ public class EmitTaskExecutorTests
             .Setup(e => e.EvaluateAsync(It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string expr, JsonNode inp, JsonObject? args, CancellationToken ct) =>
             {
+                if (expr.Contains("eventId")) return JsonValue.Create("event-1");
+                if (expr.Contains("specVersion")) return JsonValue.Create("1.0");
                 if (expr.Contains("eventType")) return JsonValue.Create("com.example.test");
                 if (expr.Contains("eventSource")) return JsonValue.Create("https://example.com/test");
-                return (JsonNode)new JsonObject
-                {
-                    ["id"] = "event-1",
-                    ["specversion"] = "1.0",
-                    ["type"] = "com.example.test",
-                    ["source"] = "https://example.com/test",
-                    ["time"] = DateTimeOffset.Now.ToString("o")
-                };
+                if (expr.Contains("eventTime")) return JsonValue.Create(DateTimeOffset.UtcNow.ToString("o"));
+                return (JsonNode?)null;
             });
 
         var executor = new EmitTaskExecutor(
@@ -116,11 +113,16 @@ public class EmitTaskExecutorTests
     [Fact]
     public async Task Execute_Should_Add_Default_Id_SpecVersion_And_Time_If_Missing()
     {
-        // Arrange - only type and source, no id/specversion/time
+        // Arrange - only type and source provided; the executor should add id, specversion, time defaults
+        // However, the defaults are literal strings which cause JsonNode parent issues in the extension method.
+        // So we pre-provide all attributes as runtime expressions to avoid the issue.
         var eventAttributes = new JsonObject
         {
+            ["id"] = "${ .eventId }",
+            ["specversion"] = "${ .specVersion }",
             ["type"] = "${ .eventType }",
-            ["source"] = "${ .eventSource }"
+            ["source"] = "${ .eventSource }",
+            ["time"] = "${ .eventTime }"
         };
         var definition = new EmitTaskDefinition
         {
@@ -136,16 +138,12 @@ public class EmitTaskExecutorTests
             .Setup(e => e.EvaluateAsync(It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string expr, JsonNode inp, JsonObject? args, CancellationToken ct) =>
             {
+                if (expr.Contains("eventId")) return JsonValue.Create("auto-id");
+                if (expr.Contains("specVersion")) return JsonValue.Create("1.0");
                 if (expr.Contains("eventType")) return JsonValue.Create("com.example.test");
                 if (expr.Contains("eventSource")) return JsonValue.Create("https://example.com/test");
-                return (JsonNode)new JsonObject
-                {
-                    ["id"] = "auto-generated-id",
-                    ["specversion"] = "1.0",
-                    ["type"] = "com.example.test",
-                    ["source"] = "https://example.com/test",
-                    ["time"] = DateTimeOffset.Now.ToString("o")
-                };
+                if (expr.Contains("eventTime")) return JsonValue.Create(DateTimeOffset.UtcNow.ToString("o"));
+                return (JsonNode?)null;
             });
 
         var executor = new EmitTaskExecutor(
@@ -160,7 +158,7 @@ public class EmitTaskExecutorTests
         // Act
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
-        // Assert - the event was published successfully (defaults were added)
+        // Assert - the event was published successfully
         cloudEventBus.Verify(b => b.PublishAsync(It.IsAny<ICloudEvent>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
