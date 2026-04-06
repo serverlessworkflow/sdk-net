@@ -5,6 +5,7 @@ global using Json.Patch;
 global using Json.Pointer;
 global using Microsoft.Extensions.Logging;
 global using Moq;
+global using ServerlessWorkflow.Sdk.Builders;
 global using ServerlessWorkflow.Sdk.Models;
 global using ServerlessWorkflow.Sdk.Models.Authentication;
 global using ServerlessWorkflow.Sdk.Models.Calls;

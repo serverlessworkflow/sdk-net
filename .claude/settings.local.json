@@ -26,7 +26,11 @@
       "Bash(grep -oP '[^\\\\\\\\]+\\\\.cs')",
       "Bash(dotnet add:*)",
       "Bash(taskkill //F //PID 8608)",
-      "Bash(taskkill //F //IM ServerlessWorkflow.Sdk.UnitTests.exe)"
+      "Bash(taskkill //F //IM ServerlessWorkflow.Sdk.UnitTests.exe)",
+      "Bash(ls src/ServerlessWorkflow.Sdk.Builders/*.cs)",
+      "Bash(ls tests/ServerlessWorkflow.Sdk.UnitTests/Cases/Builders/*.cs)",
+      "Bash(grep -v '//')",
+      "Bash(grep -v '^\\\\s*//')"
     ]
   }
 }

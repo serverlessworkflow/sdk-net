@@ -17,7 +17,7 @@ public static class NamingConvention
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
         return name.Length <= maxLength
-            && name.All(c => char.IsLower(c) && (char.IsLetter(c) || char.IsDigit(c) || c == '-'))
+            && name.All(c => char.IsDigit(c) || c == '-' || (char.IsLetter(c) && char.IsLower(c)))
             && char.IsLetterOrDigit(name.First())
             && char.IsLetterOrDigit(name.Last());
     }
