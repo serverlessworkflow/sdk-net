@@ -16,83 +16,76 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IAuthenticationPolicyDefinitionBuilder"/> interface
 /// </summary>
-public class AuthenticationPolicyDefinitionBuilder
+public sealed class AuthenticationPolicyDefinitionBuilder
     : IAuthenticationPolicyDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the name of the <see cref="AuthenticationPolicyDefinition"/> to use, if any
-    /// </summary>
-    protected string? Policy { get; set; }
-
-    /// <summary>
-    /// Gets/sets the <see cref="AuthenticationSchemeDefinition"/> to use
-    /// </summary>
-    protected IAuthenticationSchemeDefinitionBuilder? SchemeBuilder { get; set; }
+    string? policy;
+    IAuthenticationSchemeDefinitionBuilder? schemeBuilder;
 
     /// <inheritdoc/>
-    public virtual void Use(string policy)
+    public void Use(string policy)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(policy);
-        Policy = policy;
+        this.policy = policy;
     }
 
     /// <inheritdoc/>
-    public virtual IBasicAuthenticationSchemeDefinitionBuilder Basic()
+    public IBasicAuthenticationSchemeDefinitionBuilder Basic()
     {
         var builder = new BasicAuthenticationSchemeDefinitionBuilder();
-        SchemeBuilder = builder;
+        schemeBuilder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IBearerAuthenticationSchemeDefinitionBuilder Bearer()
+    public IBearerAuthenticationSchemeDefinitionBuilder Bearer()
     {
         var builder = new BearerAuthenticationSchemeDefinitionBuilder();
-        SchemeBuilder = builder;
+        schemeBuilder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual ICertificateAuthenticationSchemeDefinitionBuilder Certificate()
+    public ICertificateAuthenticationSchemeDefinitionBuilder Certificate()
     {
         var builder = new CertificateAuthenticationSchemeDefinitionBuilder();
-        SchemeBuilder = builder;
+        schemeBuilder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IDigestAuthenticationSchemeDefinitionBuilder Digest()
+    public IDigestAuthenticationSchemeDefinitionBuilder Digest()
     {
         var builder = new DigestAuthenticationSchemeDefinitionBuilder();
-        SchemeBuilder = builder;
+        schemeBuilder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationSchemeDefinitionBuilder OAuth2()
+    public IOAuth2AuthenticationSchemeDefinitionBuilder OAuth2()
     {
         var builder = new OAuth2AuthenticationSchemeDefinitionBuilder();
-        SchemeBuilder = builder;
+        schemeBuilder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IOpenIDConnectAuthenticationSchemeDefinitionBuilder OpenIDConnect()
+    public IOpenIDConnectAuthenticationSchemeDefinitionBuilder OpenIDConnect()
     {
         var builder = new OpenIDConnectAuthenticationSchemeDefinitionBuilder();
-        SchemeBuilder = builder;
+        schemeBuilder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual AuthenticationPolicyDefinition Build()
+    public AuthenticationPolicyDefinition Build()
     {
-        if (SchemeBuilder == null) throw new NullReferenceException("The authentication scheme must be set");
-        var scheme = SchemeBuilder.Build();
+        if (schemeBuilder == null) throw new NullReferenceException("The authentication scheme must be set");
+        var scheme = schemeBuilder.Build();
         return new()
         {
-            Use = Policy,
+            Use = policy,
             Basic = scheme is BasicAuthenticationSchemeDefinition basic ? basic : null,
             Bearer = scheme is BearerAuthenticationSchemeDefinition bearer ? bearer : null,
             OAuth2 = scheme is OAuth2AuthenticationSchemeDefinition oauth2 ? oauth2 : null,

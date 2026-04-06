@@ -17,32 +17,32 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="IEventDefinitionBuilder"/> interface
 /// </summary>
 /// <param name="attributes">A name/value mapping of the event's attributes. Supports runtime expressions</param>
-public class EventDefinitionBuilder(IDictionary<string, object>? attributes = null)
+public class EventDefinitionBuilder(JsonObject? attributes = null)
     : IEventDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets a name/value mapping of the event's attributes
-    /// </summary>
-    protected virtual EquatableDictionary<string, object> Attributes { get; set; } = attributes == null ? new() : new(attributes);
+    JsonObject attributes = attributes ?? [];
 
     /// <inheritdoc/>
-    public virtual IEventDefinitionBuilder With(string name, object value)
+    public virtual IEventDefinitionBuilder With(string name, JsonNode value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        Attributes[name] = value;
+        attributes[name] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IEventDefinitionBuilder With(IDictionary<string, object> attributes)
+    public virtual IEventDefinitionBuilder With(JsonObject attributes)
     {
         ArgumentNullException.ThrowIfNull(attributes);
-        Attributes = new(attributes);
+        this.attributes = attributes;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual EventDefinition Build() => new() { With = Attributes };
+    public virtual EventDefinition Build() => new() 
+    { 
+        With = attributes 
+    };
 
 }

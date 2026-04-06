@@ -7,16 +7,13 @@ public sealed class BackoffStrategyDefinitionBuilder
     : IBackoffStrategyDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the underlying service used to build the <see cref="BackoffDefinition"/> to use
-    /// </summary>
-    protected IBackoffDefinitionBuilder? Backoff { get; set; }
+    IBackoffDefinitionBuilder? backoff;
 
     /// <inheritdoc/>
     public IConstantBackoffDefinitionBuilder Constant()
     {
         var builder = new ConstantBackoffDefinitionBuilder();
-        Backoff = builder;
+        backoff = builder;
         return builder;
     }
 
@@ -24,7 +21,7 @@ public sealed class BackoffStrategyDefinitionBuilder
     public IExponentialBackoffDefinitionBuilder Exponential()
     {
         var builder = new ExponentialBackoffDefinitionBuilder();
-        Backoff = builder;
+        backoff = builder;
         return builder;
     }
 
@@ -32,15 +29,15 @@ public sealed class BackoffStrategyDefinitionBuilder
     public ILinearBackoffDefinitionBuilder Linear(Duration? increment = null)
     {
         var builder = new LinearBackoffDefinitionBuilder(increment);
-        Backoff = builder;
+        backoff = builder;
         return builder;
     }
 
     /// <inheritdoc/>
     public BackoffStrategyDefinition Build()
     {
-        if (Backoff == null) throw new NullReferenceException("The backoff strategy must be set");
-        var definition = Backoff.Build();
+        if (backoff == null) throw new NullReferenceException("The backoff strategy must be set");
+        var definition = backoff.Build();
         return new()
         {
             Constant = definition is ConstantBackoffDefinition constant ? constant : null,

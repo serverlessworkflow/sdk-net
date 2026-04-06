@@ -16,34 +16,37 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IInputDataModelDefinitionBuilder"/> interface
 /// </summary>
-public class InputDataModelDefinitionBuilder
+public sealed class InputDataModelDefinitionBuilder
     : IInputDataModelDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the <see cref="InputDataModelDefinition"/> to configure
-    /// </summary>
-    protected InputDataModelDefinition Input { get; } = new();
+    InputDataModelDefinition input = new();
 
     /// <inheritdoc/>
-    public virtual IInputDataModelDefinitionBuilder From(object expression)
+    public IInputDataModelDefinitionBuilder From(OneOf<JsonObject, string> expression)
     {
         ArgumentNullException.ThrowIfNull(expression);
-        Input.From = expression;
+        input = input with
+        {
+            From = expression
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IInputDataModelDefinitionBuilder WithSchema(Action<ISchemaDefinitionBuilder> setup)
+    public IInputDataModelDefinitionBuilder WithSchema(Action<ISchemaDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new SchemaDefinitionBuilder();
         setup(builder);
-        Input.Schema = builder.Build();
+        input = input with
+        {
+            Schema = builder.Build()
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual InputDataModelDefinition Build() => Input;
+    public InputDataModelDefinition Build() => input;
 
 }

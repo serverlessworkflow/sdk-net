@@ -13,7 +13,7 @@ internal static class WorkflowDefinitionFactory
             Document = WorkflowDefinitionMetadataFactory.Create(),
             Input = InputDataModelDefinitionFactory.Create(),
             Use = ComponentDefinitionCollectionFactory.Create(),
-            TimeoutValue = TimeoutDefinitionFactory.Create(),
+            Timeout = TimeoutDefinitionFactory.Create(),
             Output = OutputDataModelDefinitionFactory.Create(),
             Schedule = WorkflowScheduleDefinitionFactory.CreateWithCron(),
             Evaluate = RuntimeExpressionEvaluationConfigurationFactory.Create(),

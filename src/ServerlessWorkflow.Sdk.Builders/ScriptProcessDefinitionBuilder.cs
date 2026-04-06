@@ -1,5 +1,3 @@
-using ServerlessWorkflow.Sdk.Models.Processes;
-
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
@@ -9,58 +7,35 @@ public sealed class ScriptProcessDefinitionBuilder
     : ProcessDefinitionBuilder<ScriptProcessDefinition>, IScriptProcessDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the language of the script to run
-    /// </summary>
-    protected string? Language { get; set; }
-
-    /// <summary>
-    /// Gets/sets the script's code
-    /// </summary>
-    protected string? Code { get; set; }
-
-    /// <summary>
-    /// Gets/sets the script's source
-    /// </summary>
-    protected ExternalResourceDefinition? Source { get; set; }
-
-    /// <summary>
-    /// Gets/sets the uri that references the script's source
-    /// </summary>
-    protected Uri? SourceUri { get; set; }
-
-    /// <summary>
-    /// Gets the arguments, if any, of the command to execute
-    /// </summary>
-    protected EquatableDictionary<string, object>? Arguments { get; set; }
-
-    /// <summary>
-    /// Gets/sets the environment variables, if any, of the shell command to execute
-    /// </summary>
-    protected EquatableDictionary<string, string>? Environment { get; set; }
+    string? language;
+    string? code;
+    ExternalResourceDefinition? source;
+    Uri? sourceUri;
+    EquatableDictionary<string, object>? arguments;
+    EquatableDictionary<string, string>? environment;
 
     /// <inheritdoc/>
     public IScriptProcessDefinitionBuilder WithLanguage(string language)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(language);
-        Language = language;
-        IScriptProcessDefinitionBuilder self = this; return self;
+        this.language = language;
+        return this;
     }
 
     /// <inheritdoc/>
     public IScriptProcessDefinitionBuilder WithCode(string code)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(code);
-        Code = code;
-        IScriptProcessDefinitionBuilder self = this; return self;
+        this.code = code;
+        return this;
     }
 
     /// <inheritdoc/>
     public IScriptProcessDefinitionBuilder WithSource(Uri source)
     {
         ArgumentNullException.ThrowIfNull(source);
-        SourceUri = source;
-        IScriptProcessDefinitionBuilder self = this; return self;
+        sourceUri = source;
+        return this;
     }
 
     /// <inheritdoc/>
@@ -69,58 +44,61 @@ public sealed class ScriptProcessDefinitionBuilder
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ExternalResourceDefinitionBuilder();
         setup(builder);
-        Source = builder.Build();
-        IScriptProcessDefinitionBuilder self = this; return self;
+        source = builder.Build();
+        return this;
     }
 
     /// <inheritdoc/>
     public IScriptProcessDefinitionBuilder WithArgument(string name, object value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        Arguments ??= [];
-        Arguments[name] = value;
-        IScriptProcessDefinitionBuilder self = this; return self;
+        arguments ??= [];
+        arguments[name] = value;
+        return this;
     }
 
     /// <inheritdoc/>
     public IScriptProcessDefinitionBuilder WithArguments(IDictionary<string, object> arguments)
     {
         ArgumentNullException.ThrowIfNull(arguments);
-        Arguments = new(arguments);
-        IScriptProcessDefinitionBuilder self = this; return self;
+        this.arguments = [.. arguments];
+        return this;
     }
 
     /// <inheritdoc/>
     public IScriptProcessDefinitionBuilder WithEnvironment(string name, string value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        Environment ??= [];
-        Environment[name] = value;
-        IScriptProcessDefinitionBuilder self = this; return self;
+        environment ??= [];
+        environment[name] = value;
+        return this;
     }
 
     /// <inheritdoc/>
     public IScriptProcessDefinitionBuilder WithEnvironment(IDictionary<string, string> environment)
     {
         ArgumentNullException.ThrowIfNull(environment);
-        Environment = new(environment);
-        IScriptProcessDefinitionBuilder self = this; return self;
+        this.environment = [.. environment];
+        return this;
     }
 
     /// <inheritdoc/>
     public override ScriptProcessDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(Language)) throw new NullReferenceException("The language in which the script to run is expressed must be set");
-        if (string.IsNullOrWhiteSpace(Code) && Source == null && SourceUri == null) throw new NullReferenceException("Either the code or the source properties must be set");
-        ExternalResourceDefinition? source = Source;
-        if (source == null && SourceUri != null) source = new() { Endpoint = SourceUri };
+        if (string.IsNullOrWhiteSpace(language)) throw new NullReferenceException("The language in which the script to run is expressed must be set");
+        if (string.IsNullOrWhiteSpace(code) && this.source == null && sourceUri == null) throw new NullReferenceException("Either the code or the source properties must be set");
+        ExternalResourceDefinition? source = this.source;
+        if (source == null && sourceUri != null) source = new() 
+        { 
+            Endpoint = sourceUri 
+        };
         return new()
         {
-            Language = Language,
-            Code = Code,
+            Language = language,
+            Code = code,
             Source = source,
-            Arguments = Arguments,
-            Environment = Environment
+            Arguments = arguments,
+            Environment = environment
         };
     }
 

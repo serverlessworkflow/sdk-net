@@ -7,27 +7,16 @@ public sealed class OAuth2AuthenticationEndpointsDefinitionBuilder
     : IOAuth2AuthenticationEndpointsDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the relative path to the token endpoint. Defaults to /oauth2/token
-    /// </summary>
-    protected Uri Token { get; set; } = new("/oauth2/token", UriKind.Relative);
-
-    /// <summary>
-    /// Gets/sets the relative path to the revocation endpoint. Defaults to /oauth2/revoke
-    /// </summary>
-    protected Uri Revocation { get; set; } = new("/oauth2/revoke", UriKind.Relative);
-
-    /// <summary>
-    /// Gets/sets the relative path to the introspection endpoint. Defaults to /oauth2/introspect
-    /// </summary>
-    protected Uri Introspection { get; set; } = new("/oauth2/introspect", UriKind.Relative);
+    Uri token = new("/oauth2/token", UriKind.Relative);
+    Uri revocation = new("/oauth2/revoke", UriKind.Relative);
+    Uri introspection = new("/oauth2/introspect", UriKind.Relative);
 
     /// <inheritdoc/>
     public IOAuth2AuthenticationEndpointsDefinitionBuilder WithTokenEndpoint(Uri uri)
     {
         ArgumentNullException.ThrowIfNull(uri);
         if (uri.IsAbsoluteUri) throw new ArgumentException("The specified uri must be relative to the configured authority", nameof(uri));
-        Token = uri;
+        token = uri;
         IOAuth2AuthenticationEndpointsDefinitionBuilder self = this; return self;
     }
 
@@ -36,7 +25,7 @@ public sealed class OAuth2AuthenticationEndpointsDefinitionBuilder
     {
         ArgumentNullException.ThrowIfNull(uri);
         if (uri.IsAbsoluteUri) throw new ArgumentException("The specified uri must be relative to the configured authority", nameof(uri));
-        Revocation = uri;
+        revocation = uri;
         IOAuth2AuthenticationEndpointsDefinitionBuilder self = this; return self;
     }
 
@@ -45,21 +34,21 @@ public sealed class OAuth2AuthenticationEndpointsDefinitionBuilder
     {
         ArgumentNullException.ThrowIfNull(uri);
         if (uri.IsAbsoluteUri) throw new ArgumentException("The specified uri must be relative to the configured authority", nameof(uri));
-        Introspection = uri;
+        introspection = uri;
         IOAuth2AuthenticationEndpointsDefinitionBuilder self = this; return self;
     }
 
     /// <inheritdoc/>
     public OAuth2AuthenticationEndpointsDefinition Build()
     {
-        if (Token == null) throw new NullReferenceException("The token endpoint must be configured");
-        if (Revocation == null) throw new NullReferenceException("The revocation endpoint must be configured");
-        if (Introspection == null) throw new NullReferenceException("The introspection endpoint must be configured");
+        if (token == null) throw new NullReferenceException("The token endpoint must be configured");
+        if (revocation == null) throw new NullReferenceException("The revocation endpoint must be configured");
+        if (introspection == null) throw new NullReferenceException("The introspection endpoint must be configured");
         return new()
         {
-            Token = Token,
-            Revocation = Revocation,
-            Introspection = Introspection
+            Token = token,
+            Revocation = revocation,
+            Introspection = introspection
         };
     }
 

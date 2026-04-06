@@ -58,7 +58,7 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     public virtual TBuilder If(string condition)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(condition);
-        this.IfExpression = condition;
+        IfExpression = condition;
         return (TBuilder)(object)this;
     }
 
@@ -66,7 +66,7 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     public virtual TBuilder WithTimeout(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        this.Timeout = name;
+        Timeout = name;
         return (TBuilder)(object)this;
     }
 
@@ -74,7 +74,7 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     public virtual TBuilder WithTimeout(TimeoutDefinition timeout)
     {
         ArgumentNullException.ThrowIfNull(timeout);
-        this.Timeout = timeout;
+        Timeout = timeout;
         return (TBuilder)(object)this;
     }
 
@@ -84,7 +84,7 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TimeoutDefinitionBuilder();
         setup(builder);
-        this.Timeout = builder.Build();
+        Timeout = builder.Build();
         return (TBuilder)(object)this;
     }
 
@@ -94,7 +94,7 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new InputDataModelDefinitionBuilder();
         setup(builder);
-        this.Input = builder.Build();
+        Input = builder.Build();
         return (TBuilder)(object)this;
     }
 
@@ -104,7 +104,7 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OutputDataModelDefinitionBuilder();
         setup(builder);
-        this.Output = builder.Build();
+        Output = builder.Build();
         return (TBuilder)(object)this;
     }
 
@@ -114,7 +114,7 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OutputDataModelDefinitionBuilder();
         setup(builder);
-        this.Export = builder.Build();
+        Export = builder.Build();
         return (TBuilder)(object)this;
     }
 
@@ -122,7 +122,7 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     public virtual TBuilder Then(string directive)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(directive);
-        this.ThenDirective = directive;
+        ThenDirective = directive;
         return (TBuilder)(object)this;
     }
 
@@ -133,22 +133,20 @@ public abstract class TaskDefinitionBuilder<TBuilder, TDefinition>
     /// <returns>The configured task definition</returns>
     protected virtual TDefinition Configure(TDefinition definition)
     {
-        definition.If = this.IfExpression;
-        if (this.Timeout != null)
+        return definition with
         {
-            if (this.Timeout.T1Value != null) definition.Timeout = this.Timeout.T1Value;
-            else definition.TimeoutReference = this.Timeout.T2Value;
-        }
-        definition.Then = this.ThenDirective;
-        definition.Input = this.Input;
-        definition.Output = this.Output;
-        definition.Export = this.Export;
-        return definition;
+            If = IfExpression,
+            Timeout = Timeout,
+            Then = ThenDirective,
+            Input = Input,
+            Output = Output,
+            Export = Export
+        }; ;
     }
 
     /// <inheritdoc/>
     public abstract TDefinition Build();
 
-    TaskDefinition ITaskDefinitionBuilder.Build() => this.Build();
+    TaskDefinition ITaskDefinitionBuilder.Build() => Build();
 
 }

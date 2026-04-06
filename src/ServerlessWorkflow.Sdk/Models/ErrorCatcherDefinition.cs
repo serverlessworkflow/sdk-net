@@ -42,7 +42,7 @@ public sealed record ErrorCatcherDefinition
     [Description("The retry policy to use, if any")]
     [Required]
     [DataMember(Order = 5, Name = "retry"), JsonPropertyOrder(5), JsonPropertyName("retry"), JsonConverter(typeof(OneOfJsonConverter<RetryPolicyDefinition, string>))]
-    public OneOf<RetryPolicyDefinition, string>? RetryValue { get; init; } = null!;
+    public OneOf<RetryPolicyDefinition, string>? Retry { get; init; } = null!;
 
     /// <summary>
     /// Gets/sets a name/definition map of the tasks to run when catching an error

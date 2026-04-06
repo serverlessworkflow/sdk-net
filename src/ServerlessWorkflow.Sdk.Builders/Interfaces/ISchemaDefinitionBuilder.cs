@@ -38,7 +38,7 @@ public interface ISchemaDefinitionBuilder
     /// </summary>
     /// <param name="document">The schema document</param>
     /// <returns>The configured <see cref="ISchemaDefinitionBuilder"/></returns>
-    ISchemaDefinitionBuilder WithDocument(object document);
+    ISchemaDefinitionBuilder WithDocument(JsonObject document);
 
     /// <summary>
     /// Builds the configured <see cref="SchemaDefinition"/>

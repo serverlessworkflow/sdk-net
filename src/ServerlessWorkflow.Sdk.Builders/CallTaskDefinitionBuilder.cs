@@ -17,53 +17,46 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="ICallTaskDefinitionBuilder"/> interface
 /// </summary>
 /// <param name="functionName">The name of the function to call</param>
-public class CallTaskDefinitionBuilder(string? functionName = null)
+public sealed class CallTaskDefinitionBuilder(string? functionName = null)
     : TaskDefinitionBuilder<ICallTaskDefinitionBuilder, CallTaskDefinition>, ICallTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the name of the function to call
-    /// </summary>
-    protected virtual string? FunctionName { get; set; } = functionName;
-
-    /// <summary>
-    /// Gets a name/value mapping of the function's arguments, if any
-    /// </summary>
-    protected virtual EquatableDictionary<string, object>? FunctionArguments { get; set; }
+    string? functionName = functionName;
+    JsonObject? functionArguments;
 
     /// <inheritdoc/>
-    public virtual ICallTaskDefinitionBuilder Function(string name)
+    public ICallTaskDefinitionBuilder Function(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        FunctionName = name;
+        functionName = name;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ICallTaskDefinitionBuilder With(string name, object value)
+    public ICallTaskDefinitionBuilder With(string name, JsonNode value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        FunctionArguments ??= [];
-        FunctionArguments[name] = value;
+        functionArguments ??= [];
+        functionArguments[name] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ICallTaskDefinitionBuilder With(IDictionary<string, object> arguments)
+    public ICallTaskDefinitionBuilder With(JsonObject arguments)
     {
         ArgumentNullException.ThrowIfNull(arguments);
-        FunctionArguments = new(arguments);
+        functionArguments = arguments;
         return this;
     }
 
     /// <inheritdoc/>
     public override CallTaskDefinition Build() 
     {
-        if (string.IsNullOrWhiteSpace(FunctionName)) throw new NullReferenceException("The function to call is required");
+        if (string.IsNullOrWhiteSpace(functionName)) throw new NullReferenceException("The function to call is required");
         return Configure(new()
         {
-            Call = FunctionName,
-            With = FunctionArguments,
+            Call = functionName,
+            With = functionArguments,
         });
     }
 

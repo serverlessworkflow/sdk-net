@@ -52,10 +52,10 @@ public sealed class TryTaskExecutor(IServiceProvider serviceProvider, ILogger<Tr
             Detail = ex.Message
         };
         Executors.Remove(executor);
-        var hasRetryPolicy = Task.Definition.Catch.RetryValue != null;
+        var hasRetryPolicy = Task.Definition.Catch.Retry != null;
         if (hasRetryPolicy)
         {
-            var retryPolicy = Task.Definition.Catch.RetryValue!.Match(
+            var retryPolicy = Task.Definition.Catch.Retry!.Match(
                 policy => policy,
                 reference =>
                 {

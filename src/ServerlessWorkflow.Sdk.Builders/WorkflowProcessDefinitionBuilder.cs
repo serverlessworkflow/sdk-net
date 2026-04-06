@@ -7,33 +7,18 @@ public sealed partial class WorkflowProcessDefinitionBuilder
     : ProcessDefinitionBuilder<WorkflowProcessDefinition>, IWorkflowProcessDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the namespace of the workflow to run
-    /// </summary>
-    protected string? Namespace { get; set; }
-
-    /// <summary>
-    /// Gets/sets the name of the workflow to run
-    /// </summary>
-    protected string? Name { get; set; }
-
-    /// <summary>
-    /// Gets/sets the version of the workflow to run. Defaults to 'latest'
-    /// </summary>
-    protected string Version { get; set; } = "latest";
-
-    /// <summary>
-    /// Gets/sets the data, if any, to pass as input to the workflow to execute
-    /// </summary>
-    protected JsonObject? Input { get; set; }
+    string? @namespace;
+    string? name;
+    string version = "latest";
+    JsonObject? input;
 
     /// <inheritdoc/>
     public IWorkflowProcessDefinitionBuilder WithNamespace(string @namespace)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(@namespace);
         if (!DnsLabelRegex().IsMatch(@namespace)) throw new ArgumentException($"The specified value '{@namespace}' is not a valid RFC1123 DNS label name", nameof(@namespace));
-        Namespace = @namespace;
-        IWorkflowProcessDefinitionBuilder self = this; return self;
+        this.@namespace = @namespace;
+        return this;
     }
 
     /// <inheritdoc/>
@@ -41,36 +26,36 @@ public sealed partial class WorkflowProcessDefinitionBuilder
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         if (!DnsLabelRegex().IsMatch(name)) throw new ArgumentException($"The specified value '{name}' is not a valid RFC1123 DNS label name", nameof(name));
-        Name = name;
-        IWorkflowProcessDefinitionBuilder self = this; return self;
+        this.name = name;
+        return this;
     }
 
     /// <inheritdoc/>
     public IWorkflowProcessDefinitionBuilder WithVersion(string version)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(version);
-        Version = version;
-        IWorkflowProcessDefinitionBuilder self = this; return self;
+        this.version = version;
+        return this;
     }
 
     /// <inheritdoc/>
-    public IWorkflowProcessDefinitionBuilder WithInput(object input)
+    public IWorkflowProcessDefinitionBuilder WithInput(JsonObject input)
     {
-        Input = input;
-        IWorkflowProcessDefinitionBuilder self = this; return self;
+        this.input = input;
+        return this;
     }
 
     /// <inheritdoc/>
     public override WorkflowProcessDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(Name)) throw new NullReferenceException("The name of the workflow to run must be set");
-        if (string.IsNullOrWhiteSpace(Version)) throw new NullReferenceException("The version of the workflow to run must be set");
+        if (string.IsNullOrWhiteSpace(name)) throw new NullReferenceException("The name of the workflow to run must be set");
+        if (string.IsNullOrWhiteSpace(version)) throw new NullReferenceException("The version of the workflow to run must be set");
         return new()
         {
-            Namespace = string.IsNullOrWhiteSpace(Namespace) ? WorkflowDefinitionMetadata.DefaultNamespace : Namespace,
-            Name = Name,
-            Version = Version,
-            Input = Input
+            Namespace = string.IsNullOrWhiteSpace(@namespace) ? WorkflowDefinitionMetadata.DefaultNamespace : @namespace,
+            Name = name,
+            Version = version,
+            Input = input
         };
     }
 

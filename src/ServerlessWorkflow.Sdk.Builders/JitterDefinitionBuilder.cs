@@ -7,41 +7,34 @@ public sealed class JitterDefinitionBuilder(Duration? from = null, Duration? to 
     : IJitterDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the minimum duration of the jitter range
-    /// </summary>
-    protected Duration? JitterFrom { get; set; } = from;
-
-    /// <summary>
-    /// Gets the maximum duration of the jitter range
-    /// </summary>
-    protected Duration? JitterTo { get; set; } = to;
+    Duration? jitterFrom = from;
+    Duration? jitterTo = to;
 
     /// <inheritdoc/>
     public IJitterDefinitionBuilder From(Duration from)
     {
         ArgumentNullException.ThrowIfNull(from);
-        JitterFrom = from;
-        IJitterDefinitionBuilder self = this; return self;
+        jitterFrom = from;
+        return this;
     }
 
     /// <inheritdoc/>
     public IJitterDefinitionBuilder To(Duration to)
     {
         ArgumentNullException.ThrowIfNull(to);
-        JitterTo = to;
-        IJitterDefinitionBuilder self = this; return self;
+        jitterTo = to;
+        return this;
     }
 
     /// <inheritdoc/>
     public JitterDefinition Build()
     {
-        if (JitterFrom == null) throw new NullReferenceException("The jitter range's minimum duration must be set");
-        if (JitterTo == null) throw new NullReferenceException("The jitter range's maximum duration must be set");
+        if (jitterFrom == null) throw new NullReferenceException("The jitter range's minimum duration must be set");
+        if (jitterTo == null) throw new NullReferenceException("The jitter range's maximum duration must be set");
         return new()
         {
-            From = JitterFrom,
-            To = JitterTo,
+            From = jitterFrom,
+            To = jitterTo,
         };
     }
 

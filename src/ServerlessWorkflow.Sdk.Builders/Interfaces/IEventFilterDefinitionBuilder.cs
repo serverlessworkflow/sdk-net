@@ -25,14 +25,14 @@ public interface IEventFilterDefinitionBuilder
     /// <param name="name">The name of the attribute to filter events by</param>
     /// <param name="value">The value of the attribute to filter events by. Supports runtime expressions</param>
     /// <returns>The configured <see cref="IEventFilterDefinitionBuilder"/></returns>
-    IEventFilterDefinitionBuilder With(string name, object value);
+    IEventFilterDefinitionBuilder With(string name, JsonNode value);
 
     /// <summary>
     /// Sets a name/value mapping of the attributes to filter events by
     /// </summary>
     /// <param name="attributes">A name/value mapping of the attributes to filter events by. Supports runtime expressions</param>
     /// <returns>The configured <see cref="IEventFilterDefinitionBuilder"/></returns>
-    IEventFilterDefinitionBuilder With(IDictionary<string, object> attributes);
+    IEventFilterDefinitionBuilder With(JsonObject attributes);
 
     /// <summary>
     /// Builds the configured <see cref="EventFilterDefinition"/>

@@ -7,23 +7,20 @@ public sealed class LinearBackoffDefinitionBuilder(Duration? increment = null)
     : ILinearBackoffDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the linear incrementation to the delay between retry attempts
-    /// </summary>
-    protected Duration? LinearIncrement { get; set; } = increment;
+    Duration? linearIncrement = increment;
 
     /// <inheritdoc/>
     public ILinearBackoffDefinitionBuilder WithIncrement(Duration increment)
     {
         ArgumentNullException.ThrowIfNull(increment);
-        LinearIncrement = increment;
-        ILinearBackoffDefinitionBuilder self = this; return self;
+        linearIncrement = increment;
+        return this;
     }
 
     /// <inheritdoc/>
     public LinearBackoffDefinition Build() => new()
     {
-        Increment = LinearIncrement
+        Increment = linearIncrement
     };
 
     BackoffDefinition IBackoffDefinitionBuilder.Build() => Build();

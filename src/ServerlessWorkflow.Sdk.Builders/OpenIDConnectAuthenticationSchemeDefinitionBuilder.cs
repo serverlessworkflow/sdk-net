@@ -16,7 +16,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IOpenIDConnectAuthenticationSchemeDefinitionBuilder"/> interface
 /// </summary>
-public class OpenIDConnectAuthenticationSchemeDefinitionBuilder
+public sealed class OpenIDConnectAuthenticationSchemeDefinitionBuilder
     : OAuth2AuthenticationSchemeDefinitionBuilder<OpenIDConnectSchemeDefinition, IOpenIDConnectAuthenticationSchemeDefinitionBuilder>, IOpenIDConnectAuthenticationSchemeDefinitionBuilder
 {
 

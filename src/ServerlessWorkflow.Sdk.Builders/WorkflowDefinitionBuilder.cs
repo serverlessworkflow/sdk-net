@@ -16,196 +16,153 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IWorkflowDefinitionBuilder"/> interface
 /// </summary>
-public class WorkflowDefinitionBuilder
+public sealed class WorkflowDefinitionBuilder
     : IWorkflowDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the version of the DSL used to define the workflow
-    /// </summary>
-    protected string Dsl { get; set; } = ServerlessWorkflowSpecificationDefaults.Version;
-
-    /// <summary>
-    /// Gets/sets the workflow's namespace
-    /// </summary>
-    protected string? Namespace { get; set; }
-
-    /// <summary>
-    /// Gets/sets the workflow's name
-    /// </summary>
-    protected string? Name { get; set; }
-
-    /// <summary>
-    /// Gets the workflow's semantic version
-    /// </summary>
-    protected string? Version { get; set; }
-
-    /// <summary>
-    /// Gets/sets the workflow's title
-    /// </summary>
-    protected string? Title { get; set; }
-
-    /// <summary>
-    /// Gets/sets the workflow's Markdown summary
-    /// </summary>
-    protected string? Summary { get; set; }
-
-    /// <summary>
-    /// Gets/sets the workflow's tags
-    /// </summary>
-    protected EquatableDictionary<string, string>? Tags { get; set; }
-
-    /// <summary>
-    /// Gets/sets the workflow's timeout, if any
-    /// </summary>
-    protected OneOf<TimeoutDefinition, string>? Timeout { get; set; }
-
-    /// <summary>
-    /// Gets/sets the workflow's input data, if any
-    /// </summary>
-    protected InputDataModelDefinition? Input { get; set; }
-
-    /// <summary>
-    /// Gets/sets the workflow's output data, if any
-    /// </summary>
-    protected OutputDataModelDefinition? Output { get; set; }
-
-    /// <summary>
-    /// Gets/sets a name/value mapping of the workflow's reusable components
-    /// </summary>
-    protected ComponentDefinitionCollection? Components { get; set; }
-
-    /// <summary>
-    /// Gets/sets a name/value mapping of the tasks the workflow is made out of
-    /// </summary>
-    protected Map<string, TaskDefinition>? Tasks { get; set; }
+    string dsl = ServerlessWorkflowSpecificationDefaults.Version;
+    string? @namespace;
+    string? name;
+    string? version;
+    string? title;
+    string? summary;
+    EquatableDictionary<string, string>? tags;
+    OneOf<TimeoutDefinition, string>? timeout;
+    InputDataModelDefinition? input;
+    OutputDataModelDefinition? output;
+    ComponentDefinitionCollection? components;
+    Map<string, TaskDefinition>? tasks;
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseDsl(string version)
+    public IWorkflowDefinitionBuilder UseDsl(string version)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(version);
         if (!SemVersion.TryParse(version, SemVersionStyles.Strict, out _)) throw new ArgumentException($"The specified value '{version}' is not a valid semantic version (SemVer 2.0)", nameof(version));
-        Dsl = version;
+        dsl = version;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithNamespace(string @namespace)
+    public IWorkflowDefinitionBuilder WithNamespace(string @namespace)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(@namespace);
         if (!NamingConvention.IsValidName(@namespace)) throw new ArgumentException($"The the specified value '{@namespace}' is not a valid RFC1123 DNS label name", nameof(@namespace));
-        Namespace = @namespace;
+        this.@namespace = @namespace;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithName(string name)
+    public IWorkflowDefinitionBuilder WithName(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         if (!NamingConvention.IsValidName(name)) throw new ArgumentException($"The the specified value '{name}' is not a valid RFC1123 DNS label name", nameof(name));
-        Name = name;
+        this.name = name;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithVersion(string version)
+    public IWorkflowDefinitionBuilder WithVersion(string version)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(version);
         if (!SemVersion.TryParse(version, SemVersionStyles.Strict, out _)) throw new ArgumentException($"The specified value '{version}' is not a valid semantic version (SemVer 2.0)", nameof(version)); 
-        Version = version;
+        this.version = version;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithTitle(string title)
+    public IWorkflowDefinitionBuilder WithTitle(string title)
     {
-        Title = title;
+        this.title = title;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithSummary(string description)
+    public IWorkflowDefinitionBuilder WithSummary(string summary)
     {
-        Summary = description;
+        this.summary = summary;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithTag(string name, string value)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        Tags ??= [];
-        Tags[name] = value;
-        return this;
-    }
-
-    /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithTag(IDictionary<string, string> arguments)
-    {
-        ArgumentNullException.ThrowIfNull(arguments);
-        Tags = [.. arguments];
-        return this;
-    }
-
-    /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithTimeout(string name)
+    public IWorkflowDefinitionBuilder WithTag(string name, string value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        Timeout = name;
+        tags ??= [];
+        tags[name] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithTimeout(TimeoutDefinition timeout)
+    public IWorkflowDefinitionBuilder WithTag(IDictionary<string, string> tags)
+    {
+        ArgumentNullException.ThrowIfNull(tags);
+        this.tags = [.. tags];
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public IWorkflowDefinitionBuilder WithTimeout(string name)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        timeout = name;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public IWorkflowDefinitionBuilder WithTimeout(TimeoutDefinition timeout)
     {
         ArgumentNullException.ThrowIfNull(timeout);
-        Timeout = timeout;
+        this.timeout = timeout;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithTimeout(Action<ITimeoutDefinitionBuilder> setup)
+    public IWorkflowDefinitionBuilder WithTimeout(Action<ITimeoutDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TimeoutDefinitionBuilder();
         setup(builder);
-        Timeout = builder.Build();
+        timeout = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithInput(Action<IInputDataModelDefinitionBuilder> setup)
+    public IWorkflowDefinitionBuilder WithInput(Action<IInputDataModelDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new InputDataModelDefinitionBuilder();
         setup(builder);
-        Input = builder.Build();
+        this.input = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder WithOutput(Action<IOutputDataModelDefinitionBuilder> setup)
+    public IWorkflowDefinitionBuilder WithOutput(Action<IOutputDataModelDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OutputDataModelDefinitionBuilder();
         setup(builder);
-        Output = builder.Build();
+        this.output = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseAuthentication(string name, AuthenticationPolicyDefinition authentication)
+    public IWorkflowDefinitionBuilder UseAuthentication(string name, AuthenticationPolicyDefinition authentication)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(authentication);
-        Components ??= new();
-        Components.Authentications ??= [];
-        Components.Authentications[name] = authentication;
+        components ??= new();
+        var authentications = components.Authentications ?? [];
+        authentications[name] = authentication;
+        components = components with
+        {
+            Authentications = authentications
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseAuthentication(string name, Action<IAuthenticationPolicyDefinitionBuilder> setup)
+    public IWorkflowDefinitionBuilder UseAuthentication(string name, Action<IAuthenticationPolicyDefinitionBuilder> setup)
     {
         var builder = new AuthenticationPolicyDefinitionBuilder();
         setup(builder);
@@ -213,18 +170,22 @@ public class WorkflowDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseExtension(string name, ExtensionDefinition extension)
+    public IWorkflowDefinitionBuilder UseExtension(string name, ExtensionDefinition extension)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(extension);
-        Components ??= new();
-        Components.Extensions ??= [];
-        Components.Extensions[name] = extension;
+        components ??= new();
+        var extensions = components.Extensions ?? [];
+        extensions[name] = extension;
+        components = components with
+        {
+            Extensions = extensions
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseExtension(string name, Action<IExtensionDefinitionBuilder> setup)
+    public IWorkflowDefinitionBuilder UseExtension(string name, Action<IExtensionDefinitionBuilder> setup)
     {
         var builder = new ExtensionDefinitionBuilder();
         setup(builder);
@@ -232,37 +193,47 @@ public class WorkflowDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseFunction(string name, TaskDefinition task)
+    public IWorkflowDefinitionBuilder UseFunction(string name, TaskDefinition task)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(task);
-        Components ??= new();
-        Components.Functions ??= [];
-        Components.Functions[name] = task;
+        components ??= new();
+        var functions = components.Functions ?? [];
+        functions[name] = task;
+        components = components with
+        {
+            Functions = functions
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseFunction(string name, Action<IGenericTaskDefinitionBuilder> setup)
+    public IWorkflowDefinitionBuilder UseFunction(string name, Action<IGenericTaskDefinitionBuilder> setup)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentNullException.ThrowIfNull(setup);
         var builder = new GenericTaskDefinitionBuilder();
         setup(builder);
         return UseFunction(name, builder.Build());
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseRetry(string name, RetryPolicyDefinition retry)
+    public IWorkflowDefinitionBuilder UseRetry(string name, RetryPolicyDefinition retry)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(retry);
-        Components ??= new();
-        Components.Retries ??= [];
-        Components.Retries[name] = retry;
+        components ??= new();
+        var retries = components.Retries ?? [];
+        retries[name] = retry;
+        components = components with
+        {
+            Retries = retries
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseRetry(string name, Action<IRetryPolicyDefinitionBuilder> setup)
+    public IWorkflowDefinitionBuilder UseRetry(string name, Action<IRetryPolicyDefinitionBuilder> setup)
     {
         var builder = new RetryPolicyDefinitionBuilder();
         setup(builder);
@@ -270,36 +241,45 @@ public class WorkflowDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseSecret(string secret)
+    public IWorkflowDefinitionBuilder UseSecret(string secret)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(secret);
-        Components ??= new();
-        Components.Secrets ??= [];
-        Components.Secrets.Add(secret);
+        components ??= new();
+        var secrets = components.Secrets ?? [];
+        secrets.Add(secret);
+        components = components with
+        {
+            Secrets = secrets
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder UseSecrets(params string[] secrets)
+    public IWorkflowDefinitionBuilder UseSecrets(params string[] secrets)
     {
         ArgumentNullException.ThrowIfNull(secrets);
-        Components ??= new();
-        Components.Secrets = new(secrets);
+        components ??= new();
+        var existingSecrets = components.Secrets ?? [];
+        existingSecrets.AddRange(secrets);
+        components = components with
+        {
+            Secrets = existingSecrets
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder Do(string name, TaskDefinition task)
+    public IWorkflowDefinitionBuilder Do(string name, TaskDefinition task)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(task);
-        Tasks ??= [];
-        Tasks[name] = task;
+        tasks ??= [];
+        tasks[name] = task;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowDefinitionBuilder Do(string name, Action<IGenericTaskDefinitionBuilder> setup)
+    public IWorkflowDefinitionBuilder Do(string name, Action<IGenericTaskDefinitionBuilder> setup)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(setup);
@@ -310,35 +290,31 @@ public class WorkflowDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual WorkflowDefinition Build()
+    public WorkflowDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(Dsl)) throw new NullReferenceException("The workflow DSL must be set");
-        if (string.IsNullOrWhiteSpace(Name)) throw new NullReferenceException("The workflow name must be set");
-        if (string.IsNullOrWhiteSpace(Version)) throw new NullReferenceException("The workflow version must be set");
-        if (Tasks == null || Tasks.Count < 1) throw new NullReferenceException("The workflow must define at least one task");
+        if (string.IsNullOrWhiteSpace(dsl)) throw new NullReferenceException("The workflow DSL must be set");
+        if (string.IsNullOrWhiteSpace(name)) throw new NullReferenceException("The workflow name must be set");
+        if (string.IsNullOrWhiteSpace(version)) throw new NullReferenceException("The workflow version must be set");
+        if (tasks == null || tasks.Count < 1) throw new NullReferenceException("The workflow must define at least one task");
         var definition =  new WorkflowDefinition()
         {
             Document = new()
             {
-                Dsl = Dsl,
-                Namespace = string.IsNullOrWhiteSpace(Namespace) ? WorkflowDefinitionMetadata.DefaultNamespace : Namespace,
-                Name = Name,
-                Version = Version,
-                Title = Title,
-                Summary = Summary,
-                Tags = Tags
+                Dsl = dsl,
+                Namespace = string.IsNullOrWhiteSpace(@namespace) ? WorkflowDefinitionMetadata.DefaultNamespace : @namespace,
+                Name = name,
+                Version = version,
+                Title = title,
+                Summary = summary,
+                Tags = tags
             },
-            Use = Components,
-            Do = Tasks
+            Use = components,
+            Do = tasks,
+            Timeout = timeout
         };
-        if (Timeout != null)
-        {
-            if (Timeout.T1Value != null) definition.Timeout = Timeout.T1Value;
-            else definition.TimeoutReference = Timeout.T2Value;
-        }
         return definition;
     }
 
-    Map<string, TaskDefinition> ITaskDefinitionMapBuilder<IWorkflowDefinitionBuilder>.Build() => Tasks!;
+    Map<string, TaskDefinition> ITaskDefinitionMapBuilder<IWorkflowDefinitionBuilder>.Build() => tasks!;
 
 }

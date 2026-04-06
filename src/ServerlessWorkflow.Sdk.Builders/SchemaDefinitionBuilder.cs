@@ -16,42 +16,48 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="ISchemaDefinitionBuilder"/> interface
 /// </summary>
-public class SchemaDefinitionBuilder
+public sealed class SchemaDefinitionBuilder
     : ISchemaDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the <see cref="SchemaDefinition"/> to configure
-    /// </summary>
-    protected SchemaDefinition Schema { get; } = new();
+    SchemaDefinition schema = new();
 
     /// <inheritdoc/>
-    public virtual ISchemaDefinitionBuilder WithFormat(string format)
+    public ISchemaDefinitionBuilder WithFormat(string format)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(format);
-        Schema.Format = format;
+        schema = schema with
+        {
+            Format = format
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ISchemaDefinitionBuilder WithResource(Action<IExternalResourceDefinitionBuilder> setup)
+    public ISchemaDefinitionBuilder WithResource(Action<IExternalResourceDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ExternalResourceDefinitionBuilder();
         setup(builder);
-        Schema.Resource = builder.Build();
+        schema = schema with
+        {
+            Resource = builder.Build()
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ISchemaDefinitionBuilder WithDocument(object document)
+    public ISchemaDefinitionBuilder WithDocument(JsonObject document)
     {
         ArgumentNullException.ThrowIfNull(document);
-        Schema.Document = document;
+        schema = schema with
+        {
+            Document = document
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual SchemaDefinition Build() => Schema;
+    public SchemaDefinition Build() => schema;
 
 }

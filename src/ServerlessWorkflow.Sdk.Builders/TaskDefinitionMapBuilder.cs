@@ -16,27 +16,24 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="ITaskDefinitionMapBuilder"/> interface
 /// </summary>
-public class TaskDefinitionMapBuilder
+public sealed class TaskDefinitionMapBuilder
     : ITaskDefinitionMapBuilder
 {
 
-    /// <summary>
-    /// Gets a name/value mapping of the tasks the workflow is made out of
-    /// </summary>
-    protected Map<string, TaskDefinition>? Tasks { get; set; }
+    Map<string, TaskDefinition>? tasks;
 
     /// <inheritdoc/>
-    public virtual ITaskDefinitionMapBuilder Do(string name, TaskDefinition task)
+    public ITaskDefinitionMapBuilder Do(string name, TaskDefinition task)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(task);
-        this.Tasks ??= [];
-        this.Tasks[name] = task;
+        tasks ??= [];
+        tasks[name] = task;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ITaskDefinitionMapBuilder Do(string name, Action<IGenericTaskDefinitionBuilder> setup)
+    public ITaskDefinitionMapBuilder Do(string name, Action<IGenericTaskDefinitionBuilder> setup)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentNullException.ThrowIfNull(setup);
@@ -47,10 +44,10 @@ public class TaskDefinitionMapBuilder
     }
 
     /// <inheritdoc/>
-    public virtual Map<string, TaskDefinition> Build()
+    public Map<string, TaskDefinition> Build()
     {
-        if (this.Tasks == null || this.Tasks.Count < 1) throw new NullReferenceException("The task must define at least one subtask");
-        return this.Tasks;
+        if (tasks == null || tasks.Count < 1) throw new NullReferenceException("The task must define at least one subtask");
+        return tasks;
     }
 
 }

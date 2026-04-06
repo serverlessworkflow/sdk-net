@@ -16,46 +16,39 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IBasicAuthenticationSchemeDefinitionBuilder"/> interface
 /// </summary>
-public class BasicAuthenticationSchemeDefinitionBuilder
+public sealed class BasicAuthenticationSchemeDefinitionBuilder
     : AuthenticationSchemeDefinitionBuilder<BasicAuthenticationSchemeDefinition>, IBasicAuthenticationSchemeDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the username to use
-    /// </summary>
-    protected string? Username { get; set; }
-
-    /// <summary>
-    /// Gets/sets the password to use
-    /// </summary>
-    protected string? Password { get; set; }
+    string? username;
+    string? password;
 
     /// <inheritdoc/>
-    public virtual IBasicAuthenticationSchemeDefinitionBuilder WithUsername(string username)
+    public IBasicAuthenticationSchemeDefinitionBuilder WithUsername(string username)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(username);
-        Username = username;
+        this.username = username;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IBasicAuthenticationSchemeDefinitionBuilder WithPassword(string password)
+    public IBasicAuthenticationSchemeDefinitionBuilder WithPassword(string password)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(password);
-        Password = password;
+        this.password = password;
         return this;
     }
 
     /// <inheritdoc/>
     public override BasicAuthenticationSchemeDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(Username)) throw new NullReferenceException("The username must be set");
-        if (string.IsNullOrWhiteSpace(Password)) throw new NullReferenceException("The password must be set");
+        if (string.IsNullOrWhiteSpace(username)) throw new NullReferenceException("The username must be set");
+        if (string.IsNullOrWhiteSpace(password)) throw new NullReferenceException("The password must be set");
         return new()
         {
             Use = Secret,
-            Username = Username,
-            Password = Password
+            Username = username,
+            Password = password
         };
     }
 

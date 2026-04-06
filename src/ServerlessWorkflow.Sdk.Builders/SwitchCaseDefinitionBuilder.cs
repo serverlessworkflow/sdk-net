@@ -16,42 +16,35 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="ISwitchCaseDefinitionBuilder"/> interface
 /// </summary>
-public class SwitchCaseDefinitionBuilder
+public sealed class SwitchCaseDefinitionBuilder
     : ISwitchCaseDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the runtime expression used to determine whether or not the case to build matches
-    /// </summary>
-    protected virtual string? WhenExpression { get; set; }
-
-    /// <summary>
-    /// Gets/sets the flow directive to execute when the case to build matches
-    /// </summary>
-    protected virtual string? ThenDirective { get; set; }
+    string? whenExpression;
+    string? thenDirective;
 
     /// <inheritdoc/>
-    public virtual ISwitchCaseDefinitionBuilder When(string expression)
+    public ISwitchCaseDefinitionBuilder When(string expression)
     {
-        this.WhenExpression = expression;
+        whenExpression = expression;
         return this;
     }
     /// <inheritdoc/>
-    public virtual ISwitchCaseDefinitionBuilder Then(string directive)
+    public ISwitchCaseDefinitionBuilder Then(string directive)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(directive);
-        this.ThenDirective = directive;
+        thenDirective = directive;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual SwitchCaseDefinition Build()
+    public SwitchCaseDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(this.ThenDirective)) throw new NullReferenceException("The flow directive to execute when the switch case matches must be set");
+        if (string.IsNullOrWhiteSpace(thenDirective)) throw new NullReferenceException("The flow directive to execute when the switch case matches must be set");
         return new()
         {
-            When = this.WhenExpression,
-            Then = this.ThenDirective
+            When = whenExpression,
+            Then = thenDirective
         };
     }
 

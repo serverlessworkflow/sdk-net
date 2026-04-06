@@ -17,35 +17,32 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="ISetTaskDefinitionBuilder"/> interface
 /// </summary>
 /// <param name="variables">A name/value mapping of the variables to set</param>
-public class SetTaskDefinitionBuilder(IDictionary<string, object>? variables = null)
+public sealed class SetTaskDefinitionBuilder(JsonObject? variables = null)
     : TaskDefinitionBuilder<ISetTaskDefinitionBuilder, SetTaskDefinition>, ISetTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets a name/value mapping of the variables to set
-    /// </summary>
-    protected EquatableDictionary<string, object> Variables { get; set; } = [..variables];
+    JsonObject variables = variables ?? [];
 
     /// <inheritdoc/>
-    public virtual ISetTaskDefinitionBuilder Set(string name, object value)
+    public ISetTaskDefinitionBuilder Set(string name, JsonNode value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        Variables[name] = value;
+        variables[name] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ISetTaskDefinitionBuilder Set(IDictionary<string, object> variables)
+    public ISetTaskDefinitionBuilder Set(JsonObject variables)
     {
         ArgumentNullException.ThrowIfNull(variables);
-        Variables = new(variables);
+        this.variables = variables;
         return this;
     }
 
     /// <inheritdoc/>
     public override SetTaskDefinition Build() => Configure(new()
     {
-        Set = Variables
+        Set = variables
     });
 
 }

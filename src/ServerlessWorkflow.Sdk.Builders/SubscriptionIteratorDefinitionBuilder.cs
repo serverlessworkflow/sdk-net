@@ -7,45 +7,26 @@ public sealed class SubscriptionIteratorDefinitionBuilder
     : ISubscriptionIteratorDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the item variable name
-    /// </summary>
-    protected string? ItemValue { get; set; }
-
-    /// <summary>
-    /// Gets/sets the index variable name
-    /// </summary>
-    protected string? AtValue { get; set; }
-
-    /// <summary>
-    /// Gets/sets the tasks to execute
-    /// </summary>
-    protected Map<string, TaskDefinition>? DoTasks { get; set; }
-
-    /// <summary>
-    /// Gets/sets the output definition
-    /// </summary>
-    protected OutputDataModelDefinition? OutputValue { get; set; }
-
-    /// <summary>
-    /// Gets/sets the export definition
-    /// </summary>
-    protected OutputDataModelDefinition? ExportValue { get; set; }
+    string? itemValue;
+    string? atValue;
+    Map<string, TaskDefinition>? doTasks;
+    OutputDataModelDefinition? outputValue;
+    OutputDataModelDefinition? exportValue;
 
     /// <inheritdoc/>
     public ISubscriptionIteratorDefinitionBuilder Item(string item)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(item);
-        ItemValue = item;
-        ISubscriptionIteratorDefinitionBuilder self = this; return self;
+        itemValue = item;
+        return this;
     }
 
     /// <inheritdoc/>
     public ISubscriptionIteratorDefinitionBuilder At(string at)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(at);
-        AtValue = at;
-        ISubscriptionIteratorDefinitionBuilder self = this; return self;
+        atValue = at;
+        return this;
     }
 
     /// <inheritdoc/>
@@ -54,8 +35,8 @@ public sealed class SubscriptionIteratorDefinitionBuilder
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        DoTasks = builder.Build();
-        ISubscriptionIteratorDefinitionBuilder self = this; return self;
+        doTasks = builder.Build();
+        return this;
     }
 
     /// <inheritdoc/>
@@ -64,8 +45,8 @@ public sealed class SubscriptionIteratorDefinitionBuilder
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OutputDataModelDefinitionBuilder();
         setup(builder);
-        OutputValue = builder.Build();
-        ISubscriptionIteratorDefinitionBuilder self = this; return self;
+        outputValue = builder.Build();
+        return this;
     }
 
     /// <inheritdoc/>
@@ -74,18 +55,18 @@ public sealed class SubscriptionIteratorDefinitionBuilder
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OutputDataModelDefinitionBuilder();
         setup(builder);
-        ExportValue = builder.Build();
-        ISubscriptionIteratorDefinitionBuilder self = this; return self;
+        exportValue = builder.Build();
+        return this;
     }
 
     /// <inheritdoc/>
     public SubscriptionIteratorDefinition Build() => new()
     {
-        Item = ItemValue,
-        At = AtValue,
-        Do = DoTasks,
-        Output = OutputValue,
-        Export = ExportValue
+        Item = itemValue,
+        At = atValue,
+        Do = doTasks,
+        Output = outputValue,
+        Export = exportValue
     };
 
 }

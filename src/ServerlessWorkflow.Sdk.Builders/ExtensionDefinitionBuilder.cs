@@ -16,76 +16,61 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IExtensionDefinitionBuilder"/> interface
 /// </summary>
-public class ExtensionDefinitionBuilder
+public sealed class ExtensionDefinitionBuilder
     : IExtensionDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the type of the extended task
-    /// </summary>
-    protected string? TaskType { get; set; }
-
-    /// <summary>
-    /// Gets/sets the expression used to evaluate whether or not the extension applies
-    /// </summary>
-    protected string? WhenExpression { get; set; }
-
-    /// <summary>
-    /// Gets/sets the definition of the task to run before the extended one
-    /// </summary>
-    protected Map<string, TaskDefinition>? BeforeTasks { get; set; }
-
-    /// <summary>
-    /// Gets/sets the definition of the task to run after the extended one
-    /// </summary>
-    protected Map<string, TaskDefinition>? AfterTasks { get; set; }
+    string? taskType;
+    string? whenExpression;
+    Map<string, TaskDefinition>? beforeTasks;
+    Map<string, TaskDefinition>? afterTasks;
 
     /// <inheritdoc/>
-    public virtual IExtensionDefinitionBuilder Extend(string taskType)
+    public IExtensionDefinitionBuilder Extend(string taskType)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(taskType);
-        TaskType = taskType;
+        this.taskType = taskType;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IExtensionDefinitionBuilder When(string when)
+    public IExtensionDefinitionBuilder When(string when)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(when);
-        WhenExpression = when;
+        whenExpression = when;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IExtensionDefinitionBuilder Before(Action<ITaskDefinitionMapBuilder> setup)
+    public IExtensionDefinitionBuilder Before(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        BeforeTasks = builder.Build();
+        beforeTasks = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IExtensionDefinitionBuilder After(Action<ITaskDefinitionMapBuilder> setup)
+    public IExtensionDefinitionBuilder After(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        AfterTasks = builder.Build();
+        afterTasks = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ExtensionDefinition Build()
+    public ExtensionDefinition Build()
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(TaskType);
+        ArgumentException.ThrowIfNullOrWhiteSpace(taskType);
         return new()
         {
-            Extend = TaskType,
-            When = WhenExpression,
-            Before = BeforeTasks,
-            After = AfterTasks
+            Extend = taskType,
+            When = whenExpression,
+            Before = beforeTasks,
+            After = afterTasks
         };
     }
 

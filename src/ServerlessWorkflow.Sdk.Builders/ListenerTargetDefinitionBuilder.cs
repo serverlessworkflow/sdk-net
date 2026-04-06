@@ -20,82 +20,63 @@ public class ListenerTargetDefinitionBuilder
     : IListenerTargetDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets a list containing all the events that must be listened to, if any
-    /// </summary>
-    protected IEventFilterDefinitionCollectionBuilder? AllEvents { get; set; }
-
-    /// <summary>
-    /// Gets/sets a list containing any of the events to listen to, if any
-    /// </summary>
-    protected IEventFilterDefinitionCollectionBuilder? AnyEvents { get; set; }
-
-    /// <summary>
-    /// Gets/sets the single event to listen to
-    /// </summary>
-    protected IEventFilterDefinitionBuilder? SingleEvent { get; set; }
-
-    /// <summary>
-    /// Gets the runtime expression that represents the condition that must match for the task to stop consuming events
-    /// </summary>
-    protected string? UntilExpression { get; private set; }
-
-    /// <summary>
-    /// Gets the strategy used to configure the events to consume for the task to stop consuming events
-    /// </summary>
-    protected EventConsumptionStrategyDefinition? UntilEvents { get; private set; }
+    IEventFilterDefinitionCollectionBuilder? allEvents;
+    IEventFilterDefinitionCollectionBuilder? anyEvents;
+    IEventFilterDefinitionBuilder? singleEvent;
+    string? untilExpression;
+    EventConsumptionStrategyDefinition? untilEvents;
 
     /// <inheritdoc/>
-    public virtual IEventFilterDefinitionCollectionBuilder All()
+    public IEventFilterDefinitionCollectionBuilder All()
     {
-        AllEvents = new EventFilterDefinitionCollectionBuilder();
-        return AllEvents;
+        allEvents = new EventFilterDefinitionCollectionBuilder();
+        return allEvents;
     }
 
     /// <inheritdoc/>
-    public virtual IEventFilterDefinitionCollectionBuilder Any()
+    public IEventFilterDefinitionCollectionBuilder Any()
     {
-        AnyEvents = new EventFilterDefinitionCollectionBuilder();
-        return AnyEvents;
+        anyEvents = new EventFilterDefinitionCollectionBuilder();
+        return anyEvents;
     }
 
     /// <inheritdoc/>
-    public virtual IEventFilterDefinitionBuilder One()
+    public IEventFilterDefinitionBuilder One()
     {
-        SingleEvent = new EventFilterDefinitionBuilder();
-        return SingleEvent;
+        singleEvent = new EventFilterDefinitionBuilder();
+        return singleEvent;
     }
 
     /// <inheritdoc/>
-    public virtual void Until(string expression)
+    public void Until(string expression)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(expression);
-        if (AnyEvents == null) throw new Exception("The until clause can only be specified when the strategy is used to consume any events");
-        UntilExpression = expression;
+        if (anyEvents == null) throw new Exception("The until clause can only be specified when the strategy is used to consume any events");
+        untilExpression = expression;
     }
 
     /// <inheritdoc/>
-    public virtual void Until(Action<IListenerTargetDefinitionBuilder> setup)
+    public void Until(Action<IListenerTargetDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
-        if (AnyEvents == null) throw new Exception("The until clause can only be specified when the strategy is used to consume any events");
+        if (anyEvents == null) throw new Exception("The until clause can only be specified when the strategy is used to consume any events");
         var builder = new ListenerTargetDefinitionBuilder();
         setup(builder);
-        UntilEvents = builder.Build();
+        untilEvents = builder.Build();
     }
 
     /// <inheritdoc/>
-    public virtual EventConsumptionStrategyDefinition Build()
+    public EventConsumptionStrategyDefinition Build()
     {
-        if (AllEvents == null && AnyEvents == null && SingleEvent == null) throw new NullReferenceException("The target must be defined");
+        if (allEvents == null && anyEvents == null && singleEvent == null) throw new NullReferenceException("The target must be defined");
         OneOf<EventConsumptionStrategyDefinition, string>? until = null;
-        if (UntilExpression != null) until = UntilExpression;
-        else if (UntilEvents != null) until = UntilEvents;
+        if (untilExpression != null) until = untilExpression;
+        else if (untilEvents != null) until = untilEvents;
         return new()
         {
-            All = AllEvents?.Build(),
-            Any = AnyEvents?.Build(),
-            One = SingleEvent?.Build(),
+            All = allEvents?.Build(),
+            Any = anyEvents?.Build(),
+            One = singleEvent?.Build(),
             Until = until
         };
     }

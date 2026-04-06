@@ -10,6 +10,12 @@ public sealed class EquatableList<T>
 {
 
     /// <inheritdoc/>
+    public EquatableList() : base() { }
+
+    /// <inheritdoc/>
+    public EquatableList(IEnumerable<T> collection) : base(collection) { }
+
+    /// <inheritdoc/>
     public bool Equals(EquatableList<T>? other) => other is not null && this.SequenceEqual(other);
 
     /// <inheritdoc/>

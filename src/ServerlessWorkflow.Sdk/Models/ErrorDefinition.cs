@@ -28,7 +28,7 @@ public sealed record ErrorDefinition
     /// </summary>
     [Description("The status code produced by the described error")]
     [DataMember(Order = 3, Name = "status"), JsonPropertyOrder(3), JsonPropertyName("status")]
-    public required uint Status { get; init; }
+    public required string Status { get; init; }
 
     /// <summary>
     /// Gets/sets a human-readable explanation specific to this occurrence of the error.

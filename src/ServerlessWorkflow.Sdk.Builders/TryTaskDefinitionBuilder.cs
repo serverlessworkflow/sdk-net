@@ -16,48 +16,41 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="ITryTaskDefinitionBuilder"/> interface
 /// </summary>
-public class TryTaskDefinitionBuilder
+public sealed class TryTaskDefinitionBuilder
     : TaskDefinitionBuilder<ITryTaskDefinitionBuilder, TryTaskDefinition>, ITryTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the tasks to try
-    /// </summary>
-    protected Map<string, TaskDefinition>? TryTasks { get; set; }
-
-    /// <summary>
-    /// Gets/sets the definition of the error catcher to use
-    /// </summary>
-    protected ErrorCatcherDefinition? ErrorCatcher { get; set; }
+    Map<string, TaskDefinition>? tryTasks;
+    ErrorCatcherDefinition? errorCatcher;
 
     /// <inheritdoc/>
-    public virtual ITryTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
+    public ITryTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        this.TryTasks = builder.Build();
+        tryTasks = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ITryTaskDefinitionBuilder Catch(Action<IErrorCatcherDefinitionBuilder> setup)
+    public ITryTaskDefinitionBuilder Catch(Action<IErrorCatcherDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ErrorCatcherDefinitionBuilder();
-        this.ErrorCatcher = builder.Build();
+        errorCatcher = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
     public override TryTaskDefinition Build()
     {
-        if (this.TryTasks == null || this.TryTasks.Count < 1) throw new NullReferenceException("The task to try must be set");
-        if (this.ErrorCatcher == null) throw new NullReferenceException("The catch clause must be set");
+        if (tryTasks == null || tryTasks.Count < 1) throw new NullReferenceException("The task to try must be set");
+        if (errorCatcher == null) throw new NullReferenceException("The catch clause must be set");
         return this.Configure(new()
         {
-            Try = this.TryTasks,
-            Catch = this.ErrorCatcher
+            Try = tryTasks,
+            Catch = errorCatcher
         });
     }
 

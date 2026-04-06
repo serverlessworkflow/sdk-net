@@ -16,88 +16,69 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IErrorDefinitionBuilder"/> interface
 /// </summary>
-public class ErrorDefinitionBuilder
+public sealed class ErrorDefinitionBuilder
     : IErrorDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the type of the error to build
-    /// </summary>
-    protected string? Type { get; set; }
-
-    /// <summary>
-    /// Gets the status of the error to build
-    /// </summary>
-    protected string? Status { get; set; }
-
-    /// <summary>
-    /// Gets the title of the error to build
-    /// </summary>
-    protected string? Title { get; set; }
-
-    /// <summary>
-    /// Gets the detail of the error to build
-    /// </summary>
-    protected string? Detail { get; set; }
-
-    /// <summary>
-    /// Gets the instance of the error to build
-    /// </summary>
-    protected string? Instance { get; set; }
+    string? type;
+    string? status;
+    string? title;
+    string? detail;
+    string? instance;
 
     /// <inheritdoc/>
-    public virtual IErrorDefinitionBuilder WithType(string type)
+    public IErrorDefinitionBuilder WithType(string type)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(type);
-        Type = type;
+        this.type = type;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IErrorDefinitionBuilder WithStatus(string status)
+    public IErrorDefinitionBuilder WithStatus(string status)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(status);
-        Status = status;
+        this.status = status;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IErrorDefinitionBuilder WithTitle(string title)
+    public IErrorDefinitionBuilder WithTitle(string title)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(title);
-        Title = title;
+        this.title = title;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IErrorDefinitionBuilder WithDetail(string detail)
+    public IErrorDefinitionBuilder WithDetail(string detail)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(detail);
-        Detail = detail;
+        this.detail = detail;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IErrorDefinitionBuilder WithInstance(string instance)
+    public IErrorDefinitionBuilder WithInstance(string instance)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(instance);
-        Instance = instance;
+        this.instance = instance;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ErrorDefinition Build()
+    public ErrorDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(Type)) throw new NullReferenceException("The error type must be set");
-        if (string.IsNullOrWhiteSpace(Title)) throw new NullReferenceException("The error title must be set");
-        if (string.IsNullOrWhiteSpace(Status)) throw new NullReferenceException("The error status must be set");
+        if (string.IsNullOrWhiteSpace(type)) throw new NullReferenceException("The error type must be set");
+        if (string.IsNullOrWhiteSpace(title)) throw new NullReferenceException("The error title must be set");
+        if (string.IsNullOrWhiteSpace(status)) throw new NullReferenceException("The error status must be set");
         return new()
         {
-            Type = Type,
-            Status = Status,
-            Title = Title,
-            Detail = Detail,
-            Instance = Instance
+            Type = type,
+            Status = status,
+            Title = title,
+            Detail = detail,
+            Instance = instance
         };
     }
 

@@ -16,14 +16,11 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="ISwitchTaskDefinitionBuilder"/> interface
 /// </summary>
-public class SwitchTaskDefinitionBuilder
+public sealed class SwitchTaskDefinitionBuilder
     : TaskDefinitionBuilder<ISwitchTaskDefinitionBuilder, SwitchTaskDefinition>, ISwitchTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets a name/value mapping of the cases of the <see cref="SwitchTaskDefinition"/> to build
-    /// </summary>
-    protected Map<string, SwitchCaseDefinition> Cases { get; } = [];
+    readonly Map<string, SwitchCaseDefinition> cases = [];
 
     /// <inheritdoc/>
     public ISwitchTaskDefinitionBuilder Case(string name, Action<ISwitchCaseDefinitionBuilder> setup)
@@ -33,14 +30,14 @@ public class SwitchTaskDefinitionBuilder
         var builder = new SwitchCaseDefinitionBuilder();
         setup(builder);
         var @case = builder.Build();
-        this.Cases[name] = @case;
+        cases[name] = @case;
         return this;
     }
 
     /// <inheritdoc/>
     public override SwitchTaskDefinition Build() => this.Configure(new()
     {
-        Switch = this.Cases
+        Switch = cases
     });
 
 }

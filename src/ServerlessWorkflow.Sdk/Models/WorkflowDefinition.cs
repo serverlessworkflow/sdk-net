@@ -35,7 +35,7 @@ public sealed record WorkflowDefinition
     /// </summary>
     [Description("The workflow's timeout, if any.")]
     [DataMember(Order = 4, Name = "timeout"), JsonPropertyOrder(4), JsonPropertyName("timeout"), JsonConverter(typeof(OneOfJsonConverter<TimeoutDefinition, string>))]
-    public OneOf<TimeoutDefinition, string>? TimeoutValue { get; init; } = null!;
+    public OneOf<TimeoutDefinition, string>? Timeout { get; init; } = null!;
 
     /// <summary>
     /// Gets/sets the workflow's output definition, if any

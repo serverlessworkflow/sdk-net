@@ -8,6 +8,6 @@ internal static class ErrorCatcherDefinitionFactory
         As = "error",
         When = "${ .error.status == 503 }",
         ExceptWhen = "${ .error.status == 404 }",
-        RetryValue = RetryPolicyDefinitionFactory.Create()
+        Retry = RetryPolicyDefinitionFactory.Create()
     };
 }

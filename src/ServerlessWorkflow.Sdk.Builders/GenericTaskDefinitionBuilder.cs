@@ -16,43 +16,40 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IGenericTaskDefinitionBuilder"/> interface
 /// </summary>
-public class GenericTaskDefinitionBuilder
+public sealed class GenericTaskDefinitionBuilder
     : IGenericTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the underlying <see cref="ITaskDefinitionBuilder"/>
-    /// </summary>
-    protected ITaskDefinitionBuilder? Builder { get; set; }
+    ITaskDefinitionBuilder? builder;
 
     /// <inheritdoc/>
-    public virtual ICallTaskDefinitionBuilder Call(string? function = null)
+    public ICallTaskDefinitionBuilder Call(string? function = null)
     {
         var builder = new CallTaskDefinitionBuilder(function);
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IDoTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
+    public IDoTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
         var builder = new DoTaskDefinitionBuilder();
         builder.Do(setup);
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IEmitTaskDefinitionBuilder Emit(EventDefinition e)
+    public IEmitTaskDefinitionBuilder Emit(EventDefinition e)
     {
         ArgumentNullException.ThrowIfNull(e);
         var builder = new EmitTaskDefinitionBuilder(e);
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IEmitTaskDefinitionBuilder Emit(Action<IEventDefinitionBuilder> setup)
+    public IEmitTaskDefinitionBuilder Emit(Action<IEventDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new EventDefinitionBuilder();
@@ -62,48 +59,48 @@ public class GenericTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IForTaskDefinitionBuilder For()
+    public IForTaskDefinitionBuilder For()
     {
         var builder = new ForTaskDefinitionBuilder();
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IForkTaskDefinitionBuilder Fork()
+    public IForkTaskDefinitionBuilder Fork()
     {
         var builder = new ForkTaskDefinitionBuilder();
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IListenTaskDefinitionBuilder Listen()
+    public IListenTaskDefinitionBuilder Listen()
     {
         var builder = new ListenTaskDefinitionBuilder();
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IDoTaskDefinitionBuilder Execute()
+    public IDoTaskDefinitionBuilder Execute()
     {
         var builder = new DoTaskDefinitionBuilder();
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IRaiseTaskDefinitionBuilder Raise(ErrorDefinition error)
+    public IRaiseTaskDefinitionBuilder Raise(ErrorDefinition error)
     {
         ArgumentNullException.ThrowIfNull(error);
         var builder = new RaiseTaskDefinitionBuilder(error);
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IRaiseTaskDefinitionBuilder Raise(Action<IErrorDefinitionBuilder> setup)
+    public IRaiseTaskDefinitionBuilder Raise(Action<IErrorDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ErrorDefinitionBuilder();
@@ -113,53 +110,56 @@ public class GenericTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public virtual IRunTaskDefinitionBuilder Run()
+    public IRunTaskDefinitionBuilder Run()
     {
         var builder = new RunTaskDefinitionBuilder();
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual ISetTaskDefinitionBuilder Set(string name, string value) => Set(new Dictionary<string, object>() { { name, value } });
+    public ISetTaskDefinitionBuilder Set(string name, string value) => Set(new() 
+    { 
+        { name, value } 
+    });
 
     /// <inheritdoc/>
-    public virtual ISetTaskDefinitionBuilder Set(IDictionary<string, object>? variables = null)
+    public ISetTaskDefinitionBuilder Set(JsonObject? variables = null)
     {
         var builder = new SetTaskDefinitionBuilder(variables);
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual ISwitchTaskDefinitionBuilder Switch()
+    public ISwitchTaskDefinitionBuilder Switch()
     {
         var builder = new SwitchTaskDefinitionBuilder();
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual ITryTaskDefinitionBuilder Try()
+    public ITryTaskDefinitionBuilder Try()
     {
         var builder = new TryTaskDefinitionBuilder();
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IWaitTaskDefinitionBuilder Wait(Duration? duration = null)
+    public IWaitTaskDefinitionBuilder Wait(Duration? duration = null)
     {
         var builder = new WaitTaskDefinitionBuilder(duration);
-        Builder = builder;
+        this.builder = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual TaskDefinition Build()
+    public TaskDefinition Build()
     {
-        if (Builder == null) throw new NullReferenceException();
-        return Builder.Build();
+        if (this.builder == null) throw new NullReferenceException();
+        return this.builder.Build();
     }
 
 }

@@ -7,35 +7,28 @@ public sealed class RetryAttemptLimitDefinitionBuilder
     : IRetryAttemptLimitDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the maximum attempts count
-    /// </summary>
-    protected uint? AttemptCount { get; set; }
-
-    /// <summary>
-    /// Gets/sets the duration limit, if any, for all retry attempts
-    /// </summary>
-    protected Duration? AttemptDuration { get; set; }
+    uint? attemptCount;
+    Duration? attemptDuration;
 
     /// <inheritdoc/>
     public IRetryAttemptLimitDefinitionBuilder Count(uint count)
     {
-        AttemptCount = count;
-        IRetryAttemptLimitDefinitionBuilder self = this; return self;
+        attemptCount = count;
+        return this;
     }
 
     /// <inheritdoc/>
     public IRetryAttemptLimitDefinitionBuilder Duration(Duration duration)
     {
-        AttemptDuration = duration;
-        IRetryAttemptLimitDefinitionBuilder self = this; return self;
+        attemptDuration = duration;
+        return this;
     }
 
     /// <inheritdoc/>
     public RetryAttemptLimitDefinition Build() => new()
     {
-        Count = AttemptCount,
-        Duration = AttemptDuration
+        Count = attemptCount,
+        Duration = attemptDuration
     };
 
 }

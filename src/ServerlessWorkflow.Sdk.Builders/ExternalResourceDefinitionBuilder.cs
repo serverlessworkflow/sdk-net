@@ -16,53 +16,46 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IExternalResourceDefinitionBuilder"/> interface
 /// </summary>
-public class ExternalResourceDefinitionBuilder
+public sealed class ExternalResourceDefinitionBuilder
     : IExternalResourceDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the external resource's name
-    /// </summary>
-    protected virtual string? Name { get; set; }
-
-    /// <summary>
-    /// Gets/sets the endpoint at which to get the defined resource
-    /// </summary>
-    protected virtual EndpointDefinition? Endpoint { get; set; }
+    string? name;
+    OneOf<EndpointDefinition, Uri>? endpoint;
 
     /// <inheritdoc/>
-    public virtual IExternalResourceDefinitionBuilder WithName(string name)
+    public IExternalResourceDefinitionBuilder WithName(string name)
     {
-        Name = name;
+        this.name = name;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IExternalResourceDefinitionBuilder WithEndpoint(OneOf<EndpointDefinition, Uri> endpoint)
+    public IExternalResourceDefinitionBuilder WithEndpoint(OneOf<EndpointDefinition, Uri> endpoint)
     {
         ArgumentNullException.ThrowIfNull(endpoint);
-        Endpoint = endpoint;
+        this.endpoint = endpoint;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IExternalResourceDefinitionBuilder WithEndpoint(Action<IEndpointDefinitionBuilder> setup)
+    public IExternalResourceDefinitionBuilder WithEndpoint(Action<IEndpointDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new EndpointDefinitionBuilder();
         setup(builder);
-        Endpoint = builder.Build();
+        this.endpoint = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ExternalResourceDefinition Build()
+    public ExternalResourceDefinition Build()
     {
-        if (Endpoint == null) throw new NullReferenceException("The endpoint at which to get the defined resource must be set");
+        if (endpoint == null) throw new NullReferenceException("The endpoint at which to get the defined resource must be set");
         var externalResource = new ExternalResourceDefinition()
         {
-            Name = Name,
-            Endpoint = Endpoint
+            Name = name,
+            Endpoint = endpoint
         };
         return externalResource;
     }

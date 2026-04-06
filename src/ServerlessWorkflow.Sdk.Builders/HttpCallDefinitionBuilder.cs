@@ -1,151 +1,113 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
-//
-// Licensed under the Apache License, Version 2.0 (the "License"),
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-
-namespace ServerlessWorkflow.Sdk.Builders;
+﻿namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IHttpCallDefinitionBuilder"/> interface
 /// </summary>
-[DataContract]
-public class HttpCallDefinitionBuilder
+public sealed class HttpCallDefinitionBuilder
     : IHttpCallDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the HTTP method of the request to perform
-    /// </summary>
-    protected string? Method { get; set; }
-
-    /// <summary>
-    /// Gets/sets the definition of the endpoint to request
-    /// </summary>
-    protected EndpointDefinition? Endpoint { get; set; }
-
-    /// <summary>
-    /// Gets/sets a name/value mapping of the headers, if any, of the HTTP request to perform
-    /// </summary>
-    protected EquatableDictionary<string, string>? Headers { get; set; }
-
-    /// <summary>
-    /// Gets/sets a name/value mapping of the cookies, if any, of the HTTP request to perform
-    /// </summary>
-    protected EquatableDictionary<string, string>? Cookies { get; set; }
-
-    /// <summary>
-    /// Gets/sets the body, if any, of the HTTP request to perform
-    /// </summary>
-    protected object? Body { get; set; }
-
-    /// <summary>
-    /// Gets/sets the http call output format. Defaults to <see cref="HttpOutputFormat.Content"/>.
-    /// </summary>
-    protected string? OutputFormat { get; set; }
+    string? method;
+    EndpointDefinition? endpoint;
+    EquatableDictionary<string, string>? headers;
+    EquatableDictionary<string, string>? cookies;
+    JsonNode? body;
+    string? outputFormat;
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithMethod(string method)
+    public IHttpCallDefinitionBuilder WithMethod(string method)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(method);
-        Method = method;
+        this.method = method;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithUri(Uri uri)
+    public IHttpCallDefinitionBuilder WithUri(Uri uri)
     {
         ArgumentNullException.ThrowIfNull(uri);
-        Endpoint = new() { Uri = uri };
+        endpoint = new() { Uri = uri };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithEndpoint(EndpointDefinition endpoint)
+    public IHttpCallDefinitionBuilder WithEndpoint(EndpointDefinition endpoint)
     {
         ArgumentNullException.ThrowIfNull(endpoint);
-        Endpoint = endpoint;
+        this.endpoint = endpoint;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithEndpoint(Action<IEndpointDefinitionBuilder> setup)
+    public IHttpCallDefinitionBuilder WithEndpoint(Action<IEndpointDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
-        var builder = (IEndpointDefinitionBuilder)new ExternalResourceDefinitionBuilder();
+        var builder = new EndpointDefinitionBuilder();
         setup(builder);
         return WithEndpoint(builder.Build());
     }
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithHeader(string name, string value)
+    public IHttpCallDefinitionBuilder WithHeader(string name, string value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(value);
-        Headers ??= [];
-        Headers[name] = value;
+        headers ??= [];
+        headers[name] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithHeaders(IDictionary<string, string> headers)
+    public IHttpCallDefinitionBuilder WithHeaders(IDictionary<string, string> headers)
     {
-        Headers = headers == null ? null : new(headers);
+        this.headers = headers == null ? null : new(headers);
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithCookie(string name, string value)
+    public IHttpCallDefinitionBuilder WithCookie(string name, string value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(value);
-        Cookies ??= [];
-        Cookies[name] = value;
+        cookies ??= [];
+        cookies[name] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithCookies(IDictionary<string, string> cookies)
+    public IHttpCallDefinitionBuilder WithCookies(IDictionary<string, string> cookies)
     {
-        Cookies = cookies == null ? null : new(cookies);
+        this.cookies = cookies == null ? null : new(cookies);
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithBody(object body)
+    public IHttpCallDefinitionBuilder WithBody(JsonNode body)
     {
-        Body = body;
+        this.body = body;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IHttpCallDefinitionBuilder WithOutputFormat(string format)
+    public IHttpCallDefinitionBuilder WithOutputFormat(string format)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(format);
-        OutputFormat = format;
+        outputFormat = format;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual HttpCallDefinition Build()
+    public HttpCallDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(Method)) throw new NullReferenceException("The HTTP method must be set");
-        if (Endpoint == null) throw new NullReferenceException("The HTTP endpoint must be set");
+        if (string.IsNullOrWhiteSpace(method)) throw new NullReferenceException("The HTTP method must be set");
+        if (endpoint == null) throw new NullReferenceException("The HTTP endpoint must be set");
         return new()
         {
-            Method = Method,
-            Endpoint = Endpoint,
-            Headers = Headers,
-            Body = Body,
-            Output = OutputFormat
+            Method = method,
+            Endpoint = endpoint,
+            Headers = headers,
+            Body = body,
+            Output = outputFormat
         };
     }
 

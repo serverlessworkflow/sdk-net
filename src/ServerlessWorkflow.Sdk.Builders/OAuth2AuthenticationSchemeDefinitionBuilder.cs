@@ -82,7 +82,7 @@ public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, T
     public virtual TBuilder WithAuthority(Uri uri)
     {
         ArgumentNullException.ThrowIfNull(uri);
-        this.Authority = uri;
+        Authority = uri;
         return (TBuilder)(object)this;
     }
 
@@ -90,7 +90,7 @@ public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, T
     public virtual TBuilder WithGrantType(string grantType)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(grantType);
-        this.GrantType = grantType;
+        GrantType = grantType;
         return (TBuilder)(object)this;
     }
 
@@ -98,7 +98,7 @@ public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, T
     public virtual TBuilder WithClient(OAuth2AuthenticationClientDefinition client)
     {
         ArgumentNullException.ThrowIfNull(client);
-        this.Client = client;
+        Client = client;
         return (TBuilder)(object)this;
     }
 
@@ -108,7 +108,7 @@ public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, T
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OAuth2AuthenticationClientDefinitionBuilder();
         setup(builder);
-        this.Client = builder.Build();
+        Client = builder.Build();
         return (TBuilder)(object)this;
     }
 
@@ -116,7 +116,7 @@ public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, T
     public virtual TBuilder WithRequest(OAuth2AuthenticationRequestDefinition request)
     {
         ArgumentNullException.ThrowIfNull(request);
-        this.Request = request;
+        Request = request;
         return (TBuilder)(object)this;
     }
 
@@ -126,7 +126,7 @@ public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, T
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OAuth2AuthenticationRequestDefinitionBuilder();
         setup(builder);
-        this.Request = builder.Build();
+        Request = builder.Build();
         return (TBuilder)(object)this;
     }
 
@@ -134,7 +134,7 @@ public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, T
     public virtual TBuilder WithIssuers(params string[] issuers)
     {
         ArgumentNullException.ThrowIfNull(issuers);
-        this.Issuers = new(issuers);
+        Issuers = new(issuers);
         return (TBuilder)(object)this;
     }
 
@@ -142,14 +142,14 @@ public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, T
     public virtual TBuilder WithAudiences(params string[] audiences)
     {
         ArgumentNullException.ThrowIfNull(audiences);
-        this.Audiences = new(audiences);
+        Audiences = new(audiences);
         return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
     public virtual TBuilder WithScopes(params string[] scopes)
     {
-        this.Scopes = new(scopes);
+        Scopes = new(scopes);
         return (TBuilder)(object)this;
     }
 
@@ -157,32 +157,32 @@ public abstract class OAuth2AuthenticationSchemeDefinitionBuilder<TDefinition, T
     public virtual TBuilder WithActor(OAuth2TokenDefinition actor)
     {
         ArgumentNullException.ThrowIfNull(actor);
-        this.Actor = actor;
+        Actor = actor;
         return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
     public virtual TBuilder WithUsername(string username)
     {
-        this.Username = username;
+        Username = username;
         return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
     public virtual TBuilder WithPassword(string password)
     {
-        this.Password = password;
+        Password = password;
         return (TBuilder)(object)this;
     }
 
     /// <inheritdoc/>
     public virtual TBuilder WithSubject(OAuth2TokenDefinition subject)
     {
-        this.Subject = subject;
+        Subject = subject;
         return (TBuilder)(object)this;
     }
 
-    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => this.Build();
+    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => Build();
 
 }
 
@@ -202,7 +202,7 @@ public class OAuth2AuthenticationSchemeDefinitionBuilder
     public virtual IOAuth2AuthenticationSchemeDefinitionBuilder WithEndpoints(OAuth2AuthenticationEndpointsDefinition endpoints)
     {
         ArgumentNullException.ThrowIfNull(endpoints);
-        this.Endpoints = endpoints;
+        Endpoints = endpoints;
         return this;
     }
 
@@ -212,30 +212,30 @@ public class OAuth2AuthenticationSchemeDefinitionBuilder
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OAuth2AuthenticationEndpointsDefinitionBuilder();
         setup(builder);
-        this.Endpoints = builder.Build();
+        Endpoints = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
     public override OAuth2AuthenticationSchemeDefinition Build()
     {
-        if (this.Authority == null) throw new NullReferenceException("The authority must be set");
-        if (string.IsNullOrWhiteSpace(this.GrantType)) throw new NullReferenceException("The grant type must be set");
+        if (Authority == null) throw new NullReferenceException("The authority must be set");
+        if (string.IsNullOrWhiteSpace(GrantType)) throw new NullReferenceException("The grant type must be set");
         return new()
         {
-            Use = this.Secret,
-            Authority = this.Authority,
-            Endpoints = this.Endpoints,
-            Grant = this.GrantType,
-            Client = this.Client,
-            Request = this.Request,
-            Issuers = this.Issuers,
-            Audiences = this.Audiences,
-            Scopes = this.Scopes,
-            Actor = this.Actor,
-            Username = this.Username,
-            Password = this.Password,
-            Subject = this.Subject
+            Use = Secret,
+            Authority = Authority,
+            Endpoints = Endpoints,
+            Grant = GrantType,
+            Client = Client,
+            Request = Request,
+            Issuers = Issuers,
+            Audiences = Audiences,
+            Scopes = Scopes,
+            Actor = Actor,
+            Username = Username,
+            Password = Password,
+            Subject = Subject
         };
     }
 

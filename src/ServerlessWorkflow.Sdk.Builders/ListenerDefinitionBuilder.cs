@@ -10,7 +10,7 @@ public sealed class ListenerDefinitionBuilder(EventConsumptionStrategyDefinition
     /// <summary>
     /// Gets/sets the initial target value
     /// </summary>
-    EventConsumptionStrategyDefinition? initialTo = to;
+    readonly EventConsumptionStrategyDefinition? initialTo = to;
 
     /// <summary>
     /// Gets/sets the read mode

@@ -16,32 +16,29 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IDoTaskDefinitionBuilder"/> interface
 /// </summary>
-public class DoTaskDefinitionBuilder
+public sealed class DoTaskDefinitionBuilder
     : TaskDefinitionBuilder<IDoTaskDefinitionBuilder, DoTaskDefinition>, IDoTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets a name/definition mapping of the tasks to execute sequentially, if any
-    /// </summary>
-    protected Map<string, TaskDefinition>? Tasks { get; set; }
+    Map<string, TaskDefinition>? tasks;
 
     /// <inheritdoc/>
-    public virtual IDoTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
+    public IDoTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        Tasks = builder.Build();
+        tasks = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
     public override DoTaskDefinition Build()
     {
-        if (Tasks == null || Tasks.Count < 2) throw new NullReferenceException("The execution strategy must define at least two subtasks");
+        if (tasks == null || tasks.Count < 2) throw new NullReferenceException("The execution strategy must define at least two subtasks");
         return Configure(new()
         {
-            Do = Tasks
+            Do = tasks
         });
     }
 

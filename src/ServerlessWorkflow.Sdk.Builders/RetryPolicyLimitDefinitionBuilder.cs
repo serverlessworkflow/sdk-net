@@ -7,35 +7,28 @@ public sealed class RetryPolicyLimitDefinitionBuilder
     : IRetryPolicyLimitDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the service used to build the definition of the limits for all retry attempts of a given policy
-    /// </summary>
-    protected IRetryAttemptLimitDefinitionBuilder? LimitAttempt { get; set; }
-
-    /// <summary>
-    /// Gets the maximum duration during which retrying is allowed
-    /// </summary>
-    protected Duration? LimitDuration { get; set; }
+    RetryAttemptLimitDefinitionBuilder? limitAttempt;
+    Duration? limitDuration;
 
     /// <inheritdoc/>
     public IRetryAttemptLimitDefinitionBuilder Attempt()
     {
-        LimitAttempt = new RetryAttemptLimitDefinitionBuilder();
-        return LimitAttempt;
+        limitAttempt = new RetryAttemptLimitDefinitionBuilder();
+        return limitAttempt;
     }
 
     /// <inheritdoc/>
     public IRetryPolicyLimitDefinitionBuilder Duration(Duration duration)
     {
-        LimitDuration = duration;
-        IRetryPolicyLimitDefinitionBuilder self = this; return self;
+        limitDuration = duration;
+        return this;
     }
 
     /// <inheritdoc/>
     public RetryPolicyLimitDefinition Build() => new()
     {
-        Attempt = LimitAttempt?.Build(),
-        Duration = LimitDuration,
+        Attempt = limitAttempt?.Build(),
+        Duration = limitDuration,
     };
 
 }
