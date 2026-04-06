@@ -6,13 +6,18 @@ public class CallTaskDefinitionBuilderTests
     [Fact]
     public void Build_Should_Set_Function_And_Arguments()
     {
+        //arrange
         var functionName = "myFunction";
         var argName = "arg1";
         var argValue = "value1";
+
+        //act
         var task = new CallTaskDefinitionBuilder()
             .Function(functionName)
             .With(argName, JsonValue.Create(argValue))
             .Build();
+
+        //assert
         task.Call.Should().Be(functionName);
         task.With![argName]!.GetValue<string>().Should().Be(argValue);
     }
@@ -20,29 +25,45 @@ public class CallTaskDefinitionBuilderTests
     [Fact]
     public void Build_Should_Accept_Function_Via_Constructor()
     {
+        //arrange
         var functionName = "presetFunc";
+
+        //act
         var task = new CallTaskDefinitionBuilder(functionName).Build();
+
+        //assert
         task.Call.Should().Be(functionName);
     }
 
     [Fact]
     public void Build_Should_Accept_Prebuilt_Arguments()
     {
+        //arrange
         var functionName = "fn";
         var key = "key";
         var value = "val";
         var args = new JsonObject { [key] = value };
+
+        //act
         var task = new CallTaskDefinitionBuilder()
             .Function(functionName)
             .With(args)
             .Build();
+
+        //assert
         task.With![key]!.GetValue<string>().Should().Be(value);
     }
 
     [Fact]
     public void Build_Should_Throw_When_Function_Missing()
     {
-        var act = () => new CallTaskDefinitionBuilder().Build();
+        //arrange
+        var builder = new CallTaskDefinitionBuilder();
+
+        //act
+        var act = () => builder.Build();
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 

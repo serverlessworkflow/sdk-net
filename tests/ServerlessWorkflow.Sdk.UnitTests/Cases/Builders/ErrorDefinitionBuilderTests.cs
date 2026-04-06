@@ -6,11 +6,14 @@ public class ErrorDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Error_With_All_Properties()
     {
+        //arrange
         var type = "https://errors.com/not-found";
         var title = "Not Found";
         var status = "404";
         var detail = "Resource not found";
         var instance = "/items/123";
+
+        //act
         var error = new ErrorDefinitionBuilder()
             .WithType(type)
             .WithTitle(title)
@@ -18,6 +21,8 @@ public class ErrorDefinitionBuilderTests
             .WithDetail(detail)
             .WithInstance(instance)
             .Build();
+
+        //assert
         error.Type.Should().Be(type);
         error.Title.Should().Be(title);
         error.Status.Should().Be(status);
@@ -28,21 +33,42 @@ public class ErrorDefinitionBuilderTests
     [Fact]
     public void Build_Should_Throw_When_Type_Missing()
     {
-        var act = () => new ErrorDefinitionBuilder().WithTitle("t").WithStatus("400").Build();
+        //arrange
+        var title = "t";
+        var status = "400";
+
+        //act
+        var act = () => new ErrorDefinitionBuilder().WithTitle(title).WithStatus(status).Build();
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 
     [Fact]
     public void Build_Should_Throw_When_Title_Missing()
     {
-        var act = () => new ErrorDefinitionBuilder().WithType("t").WithStatus("400").Build();
+        //arrange
+        var type = "t";
+        var status = "400";
+
+        //act
+        var act = () => new ErrorDefinitionBuilder().WithType(type).WithStatus(status).Build();
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 
     [Fact]
     public void Build_Should_Throw_When_Status_Missing()
     {
-        var act = () => new ErrorDefinitionBuilder().WithType("t").WithTitle("t").Build();
+        //arrange
+        var type = "t";
+        var title = "t";
+
+        //act
+        var act = () => new ErrorDefinitionBuilder().WithType(type).WithTitle(title).Build();
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 

@@ -6,131 +6,198 @@ public class WorkflowDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Minimal_Workflow()
     {
-        // act
+        //arrange
+        var workflowName = "test-workflow";
+        var version = "1.0.0";
+        var taskName = "greet";
+        var key = "message";
+        var value = "hello";
+        var expectedTaskCount = 1;
+
+        //act
         var workflow = new WorkflowDefinitionBuilder()
-            .WithName("test-workflow")
-            .WithVersion("1.0.0")
-            .Do("greet", task => task.Set("message", "hello"))
+            .WithName(workflowName)
+            .WithVersion(version)
+            .Do(taskName, task => task.Set(key, value))
             .Build();
-        // assert
+
+        //assert
         workflow.Should().NotBeNull();
-        workflow.Document.Name.Should().Be("test-workflow");
-        workflow.Document.Version.Should().Be("1.0.0");
+        workflow.Document.Name.Should().Be(workflowName);
+        workflow.Document.Version.Should().Be(version);
         workflow.Document.Namespace.Should().Be(WorkflowDefinitionMetadata.DefaultNamespace);
-        workflow.Do.Should().HaveCount(1);
+        workflow.Do.Should().HaveCount(expectedTaskCount);
     }
 
     [Fact]
     public void Build_Should_Set_All_Document_Properties()
     {
-        // act
+        //arrange
+        var dsl = "1.0.0";
+        var ns = "my-namespace";
+        var workflowName = "my-workflow";
+        var version = "2.0.0";
+        var title = "My Workflow";
+        var summary = "A test workflow";
+        var tagKey = "env";
+        var tagValue = "test";
+        var taskName = "step1";
+        var key = "k";
+        var value = "v";
+
+        //act
         var workflow = new WorkflowDefinitionBuilder()
-            .UseDsl("1.0.0")
-            .WithNamespace("my-namespace")
-            .WithName("my-workflow")
-            .WithVersion("2.0.0")
-            .WithTitle("My Workflow")
-            .WithSummary("A test workflow")
-            .WithTag("env", "test")
-            .Do("step1", task => task.Set("k", "v"))
+            .UseDsl(dsl)
+            .WithNamespace(ns)
+            .WithName(workflowName)
+            .WithVersion(version)
+            .WithTitle(title)
+            .WithSummary(summary)
+            .WithTag(tagKey, tagValue)
+            .Do(taskName, task => task.Set(key, value))
             .Build();
-        // assert
-        workflow.Document.Dsl.Should().Be("1.0.0");
-        workflow.Document.Namespace.Should().Be("my-namespace");
-        workflow.Document.Name.Should().Be("my-workflow");
-        workflow.Document.Version.Should().Be("2.0.0");
-        workflow.Document.Title.Should().Be("My Workflow");
-        workflow.Document.Summary.Should().Be("A test workflow");
-        workflow.Document.Tags.Should().ContainKey("env");
+
+        //assert
+        workflow.Document.Dsl.Should().Be(dsl);
+        workflow.Document.Namespace.Should().Be(ns);
+        workflow.Document.Name.Should().Be(workflowName);
+        workflow.Document.Version.Should().Be(version);
+        workflow.Document.Title.Should().Be(title);
+        workflow.Document.Summary.Should().Be(summary);
+        workflow.Document.Tags.Should().ContainKey(tagKey);
     }
 
     [Fact]
     public void Build_Should_Throw_When_Name_Missing()
     {
-        // arrange
+        //arrange
+        var version = "1.0.0";
+        var taskName = "step";
+        var key = "k";
+        var value = "v";
         var builder = new WorkflowDefinitionBuilder()
-            .WithVersion("1.0.0")
-            .Do("step", task => task.Set("k", "v"));
-        // act
+            .WithVersion(version)
+            .Do(taskName, task => task.Set(key, value));
+
+        //act
         var act = () => builder.Build();
-        // assert
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 
     [Fact]
     public void Build_Should_Throw_When_Version_Missing()
     {
-        // arrange
+        //arrange
+        var workflowName = "test";
+        var taskName = "step";
+        var key = "k";
+        var value = "v";
         var builder = new WorkflowDefinitionBuilder()
-            .WithName("test")
-            .Do("step", task => task.Set("k", "v"));
-        // act
+            .WithName(workflowName)
+            .Do(taskName, task => task.Set(key, value));
+
+        //act
         var act = () => builder.Build();
-        // assert
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 
     [Fact]
     public void Build_Should_Throw_When_No_Tasks()
     {
-        // arrange
+        //arrange
+        var workflowName = "test";
+        var version = "1.0.0";
         var builder = new WorkflowDefinitionBuilder()
-            .WithName("test")
-            .WithVersion("1.0.0");
-        // act
+            .WithName(workflowName)
+            .WithVersion(version);
+
+        //act
         var act = () => builder.Build();
-        // assert
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 
     [Fact]
     public void WithVersion_Should_Throw_For_Invalid_SemVer()
     {
-        // act
-        var act = () => new WorkflowDefinitionBuilder().WithVersion("not-semver");
-        // assert
+        //arrange
+        var invalidVersion = "not-semver";
+
+        //act
+        var act = () => new WorkflowDefinitionBuilder().WithVersion(invalidVersion);
+
+        //assert
         act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
     public void WithName_Should_Throw_For_Invalid_Name()
     {
-        // act
-        var act = () => new WorkflowDefinitionBuilder().WithName("INVALID NAME!");
-        // assert
+        //arrange
+        var invalidName = "INVALID NAME!";
+
+        //act
+        var act = () => new WorkflowDefinitionBuilder().WithName(invalidName);
+
+        //assert
         act.Should().Throw<ArgumentException>();
     }
 
     [Fact]
     public void Build_Should_Configure_Timeout()
     {
-        // act
+        //arrange
+        var workflowName = "test";
+        var version = "1.0.0";
+        var timeoutDuration = Duration.FromSeconds(30);
+        var taskName = "step";
+        var key = "k";
+        var value = "v";
+
+        //act
         var workflow = new WorkflowDefinitionBuilder()
-            .WithName("test")
-            .WithVersion("1.0.0")
-            .WithTimeout(timeout => timeout.After(Duration.FromSeconds(30)))
-            .Do("step", task => task.Set("k", "v"))
+            .WithName(workflowName)
+            .WithVersion(version)
+            .WithTimeout(timeout => timeout.After(timeoutDuration))
+            .Do(taskName, task => task.Set(key, value))
             .Build();
-        // assert
+
+        //assert
         workflow.Timeout.Should().NotBeNull();
     }
 
     [Fact]
     public void Build_Should_Configure_Components()
     {
-        // act
+        //arrange
+        var workflowName = "test";
+        var version = "1.0.0";
+        var secret1 = "my-secret";
+        var secret2 = "secret1";
+        var secret3 = "secret2";
+        var taskName = "step";
+        var key = "k";
+        var value = "v";
+
+        //act
         var workflow = new WorkflowDefinitionBuilder()
-            .WithName("test")
-            .WithVersion("1.0.0")
-            .UseSecret("my-secret")
-            .UseSecret("secret1")
-            .UseSecret("secret2")
-            .Do("step", task => task.Set("k", "v"))
+            .WithName(workflowName)
+            .WithVersion(version)
+            .UseSecret(secret1)
+            .UseSecret(secret2)
+            .UseSecret(secret3)
+            .Do(taskName, task => task.Set(key, value))
             .Build();
-        // assert
+
+        //assert
         workflow.Use.Should().NotBeNull();
-        workflow.Use!.Secrets.Should().Contain("my-secret");
-        workflow.Use.Secrets.Should().Contain("secret1");
+        workflow.Use!.Secrets.Should().Contain(secret1);
+        workflow.Use.Secrets.Should().Contain(secret2);
     }
 
 }

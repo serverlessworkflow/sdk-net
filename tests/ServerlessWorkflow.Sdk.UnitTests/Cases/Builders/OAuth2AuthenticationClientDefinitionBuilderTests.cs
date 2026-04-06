@@ -6,16 +6,21 @@ public class OAuth2AuthenticationClientDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Client_With_All_Properties()
     {
+        //arrange
         var clientId = "my-client-id";
         var clientSecret = "my-client-secret";
         var assertion = "jwt-assertion";
         var authMethod = "client_secret_post";
+
+        //act
         var client = new OAuth2AuthenticationClientDefinitionBuilder()
             .WithId(clientId)
             .WithSecret(clientSecret)
             .WithAssertion(assertion)
             .WithAuthenticationMethod(authMethod)
             .Build();
+
+        //assert
         client.Id.Should().Be(clientId);
         client.Secret.Should().Be(clientSecret);
         client.Assertion.Should().Be(assertion);
@@ -25,10 +30,15 @@ public class OAuth2AuthenticationClientDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Client_With_Minimal_Properties()
     {
+        //arrange
         var clientId = "minimal-client";
+
+        //act
         var client = new OAuth2AuthenticationClientDefinitionBuilder()
             .WithId(clientId)
             .Build();
+
+        //assert
         client.Id.Should().Be(clientId);
         client.Secret.Should().BeNull();
     }

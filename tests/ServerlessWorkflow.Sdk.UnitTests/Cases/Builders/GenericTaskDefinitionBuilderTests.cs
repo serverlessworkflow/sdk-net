@@ -6,204 +6,278 @@ public class GenericTaskDefinitionBuilderTests
     [Fact]
     public void Call_Should_Return_CallTaskDefinition()
     {
-        // arrange
+        //arrange
+        var functionName = "myFunc";
+        var argName = "arg";
+        var argValue = "val";
         var builder = new GenericTaskDefinitionBuilder();
-        builder.Call("myFunc").With("arg", JsonValue.Create("val"));
-        // act
+        builder.Call(functionName).With(argName, JsonValue.Create(argValue));
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<CallTaskDefinition>();
-        ((CallTaskDefinition)task).Call.Should().Be("myFunc");
+        ((CallTaskDefinition)task).Call.Should().Be(functionName);
     }
 
     [Fact]
     public void Set_With_Name_Value_Should_Return_SetTaskDefinition()
     {
-        // arrange
+        //arrange
+        var key = "greeting";
+        var value = "hello";
         var builder = new GenericTaskDefinitionBuilder();
-        builder.Set("greeting", "hello");
-        // act
+        builder.Set(key, value);
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<SetTaskDefinition>();
     }
 
     [Fact]
     public void Set_With_JsonObject_Should_Return_SetTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
         var key = "k";
         var value = "v";
         builder.Set(new JsonObject { [key] = value });
-        // act
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<SetTaskDefinition>();
     }
 
     [Fact]
     public void Wait_Should_Return_WaitTaskDefinition()
     {
-        // arrange
+        //arrange
+        var duration = Duration.FromSeconds(5);
         var builder = new GenericTaskDefinitionBuilder();
-        builder.Wait(Duration.FromSeconds(5));
-        // act
+        builder.Wait(duration);
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<WaitTaskDefinition>();
     }
 
     [Fact]
     public void Emit_With_EventDefinition_Should_Return_EmitTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
-        var e = new EventDefinition { With = new JsonObject { ["type"] = "com.test" } };
+        var typeKey = "type";
+        var typeValue = "com.test";
+        var e = new EventDefinition { With = new JsonObject { [typeKey] = typeValue } };
         builder.Emit(e);
-        // act
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<EmitTaskDefinition>();
     }
 
     [Fact]
     public void Emit_With_Setup_Should_Return_EmitTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
-        builder.Emit(e => e.With("type", JsonValue.Create("com.test")));
-        // act
+        var typeKey = "type";
+        var typeValue = "com.test";
+        builder.Emit(e => e.With(typeKey, JsonValue.Create(typeValue)));
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<EmitTaskDefinition>();
     }
 
     [Fact]
     public void Raise_With_ErrorDefinition_Should_Return_RaiseTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
-        var error = new ErrorDefinition { Type = "https://err.com/t", Title = "T", Status = "500" };
+        var errorType = "https://err.com/t";
+        var errorTitle = "T";
+        var errorStatus = "500";
+        var error = new ErrorDefinition { Type = errorType, Title = errorTitle, Status = errorStatus };
         builder.Raise(error);
-        // act
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<RaiseTaskDefinition>();
     }
 
     [Fact]
     public void Raise_With_Setup_Should_Return_RaiseTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
-        builder.Raise(e => e.WithType("https://err.com/t").WithTitle("T").WithStatus("500"));
-        // act
+        var errorType = "https://err.com/t";
+        var errorTitle = "T";
+        var errorStatus = "500";
+        builder.Raise(e => e.WithType(errorType).WithTitle(errorTitle).WithStatus(errorStatus));
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<RaiseTaskDefinition>();
     }
 
     [Fact]
     public void For_Should_Return_ForTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
-        builder.For().Each("item").In("${ .items }").Do(tasks => tasks.Do("process", t => t.Set("k", "v")));
-        // act
+        var eachVar = "item";
+        var inExpr = "${ .items }";
+        var taskName = "process";
+        var key = "k";
+        var value = "v";
+        builder.For().Each(eachVar).In(inExpr).Do(tasks => tasks.Do(taskName, t => t.Set(key, value)));
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<ForTaskDefinition>();
     }
 
     [Fact]
     public void Fork_Should_Return_ForkTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
+        var b1Name = "b1";
+        var b1Key = "a";
+        var b1Value = "1";
+        var b2Name = "b2";
+        var b2Key = "b";
+        var b2Value = "2";
         builder.Fork().Branch(tasks =>
         {
-            tasks.Do("b1", t => t.Set("a", "1"));
-            tasks.Do("b2", t => t.Set("b", "2"));
+            tasks.Do(b1Name, t => t.Set(b1Key, b1Value));
+            tasks.Do(b2Name, t => t.Set(b2Key, b2Value));
         });
-        // act
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<ForkTaskDefinition>();
     }
 
     [Fact]
     public void Switch_Should_Return_SwitchTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
-        builder.Switch().Case("default", c => c.Then(FlowDirective.End));
-        // act
+        var caseName = "default";
+        builder.Switch().Case(caseName, c => c.Then(FlowDirective.End));
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<SwitchTaskDefinition>();
     }
 
     [Fact]
     public void Try_Should_Return_TryTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
+        var taskName = "risky";
+        var key = "k";
+        var value = "v";
         builder.Try()
-            .Do(tasks => tasks.Do("risky", t => t.Set("k", "v")))
+            .Do(tasks => tasks.Do(taskName, t => t.Set(key, value)))
             .Catch(c => { });
-        // act
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<TryTaskDefinition>();
     }
 
     [Fact]
     public void Run_Should_Return_RunTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
-        builder.Run().Shell().WithCommand("echo test");
-        // act
+        var command = "echo test";
+        builder.Run().Shell().WithCommand(command);
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<RunTaskDefinition>();
     }
 
     [Fact]
     public void Listen_Should_Return_ListenTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
-        builder.Listen().To(l => l.One().With("type", JsonValue.Create("com.test")));
-        // act
+        var typeKey = "type";
+        var typeValue = "com.test";
+        builder.Listen().To(l => l.One().With(typeKey, JsonValue.Create(typeValue)));
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<ListenTaskDefinition>();
     }
 
     [Fact]
     public void Do_Should_Return_DoTaskDefinition()
     {
-        // arrange
+        //arrange
         var builder = new GenericTaskDefinitionBuilder();
+        var s1Name = "s1";
+        var s1Key = "a";
+        var s1Value = "1";
+        var s2Name = "s2";
+        var s2Key = "b";
+        var s2Value = "2";
         builder.Do(tasks =>
         {
-            tasks.Do("s1", t => t.Set("a", "1"));
-            tasks.Do("s2", t => t.Set("b", "2"));
+            tasks.Do(s1Name, t => t.Set(s1Key, s1Value));
+            tasks.Do(s2Name, t => t.Set(s2Key, s2Value));
         });
-        // act
+
+        //act
         var task = builder.Build();
-        // assert
+
+        //assert
         task.Should().BeOfType<DoTaskDefinition>();
     }
 
     [Fact]
     public void Build_Should_Throw_When_No_Task_Configured()
     {
-        // act
-        var act = () => new GenericTaskDefinitionBuilder().Build();
-        // assert
+        //arrange
+        var builder = new GenericTaskDefinitionBuilder();
+
+        //act
+        var act = () => builder.Build();
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 

@@ -6,8 +6,13 @@ public class LinearBackoffDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Linear_Backoff_With_Increment()
     {
+        //arrange
         var increment = Duration.FromSeconds(2);
+
+        //act
         var definition = new LinearBackoffDefinitionBuilder(increment).Build();
+
+        //assert
         definition.Should().NotBeNull();
         definition.Increment.Should().NotBeNull();
     }
@@ -15,7 +20,13 @@ public class LinearBackoffDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Linear_Backoff_Without_Increment()
     {
-        var definition = new LinearBackoffDefinitionBuilder().Build();
+        //arrange
+        var builder = new LinearBackoffDefinitionBuilder();
+
+        //act
+        var definition = builder.Build();
+
+        //assert
         definition.Should().NotBeNull();
     }
 

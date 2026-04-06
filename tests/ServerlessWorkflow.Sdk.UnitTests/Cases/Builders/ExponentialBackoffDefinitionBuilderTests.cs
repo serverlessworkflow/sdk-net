@@ -6,7 +6,13 @@ public class ExponentialBackoffDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Exponential_Backoff()
     {
-        var definition = new ExponentialBackoffDefinitionBuilder().Build();
+        //arrange
+        var builder = new ExponentialBackoffDefinitionBuilder();
+
+        //act
+        var definition = builder.Build();
+
+        //assert
         definition.Should().NotBeNull();
     }
 

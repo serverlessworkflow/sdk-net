@@ -6,7 +6,13 @@ public class ConstantBackoffDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Constant_Backoff()
     {
-        var definition = new ConstantBackoffDefinitionBuilder().Build();
+        //arrange
+        var builder = new ConstantBackoffDefinitionBuilder();
+
+        //act
+        var definition = builder.Build();
+
+        //assert
         definition.Should().NotBeNull();
     }
 

@@ -6,25 +6,43 @@ public class TimeoutDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Timeout_From_Duration()
     {
+        //arrange
+        var duration = Duration.FromSeconds(30);
+
+        //act
         var timeout = new TimeoutDefinitionBuilder()
-            .After(Duration.FromSeconds(30))
+            .After(duration)
             .Build();
+
+        //assert
         timeout.After.Should().NotBeNull();
     }
 
     [Fact]
     public void Build_Should_Create_Timeout_From_String()
     {
+        //arrange
+        var durationString = "PT30S";
+
+        //act
         var timeout = new TimeoutDefinitionBuilder()
-            .After("PT30S")
+            .After(durationString)
             .Build();
+
+        //assert
         timeout.After.Should().NotBeNull();
     }
 
     [Fact]
     public void Build_Should_Throw_When_After_Missing()
     {
-        var act = () => new TimeoutDefinitionBuilder().Build();
+        //arrange
+        var builder = new TimeoutDefinitionBuilder();
+
+        //act
+        var act = () => builder.Build();
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 

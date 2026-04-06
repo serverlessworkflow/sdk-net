@@ -6,11 +6,16 @@ public class ListenerDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Listener_With_One_Event()
     {
+        //arrange
         var typeKey = "type";
         var typeValue = "com.example.test";
         var builder = new ListenerDefinitionBuilder();
         builder.One().With(typeKey, JsonValue.Create(typeValue));
+
+        //act
         var result = builder.Build();
+
+        //assert
         result.To.One.Should().NotBeNull();
         result.To.One!.With[typeKey]!.GetValue<string>().Should().Be(typeValue);
     }
@@ -18,13 +23,18 @@ public class ListenerDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Listener_With_Read_Mode()
     {
+        //arrange
         var readMode = EventReadMode.Envelope;
         var typeKey = "type";
         var typeValue = "com.test";
         var builder = new ListenerDefinitionBuilder();
         builder.One().With(typeKey, JsonValue.Create(typeValue));
         builder.Read(readMode);
+
+        //act
         var result = builder.Build();
+
+        //assert
         result.Read.Should().Be(readMode);
         result.To.One.Should().NotBeNull();
     }
@@ -32,7 +42,13 @@ public class ListenerDefinitionBuilderTests
     [Fact]
     public void Build_Should_Throw_When_No_Target()
     {
-        var act = () => new ListenerDefinitionBuilder().Build();
+        //arrange
+        var builder = new ListenerDefinitionBuilder();
+
+        //act
+        var act = () => builder.Build();
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 

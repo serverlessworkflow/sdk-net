@@ -6,12 +6,17 @@ public class SubscriptionIteratorDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Iterator_With_Item_And_At()
     {
+        //arrange
         var itemVar = "event";
         var atVar = "index";
+
+        //act
         var iterator = new SubscriptionIteratorDefinitionBuilder()
             .Item(itemVar)
             .At(atVar)
             .Build();
+
+        //assert
         iterator.Item.Should().Be(itemVar);
         iterator.At.Should().Be(atVar);
     }
@@ -19,7 +24,13 @@ public class SubscriptionIteratorDefinitionBuilderTests
     [Fact]
     public void Build_Should_Create_Empty_Iterator()
     {
-        var iterator = new SubscriptionIteratorDefinitionBuilder().Build();
+        //arrange
+        var builder = new SubscriptionIteratorDefinitionBuilder();
+
+        //act
+        var iterator = builder.Build();
+
+        //assert
         iterator.Should().NotBeNull();
     }
 

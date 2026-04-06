@@ -6,30 +6,49 @@ public class EventFilterDefinitionCollectionBuilderTests
     [Fact]
     public void Build_Should_Create_Collection_With_Single_Filter()
     {
+        //arrange
         var attrName = "type";
         var attrValue = JsonValue.Create("com.example.test");
+        var expectedCount = 1;
+
+        //act
         var collection = new EventFilterDefinitionCollectionBuilder()
             .Event(f => f.With(attrName, attrValue))
             .Build();
-        collection.Should().HaveCount(1);
+
+        //assert
+        collection.Should().HaveCount(expectedCount);
     }
 
     [Fact]
     public void Build_Should_Create_Collection_With_Multiple_Filters()
     {
+        //arrange
+        var typeKey = "type";
         var typeA = JsonValue.Create("com.a");
         var typeB = JsonValue.Create("com.b");
+        var expectedCount = 2;
+
+        //act
         var collection = new EventFilterDefinitionCollectionBuilder()
-            .Event(f => f.With("type", typeA))
-            .Event(f => f.With("type", typeB))
+            .Event(f => f.With(typeKey, typeA))
+            .Event(f => f.With(typeKey, typeB))
             .Build();
-        collection.Should().HaveCount(2);
+
+        //assert
+        collection.Should().HaveCount(expectedCount);
     }
 
     [Fact]
     public void Build_Should_Throw_When_No_Filters()
     {
-        var act = () => new EventFilterDefinitionCollectionBuilder().Build();
+        //arrange
+        var builder = new EventFilterDefinitionCollectionBuilder();
+
+        //act
+        var act = () => builder.Build();
+
+        //assert
         act.Should().Throw<NullReferenceException>();
     }
 
