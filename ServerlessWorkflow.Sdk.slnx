@@ -16,6 +16,7 @@
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Docker/ServerlessWorkflow.Sdk.Runtime.Docker.csproj" Id="75437264-81aa-4a4b-9fb5-07a80bd176e2">
       <Build Solution="Debug|*" Project="false" />
     </Project>
+    <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Kubernetes/ServerlessWorkflow.Sdk.Runtime.Kubernetes.csproj" Id="f22a2fff-df92-424f-b7c8-23e84c223a37" />
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime/ServerlessWorkflow.Sdk.Runtime.csproj" Id="ff379ac7-32ea-48b7-a3d2-921c7b04b8ab" />
     <Project Path="src/ServerlessWorkflow.Sdk/ServerlessWorkflow.Sdk.csproj" />
   </Folder>

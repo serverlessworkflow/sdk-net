@@ -16,7 +16,7 @@ public class ErrorFilterDefinitionBuilderTests
             .Build();
 
         //assert
-        filter.With[attrName]!.GetValue<string>().Should().Be(attrValue);
+        filter.With?[attrName]?.GetValue<string>().Should().Be(attrValue);
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class ErrorFilterDefinitionBuilderTests
             .Build();
 
         //assert
-        filter.With[typeKey]!.GetValue<string>().Should().Be(errorType);
+        filter.With?[typeKey]?.GetValue<string>().Should().Be(errorType);
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class ErrorFilterDefinitionBuilderTests
         var filter = new ErrorFilterDefinitionBuilder(attributes).Build();
 
         //assert
-        filter.With[statusKey]!.GetValue<string>().Should().Be(status);
+        filter.With?[statusKey]?.GetValue<string>().Should().Be(status);
     }
 
 }

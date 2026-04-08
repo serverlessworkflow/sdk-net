@@ -17,7 +17,7 @@ public class ListenTaskDefinitionBuilderTests
 
         //assert
         task.Listen.To.One.Should().NotBeNull();
-        task.Listen.To.One!.With[typeKey]!.GetValue<string>().Should().Be(typeValue);
+        task.Listen.To.One.With?[typeKey]?.GetValue<string>().Should().Be(typeValue);
     }
 
 }

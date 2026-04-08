@@ -21,7 +21,7 @@ public class InMemoryCloudEventBusTests
 
         //act
         await bus.PublishAsync(cloudEvent, TestContext.Current.CancellationToken);
-        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2));
+        await tcs.Task.WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
 
         //assert
         received.Should().NotBeNull();
@@ -60,7 +60,7 @@ public class InMemoryCloudEventBusTests
 
         //act
         await bus.PublishAsync(cloudEvent, TestContext.Current.CancellationToken);
-        await Task.WhenAll(tcs1.Task, tcs2.Task).WaitAsync(TimeSpan.FromSeconds(2));
+        await Task.WhenAll(tcs1.Task, tcs2.Task).WaitAsync(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
 
         //assert
         count1.Should().Be(1);

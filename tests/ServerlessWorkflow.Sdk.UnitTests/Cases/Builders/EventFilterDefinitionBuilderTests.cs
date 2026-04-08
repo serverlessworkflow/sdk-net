@@ -16,7 +16,7 @@ public class EventFilterDefinitionBuilderTests
             .Build();
 
         //assert
-        filter.With[attrName]!.GetValue<string>().Should().Be(attrValue);
+        filter.With?[attrName]?.GetValue<string>().Should().Be(attrValue);
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class EventFilterDefinitionBuilderTests
             .Build();
 
         //assert
-        filter.With[sourceKey]!.GetValue<string>().Should().Be(sourceValue);
+        filter.With?[sourceKey]?.GetValue<string>().Should().Be(sourceValue);
     }
 
 }

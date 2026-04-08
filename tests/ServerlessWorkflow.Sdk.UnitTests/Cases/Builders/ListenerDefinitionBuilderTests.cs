@@ -17,7 +17,7 @@ public class ListenerDefinitionBuilderTests
 
         //assert
         result.To.One.Should().NotBeNull();
-        result.To.One!.With[typeKey]!.GetValue<string>().Should().Be(typeValue);
+        result.To.One.With?[typeKey]?.GetValue<string>().Should().Be(typeValue);
     }
 
     [Fact]

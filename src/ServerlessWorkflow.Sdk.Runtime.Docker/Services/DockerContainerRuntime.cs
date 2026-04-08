@@ -7,8 +7,8 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services;
 /// </summary>
 /// <param name="logger">The service used to perform logging</param>
 /// <param name="environment">The current <see cref="IHostEnvironment"/></param>
-/// <param name="options">The current <see cref="DockerContainerPlatformOptions"/></param>
-public sealed class DockerContainerRuntime(ILogger<DockerContainerRuntime> logger, IHostEnvironment environment, IOptions<DockerContainerPlatformOptions> options)
+/// <param name="options">The current <see cref="DockerContainerRuntimeOptions"/></param>
+public sealed class DockerContainerRuntime(ILogger<DockerContainerRuntime> logger, IHostEnvironment environment, IOptions<DockerContainerRuntimeOptions> options)
     : IHostedService, IContainerRuntime, IDisposable, IAsyncDisposable
 {
 
