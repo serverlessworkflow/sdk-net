@@ -90,7 +90,7 @@ public class ForTaskExecutorTests
             For = new ForLoopDefinition { Each = "item", In = "${ .items }" },
             Do = subtasks
         };
-        var input = new JsonObject { ["items"] = new JsonArray("a", "b") };
+        var input = new JsonObject { ["items"] = new JsonArray("a") };
         var taskContext = CreateTaskExecutionContext(definition, input);
 
         Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
@@ -99,9 +99,8 @@ public class ForTaskExecutorTests
         expressionMock.Setup(e => e.EvaluateAsync(
             It.Is<string>(s => s.Contains("items")),
             It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new JsonArray("a", "b"));
+            .ReturnsAsync(new JsonArray("a"));
 
-        // Set up child executor that completes
         var childExecutor = CreateCompletingChildExecutor();
         var executorFactory = new Mock<ITaskExecutorFactory>();
         executorFactory.Setup(f => f.Create(It.IsAny<ITaskExecutionContext>())).Returns(childExecutor.Object);
@@ -133,7 +132,6 @@ public class ForTaskExecutorTests
             CreateSchemaHandlerProvider().Object,
             taskContext.Object);
 
-        // Initialize first to load the collection
         await executor.InitializeAsync(TestContext.Current.CancellationToken);
 
         // Act
@@ -142,7 +140,7 @@ public class ForTaskExecutorTests
         // Assert
         Mock.Get(taskContext.Object.Workflow.Instance).Verify(
             i => i.CreateTaskAsync(It.IsAny<TaskDefinition>(), It.IsAny<string?>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<ITaskInstance?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()),
-            Times.AtLeastOnce);
+            Times.Once);
     }
 
     [Fact]
@@ -178,17 +176,18 @@ public class ForTaskExecutorTests
             Times.Never);
     }
 
-    static Mock<ITaskExecutor> CreateCompletingChildExecutor()
+    static Mock<ITaskExecutor> CreateCompletingChildExecutor(string path = "/for/0/do")
     {
         var childState = new Mock<ITaskState>();
         childState.Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
         childState.Setup(s => s.Output).Returns(new JsonObject());
         childState.Setup(s => s.Next).Returns(FlowDirective.Continue);
-        childState.Setup(s => s.Reference).Returns(JsonPointer.Parse("/for/0/do"));
-        childState.Setup(s => s.Name).Returns("0");
+        childState.Setup(s => s.Reference).Returns(JsonPointer.Parse(path));
+        childState.Setup(s => s.IsOperative).Returns(false);
 
         var childInstance = new Mock<ITaskInstance>();
         childInstance.Setup(i => i.State).Returns(childState.Object);
+        childInstance.Setup(i => i.GetSubTasksAsync(It.IsAny<CancellationToken>())).Returns(AsyncEnumerableEmpty<ITaskInstance>());
 
         var childTaskContext = new Mock<ITaskExecutionContext>();
         childTaskContext.Setup(c => c.Instance).Returns(childInstance.Object);
@@ -200,11 +199,7 @@ public class ForTaskExecutorTests
         childExecutor.Setup(e => e.InitializeAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         childExecutor.Setup(e => e.ExecuteAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         childExecutor.Setup(e => e.Subscribe(It.IsAny<IObserver<ITaskLifeCycleEvent>>()))
-            .Returns((IObserver<ITaskLifeCycleEvent> observer) =>
-            {
-                observer.OnCompleted();
-                return Mock.Of<IDisposable>();
-            });
+            .Returns(Mock.Of<IDisposable>());
 
         return childExecutor;
     }

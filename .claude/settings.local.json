@@ -34,7 +34,10 @@
       "Bash(ls tests/ServerlessWorkflow.Sdk.UnitTests/Cases/Runtime/Services/*.cs)",
       "Bash(sed 's|.*/||')",
       "Bash(ls src/ServerlessWorkflow.Sdk.IO/*.cs)",
-      "Bash(ls src/ServerlessWorkflow.Sdk.Runtime.Abstractions/*.cs src/ServerlessWorkflow.Sdk.Runtime.Abstractions/Services/*.cs)"
+      "Bash(ls src/ServerlessWorkflow.Sdk.Runtime.Abstractions/*.cs src/ServerlessWorkflow.Sdk.Runtime.Abstractions/Services/*.cs)",
+      "Bash(taskkill /F /PID 14212)",
+      "Bash(taskkill /F /IM \"ServerlessWorkflow.Sdk.UnitTests.exe\")",
+      "Bash(cmd.exe:*)"
     ]
   }
 }

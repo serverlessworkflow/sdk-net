@@ -17,6 +17,7 @@ global using ServerlessWorkflow.Sdk.Runtime.Services;
 global using ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 global using ServerlessWorkflow.Sdk.Serialization.Json;
 global using ServerlessWorkflow.Sdk.UnitTests.Services;
+global using System.Net;
 global using System.Reactive.Subjects;
 global using System.Text.Json;
 global using System.Text.Json.Nodes;
