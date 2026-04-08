@@ -11,6 +11,7 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
 {
 
     TaskExecutorRegistry? registry;
+    CallTaskExecutorRegistry? callRegistry;
 
     /// <inheritdoc/>
     public IServiceCollection Services { get; } = services;
@@ -29,6 +30,16 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
         registry = new TaskExecutorRegistry();
         Services.AddSingleton(registry);
         return registry;
+    }
+
+    CallTaskExecutorRegistry GetOrCreateCallRegistry()
+    {
+        if (callRegistry != null) return callRegistry;
+        callRegistry = Services.FirstOrDefault(d => d.ServiceType == typeof(CallTaskExecutorRegistry))?.ImplementationInstance as CallTaskExecutorRegistry;
+        if (callRegistry != null) return callRegistry;
+        callRegistry = new CallTaskExecutorRegistry();
+        Services.AddSingleton(callRegistry);
+        return callRegistry;
     }
 
     WorkflowRuntimeBuilder ReplaceService<TService>(Type implementationType) where TService : class
@@ -127,6 +138,14 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
         where TExecutor : class, ITaskExecutor<TDefinition>
     {
         GetOrCreateRegistry().Register<TDefinition, TExecutor>();
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseCallTaskExecutor<TExecutor>(string callType)
+        where TExecutor : class, ITaskExecutor<CallTaskDefinition>
+    {
+        GetOrCreateCallRegistry().Register<TExecutor>(callType);
         return this;
     }
 

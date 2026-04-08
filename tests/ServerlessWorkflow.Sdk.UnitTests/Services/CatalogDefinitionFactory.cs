@@ -4,6 +4,6 @@ internal static class CatalogDefinitionFactory
 {
     internal static CatalogDefinition Create() => new()
     {
-        EndpointValue = EndpointDefinitionFactory.CreateSimple()
+        Endpoint = EndpointDefinitionFactory.CreateSimple()
     };
 }

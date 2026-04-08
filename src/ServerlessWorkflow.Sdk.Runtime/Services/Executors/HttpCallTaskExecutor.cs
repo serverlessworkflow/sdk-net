@@ -3,7 +3,7 @@ using ServerlessWorkflow.Sdk.Models.Calls;
 namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 
 /// <summary>
-/// Represents an <see cref="ITaskExecutor"/> implementation used to execute <see cref="CallTaskDefinition"/>s
+/// Represents an <see cref="ITaskExecutor"/> implementation used to execute HTTP <see cref="CallTaskDefinition"/>s
 /// </summary>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
 /// <param name="logger">The service used to perform logging</param>
@@ -13,7 +13,7 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 /// <param name="httpClientFactory">The service used to create <see cref="HttpClient"/>s</param>
 /// <param name="authenticationHandler">The service used to handle authentication policies</param>
 /// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
-public sealed class CallTaskExecutor(IServiceProvider serviceProvider, ILogger<CallTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IHttpClientFactory httpClientFactory, IAuthenticationHandler authenticationHandler, ITaskExecutionContext<CallTaskDefinition> task)
+public sealed class HttpCallTaskExecutor(IServiceProvider serviceProvider, ILogger<HttpCallTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IHttpClientFactory httpClientFactory, IAuthenticationHandler authenticationHandler, ITaskExecutionContext<CallTaskDefinition> task)
     : TaskExecutor<CallTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
 {
 
@@ -23,41 +23,23 @@ public sealed class CallTaskExecutor(IServiceProvider serviceProvider, ILogger<C
     /// <inheritdoc/>
     protected override async Task InitializeCoreAsync(CancellationToken cancellationToken)
     {
-        switch (Task.Definition.Call)
+        try
         {
-            case Function.Http:
-                try
-                {
-                    http = JsonSerializer.Deserialize(Task.Definition.With!, Sdk.Serialization.Json.JsonSerializationContext.Default.HttpCallDefinition) ?? throw new InvalidOperationException("Failed to deserialize HTTP call definition from 'with'");
-                    authentication = http.Endpoint.Match(
-                        endpoint => endpoint.Authentication,
-                        _ => null
-                    );
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError("An error occurred while initializing the HTTP call task '{task}': {ex}", Task.Instance.State.Reference, ex);
-                    await SetErrorAsync(RuntimeError.Validation(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Invalid/missing call parameters for function 'http': {ex.Message}"), cancellationToken).ConfigureAwait(false);
-                }
-                break;
-            case Function.Grpc:
-            case Function.OpenApi:
-            case Function.AsyncApi:
-                break;
+            http = JsonSerializer.Deserialize(Task.Definition.With!, Sdk.Serialization.Json.JsonSerializationContext.Default.HttpCallDefinition) ?? throw new InvalidOperationException("Failed to deserialize HTTP call definition from 'with'");
+            authentication = http.Endpoint.Match(
+                endpoint => endpoint.Authentication,
+                _ => null
+            );
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("An error occurred while initializing the HTTP call task '{task}': {ex}", Task.Instance.State.Reference, ex);
+            await SetErrorAsync(RuntimeError.Validation(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Invalid/missing call parameters for function 'http': {ex.Message}"), cancellationToken).ConfigureAwait(false);
         }
     }
 
     /// <inheritdoc/>
-    protected override Task ExecuteCoreAsync(CancellationToken cancellationToken) => Task.Definition.Call switch
-    {
-        Function.Http => ExecuteHttpCallAsync(cancellationToken),
-        Function.Grpc => throw new NotSupportedException($"The call type '{Function.Grpc}' is not yet supported"),
-        Function.OpenApi => throw new NotSupportedException($"The call type '{Function.OpenApi}' is not yet supported"),
-        Function.AsyncApi => throw new NotSupportedException($"The call type '{Function.AsyncApi}' is not yet supported"),
-        _ => ExecuteCustomFunctionCallAsync(cancellationToken)
-    };
-
-    async Task ExecuteHttpCallAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
         if (http == null) throw new InvalidOperationException("The executor must be initialized before execution");
         var arguments = GetExpressionEvaluationArguments();
@@ -69,8 +51,9 @@ public sealed class CallTaskExecutor(IServiceProvider serviceProvider, ILogger<C
         {
             if (mediaType.StartsWith("text"))
             {
-                var rawContent = http.Body.ToJsonString();
-                requestContent = new StringContent(rawContent, Encoding.UTF8, mediaType);
+                var rawContent = http.Body.ToString();
+                if (!string.IsNullOrWhiteSpace(rawContent) && rawContent.IsRuntimeExpression()) rawContent = await Task.Workflow.Expressions.EvaluateAsync<string>(rawContent, Task.Input, arguments, cancellationToken).ConfigureAwait(false);
+                if (!string.IsNullOrWhiteSpace(rawContent)) requestContent = new StringContent(rawContent, Encoding.UTF8, mediaType);
             }
             else if (mediaType == MediaTypeNames.Application.Octet)
             {
@@ -94,7 +77,15 @@ public sealed class CallTaskExecutor(IServiceProvider serviceProvider, ILogger<C
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authResult.Scheme, authResult.Value);
         }
         using var request = new HttpRequestMessage(new HttpMethod(http.Method), endpointUri) { Content = requestContent };
-        if (http.Headers != null) foreach (var header in http.Headers) request.Headers.TryAddWithoutValidation(header.Key, header.Value);
+        if (http.Headers != null)
+        {
+            foreach (var header in http.Headers)
+            {
+                var headerValue = header.Value;
+                if (headerValue.IsRuntimeExpression()) headerValue = await Task.Workflow.Expressions.EvaluateAsync<string>(headerValue, Task.Input, arguments, cancellationToken).ConfigureAwait(false);
+                request.Headers.TryAddWithoutValidation(header.Key, headerValue);
+            }
+        }
         using var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
         var successRange = http.Redirect ? 399 : 299;
         if ((int)response.StatusCode < 200 || (int)response.StatusCode > successRange)
@@ -141,12 +132,6 @@ public sealed class CallTaskExecutor(IServiceProvider serviceProvider, ILogger<C
             _ => content
         };
         await SetResultAsync(result, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
-    }
-
-    Task ExecuteCustomFunctionCallAsync(CancellationToken cancellationToken)
-    {
-        //todo: implement custom function call resolution (from workflow use.functions, catalogs, or external resources)
-        throw new NotSupportedException($"Custom function calls ('{Task.Definition.Call}') are not yet supported");
     }
 
 }

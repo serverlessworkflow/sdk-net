@@ -11,12 +11,19 @@
   <ItemGroup>
     <PackageReference Include="Apache.Avro" Version="1.12.1" />
     <PackageReference Include="Duende.IdentityModel" Version="8.1.0" />
+    <PackageReference Include="DynamicGrpc" Version="1.4.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.34.1" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.76.0" />
     <PackageReference Include="Jint" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.5" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
     <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.17.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.17.0" />
+    <PackageReference Include="Microsoft.OpenApi.Readers" Version="1.6.28" />
+    <PackageReference Include="Neuroglia.AsyncApi.Client" Version="3.0.6" />
+    <PackageReference Include="Neuroglia.AsyncApi.IO" Version="3.0.6" />
+    <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
 
   <ItemGroup>

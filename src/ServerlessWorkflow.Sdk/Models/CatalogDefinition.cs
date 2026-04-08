@@ -19,6 +19,6 @@ public sealed record CatalogDefinition
     [Description("The endpoint that defines the root URL at which the catalog is located.")]
     [Required]
     [DataMember(Order = 1, Name = "endpoint"), JsonPropertyOrder(1), JsonPropertyName("endpoint"), JsonConverter(typeof(OneOfJsonConverter<EndpointDefinition, Uri>))]
-    public required OneOf<EndpointDefinition, Uri> EndpointValue { get; init; }
+    public required OneOf<EndpointDefinition, Uri> Endpoint { get; init; }
 
 }

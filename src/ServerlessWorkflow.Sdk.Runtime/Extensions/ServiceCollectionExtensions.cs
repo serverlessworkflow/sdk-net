@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
         services.AddHttpClient();
         RegisterDefaultServices(builder);
         RegisterDefaultTaskExecutors(builder);
+        RegisterDefaultCallTaskExecutors(builder);
         configure?.Invoke(builder);
         return services;
     }
@@ -47,7 +48,6 @@ public static class ServiceCollectionExtensions
 
     static void RegisterDefaultTaskExecutors(WorkflowRuntimeBuilder builder)
     {
-        builder.UseTaskExecutor<CallTaskDefinition, CallTaskExecutor>();
         builder.UseTaskExecutor<DoTaskDefinition, DoTaskExecutor>();
         builder.UseTaskExecutor<EmitTaskDefinition, EmitTaskExecutor>();
         builder.UseTaskExecutor<ExtensionTaskDefinition, ExtensionTaskExecutor>();
@@ -60,6 +60,14 @@ public static class ServiceCollectionExtensions
         builder.UseTaskExecutor<SwitchTaskDefinition, SwitchTaskExecutor>();
         builder.UseTaskExecutor<TryTaskDefinition, TryTaskExecutor>();
         builder.UseTaskExecutor<WaitTaskDefinition, WaitTaskExecutor>();
+    }
+
+    static void RegisterDefaultCallTaskExecutors(WorkflowRuntimeBuilder builder)
+    {
+        builder.UseCallTaskExecutor<HttpCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.Http);
+        builder.UseCallTaskExecutor<OpenApiCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.OpenApi);
+        builder.UseCallTaskExecutor<AsyncApiCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.AsyncApi);
+        builder.UseCallTaskExecutor<GrpcCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.Grpc);
     }
 
 }

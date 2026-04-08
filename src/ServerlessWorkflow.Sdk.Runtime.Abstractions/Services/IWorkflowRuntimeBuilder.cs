@@ -197,6 +197,15 @@ public interface IWorkflowRuntimeBuilder
         where TExecutor : class, ITaskExecutor<TDefinition>;
 
     /// <summary>
+    /// Registers a <see cref="ITaskExecutor{TDefinition}"/> for the specified call type (e.g. "http", "openapi", "asyncapi", "grpc")
+    /// </summary>
+    /// <param name="callType">The call type discriminator to register the executor for</param>
+    /// <typeparam name="TExecutor">The type of <see cref="ITaskExecutor{TDefinition}"/> to register</typeparam>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseCallTaskExecutor<TExecutor>(string callType)
+        where TExecutor : class, ITaskExecutor<CallTaskDefinition>;
+
+    /// <summary>
     /// Configures the <see cref="ITaskExecutorFactory"/> implementation to use
     /// </summary>
     /// <typeparam name="TFactory">The type of <see cref="ITaskExecutorFactory"/> to use</typeparam>
