@@ -5,5 +5,6 @@ global using ServerlessWorkflow.Sdk.Models;
 global using ServerlessWorkflow.Sdk.Models.Authentication;
 global using ServerlessWorkflow.Sdk.Models.Tasks;
 global using ServerlessWorkflow.Sdk.Runtime.Services;
+global using System.Diagnostics;
 global using System.Text.Json;
 global using System.Text.Json.Nodes;

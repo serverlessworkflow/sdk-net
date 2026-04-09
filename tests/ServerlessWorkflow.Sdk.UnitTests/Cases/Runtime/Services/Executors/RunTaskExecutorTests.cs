@@ -1,6 +1,6 @@
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Runtime.Services.Executors;
 
-public class RunTaskExecutorTests
+public class ContainerRunTaskExecutorTests
     : TaskExecutorTestsBase
 {
 
@@ -33,9 +33,9 @@ public class RunTaskExecutorTests
             It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string expr, JsonNode inp, JsonObject? args, CancellationToken ct) => inp);
 
-        var executor = new RunTaskExecutor(
+        var executor = new ContainerRunTaskExecutor(
             CreateServiceProvider().Object,
-            Mock.Of<ILogger<RunTaskExecutor>>(),
+            Mock.Of<ILogger<ContainerRunTaskExecutor>>(),
             CreateExecutionContextFactory().Object,
             CreateExecutorFactory().Object,
             CreateSchemaHandlerProvider().Object,
@@ -79,9 +79,9 @@ public class RunTaskExecutorTests
             It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string expr, JsonNode inp, JsonObject? args, CancellationToken ct) => inp);
 
-        var executor = new RunTaskExecutor(
+        var executor = new ContainerRunTaskExecutor(
             CreateServiceProvider().Object,
-            Mock.Of<ILogger<RunTaskExecutor>>(),
+            Mock.Of<ILogger<ContainerRunTaskExecutor>>(),
             CreateExecutionContextFactory().Object,
             CreateExecutorFactory().Object,
             CreateSchemaHandlerProvider().Object,
@@ -122,9 +122,9 @@ public class RunTaskExecutorTests
             It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string expr, JsonNode inp, JsonObject? args, CancellationToken ct) => inp);
 
-        var executor = new RunTaskExecutor(
+        var executor = new ContainerRunTaskExecutor(
             CreateServiceProvider().Object,
-            Mock.Of<ILogger<RunTaskExecutor>>(),
+            Mock.Of<ILogger<ContainerRunTaskExecutor>>(),
             CreateExecutionContextFactory().Object,
             CreateExecutorFactory().Object,
             CreateSchemaHandlerProvider().Object,
@@ -167,9 +167,9 @@ public class RunTaskExecutorTests
             It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((string expr, JsonNode inp, JsonObject? args, CancellationToken ct) => inp);
 
-        var executor = new RunTaskExecutor(
+        var executor = new ContainerRunTaskExecutor(
             CreateServiceProvider().Object,
-            Mock.Of<ILogger<RunTaskExecutor>>(),
+            Mock.Of<ILogger<ContainerRunTaskExecutor>>(),
             CreateExecutionContextFactory().Object,
             CreateExecutorFactory().Object,
             CreateSchemaHandlerProvider().Object,
@@ -180,38 +180,6 @@ public class RunTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(It.IsAny<IRuntimeError>(), It.IsAny<CancellationToken>()),
-            Times.AtLeastOnce);
-    }
-
-    [Fact]
-    public async Task Execute_Should_Throw_When_No_Process_Type_Configured()
-    {
-        // Arrange
-        var definition = new RunTaskDefinition
-        {
-            Run = new ProcessTypeDefinition()
-        };
-        var taskContext = CreateTaskExecutionContext(definition);
-
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
-
-        var containerRuntime = new Mock<IContainerRuntime>();
-
-        var executor = new RunTaskExecutor(
-            CreateServiceProvider().Object,
-            Mock.Of<ILogger<RunTaskExecutor>>(),
-            CreateExecutionContextFactory().Object,
-            CreateExecutorFactory().Object,
-            CreateSchemaHandlerProvider().Object,
-            containerRuntime.Object,
-            taskContext.Object);
-
-        // Act
-        await executor.ExecuteAsync(TestContext.Current.CancellationToken);
-
-        // Assert - should set a runtime error because neither container nor shell is configured
         Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(It.IsAny<IRuntimeError>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
@@ -231,9 +199,9 @@ public class RunTaskExecutorTests
 
         Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
 
-        var executor = new RunTaskExecutor(
+        var executor = new ContainerRunTaskExecutor(
             CreateServiceProvider().Object,
-            Mock.Of<ILogger<RunTaskExecutor>>(),
+            Mock.Of<ILogger<ContainerRunTaskExecutor>>(),
             CreateExecutionContextFactory().Object,
             CreateExecutorFactory().Object,
             CreateSchemaHandlerProvider().Object,

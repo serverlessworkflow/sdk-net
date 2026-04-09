@@ -172,6 +172,36 @@ public interface IWorkflowRuntimeBuilder
     IWorkflowRuntimeBuilder UseSecretsManager(Func<IServiceProvider, ISecretsManager> factory);
 
     /// <summary>
+    /// Configures the <see cref="IScriptExecutor"/> implementation to use
+    /// </summary>
+    /// <typeparam name="TExecutor">The type of <see cref="IScriptExecutor"/> to use</typeparam>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseScriptExecutor<TExecutor>()
+        where TExecutor : class, IScriptExecutor;
+
+    /// <summary>
+    /// Configures the <see cref="IScriptExecutor"/> implementation to use
+    /// </summary>
+    /// <param name="factory">The type of <see cref="IScriptExecutor"/> to use</param>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseScriptExecutor(Func<IServiceProvider, IScriptExecutor> factory);
+
+    /// <summary>
+    /// Configures the <see cref="IScriptExecutorProvider"/> implementation to use
+    /// </summary>
+    /// <typeparam name="TProvider">The type of <see cref="IScriptExecutorProvider"/> to use</typeparam>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseScriptExecutorProvider<TProvider>()
+        where TProvider : class, IScriptExecutorProvider;
+
+    /// <summary>
+    /// Configures the <see cref="IScriptExecutorProvider"/> implementation to use
+    /// </summary>
+    /// <param name="factory">A factory function used to create the <see cref="IScriptExecutorProvider"/></param>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseScriptExecutorProvider(Func<IServiceProvider, IScriptExecutorProvider> factory);
+
+    /// <summary>
     /// Configures the <see cref="ITaskExecutionContextFactory"/> implementation to use
     /// </summary>
     /// <typeparam name="TFactory">The type of <see cref="ITaskExecutionContextFactory"/> to use</typeparam>
@@ -204,6 +234,15 @@ public interface IWorkflowRuntimeBuilder
     /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
     IWorkflowRuntimeBuilder UseCallTaskExecutor<TExecutor>(string callType)
         where TExecutor : class, ITaskExecutor<CallTaskDefinition>;
+
+    /// <summary>
+    /// Registers a <see cref="ITaskExecutor{TDefinition}"/> for the specified process type (e.g. "container", "shell", "script", "workflow")
+    /// </summary>
+    /// <param name="processType">The process type discriminator to register the executor for</param>
+    /// <typeparam name="TExecutor">The type of <see cref="ITaskExecutor{TDefinition}"/> to register</typeparam>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseRunTaskExecutor<TExecutor>(string processType)
+        where TExecutor : class, ITaskExecutor<RunTaskDefinition>;
 
     /// <summary>
     /// Configures the <see cref="ITaskExecutorFactory"/> implementation to use

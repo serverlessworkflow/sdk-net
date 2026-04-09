@@ -2,7 +2,7 @@
 
 namespace ServerlessWorkflow.Sdk.UnitTests;
 
-public static class ObjectAssertionsExtensions
+internal static class ObjectAssertionsExtensions
 {
 
     public static void BeJsonEquivalentTo<T>(this ObjectAssertions should, T expected)

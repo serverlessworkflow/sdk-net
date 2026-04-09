@@ -12,6 +12,7 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
 
     TaskExecutorRegistry? registry;
     CallTaskExecutorRegistry? callRegistry;
+    RunTaskExecutorRegistry? runRegistry;
 
     /// <inheritdoc/>
     public IServiceCollection Services { get; } = services;
@@ -40,6 +41,16 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
         callRegistry = new CallTaskExecutorRegistry();
         Services.AddSingleton(callRegistry);
         return callRegistry;
+    }
+
+    RunTaskExecutorRegistry GetOrCreateRunRegistry()
+    {
+        if (runRegistry != null) return runRegistry;
+        runRegistry = Services.FirstOrDefault(d => d.ServiceType == typeof(RunTaskExecutorRegistry))?.ImplementationInstance as RunTaskExecutorRegistry;
+        if (runRegistry != null) return runRegistry;
+        runRegistry = new RunTaskExecutorRegistry();
+        Services.AddSingleton(runRegistry);
+        return runRegistry;
     }
 
     WorkflowRuntimeBuilder ReplaceService<TService>(Type implementationType) where TService : class
@@ -127,6 +138,18 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
     public IWorkflowRuntimeBuilder UseSecretsManager(Func<IServiceProvider, ISecretsManager> factory) => ReplaceService<ISecretsManager>(factory);
 
     /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseScriptExecutor<TExecutor>() where TExecutor : class, IScriptExecutor => AddService<IScriptExecutor>(typeof(TExecutor));
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseScriptExecutor(Func<IServiceProvider, IScriptExecutor> factory) => AddService<IScriptExecutor>(factory);
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseScriptExecutorProvider<TProvider>() where TProvider : class, IScriptExecutorProvider => ReplaceService<IScriptExecutorProvider>(typeof(TProvider));
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseScriptExecutorProvider(Func<IServiceProvider, IScriptExecutorProvider> factory) => ReplaceService<IScriptExecutorProvider>(factory);
+
+    /// <inheritdoc/>
     public IWorkflowRuntimeBuilder UseTaskExecutionContextFactory<TFactory>() where TFactory : class, ITaskExecutionContextFactory => ReplaceService<ITaskExecutionContextFactory>(typeof(TFactory));
 
     /// <inheritdoc/>
@@ -146,6 +169,14 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
         where TExecutor : class, ITaskExecutor<CallTaskDefinition>
     {
         GetOrCreateCallRegistry().Register<TExecutor>(callType);
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseRunTaskExecutor<TExecutor>(string processType)
+        where TExecutor : class, ITaskExecutor<RunTaskDefinition>
+    {
+        GetOrCreateRunRegistry().Register<TExecutor>(processType);
         return this;
     }
 

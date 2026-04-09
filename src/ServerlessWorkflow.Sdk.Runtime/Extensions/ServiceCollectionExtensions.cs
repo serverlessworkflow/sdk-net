@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
         RegisterDefaultServices(builder);
         RegisterDefaultTaskExecutors(builder);
         RegisterDefaultCallTaskExecutors(builder);
+        RegisterDefaultRunTaskExecutors(builder);
         configure?.Invoke(builder);
         return services;
     }
@@ -41,6 +42,9 @@ public static class ServiceCollectionExtensions
         builder.UseSchemaHandler<AvroSchemaHandler>();
         builder.UseSchemaHandler<XmlSchemaHandler>();
         builder.UseSchemaHandlerProvider<SchemaHandlerProvider>();
+        builder.UseScriptExecutor<NodeJSScriptExecutor>();
+        builder.UseScriptExecutor<PythonScriptExecutor>();
+        builder.UseScriptExecutorProvider<ScriptExecutorProvider>();
         builder.UseTaskExecutorFactory<TaskExecutorFactory>();
         builder.UseTaskStateStore<InMemoryTaskStateStore>();
         builder.UseWorkflowStateStore<InMemoryWorkflowStateStore>();
@@ -55,7 +59,6 @@ public static class ServiceCollectionExtensions
         builder.UseTaskExecutor<ForkTaskDefinition, ForkTaskExecutor>();
         builder.UseTaskExecutor<ListenTaskDefinition, ListenTaskExecutor>();
         builder.UseTaskExecutor<RaiseTaskDefinition, RaiseTaskExecutor>();
-        builder.UseTaskExecutor<RunTaskDefinition, RunTaskExecutor>();
         builder.UseTaskExecutor<SetTaskDefinition, SetTaskExecutor>();
         builder.UseTaskExecutor<SwitchTaskDefinition, SwitchTaskExecutor>();
         builder.UseTaskExecutor<TryTaskDefinition, TryTaskExecutor>();
@@ -68,6 +71,14 @@ public static class ServiceCollectionExtensions
         builder.UseCallTaskExecutor<OpenApiCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.OpenApi);
         builder.UseCallTaskExecutor<AsyncApiCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.AsyncApi);
         builder.UseCallTaskExecutor<GrpcCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.Grpc);
+    }
+
+    static void RegisterDefaultRunTaskExecutors(WorkflowRuntimeBuilder builder)
+    {
+        builder.UseRunTaskExecutor<ContainerRunTaskExecutor>(ServerlessWorkflow.Sdk.ProcessType.Container);
+        builder.UseRunTaskExecutor<ShellRunTaskExecutor>(ServerlessWorkflow.Sdk.ProcessType.Shell);
+        builder.UseRunTaskExecutor<ScriptRunTaskExecutor>(ServerlessWorkflow.Sdk.ProcessType.Script);
+        builder.UseRunTaskExecutor<WorkflowRunTaskExecutor>(ServerlessWorkflow.Sdk.ProcessType.Workflow);
     }
 
 }

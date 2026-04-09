@@ -111,8 +111,3 @@ public class SetTaskExecutorTests
         taskContext.Object);
 
 }
-
-internal static class MockExtensions
-{
-    public static Mock<T> AsIMock<T>(this T obj) where T : class => Mock.Get(obj);
-}
