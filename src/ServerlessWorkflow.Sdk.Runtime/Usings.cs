@@ -5,6 +5,7 @@ global using Microsoft.Extensions.DependencyInjection.Extensions;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
+global using ServerlessWorkflow.Sdk;
 global using ServerlessWorkflow.Sdk.Models;
 global using ServerlessWorkflow.Sdk.Models.Authentication;
 global using ServerlessWorkflow.Sdk.Models.Tasks;

@@ -31,3 +31,38 @@ public interface IWorkflowStateStore
     Task<IWorkflowState> UpdateAsync(IWorkflowState state, CancellationToken cancellationToken = default);
 
 }
+
+/// <summary>
+/// Defines the fundamentals of a service used to manage <see cref="IWorkflowState"/>s
+/// </summary>
+/// <typeparam name="TState">The type of the workflow states to manage</typeparam>
+public interface IWorkflowStateStore<TState>
+    : IWorkflowStateStore
+    where TState : class, IWorkflowState, new()
+{
+
+    /// <summary>
+    /// Adds a the specified <see cref="IWorkflowState"/>
+    /// </summary>
+    /// <param name="state">The <see cref="IWorkflowState"/> to add</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The added <see cref="IWorkflowState"/></returns>
+    Task<IWorkflowState> AddAsync(TState state, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Gets the <see cref="IWorkflowState"/> with the specified unique identifier, belonging to the specified workflow
+    /// </summary>
+    /// <param name="id">The unique identifier of the workflow to get the state of</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The <see cref="IWorkflowState"/> with the specified unique identifier</returns>
+    new Task<TState> GetAsync(string id, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates the specified <see cref="IWorkflowState"/>
+    /// </summary>
+    /// <param name="state">The <see cref="IWorkflowState"/> to update</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The updated <see cref="IWorkflowState"/></returns>
+    Task<TState> UpdateAsync(TState state, CancellationToken cancellationToken = default);
+
+}

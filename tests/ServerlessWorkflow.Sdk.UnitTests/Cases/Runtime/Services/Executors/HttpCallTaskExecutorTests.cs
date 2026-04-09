@@ -59,7 +59,7 @@ public class HttpCallTaskExecutorTests
         // assert
         Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(
-                It.Is<IRuntimeError>(e => e.Status == 500),
+                It.Is<Error>(e => e.Status == 500),
                 It.IsAny<CancellationToken>()),
             Times.Once);
     }
@@ -171,7 +171,7 @@ public class HttpCallTaskExecutorTests
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
         Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(It.IsAny<IRuntimeError>(), It.IsAny<CancellationToken>()),
+            i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
 

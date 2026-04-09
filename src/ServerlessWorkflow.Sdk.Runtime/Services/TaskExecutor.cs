@@ -5,11 +5,11 @@
 /// </summary>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/>.</param>
 /// <param name="logger">The service used to perform logging</param>
-/// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
+/// <param name="taskProcessFactory">The service used to create <see cref="ITaskProcess"/>es</param>
 /// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
 /// <param name="schemaHandlerProvider">The service used to provider <see cref="ISchemaHandler"/>s</param>
-/// <param name="task">The <see cref="ITaskExecutionContext"/> in which to run the <see cref="ITaskExecutor"/></param>
-public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider, ILogger logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, ITaskExecutionContext<TDefinition> task)
+/// <param name="task">The <see cref="ITaskProcess"/> to run</param>
+public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider, ILogger logger, ITaskProcessFactory taskProcessFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, ITaskProcess<TDefinition> task)
     : ITaskExecutor<TDefinition>
      where TDefinition : TaskDefinition
 {
@@ -27,9 +27,9 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     protected ILogger Logger { get; } = logger;
 
     /// <summary>
-    /// Gets the service used to create <see cref="ITaskExecutionContext"/>s
+    /// Gets the service used to create <see cref="ITaskProcessFactory"/>s
     /// </summary>
-    protected ITaskExecutionContextFactory ExecutionContextFactory { get; } = executionContextFactory;
+    protected ITaskProcessFactory ProcessFactory { get; } = taskProcessFactory;
 
     /// <summary>
     /// Gets the service used to create <see cref="ITaskExecutor"/>s
@@ -42,9 +42,9 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     protected ISchemaHandlerProvider SchemaHandlerProvider { get; } = schemaHandlerProvider;
 
     /// <inheritdoc/>
-    public ITaskExecutionContext<TDefinition> Task { get; } = task;
+    public ITaskProcess<TDefinition> Task { get; } = task;
 
-    ITaskExecutionContext ITaskExecutor.Task => Task;
+    ITaskProcess ITaskExecutor.Task => Task;
 
     /// <summary>
     /// Gets the <see cref="ISubject{T}"/> used to stream <see cref="ITaskLifeCycleEvent"/>s
@@ -79,7 +79,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     /// <summary>
     /// Gets a key/definition mapping of the extensions, if any, that apply to the task to run
     /// </summary>
-    protected IEnumerable<KeyValuePair<string, ExtensionDefinition>>? Extensions => Task.Workflow.Definition.Use?.Extensions?.Where(ex => ex.Value.Extend == "all" || ex.Value.Extend == Task.Definition.Type);
+    protected IEnumerable<KeyValuePair<string, ExtensionDefinition>>? Extensions => Task.Workflow.Instance.Definition.Use?.Extensions?.Where(ex => ex.Value.Extend == "all" || ex.Value.Extend == Task.Instance.Definition.Type);
 
     /// <inheritdoc/>
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
@@ -88,13 +88,13 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         try
         {
             await InitializeCoreAsync(cancellationToken).ConfigureAwait(false);
-            await Task.Instance.InitializeAsync(cancellationToken).ConfigureAwait(false);
+            await Task.InitializeAsync(cancellationToken).ConfigureAwait(false);
             Subject.OnNext(new TaskLifeCycleEvent(TaskLifeCycleEventType.Initialized));
         }
         catch (HttpRequestException ex)
         {
             Logger.LogError("An error occurred while initializing the task '{task}': {ex}", Task.Instance.State.Reference, ex);
-            await ((ITaskExecutor)this).SetErrorAsync(new RuntimeError()
+            await ((ITaskExecutor)this).SetErrorAsync(new Error()
             {
                 Type = ErrorType.Communication,
                 Title = ErrorTitle.Communication,
@@ -106,7 +106,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         catch (Exception ex)
         {
             Logger.LogError("An error occurred while initializing the task '{task}': {ex}", Task.Instance.State.Reference, ex);
-            await ((ITaskExecutor)this).SetErrorAsync(new RuntimeError()
+            await ((ITaskExecutor)this).SetErrorAsync(new Error()
             {
                 Type = ErrorType.Runtime,
                 Title = ErrorTitle.Runtime,
@@ -129,23 +129,24 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         if (Task.Instance.State.Status != null && !Task.Instance.State.IsOperative) return;
         CancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         var expressionEvaluationArguments = GetExpressionEvaluationArguments();
-        var timeout = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Timeout, Task.Input, expressionEvaluationArguments, cancellationToken).ConfigureAwait(false);
+        var timeout = await Task.Workflow.Expressions.EvaluateAsync(Task.Instance.Definition.Timeout, Task.Instance.State.Input, expressionEvaluationArguments, cancellationToken).ConfigureAwait(false);
         if (timeout is not null) CancellationTokenSource.CancelAfter(timeout.ToTimeSpan());
         try
         {
-            if (!string.IsNullOrWhiteSpace(Task.Definition.If) && !await Task.Workflow.Expressions.EvaluateConditionAsync(Task.Definition.If, Task.Input, expressionEvaluationArguments, cancellationToken).ConfigureAwait(false))
+            if (!string.IsNullOrWhiteSpace(Task.Instance.Definition.If) && !await Task.Workflow.Expressions.EvaluateConditionAsync(Task.Instance.Definition.If, Task.Instance.State.Input, expressionEvaluationArguments, cancellationToken).ConfigureAwait(false))
             {
-                await SkipAsync(Task.Input, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+                await SkipAsync(Task.Instance.State.Input, Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                if (Task.Definition.Input?.Schema != null)
+                if (Task.Instance.Definition.Input?.Schema is not null)
                 {
-                    var schemaHandler = SchemaHandlerProvider.GetHandler(Task.Definition.Input.Schema.Format) ?? throw new ArgumentNullException($"Failed to find an handler that supports the specified schema format '{Task.Definition.Input.Schema.Format}'");
-                    var validationResult = await schemaHandler.ValidateAsync(Task.Input, Task.Definition.Input.Schema, cancellationToken).ConfigureAwait(false);
+                    var schemaFormat = Task.Instance.Definition.Input.Schema!.Format ?? SchemaFormat.Json;
+                    var schemaHandler = SchemaHandlerProvider.GetHandler(schemaFormat) ?? throw new ArgumentNullException($"Failed to find an handler that supports the specified schema format '{schemaFormat}'");
+                    var validationResult = await schemaHandler.ValidateAsync(Task.Instance.State.Input, Task.Instance.Definition.Input.Schema!, cancellationToken).ConfigureAwait(false);
                     if (!validationResult.IsValid)
                     {
-                        await SetErrorAsync(new RuntimeError()
+                        await SetErrorAsync(new Error()
                         {
                             Type = ErrorType.Validation,
                             Status = ErrorStatus.Validation,
@@ -156,7 +157,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
                         return;
                     }
                 }
-                await Task.Instance.StartAsync(CancellationTokenSource.Token).ConfigureAwait(false);
+                await Task.StartAsync(CancellationTokenSource.Token).ConfigureAwait(false);
                 Subject.OnNext(new TaskLifeCycleEvent(TaskLifeCycleEventType.Running));
                 Stopwatch.Start();
                 await BeforeExecuteAsync(cancellationToken).ConfigureAwait(false); //todo: act upon last directive
@@ -167,7 +168,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         catch (OperationCanceledException) when (timeout is not null && !cancellationToken.IsCancellationRequested)
         {
             Logger.LogError("The task '{task}' timed out after {timeout} milliseconds", Task.Instance.State.Reference, timeout.TotalMilliseconds);
-            await SetErrorAsync(new RuntimeError()
+            await SetErrorAsync(new Error()
             {
                 Status = (int)HttpStatusCode.RequestTimeout,
                 Type = ErrorType.Timeout,
@@ -179,7 +180,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         catch (HttpRequestException ex)
         {
             Logger.LogError("An error occurred while executing the task '{task}': {ex}", Task.Instance.State.Reference, ex);
-            await SetErrorAsync(new RuntimeError()
+            await SetErrorAsync(new Error()
             {
                 Type = ErrorType.Communication,
                 Title = ErrorTitle.Communication,
@@ -191,7 +192,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         catch (Exception ex)
         {
             Logger.LogError("An error occurred while executing the task '{task}': {ex}", Task.Instance.State.Reference, ex);
-            await SetErrorAsync(new RuntimeError()
+            await SetErrorAsync(new Error()
             {
                 Type = ErrorType.Runtime,
                 Title = ErrorTitle.Runtime,
@@ -210,19 +211,19 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     protected virtual async Task BeforeExecuteAsync(CancellationToken cancellationToken)
     {
         if (Task.Instance.State.IsExtension || Extensions is null) return;
-        var input = Task.Input;
+        var input = Task.Instance.State.Input;
         foreach (var extension in Extensions.Where(ex => ex.Value.Before != null).Reverse())
         {
             var taskDefinition = new DoTaskDefinition()
             {
                 Do = extension.Value.Before!
             };
-            var task = await Task.Workflow.Instance.CreateTaskAsync(taskDefinition, $"before/{extension.Key}", input, null, Task.Instance, true, cancellationToken).ConfigureAwait(false);
-            var executor = await CreateTaskExecutorAsync(task, taskDefinition, Task.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+            var task = await Task.Workflow.Instance.CreateTaskAsync(taskDefinition, $"before/{extension.Key}", input, null, Task, true, cancellationToken).ConfigureAwait(false);
+            var executor = await CreateTaskExecutorAsync(task, taskDefinition, Task.Instance.State.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
             await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
             if (executor.Task.Instance.State.Next == FlowDirective.Exit)
             {
-                await SetResultAsync(executor.Task.Output, executor.Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+                await SetResultAsync(executor.Task.Output, executor.Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
                 return;
             }
             input = executor.Task.Output ?? new JsonObject();
@@ -251,8 +252,8 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
             {
                 Do = extension.Value.After!
             };
-            var task = await Task.Workflow.Instance.CreateTaskAsync(taskDefinition, $"after/{extension.Key}", output, null, Task.Instance, true, cancellationToken).ConfigureAwait(false);
-            var executor = await CreateTaskExecutorAsync(task, taskDefinition, Task.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+            var task = await Task.Workflow.Instance.CreateTaskAsync(taskDefinition, $"after/{extension.Key}", output, null, Task, true, cancellationToken).ConfigureAwait(false);
+            var executor = await CreateTaskExecutorAsync(task, taskDefinition, Task.Instance.State.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
             await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
             if (executor.Task.Instance.State.Next == FlowDirective.Exit) break;
             output = executor.Task.Output ?? new JsonObject();
@@ -271,7 +272,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         }
         Stopwatch.Stop();
         await SuspendCoreAsync(cancellationToken).ConfigureAwait(false);
-        await Task.Instance.SuspendAsync(cancellationToken).ConfigureAwait(false);
+        await Task.SuspendAsync(cancellationToken).ConfigureAwait(false);
         Subject.OnNext(new TaskLifeCycleEvent(TaskLifeCycleEventType.Suspended));
         if (!TaskCompletionSource.Task.IsCompleted) TaskCompletionSource.SetResult();
         CancellationTokenSource?.Cancel();
@@ -284,28 +285,28 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     protected virtual Task SuspendCoreAsync(CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>
-    public async Task RetryAsync(IRuntimeError cause, CancellationToken cancellationToken = default)
+    public async Task RetryAsync(Error cause, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(cause);
         Stopwatch.Stop();
-        await Task.Instance.RetryAsync(cause, cancellationToken).ConfigureAwait(false);
+        await Task.RetryAsync(cause, cancellationToken).ConfigureAwait(false);
         await RetryCoreAsync(cause, cancellationToken).ConfigureAwait(false);
     }
 
     /// <summary>
     /// Retries to run the <see cref="ITaskInstance"/>
     /// </summary>
-    /// <param name="cause">The <see cref="IRuntimeError"/> that caused the retry attempt</param>
+    /// <param name="cause">The <see cref="Sdk.Models.Error"/> that caused the retry attempt</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
-    protected virtual Task RetryCoreAsync(IRuntimeError cause, CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
+    protected virtual Task RetryCoreAsync(Error cause, CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>
-    public async Task SetErrorAsync(IRuntimeError error, CancellationToken cancellationToken = default)
+    public async Task SetErrorAsync(Error error, CancellationToken cancellationToken = default)
     {
         Stopwatch.Stop();
         await SetErrorCoreAsync(error, cancellationToken).ConfigureAwait(false);
-        await Task.Instance.SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
+        await Task.SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
         Subject.OnNext(new TaskLifeCycleEvent(TaskLifeCycleEventType.Faulted));
         Subject.OnError(new RuntimeErrorException(error));
         if (!TaskCompletionSource.Task.IsCompleted) TaskCompletionSource.SetResult();
@@ -315,10 +316,10 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     /// <summary>
     /// Faults the handled <see cref="ITaskInstance"/>
     /// </summary>
-    /// <param name="error"><see cref="IRuntimeError"/> to set</param>
+    /// <param name="error"><see cref="Sdk.Models.Error"/> to set</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
-    protected virtual Task SetErrorCoreAsync(IRuntimeError error, CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
+    protected virtual Task SetErrorCoreAsync(Error error, CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>
     public async Task SetResultAsync(JsonNode? result = null, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default)
@@ -329,15 +330,15 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         var output = result;
         var arguments = GetExpressionEvaluationArguments() ?? [];
         arguments[RuntimeExpressions.Arguments.Output] = output!;
-        output = (await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Output?.As, output ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false))?.AsObject();
-        if (Task.Definition.Export?.As is not null)
+        output = (await Task.Workflow.Expressions.EvaluateAsync(Task.Instance.Definition.Output?.As, output ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false))?.AsObject();
+        if (Task.Instance.Definition.Export?.As is not null)
         {
-            var context = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Export.As, output ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false);
-            if (context is JsonObject jsonObject) await Task.Instance.SetContextDataAsync(jsonObject, cancellationToken).ConfigureAwait(false);
+            var context = await Task.Workflow.Expressions.EvaluateAsync(Task.Instance.Definition.Export.As, output ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false);
+            if (context is JsonObject jsonObject) await Task.SetContextDataAsync(jsonObject, cancellationToken).ConfigureAwait(false);
         }
         await AfterExecuteAsync(cancellationToken).ConfigureAwait(false);
         await SetResultCoreAsync(output, then, cancellationToken).ConfigureAwait(false);
-        await Task.Instance.SetResultAsync(output, then, cancellationToken).ConfigureAwait(false);
+        await Task.SetResultAsync(output, then, cancellationToken).ConfigureAwait(false);
         Subject.OnNext(new TaskLifeCycleEvent(TaskLifeCycleEventType.Completed));
         Subject.OnCompleted();
         if (!TaskCompletionSource.Task.IsCompleted) TaskCompletionSource.SetResult();
@@ -361,7 +362,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
             Executors.Remove(executor);
         }
         Stopwatch.Stop();
-        await Task.Instance.CancelAsync(cancellationToken).ConfigureAwait(false);
+        await Task.CancelAsync(cancellationToken).ConfigureAwait(false);
         await DoCancelAsync(cancellationToken).ConfigureAwait(false);
         Subject.OnNext(new TaskLifeCycleEvent(TaskLifeCycleEventType.Cancelled));
         if (!TaskCompletionSource.Task.IsCompleted) TaskCompletionSource.SetCanceled(cancellationToken);
@@ -381,7 +382,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         Stopwatch.Stop();
         if (string.IsNullOrWhiteSpace(then)) then = FlowDirective.Continue;
         var output = result;
-        await Task.Instance.SkipAsync(output, then, cancellationToken).ConfigureAwait(false);
+        await Task.SkipAsync(output, then, cancellationToken).ConfigureAwait(false);
         Subject.OnNext(new TaskLifeCycleEvent(TaskLifeCycleEventType.Skipped));
         Subject.OnCompleted();
         if (!TaskCompletionSource.Task.IsCompleted) TaskCompletionSource.SetResult();
@@ -398,10 +399,10 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     {
         var parameters = Task.Arguments.DeepClone().AsObject()!;
         parameters[RuntimeExpressions.Arguments.Runtime] = JsonSerializer.SerializeToNode(Task.Workflow.Runtime.Descriptor, Sdk.Serialization.Json.JsonSerializationContext.Default.RuntimeDescriptor);
-        parameters[RuntimeExpressions.Arguments.Context] = Task.ContextData;
-        parameters[RuntimeExpressions.Arguments.Workflow] = JsonSerializer.SerializeToNode(Task.Workflow.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowDescriptor);
-        parameters[RuntimeExpressions.Arguments.Task] = JsonSerializer.SerializeToNode(Task.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.TaskDescriptor);
-        parameters[RuntimeExpressions.Arguments.Input] = Task.Input;
+        parameters[RuntimeExpressions.Arguments.Context] = Task.Instance.State.ContextData;
+        parameters[RuntimeExpressions.Arguments.Workflow] = JsonSerializer.SerializeToNode(Task.Workflow.Instance.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowDescriptor);
+        parameters[RuntimeExpressions.Arguments.Task] = JsonSerializer.SerializeToNode(Task.Instance.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.TaskDescriptor);
+        parameters[RuntimeExpressions.Arguments.Input] = Task.Instance.State.Input;
         return parameters;
     }
 
@@ -419,8 +420,8 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         ArgumentNullException.ThrowIfNull(instance);
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(contextData);
-        var context = ExecutionContextFactory.Create(Task.Workflow, instance, definition, contextData, arguments);
-        var executor = ExecutorFactory.Create(context);
+        var process = ProcessFactory.Create(Task.Workflow, instance, definition, contextData, arguments);
+        var executor = ExecutorFactory.Create(process);
         await executor.InitializeAsync(cancellationToken).ConfigureAwait(false);
         Executors.Add(executor);
         return executor;

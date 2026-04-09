@@ -5,20 +5,20 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 /// </summary>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
 /// <param name="logger">The service used to perform logging</param>
-/// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
+/// <param name="taskProcessFactory">The service used to create <see cref="ITaskProcess"/>s</param>
 /// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
 /// <param name="schemaHandlerProvider">The service used to provide <see cref="ISchemaHandler"/> implementations</param>
 /// <param name="externalResourceReader">The service used to read external resources</param>
 /// <param name="scriptExecutorProvider">The service used to provide <see cref="IScriptExecutor"/>s</param>
-/// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
-public sealed class ScriptRunTaskExecutor(IServiceProvider serviceProvider, ILogger<ScriptRunTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IExternalResourceReader externalResourceReader, IScriptExecutorProvider scriptExecutorProvider, ITaskExecutionContext<RunTaskDefinition> task)
-    : TaskExecutor<RunTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
+/// <param name="task">The current <see cref="ITaskProcess"/></param>
+public sealed class ScriptRunTaskExecutor(IServiceProvider serviceProvider, ILogger<ScriptRunTaskExecutor> logger, ITaskProcessFactory taskProcessFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IExternalResourceReader externalResourceReader, IScriptExecutorProvider scriptExecutorProvider, ITaskProcess<RunTaskDefinition> task)
+    : TaskExecutor<RunTaskDefinition>(serviceProvider, logger, taskProcessFactory, executorFactory, schemaHandlerProvider, task)
 {
 
     /// <inheritdoc/>
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
-        var processDefinition = Task.Definition.Run.Script!;
+        var processDefinition = Task.Instance.Definition.Run.Script!;
         var executor = scriptExecutorProvider.GetExecutor(processDefinition.Language) ?? throw new NullReferenceException($"Failed to find a script executor for the specified language '{processDefinition.Language}'");
         var script = processDefinition.Code;
         if (string.IsNullOrWhiteSpace(script))
@@ -50,16 +50,16 @@ public sealed class ScriptRunTaskExecutor(IServiceProvider serviceProvider, ILog
             }
         }
         var process = await executor.ExecuteAsync(script, arguments, environment, cancellationToken).ConfigureAwait(false);
-        if (Task.Definition.Run.Await == false)
+        if (Task.Instance.Definition.Run.Await == false)
         {
-            await SetResultAsync(new JsonObject(), Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+            await SetResultAsync(new JsonObject(), Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
             return;
         }
         await process.WaitForExitAsync(cancellationToken).ConfigureAwait(false);
         var rawOutput = (await process.StandardOutput.ReadToEndAsync(cancellationToken).ConfigureAwait(false)).Trim();
         var errorMessage = (await process.StandardError.ReadToEndAsync(cancellationToken).ConfigureAwait(false)).Trim();
-        if (process.ExitCode == 0) await SetResultAsync(new JsonObject { ["output"] = rawOutput }, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
-        else await SetErrorAsync(RuntimeError.Runtime(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), errorMessage), cancellationToken).ConfigureAwait(false);
+        if (process.ExitCode == 0) await SetResultAsync(new JsonObject { ["output"] = rawOutput }, Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
+        else await SetErrorAsync(Error.Runtime(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), errorMessage), cancellationToken).ConfigureAwait(false);
         process.Dispose();
     }
 
@@ -68,7 +68,7 @@ public sealed class ScriptRunTaskExecutor(IServiceProvider serviceProvider, ILog
         if (value == null) return null;
         if (value is string str && str.IsRuntimeExpression())
         {
-            var evaluated = await Task.Workflow.Expressions.EvaluateAsync(str, Task.Input, expressionArguments, cancellationToken).ConfigureAwait(false);
+            var evaluated = await Task.Workflow.Expressions.EvaluateAsync(str, Task.Instance.State.Input, expressionArguments, cancellationToken).ConfigureAwait(false);
             if (evaluated == null) return null;
             if (evaluated is JsonValue jsonValue) return jsonValue.ToString();
             return evaluated.ToJsonString();

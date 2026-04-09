@@ -10,13 +10,13 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 /// </summary>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
 /// <param name="logger">The service used to perform logging</param>
-/// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
+/// <param name="taskProcessFactory">The service used to create <see cref="ITaskProcess"/>s</param>
 /// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
 /// <param name="schemaHandlerProvider">The service used to provide <see cref="ISchemaHandler"/> implementations</param>
 /// <param name="externalResourceReader">The service used to read external resources</param>
-/// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
-public sealed class GrpcCallTaskExecutor(IServiceProvider serviceProvider, ILogger<GrpcCallTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IExternalResourceReader externalResourceReader, ITaskExecutionContext<CallTaskDefinition> task)
-    : TaskExecutor<CallTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
+/// <param name="task">The current <see cref="ITaskProcess"/></param>
+public sealed class GrpcCallTaskExecutor(IServiceProvider serviceProvider, ILogger<GrpcCallTaskExecutor> logger, ITaskProcessFactory taskProcessFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IExternalResourceReader externalResourceReader, ITaskProcess<CallTaskDefinition> task)
+    : TaskExecutor<CallTaskDefinition>(serviceProvider, logger, taskProcessFactory, executorFactory, schemaHandlerProvider, task)
 {
 
     GrpcCallDefinition? grpc;
@@ -27,7 +27,7 @@ public sealed class GrpcCallTaskExecutor(IServiceProvider serviceProvider, ILogg
     {
         try
         {
-            grpc = JsonSerializer.Deserialize(Task.Definition.With!, Sdk.Serialization.Json.JsonSerializationContext.Default.GrpcCallDefinition) ?? throw new InvalidOperationException("Failed to deserialize gRPC call definition from 'with'");
+            grpc = JsonSerializer.Deserialize(Task.Instance.Definition.With!, Sdk.Serialization.Json.JsonSerializationContext.Default.GrpcCallDefinition) ?? throw new InvalidOperationException("Failed to deserialize gRPC call definition from 'with'");
             var fileDescriptor = await GetProtoFileDescriptorAsync(grpc.Proto, cancellationToken).ConfigureAwait(false);
             var address = grpc.Service.Port.HasValue
                 ? $"http://{grpc.Service.Host}:{grpc.Service.Port.Value}"
@@ -39,7 +39,7 @@ public sealed class GrpcCallTaskExecutor(IServiceProvider serviceProvider, ILogg
         catch (Exception ex)
         {
             logger.LogError("An error occurred while initializing the gRPC call task '{task}': {ex}", Task.Instance.State.Reference, ex);
-            await SetErrorAsync(RuntimeError.Validation(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Invalid/missing call parameters for function 'grpc': {ex.Message}"), cancellationToken).ConfigureAwait(false);
+            await SetErrorAsync(Error.Validation(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Invalid/missing call parameters for function 'grpc': {ex.Message}"), cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -49,12 +49,12 @@ public sealed class GrpcCallTaskExecutor(IServiceProvider serviceProvider, ILogg
         if (grpc == null || grpcClient == null) throw new InvalidOperationException("The executor must be initialized before execution");
         if (!grpcClient.TryFindMethod(grpc.Service.Name, grpc.Method, out _))
         {
-            await SetErrorAsync(RuntimeError.Configuration(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Failed to find a method with name '{grpc.Method}' in GRPC service with name '{grpc.Service.Name}'"), cancellationToken).ConfigureAwait(false);
+            await SetErrorAsync(Error.Configuration(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Failed to find a method with name '{grpc.Method}' in GRPC service with name '{grpc.Service.Name}'"), cancellationToken).ConfigureAwait(false);
             return;
         }
         var arguments = GetExpressionEvaluationArguments();
         var requestArgs = grpc.Arguments != null
-            ? await Task.Workflow.Expressions.EvaluateAsync(grpc.Arguments, Task.Input, arguments, cancellationToken).ConfigureAwait(false)
+            ? await Task.Workflow.Expressions.EvaluateAsync(grpc.Arguments, Task.Instance.State.Input, arguments, cancellationToken).ConfigureAwait(false)
             : null;
         var requestDictionary = requestArgs is JsonObject jsonObj
             ? jsonObj.Deserialize<Dictionary<string, object>>() ?? []
@@ -67,11 +67,11 @@ public sealed class GrpcCallTaskExecutor(IServiceProvider serviceProvider, ILogg
         catch (Exception ex)
         {
             logger.LogError("Failed to call the gRPC method '{method}' on '{service}' service at '{host}:{port}': {ex}", grpc.Method, grpc.Service.Name, grpc.Service.Host, grpc.Service.Port, ex.Message);
-            await SetErrorAsync(RuntimeError.Communication(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), ErrorStatus.Communication, ex.Message), cancellationToken).ConfigureAwait(false);
+            await SetErrorAsync(Error.Communication(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), ErrorStatus.Communication, ex.Message), cancellationToken).ConfigureAwait(false);
             return;
         }
         var result = JsonSerializer.SerializeToNode(response);
-        await SetResultAsync(result, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+        await SetResultAsync(result, Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
     }
 
     async Task<FileDescriptorProto> GetProtoFileDescriptorAsync(ExternalResourceDefinition resource, CancellationToken cancellationToken = default)

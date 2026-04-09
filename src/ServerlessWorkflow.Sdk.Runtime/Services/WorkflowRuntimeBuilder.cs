@@ -150,10 +150,16 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
     public IWorkflowRuntimeBuilder UseScriptExecutorProvider(Func<IServiceProvider, IScriptExecutorProvider> factory) => ReplaceService<IScriptExecutorProvider>(factory);
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseTaskExecutionContextFactory<TFactory>() where TFactory : class, ITaskExecutionContextFactory => ReplaceService<ITaskExecutionContextFactory>(typeof(TFactory));
+    public IWorkflowRuntimeBuilder UseWorkflowInstanceFactory<TFactory>() where TFactory : class, IWorkflowInstanceFactory => ReplaceService<IWorkflowInstanceFactory>(typeof(TFactory));
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseTaskExecutionContextFactory(Func<IServiceProvider, ITaskExecutionContextFactory> factory) => ReplaceService<ITaskExecutionContextFactory>(factory);
+    public IWorkflowRuntimeBuilder UseWorkflowInstanceFactory(Func<IServiceProvider, IWorkflowInstanceFactory> factory) => ReplaceService<IWorkflowInstanceFactory>(factory);
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseTaskInstanceFactory<TFactory>() where TFactory : class, ITaskInstanceFactory => ReplaceService<ITaskInstanceFactory>(typeof(TFactory));
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseTaskInstanceFactory(Func<IServiceProvider, ITaskInstanceFactory> factory)  => ReplaceService<ITaskInstanceFactory>(factory);
 
     /// <inheritdoc/>
     public IWorkflowRuntimeBuilder UseTaskExecutor<TDefinition, TExecutor>()
@@ -165,18 +171,18 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
     }
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseCallTaskExecutor<TExecutor>(string callType)
+    public IWorkflowRuntimeBuilder UseCallTaskExecutor<TExecutor>(string type)
         where TExecutor : class, ITaskExecutor<CallTaskDefinition>
     {
-        GetOrCreateCallRegistry().Register<TExecutor>(callType);
+        GetOrCreateCallRegistry().Register<TExecutor>(type);
         return this;
     }
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseRunTaskExecutor<TExecutor>(string processType)
+    public IWorkflowRuntimeBuilder UseRunTaskExecutor<TExecutor>(string type)
         where TExecutor : class, ITaskExecutor<RunTaskDefinition>
     {
-        GetOrCreateRunRegistry().Register<TExecutor>(processType);
+        GetOrCreateRunRegistry().Register<TExecutor>(type);
         return this;
     }
 
@@ -191,12 +197,6 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
 
     /// <inheritdoc/>
     public IWorkflowRuntimeBuilder UseTaskStateStore(Func<IServiceProvider, ITaskStateStore> factory) => ReplaceService<ITaskStateStore>(factory);
-
-    /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseWorkflowExecutionContextFactory<TFactory>() where TFactory : class, IWorkflowExecutionContextFactory => ReplaceService<IWorkflowExecutionContextFactory>(typeof(TFactory));
-
-    /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseWorkflowExecutionContextFactory(Func<IServiceProvider, IWorkflowExecutionContextFactory> factory) => ReplaceService<IWorkflowExecutionContextFactory>(factory);
 
     /// <inheritdoc/>
     public IWorkflowRuntimeBuilder UseWorkflowStateStore<TStore>() where TStore : class, IWorkflowStateStore => ReplaceService<IWorkflowStateStore>(typeof(TStore));

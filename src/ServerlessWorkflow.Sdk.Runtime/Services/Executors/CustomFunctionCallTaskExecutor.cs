@@ -8,14 +8,14 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 /// </summary>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
 /// <param name="logger">The service used to perform logging</param>
-/// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
+/// <param name="taskProcessFactory">The service used to create <see cref="ITaskProcess"/>s</param>
 /// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
 /// <param name="schemaHandlerProvider">The service used to provide <see cref="ISchemaHandler"/> implementations</param>
 /// <param name="httpClientFactory">The service used to create <see cref="HttpClient"/>s</param>
 /// <param name="authenticationHandler">The service used to handle authentication policies</param>
-/// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
-public sealed class CustomFunctionCallTaskExecutor(IServiceProvider serviceProvider, ILogger<CustomFunctionCallTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IHttpClientFactory httpClientFactory, IAuthenticationHandler authenticationHandler, ITaskExecutionContext<CallTaskDefinition> task)
-    : TaskExecutor<CallTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
+/// <param name="task">The current <see cref="ITaskProcess"/></param>
+public sealed class CustomFunctionCallTaskExecutor(IServiceProvider serviceProvider, ILogger<CustomFunctionCallTaskExecutor> logger, ITaskProcessFactory taskProcessFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IHttpClientFactory httpClientFactory, IAuthenticationHandler authenticationHandler, ITaskProcess<CallTaskDefinition> task)
+    : TaskExecutor<CallTaskDefinition>(serviceProvider, logger, taskProcessFactory, executorFactory, schemaHandlerProvider, task)
 {
 
     const string CustomFunctionDefinitionFile = "function.yaml";
@@ -27,24 +27,24 @@ public sealed class CustomFunctionCallTaskExecutor(IServiceProvider serviceProvi
     /// <inheritdoc/>
     protected override async Task InitializeCoreAsync(CancellationToken cancellationToken)
     {
-        if (Task.Workflow.Definition.Use?.Functions?.TryGetValue(Task.Definition.Call, out var fn) == true && fn != null) function = fn;
-        else if (Uri.TryCreate(Task.Definition.Call, UriKind.Absolute, out var uri) && (uri.IsFile || !string.IsNullOrWhiteSpace(uri.Host))) function = await GetCustomFunctionAsync(new EndpointDefinition { Uri = uri }, cancellationToken).ConfigureAwait(false);
-        else if (Task.Definition.Call.Contains('@'))
+        if (Task.Workflow.Definition.Use?.Functions?.TryGetValue(Task.Instance.Definition.Call, out var fn) == true && fn != null) function = fn;
+        else if (Uri.TryCreate(Task.Instance.Definition.Call, UriKind.Absolute, out var uri) && (uri.IsFile || !string.IsNullOrWhiteSpace(uri.Host))) function = await GetCustomFunctionAsync(new EndpointDefinition { Uri = uri }, cancellationToken).ConfigureAwait(false);
+        else if (Task.Instance.Definition.Call.Contains('@'))
         {
-            var components = Task.Definition.Call.Split('@', StringSplitOptions.RemoveEmptyEntries);
-            if (components.Length != 2) throw new NotSupportedException($"Unknown/unsupported function '{Task.Definition.Call}'");
+            var components = Task.Instance.Definition.Call.Split('@', StringSplitOptions.RemoveEmptyEntries);
+            if (components.Length != 2) throw new NotSupportedException($"Unknown/unsupported function '{Task.Instance.Definition.Call}'");
             function = await GetCustomFunctionFromCatalogAsync(components[0], components[1], cancellationToken).ConfigureAwait(false);
         }
-        else if (Task.Definition.Call.Contains(':'))
+        else if (Task.Instance.Definition.Call.Contains(':'))
         {
-            var components = Task.Definition.Call.Split(':', StringSplitOptions.RemoveEmptyEntries);
-            if (components.Length != 2) throw new Exception($"The specified value '{Task.Definition.Call}' is not a valid custom function qualified name ({{name}}:{{version}})");
+            var components = Task.Instance.Definition.Call.Split(':', StringSplitOptions.RemoveEmptyEntries);
+            if (components.Length != 2) throw new Exception($"The specified value '{Task.Instance.Definition.Call}' is not a valid custom function qualified name ({{name}}:{{version}})");
             var functionName = components[0];
             var functionVersion = components[1];
             uri = new Uri($"https://github.com/serverlessworkflow/catalog/tree/main/functions/{functionName}/{functionVersion}/{CustomFunctionDefinitionFile}");
             function = await GetCustomFunctionAsync(new EndpointDefinition { Uri = uri }, cancellationToken).ConfigureAwait(false);
         }
-        else throw new NotSupportedException($"Unknown/unsupported function '{Task.Definition.Call}'");
+        else throw new NotSupportedException($"Unknown/unsupported function '{Task.Instance.Definition.Call}'");
     }
 
     async Task<TaskDefinition> GetCustomFunctionAsync(EndpointDefinition endpoint, CancellationToken cancellationToken = default)
@@ -132,9 +132,9 @@ public sealed class CustomFunctionCallTaskExecutor(IServiceProvider serviceProvi
     {
         if (function == null) throw new InvalidOperationException("The executor must be initialized before execution");
         JsonNode? input;
-        if (Task.Definition.With != null)
+        if (Task.Instance.Definition.With != null)
         {
-            var evaluated = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.With, Task.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
+            var evaluated = await Task.Workflow.Expressions.EvaluateAsync(Task.Instance.Definition.With, Task.Instance.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
             input = evaluated ?? new JsonObject();
         }
         else
@@ -142,9 +142,9 @@ public sealed class CustomFunctionCallTaskExecutor(IServiceProvider serviceProvi
             input = new JsonObject();
         }
         var taskInstance = await Task.Workflow.Instance.CreateTaskAsync(function, null, input, null, Task.Instance, false, cancellationToken).ConfigureAwait(false);
-        var executor = await CreateTaskExecutorAsync(taskInstance, function, Task.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+        var executor = await CreateTaskExecutorAsync(taskInstance, function, Task.Instance.State.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
         await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
-        await SetResultAsync(executor.Task.Output, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+        await SetResultAsync(executor.Task.Output, Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
     }
 
     async Task OnSubTaskFaultAsync(ITaskExecutor executor, CancellationToken cancellationToken)

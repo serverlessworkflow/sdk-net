@@ -4,7 +4,7 @@ namespace ServerlessWorkflow.Sdk.UnitTests.Services;
 
 internal static class RuntimeErrorFactory
 {
-    internal static RuntimeError Create() => new()
+    internal static Error Create() => new()
     {
         Type = ErrorType.Runtime,
         Title = ErrorTitle.Runtime,

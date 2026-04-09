@@ -1,12 +1,11 @@
-﻿namespace ServerlessWorkflow.Sdk.Runtime.Models;
+﻿namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
 /// Represents an object used to describe an error or problem, as defined by <see href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807</see>
 /// </summary>
 [Description("Represents an object used to describe an error or problem, as defined by RFC 7807")]
 [DataContract]
-public sealed record RuntimeError
-    : IRuntimeError
+public sealed record Error
 {
 
     /// <summary>
@@ -52,13 +51,13 @@ public sealed record RuntimeError
     public IDictionary<string, JsonElement>? ExtensionData { get; set; }
 
     /// <summary>
-    /// Creates a new communication <see cref="RuntimeError"/>
+    /// Creates a new communication <see cref="Error"/>
     /// </summary>
-    /// <param name="instance">The <see cref="RuntimeError"/> source</param>
-    /// <param name="status">The <see cref="RuntimeError"/>'s status</param>
-    /// <param name="detail">The <see cref="RuntimeError"/> detail, if any</param>
-    /// <returns>A new communication <see cref="RuntimeError"/></returns>
-    public static RuntimeError Communication(Uri instance, ushort status = ErrorStatus.Communication, string? detail = null) => new()
+    /// <param name="instance">The <see cref="Error"/> source</param>
+    /// <param name="status">The <see cref="Error"/>'s status</param>
+    /// <param name="detail">The <see cref="Error"/> detail, if any</param>
+    /// <returns>A new communication <see cref="Error"/></returns>
+    public static Error Communication(Uri instance, ushort status = ErrorStatus.Communication, string? detail = null) => new()
     {
         Status = status,
         Type = ErrorType.Communication,
@@ -68,12 +67,12 @@ public sealed record RuntimeError
     };
 
     /// <summary>
-    /// Creates a new communication <see cref="RuntimeError"/>
+    /// Creates a new communication <see cref="Error"/>
     /// </summary>
-    /// <param name="instance">The <see cref="RuntimeError"/> source</param>
-    /// <param name="detail">The <see cref="RuntimeError"/> detail, if any</param>
-    /// <returns>A new communication <see cref="RuntimeError"/></returns>
-    public static RuntimeError Configuration(Uri instance, string? detail = null) => new()
+    /// <param name="instance">The <see cref="Error"/> source</param>
+    /// <param name="detail">The <see cref="Error"/> detail, if any</param>
+    /// <returns>A new communication <see cref="Error"/></returns>
+    public static Error Configuration(Uri instance, string? detail = null) => new()
     {
         Status = ErrorStatus.Configuration,
         Type = ErrorType.Configuration,
@@ -83,12 +82,12 @@ public sealed record RuntimeError
     };
 
     /// <summary>
-    /// Creates a new runtime <see cref="RuntimeError"/>
+    /// Creates a new runtime <see cref="Error"/>
     /// </summary>
-    /// <param name="instance">The <see cref="RuntimeError"/> source</param>
-    /// <param name="detail">The <see cref="RuntimeError"/> detail, if any</param>
-    /// <returns>A new communication <see cref="RuntimeError"/></returns>
-    public static RuntimeError Runtime(Uri instance, string? detail = null) => new()
+    /// <param name="instance">The <see cref="Error"/> source</param>
+    /// <param name="detail">The <see cref="Error"/> detail, if any</param>
+    /// <returns>A new communication <see cref="Error"/></returns>
+    public static Error Runtime(Uri instance, string? detail = null) => new()
     {
         Status = ErrorStatus.Runtime,
         Type = ErrorType.Runtime,
@@ -98,12 +97,12 @@ public sealed record RuntimeError
     };
 
     /// <summary>
-    /// Creates a new validation <see cref="RuntimeError"/>
+    /// Creates a new validation <see cref="Error"/>
     /// </summary>
-    /// <param name="instance">The <see cref="RuntimeError"/> source</param>
-    /// <param name="detail">The <see cref="RuntimeError"/> detail, if any</param>
-    /// <returns>A new communication <see cref="RuntimeError"/></returns>
-    public static RuntimeError Validation(Uri instance, string? detail = null) => new()
+    /// <param name="instance">The <see cref="Error"/> source</param>
+    /// <param name="detail">The <see cref="Error"/> detail, if any</param>
+    /// <returns>A new communication <see cref="Error"/></returns>
+    public static Error Validation(Uri instance, string? detail = null) => new()
     {
         Status = ErrorStatus.Validation,
         Type = ErrorType.Validation,

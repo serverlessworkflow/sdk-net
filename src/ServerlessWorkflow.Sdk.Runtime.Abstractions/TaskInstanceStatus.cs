@@ -1,7 +1,7 @@
 ﻿namespace ServerlessWorkflow.Sdk.Runtime;
 
 /// <summary>
-/// Exposes default task statuses
+/// Exposes default task instance statuses
 /// </summary>
 public static class TaskInstanceStatus
 {

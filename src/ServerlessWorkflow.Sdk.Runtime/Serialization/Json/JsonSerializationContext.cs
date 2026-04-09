@@ -7,7 +7,6 @@
 [JsonSerializable(typeof(AuthenticationResult))]
 [JsonSerializable(typeof(CloudEvent))]
 [JsonSerializable(typeof(OAuth2Token))]
-[JsonSerializable(typeof(RuntimeError))]
 [JsonSerializable(typeof(SchemaValidationResult))]
 [JsonSerializable(typeof(TaskLifeCycleEvent))]
 public partial class JsonSerializationContext

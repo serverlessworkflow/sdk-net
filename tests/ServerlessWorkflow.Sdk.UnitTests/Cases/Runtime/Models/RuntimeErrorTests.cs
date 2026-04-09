@@ -26,7 +26,7 @@ public class RuntimeErrorTests
         var toSerialize = RuntimeErrorFactory.Create();
         //act
         var yaml = YamlSerializer.Serialize(toSerialize, RuntimeJsonSerializationContext.Default.Options);
-        var deserialized = YamlSerializer.Deserialize<RuntimeError>(yaml, RuntimeJsonSerializationContext.Default.Options);
+        var deserialized = YamlSerializer.Deserialize<Error>(yaml, RuntimeJsonSerializationContext.Default.Options);
         //assert
         yaml.Should().NotBeNullOrWhiteSpace();
         deserialized.Should().BeEquivalentTo(toSerialize);
@@ -38,7 +38,7 @@ public class RuntimeErrorTests
         //arrange
         var instance = new Uri("/tasks/456", UriKind.RelativeOrAbsolute);
         //act
-        var error = RuntimeError.Communication(instance, 502, "Bad Gateway");
+        var error = Error.Communication(instance, 502, "Bad Gateway");
         //assert
         error.Type.Should().Be(ErrorType.Communication);
         error.Title.Should().Be(ErrorTitle.Communication);
@@ -53,7 +53,7 @@ public class RuntimeErrorTests
         //arrange
         var instance = new Uri("/tasks/789", UriKind.RelativeOrAbsolute);
         //act
-        var error = RuntimeError.Runtime(instance, "Something went wrong");
+        var error = Error.Runtime(instance, "Something went wrong");
         //assert
         error.Type.Should().Be(ErrorType.Runtime);
         error.Title.Should().Be(ErrorTitle.Runtime);
@@ -67,7 +67,7 @@ public class RuntimeErrorTests
         //arrange
         var instance = new Uri("/tasks/abc", UriKind.RelativeOrAbsolute);
         //act
-        var error = RuntimeError.Validation(instance, "Invalid input");
+        var error = Error.Validation(instance, "Invalid input");
         //assert
         error.Type.Should().Be(ErrorType.Validation);
         error.Status.Should().Be(ErrorStatus.Validation);
@@ -79,7 +79,7 @@ public class RuntimeErrorTests
         //arrange
         var instance = new Uri("/tasks/def", UriKind.RelativeOrAbsolute);
         //act
-        var error = RuntimeError.Configuration(instance, "Missing config");
+        var error = Error.Configuration(instance, "Missing config");
         //assert
         error.Type.Should().Be(ErrorType.Configuration);
         error.Status.Should().Be(ErrorStatus.Configuration);

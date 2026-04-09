@@ -30,7 +30,7 @@ public class GrpcCallTaskExecutorTests
         // assert
         Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(
-                It.Is<IRuntimeError>(e => e.Type == ErrorType.Validation),
+                It.Is<Error>(e => e.Type == ErrorType.Validation),
                 It.IsAny<CancellationToken>()),
             Times.Once);
     }
@@ -53,7 +53,7 @@ public class GrpcCallTaskExecutorTests
         // assert
         Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(
-                It.Is<IRuntimeError>(e => e.Type == ErrorType.Validation),
+                It.Is<Error>(e => e.Type == ErrorType.Validation),
                 It.IsAny<CancellationToken>()),
             Times.Once);
     }

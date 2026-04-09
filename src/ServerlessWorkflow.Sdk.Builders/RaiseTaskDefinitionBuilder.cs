@@ -32,7 +32,7 @@ public sealed class RaiseTaskDefinitionBuilder(ErrorDefinition? errorDefinition 
     }
 
     /// <inheritdoc/>
-    public IRaiseTaskDefinitionBuilder Error(Action<IErrorDefinitionBuilder> setup)
+    public IRaiseTaskDefinitionBuilder Error(Action<ErrorDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ErrorDefinitionBuilder();

@@ -63,7 +63,7 @@ public class WorkflowRunTaskExecutorTests
 
         // Assert - should set error because workflow process is not yet supported
         Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(It.IsAny<IRuntimeError>(), It.IsAny<CancellationToken>()),
+            i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
 

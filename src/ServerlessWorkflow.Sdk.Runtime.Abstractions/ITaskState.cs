@@ -64,17 +64,17 @@ public interface ITaskState
     /// <summary>
     /// Gets the error, if any, that has occurred during the task's execution
     /// </summary>
-    IRuntimeError? Error { get; }
+    Error? Error { get; }
 
     /// <summary>
     /// Gets the task's input data
     /// </summary>
-    JsonNode? Input { get; }
+    JsonNode Input { get; }
 
     /// <summary>
     /// Gets the task's context data
     /// </summary>
-    JsonObject? ContextData { get; }
+    JsonObject ContextData { get; }
 
     /// <summary>
     /// Gets the task's output data, if any

@@ -32,6 +32,6 @@ public interface IRaiseTaskDefinitionBuilder
     /// </summary>
     /// <param name="setup">An <see cref="Action{T}"/> used to configure the error to raise</param>
     /// <returns>The configured <see cref="IRaiseTaskDefinitionBuilder"/></returns>
-    IRaiseTaskDefinitionBuilder Error(Action<IErrorDefinitionBuilder> setup);
+    IRaiseTaskDefinitionBuilder Error(Action<ErrorDefinitionBuilder> setup);
 
 }

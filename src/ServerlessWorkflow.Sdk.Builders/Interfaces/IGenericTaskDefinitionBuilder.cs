@@ -77,7 +77,7 @@ public interface IGenericTaskDefinitionBuilder
     /// </summary>
     /// <param name="setup">An <see cref="Action{T}"/> used to configure the error to raise</param>
     /// <returns>The configured <see cref="IRaiseTaskDefinitionBuilder"/></returns>
-    IRaiseTaskDefinitionBuilder Raise(Action<IErrorDefinitionBuilder> setup);
+    IRaiseTaskDefinitionBuilder Raise(Action<ErrorDefinitionBuilder> setup);
 
     /// <summary>
     /// Configures the task to run a process

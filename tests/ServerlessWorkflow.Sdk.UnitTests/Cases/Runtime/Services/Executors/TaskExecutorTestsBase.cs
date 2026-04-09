@@ -24,7 +24,7 @@ public abstract class TaskExecutorTestsBase
         taskInstance.Setup(i => i.InitializeAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         taskInstance.Setup(i => i.StartAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         taskInstance.Setup(i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        taskInstance.Setup(i => i.SetErrorAsync(It.IsAny<IRuntimeError>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        taskInstance.Setup(i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         taskInstance.Setup(i => i.SetContextDataAsync(It.IsAny<JsonObject>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         taskInstance.Setup(i => i.CancelAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         taskInstance.Setup(i => i.SuspendAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
@@ -71,7 +71,7 @@ public abstract class TaskExecutorTestsBase
                 subInstance.Setup(i => i.InitializeAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
                 subInstance.Setup(i => i.StartAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
                 subInstance.Setup(i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-                subInstance.Setup(i => i.SetErrorAsync(It.IsAny<IRuntimeError>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+                subInstance.Setup(i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
                 subInstance.Setup(i => i.SetContextDataAsync(It.IsAny<JsonObject>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
                 subInstance.Setup(i => i.CancelAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
                 subInstance.Setup(i => i.SuspendAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);

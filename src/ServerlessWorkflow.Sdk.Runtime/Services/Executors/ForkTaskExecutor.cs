@@ -5,12 +5,12 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 /// </summary>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
 /// <param name="logger">The service used to perform logging</param>
-/// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
+/// <param name="taskProcessFactory">The service used to create <see cref="ITaskProcess"/>s</param>
 /// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
 /// <param name="schemaHandlerProvider">The service used to provide <see cref="ISchemaHandler"/> implementations</param>
-/// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
-public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<ForkTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, ITaskExecutionContext<ForkTaskDefinition> task)
-    : TaskExecutor<ForkTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
+/// <param name="task">The current <see cref="ITaskProcess"/></param>
+public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<ForkTaskExecutor> logger, ITaskProcessFactory taskProcessFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, ITaskProcess<ForkTaskDefinition> task)
+    : TaskExecutor<ForkTaskDefinition>(serviceProvider, logger, taskProcessFactory, executorFactory, schemaHandlerProvider, task)
 {
 
     static string GetPathFor(int index, string name) => $"fork/branches/{index}/{name}";
@@ -30,13 +30,13 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
     /// <inheritdoc/>
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
-        var branches = Task.Definition.Fork.Branches;
+        var branches = Task.Instance.Definition.Fork.Branches;
         var executionTasks = new List<Task>();
         var index = 0;
         foreach (var branch in branches)
         {
-            var branchInstance = await Task.Workflow.Instance.CreateTaskAsync(branch.Value, GetPathFor(index, branch.Key), Task.Input, null, Task.Instance, false, cancellationToken).ConfigureAwait(false);
-            var executor = await CreateTaskExecutorAsync(branchInstance, branch.Value, Task.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+            var branchInstance = await Task.Workflow.Instance.CreateTaskAsync(branch.Value, GetPathFor(index, branch.Key), Task.Instance.State.Input, null, Task.Instance, false, cancellationToken).ConfigureAwait(false);
+            var executor = await CreateTaskExecutorAsync(branchInstance, branch.Value, Task.Instance.State.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
             executionTasks.Add(executor.ExecuteAsync(cancellationToken));
             index++;
         }
@@ -64,7 +64,7 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
             if (Executors.Remove(executor)) await executor.CancelAsync(cancellationToken).ConfigureAwait(false);
             return;
         }
-        if (Task.Definition.Fork.Compete)
+        if (Task.Instance.Definition.Fork.Compete)
         {
             var output = executor.Task.Output ?? new JsonObject();
             foreach (var concurrentExecutor in Executors.ToList())
@@ -72,7 +72,7 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
                 Executors.Remove(concurrentExecutor);
                 await concurrentExecutor.CancelAsync(cancellationToken).ConfigureAwait(false);
             }
-            await SetResultAsync(output, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+            await SetResultAsync(output, Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
         }
         else
         {
@@ -87,7 +87,7 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
                     break;
                 }
             }
-            if (allDone) await SetResultAsync(new JsonObject(), Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+            if (allDone) await SetResultAsync(new JsonObject(), Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
         }
     }
 

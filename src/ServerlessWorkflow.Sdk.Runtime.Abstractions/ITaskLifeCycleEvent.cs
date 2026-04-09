@@ -14,6 +14,6 @@ public interface ITaskLifeCycleEvent
     /// <summary>
     /// Gets the task life cycle event's data, if any
     /// </summary>
-    JsonObject? Data { get; }
+    object? Data { get; }
 
 }

@@ -74,7 +74,7 @@ public class ForTaskExecutorTests
 
         // Assert - should set an error on the task instance because the expression didn't evaluate to an array
         Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(It.IsAny<IRuntimeError>(), It.IsAny<CancellationToken>()),
+            i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.Once);
     }
 

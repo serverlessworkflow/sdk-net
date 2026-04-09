@@ -14,10 +14,10 @@
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IErrorDefinitionBuilder"/> interface
+/// Represents the default implementation of the <see cref="ErrorDefinitionBuilder"/> interface
 /// </summary>
 public sealed class ErrorDefinitionBuilder
-    : IErrorDefinitionBuilder
+    : ErrorDefinitionBuilder
 {
 
     string? type;
@@ -27,7 +27,7 @@ public sealed class ErrorDefinitionBuilder
     string? instance;
 
     /// <inheritdoc/>
-    public IErrorDefinitionBuilder WithType(string type)
+    public ErrorDefinitionBuilder WithType(string type)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(type);
         this.type = type;
@@ -35,7 +35,7 @@ public sealed class ErrorDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public IErrorDefinitionBuilder WithStatus(string status)
+    public ErrorDefinitionBuilder WithStatus(string status)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(status);
         this.status = status;
@@ -43,7 +43,7 @@ public sealed class ErrorDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public IErrorDefinitionBuilder WithTitle(string title)
+    public ErrorDefinitionBuilder WithTitle(string title)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(title);
         this.title = title;
@@ -51,7 +51,7 @@ public sealed class ErrorDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public IErrorDefinitionBuilder WithDetail(string detail)
+    public ErrorDefinitionBuilder WithDetail(string detail)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(detail);
         this.detail = detail;
@@ -59,7 +59,7 @@ public sealed class ErrorDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public IErrorDefinitionBuilder WithInstance(string instance)
+    public ErrorDefinitionBuilder WithInstance(string instance)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(instance);
         this.instance = instance;

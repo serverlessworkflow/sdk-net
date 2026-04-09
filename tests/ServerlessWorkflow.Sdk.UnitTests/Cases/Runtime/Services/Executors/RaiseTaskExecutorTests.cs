@@ -37,7 +37,7 @@ public class RaiseTaskExecutorTests
         // Assert
         Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(
-                It.Is<IRuntimeError>(e =>
+                It.Is<Error>(e =>
                     e.Status == 404 &&
                     e.Title == "Not Found"),
                 It.IsAny<CancellationToken>()),
@@ -86,7 +86,7 @@ public class RaiseTaskExecutorTests
         // Assert
         Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(
-                It.Is<IRuntimeError>(e =>
+                It.Is<Error>(e =>
                     e.Status == 408 &&
                     e.Title == "Timeout"),
                 It.IsAny<CancellationToken>()),
@@ -119,7 +119,7 @@ public class RaiseTaskExecutorTests
         // Assert - should set a runtime error because the reference was not found
         Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(
-                It.Is<IRuntimeError>(e => e.Type == ErrorType.Runtime),
+                It.Is<Error>(e => e.Type == ErrorType.Runtime),
                 It.IsAny<CancellationToken>()),
             Times.Once);
     }
@@ -157,7 +157,7 @@ public class RaiseTaskExecutorTests
         // Assert
         Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(
-                It.Is<IRuntimeError>(e => e.Instance != null),
+                It.Is<Error>(e => e.Instance != null),
                 It.IsAny<CancellationToken>()),
             Times.Once);
     }

@@ -34,7 +34,7 @@ public sealed class TryTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public ITryTaskDefinitionBuilder Catch(Action<IErrorCatcherDefinitionBuilder> setup)
+    public ITryTaskDefinitionBuilder Catch(Action<ErrorCatcherDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ErrorCatcherDefinitionBuilder();

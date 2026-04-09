@@ -101,7 +101,7 @@ public class OpenApiCallTaskExecutorTests
         // assert
         Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(
-                It.Is<IRuntimeError>(e => e.Status == 500),
+                It.Is<Error>(e => e.Status == 500),
                 It.IsAny<CancellationToken>()),
             Times.Once);
     }

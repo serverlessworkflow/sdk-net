@@ -34,7 +34,7 @@ public class AsyncApiCallTaskExecutorTests
 
         // assert
         Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(It.IsAny<IRuntimeError>(), It.IsAny<CancellationToken>()),
+            i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
 
@@ -86,7 +86,7 @@ public class AsyncApiCallTaskExecutorTests
 
         // assert
         Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(It.IsAny<IRuntimeError>(), It.IsAny<CancellationToken>()),
+            i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
 

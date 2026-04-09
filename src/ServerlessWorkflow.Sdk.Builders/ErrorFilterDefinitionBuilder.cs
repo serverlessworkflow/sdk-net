@@ -14,17 +14,17 @@
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IErrorFilterDefinitionBuilder"/> interface
+/// Represents the default implementation of the <see cref="ErrorFilterDefinitionBuilder"/> interface
 /// </summary>
 /// <param name="attributes">A name/value mapping of the attributes to filter errors by. Supports runtime expressions</param>
 public sealed class ErrorFilterDefinitionBuilder(JsonObject? attributes = null)
-    : IErrorFilterDefinitionBuilder
+    : ErrorFilterDefinitionBuilder
 {
 
     JsonObject attributes = attributes ?? [];
 
     /// <inheritdoc/>
-    public IErrorFilterDefinitionBuilder With(string name, JsonNode value)
+    public ErrorFilterDefinitionBuilder With(string name, JsonNode value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         attributes[name] = value;
@@ -32,7 +32,7 @@ public sealed class ErrorFilterDefinitionBuilder(JsonObject? attributes = null)
     }
 
     /// <inheritdoc/>
-    public IErrorFilterDefinitionBuilder With(JsonObject attributes)
+    public ErrorFilterDefinitionBuilder With(JsonObject attributes)
     {
         ArgumentNullException.ThrowIfNull(attributes);
         this.attributes = [..attributes];

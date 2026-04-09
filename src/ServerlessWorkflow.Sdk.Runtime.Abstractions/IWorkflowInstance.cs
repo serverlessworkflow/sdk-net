@@ -7,6 +7,11 @@ public interface IWorkflowInstance
 {
 
     /// <summary>
+    /// Gets the definition of the workflow instance
+    /// </summary>
+    WorkflowDefinition Definition { get; }
+
+    /// <summary>
     /// Gets the current state of the workflow instance
     /// </summary>
     IWorkflowState State { get; }
@@ -21,38 +26,15 @@ public interface IWorkflowInstance
     /// <param name="parent">The parent task, if any</param>
     /// <param name="isExtension">Indicates whether or not the task is part of an extension</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>The newly created <see cref="ITaskInstance{TState}"/></returns>
-    Task<ITaskInstance<ITaskState>> CreateTaskAsync(TaskDefinition definition, string? path, JsonNode input, JsonObject? context = null, ITaskInstance? parent = null, bool isExtension = false, CancellationToken cancellationToken = default);
+    /// <returns>The newly created <see cref="ITaskInstance"/></returns>
+    Task<ITaskInstance> CreateTaskAsync(TaskDefinition definition, string? path, JsonNode input, JsonObject? context = null, ITaskProcess? parent = null, bool isExtension = false, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the workflow's tasks
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IAsyncEnumerable{T}"/> to asynchronously enumerate the workflow's tasks</returns>
-    IAsyncEnumerable<ITaskInstance<ITaskState>> GetTasksAsync(CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Gets the subtasks of the specified task
-    /// </summary>
-    /// <param name="task">The task to enumerate the subtasks of</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new <see cref="IAsyncEnumerable{T}"/> to asynchronously enumerate the task's subtasks</returns>
-    IAsyncEnumerable<ITaskInstance<ITaskState>> GetTasksAsync(ITaskInstance<ITaskState> task, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Continues execution with the specified task definition
-    /// </summary>
-    /// <param name="task">The task definition to continue with</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task ContinueWithAsync(TaskDefinition task, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Initializes the workflow
-    /// </summary>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task InitializeAsync(CancellationToken cancellationToken = default);
+    IAsyncEnumerable<ITaskInstance> GetTasksAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Starts the workflow
@@ -81,7 +63,7 @@ public interface IWorkflowInstance
     /// <param name="error">The error that has faulted the workflow</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SetErrorAsync(IRuntimeError error, CancellationToken cancellationToken = default);
+    Task SetErrorAsync(Error error, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Sets the workflow's result
@@ -89,7 +71,7 @@ public interface IWorkflowInstance
     /// <param name="result">The workflow's result, if any</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SetResultAsync(object? result, CancellationToken cancellationToken = default);
+    Task SetResultAsync(JsonNode? result, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Cancels the workflow's execution

@@ -20,6 +20,7 @@ public static class ServiceCollectionExtensions
         var builder = new WorkflowRuntimeBuilder(services, configuration, lifetime);
         services.AddMemoryCache();
         services.AddHttpClient();
+        services.AddSingleton<IWorkflowRuntime, WorkflowRuntime>();
         RegisterDefaultServices(builder);
         RegisterDefaultTaskExecutors(builder);
         RegisterDefaultCallTaskExecutors(builder);
@@ -45,6 +46,8 @@ public static class ServiceCollectionExtensions
         builder.UseScriptExecutor<NodeJSScriptExecutor>();
         builder.UseScriptExecutor<PythonScriptExecutor>();
         builder.UseScriptExecutorProvider<ScriptExecutorProvider>();
+        builder.UseWorkflowInstanceFactory<WorkflowInstanceFactory>();
+        builder.UseTaskInstanceFactory<TaskInstanceFactory>();
         builder.UseTaskExecutorFactory<TaskExecutorFactory>();
         builder.UseTaskStateStore<InMemoryTaskStateStore>();
         builder.UseWorkflowStateStore<InMemoryWorkflowStateStore>();
