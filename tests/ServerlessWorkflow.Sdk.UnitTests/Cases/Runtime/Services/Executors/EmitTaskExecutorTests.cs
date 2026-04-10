@@ -28,7 +28,7 @@ public class EmitTaskExecutorTests
         var cloudEventBus = new Mock<ICloudEventBus>();
         cloudEventBus.Setup(b => b.PublishAsync(It.IsAny<ICloudEvent>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         Mock.Get(taskContext.Object.Workflow.Expressions)
             .Setup(e => e.EvaluateAsync(It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
@@ -78,7 +78,7 @@ public class EmitTaskExecutorTests
         var cloudEventBus = new Mock<ICloudEventBus>();
         cloudEventBus.Setup(b => b.PublishAsync(It.IsAny<ICloudEvent>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         Mock.Get(taskContext.Object.Workflow.Expressions)
             .Setup(e => e.EvaluateAsync(It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
@@ -105,7 +105,7 @@ public class EmitTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -132,7 +132,7 @@ public class EmitTaskExecutorTests
         var cloudEventBus = new Mock<ICloudEventBus>();
         cloudEventBus.Setup(b => b.PublishAsync(It.IsAny<ICloudEvent>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         Mock.Get(taskContext.Object.Workflow.Expressions)
             .Setup(e => e.EvaluateAsync(It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
@@ -174,7 +174,7 @@ public class EmitTaskExecutorTests
         var taskContext = CreateTaskExecutionContext(definition);
         var cloudEventBus = new Mock<ICloudEventBus>();
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var executor = new EmitTaskExecutor(
             CreateServiceProvider().Object,

@@ -3,7 +3,7 @@
 /// <summary>
 /// Exposes default workflow instance statuses
 /// </summary>
-public static class WorkflowInstanceStatus
+public static class WorkflowStatus
 {
 
     /// <summary>

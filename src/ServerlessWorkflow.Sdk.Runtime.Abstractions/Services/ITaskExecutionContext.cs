@@ -1,20 +1,30 @@
-namespace ServerlessWorkflow.Sdk.Runtime;
+﻿namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
-/// Defines the fundamentals of a task process, which holds the methods to manage a task's execution
+/// Defines the fundamentals of the context of a task's execution
 /// </summary>
-public interface ITaskProcess
+public interface ITaskExecutionContext
 {
 
     /// <summary>
-    /// Gets the <see cref="ITaskInstance"/> being executed
+    /// Gets the workflow the task to execute belongs to
     /// </summary>
-    ITaskInstance Instance { get; }
+    IWorkflowExecutionContext Workflow { get; }
 
     /// <summary>
-    /// Gets the <see cref="IWorkflowProcess"/> the <see cref="ITaskProcess"/> belongs to
+    /// Gets the <see cref="TaskDefinition"/> of the task to execute
     /// </summary>
-    IWorkflowProcess Workflow { get; }
+    TaskDefinition Definition { get; }
+
+    /// <summary>
+    /// Gets the task to execute
+    /// </summary>
+    ITaskState State { get; }
+
+    /// <summary>
+    /// Gets a name/value mapping of the task's arguments, if any
+    /// </summary>
+    JsonObject? Arguments { get; }
 
     /// <summary>
     /// Initializes the task
@@ -24,11 +34,33 @@ public interface ITaskProcess
     Task InitializeAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Starts the task
+    /// Executes the task
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task StartAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Streams events
+    /// </summary>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new <see cref="IObservable{T}"/> used to stream <see cref="ICloudEvent"/>s</returns>
+    Task<IObservable<IStreamedCloudEvent>> StreamAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Begins correlating events
+    /// </summary>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>The resulting <see cref="ICorrelationContext"/></returns>
+    Task<ICorrelationContext> CorrelateAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Publishes the specified <see cref="ICloudEvent"/>
+    /// </summary>
+    /// <param name="e">The <see cref="ICloudEvent"/> to publish</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    Task PublishAsync(ICloudEvent e, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Suspends the task
@@ -40,15 +72,15 @@ public interface ITaskProcess
     /// <summary>
     /// Retries the task
     /// </summary>
-    /// <param name="cause">The error that caused the retry attempt</param>
+    /// <param name="cause">The <see cref="Error"/> to retry the task for</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task RetryAsync(Error cause, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Sets an error that has occurred during the task's execution
+    /// Sets an <see cref="Error"/> that has occurred during the task's execution
     /// </summary>
-    /// <param name="error">The error that has occurred</param>
+    /// <param name="error">The <see cref="Error"/> that has occurred</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task SetErrorAsync(Error error, CancellationToken cancellationToken = default);
@@ -62,10 +94,10 @@ public interface ITaskProcess
     Task SetContextDataAsync(JsonObject context, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Sets the task's result
+    /// Sets the task's result, if any
     /// </summary>
     /// <param name="result">The task's result, if any</param>
-    /// <param name="then">The flow directive to perform next</param>
+    /// <param name="then">The <see cref="FlowDirective"/> to perform next</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task SetResultAsync(JsonNode? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
@@ -74,32 +106,39 @@ public interface ITaskProcess
     /// Skips the task
     /// </summary>
     /// <param name="result">The task's result, if any</param>
-    /// <param name="then">The flow directive to perform next</param>
+    /// <param name="then">The <see cref="FlowDirective"/> to perform next</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task SkipAsync(JsonNode? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Cancels the task's execution
+    /// Cancels the task
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task CancelAsync(CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Gets the subtasks the task is made out of
+    /// </summary>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new <see cref="IAsyncEnumerable{T}"/> used to enumerate <see cref="ITaskState">subtasks</see></returns>
+    IAsyncEnumerable<ITaskState> GetSubTasksAsync(CancellationToken cancellationToken = default);
+
 }
 
 /// <summary>
-/// Defines the fundamentals of a task process, which holds the methods to manage a task's execution
+/// Defines the fundamentals of the context of a task's execution
 /// </summary>
-/// <typeparam name="TDefinition">The type of the task's definition</typeparam>
-public interface ITaskProcess<TDefinition>
-    : ITaskProcess
+/// <typeparam name="TDefinition">The type of task to run</typeparam>
+public interface ITaskExecutionContext<TDefinition>
+    : ITaskExecutionContext
     where TDefinition : TaskDefinition
 {
 
     /// <summary>
-    /// Gets the <see cref="ITaskInstance"/> being executed
+    /// Gets the <see cref="TaskDefinition"/> of the task to execute
     /// </summary>
-    new ITaskInstance<TDefinition> Instance { get; }
+    new TDefinition Definition { get; }
 
 }

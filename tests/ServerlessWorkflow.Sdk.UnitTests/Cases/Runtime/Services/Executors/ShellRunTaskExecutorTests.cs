@@ -14,7 +14,7 @@ public class ShellRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var executor = new ShellRunTaskExecutor(
             CreateServiceProvider().Object,
@@ -28,7 +28,7 @@ public class ShellRunTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }

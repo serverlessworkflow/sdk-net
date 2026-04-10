@@ -19,7 +19,7 @@ public class ForkTaskExecutorTests
         var input = new JsonObject { ["data"] = "test" };
         var taskContext = CreateTaskExecutionContext(definition, input);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         // Track how many times CreateTaskAsync is called
         var createCount = 0;
@@ -45,7 +45,7 @@ public class ForkTaskExecutorTests
             {
                 var childCtx = new Mock<ITaskExecutionContext>();
                 childCtx.Setup(c => c.Workflow).Returns(wf);
-                childCtx.Setup(c => c.Instance).Returns(inst);
+                childCtx.Setup(c => c.State).Returns(inst);
                 childCtx.Setup(c => c.Definition).Returns(def);
                 childCtx.Setup(c => c.ContextData).Returns(ctx);
                 childCtx.Setup(c => c.Arguments).Returns(args ?? new JsonObject());
@@ -54,12 +54,12 @@ public class ForkTaskExecutorTests
             });
 
         // Also set up GetSubTasksAsync to return completed subtasks so allDone becomes true
-        Mock.Get(taskContext.Object.Instance)
+        Mock.Get(taskContext.Object.State)
             .Setup(i => i.GetSubTasksAsync(It.IsAny<CancellationToken>()))
             .Returns(() =>
             {
                 var completedState = new Mock<ITaskState> { CallBase = true };
-                completedState.Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+                completedState.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
                 var sub1 = new Mock<ITaskInstance>();
                 sub1.Setup(i => i.State).Returns(completedState.Object);
                 var sub2 = new Mock<ITaskInstance>();
@@ -97,7 +97,7 @@ public class ForkTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var executor = new ForkTaskExecutor(
             CreateServiceProvider().Object,
@@ -111,7 +111,7 @@ public class ForkTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }
@@ -130,7 +130,7 @@ public class ForkTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var createCount = 0;
         var executorFactory = new Mock<ITaskExecutorFactory>();
@@ -152,7 +152,7 @@ public class ForkTaskExecutorTests
             {
                 var childCtx = new Mock<ITaskExecutionContext>();
                 childCtx.Setup(c => c.Workflow).Returns(wf);
-                childCtx.Setup(c => c.Instance).Returns(inst);
+                childCtx.Setup(c => c.State).Returns(inst);
                 childCtx.Setup(c => c.Definition).Returns(def);
                 childCtx.Setup(c => c.ContextData).Returns(ctx);
                 childCtx.Setup(c => c.Arguments).Returns(args ?? new JsonObject());
@@ -172,7 +172,7 @@ public class ForkTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert - in compete mode, SetResultAsync should be called when the first branch completes
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -184,7 +184,7 @@ public class ForkTaskExecutorTests
     static Mock<ITaskExecutor> CreateAsyncCompletingChildExecutor(int index)
     {
         var childState = new Mock<ITaskState> { CallBase = true };
-        childState.Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        childState.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         childState.Setup(s => s.Output).Returns(new JsonObject());
         childState.Setup(s => s.Next).Returns(FlowDirective.Continue);
         childState.Setup(s => s.Reference).Returns(JsonPointer.Parse($"/fork/branches/{index}/branch"));
@@ -195,7 +195,7 @@ public class ForkTaskExecutorTests
         childInstance.Setup(i => i.GetSubTasksAsync(It.IsAny<CancellationToken>())).Returns(AsyncEnumerableEmpty<ITaskInstance>());
 
         var childTaskContext = new Mock<ITaskExecutionContext>();
-        childTaskContext.Setup(c => c.Instance).Returns(childInstance.Object);
+        childTaskContext.Setup(c => c.State).Returns(childInstance.Object);
         childTaskContext.Setup(c => c.Output).Returns(new JsonObject());
         childTaskContext.Setup(c => c.ContextData).Returns(new JsonObject());
 

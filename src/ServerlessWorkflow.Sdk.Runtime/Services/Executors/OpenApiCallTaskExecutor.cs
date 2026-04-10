@@ -9,14 +9,14 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 /// </summary>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
 /// <param name="logger">The service used to perform logging</param>
-/// <param name="taskProcessFactory">The service used to create <see cref="ITaskProcess"/>s</param>
+/// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
 /// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
 /// <param name="schemaHandlerProvider">The service used to provide <see cref="ISchemaHandler"/> implementations</param>
 /// <param name="httpClientFactory">The service used to create <see cref="HttpClient"/>s</param>
 /// <param name="authenticationHandler">The service used to handle authentication policies</param>
-/// <param name="task">The current <see cref="ITaskProcess"/></param>
-public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, ILogger<OpenApiCallTaskExecutor> logger, ITaskProcessFactory taskProcessFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IHttpClientFactory httpClientFactory, IAuthenticationHandler authenticationHandler, ITaskProcess<CallTaskDefinition> task)
-    : TaskExecutor<CallTaskDefinition>(serviceProvider, logger, taskProcessFactory, executorFactory, schemaHandlerProvider, task)
+/// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
+public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, ILogger<OpenApiCallTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IHttpClientFactory httpClientFactory, IAuthenticationHandler authenticationHandler, ITaskExecutionContext<CallTaskDefinition> task)
+    : TaskExecutor<CallTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
 {
 
     OpenApiCallDefinition? openApi;
@@ -34,7 +34,7 @@ public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, IL
     /// <inheritdoc/>
     protected override async Task InitializeCoreAsync(CancellationToken cancellationToken)
     {
-        openApi = JsonSerializer.Deserialize(Task.Instance.Definition.With!, Sdk.Serialization.Json.JsonSerializationContext.Default.OpenApiCallDefinition) ?? throw new InvalidOperationException("Failed to deserialize OpenAPI call definition from 'with'");
+        openApi = JsonSerializer.Deserialize(Task.Definition.With!, Sdk.Serialization.Json.JsonSerializationContext.Default.OpenApiCallDefinition) ?? throw new InvalidOperationException("Failed to deserialize OpenAPI call definition from 'with'");
         var documentEndpointUri = openApi.Document.Endpoint.Match(
             endpoint => endpoint.Uri,
             uri => uri
@@ -61,7 +61,7 @@ public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, IL
         using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
         document = new OpenApiStreamReader().Read(responseStream, out _);
         var operationId = openApi.OperationId;
-        if (operationId.IsRuntimeExpression()) operationId = await Task.Workflow.Expressions.EvaluateAsync<string>(operationId, Task.Instance.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
+        if (operationId.IsRuntimeExpression()) operationId = await Task.Workflow.Expressions.EvaluateAsync<string>(operationId, Task.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
         var op = document.Paths
             .SelectMany(p => p.Value.Operations)
             .FirstOrDefault(o => o.Value.OperationId == operationId);
@@ -117,7 +117,7 @@ public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, IL
         if (openApi == null || operation == null) throw new InvalidOperationException("The executor must be initialized before execution");
         if (openApi.Parameters == null) return;
         var arguments = GetExpressionEvaluationArguments();
-        var evaluated = await Task.Workflow.Expressions.EvaluateAsync(openApi.Parameters, Task.Instance.State.Input, arguments, cancellationToken).ConfigureAwait(false);
+        var evaluated = await Task.Workflow.Expressions.EvaluateAsync(openApi.Parameters, Task.State.Input, arguments, cancellationToken).ConfigureAwait(false);
         if (evaluated is JsonObject jsonObject)
         {
             parameters = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -158,7 +158,7 @@ public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, IL
                 var detail = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 logger.LogError("Failed to execute the OpenAPI operation '{operationId}' at '{uri}'. The remote server responded with a non-success status code '{statusCode}'.", operation.OperationId, response.RequestMessage!.RequestUri, response.StatusCode);
                 if (logger.IsEnabled(LogLevel.Debug)) logger.LogDebug("Response content:\r\n{responseContent}", detail ?? "None");
-                await SetErrorAsync(Error.Communication(new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute), (ushort)response.StatusCode, detail), cancellationToken).ConfigureAwait(false);
+                await SetErrorAsync(Error.Communication(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), (ushort)response.StatusCode, detail), cancellationToken).ConfigureAwait(false);
                 return;
             }
             var responseText = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
@@ -187,7 +187,7 @@ public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, IL
             break;
         }
         if (!success) throw new HttpRequestException($"Failed to execute the Open API operation with id '{operation.OperationId}': No service available", null, HttpStatusCode.ServiceUnavailable);
-        await SetResultAsync(output, Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
+        await SetResultAsync(output, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
     }
 
     static HttpMethod ToHttpMethod(OperationType operationType) => operationType switch

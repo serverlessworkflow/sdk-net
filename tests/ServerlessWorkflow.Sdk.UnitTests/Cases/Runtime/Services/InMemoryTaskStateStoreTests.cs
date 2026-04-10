@@ -72,19 +72,19 @@ public class InMemoryTaskStateStoreTests
         var original = new Mock<ITaskState>();
         original.Setup(s => s.WorkflowId).Returns(workflowId);
         original.Setup(s => s.Id).Returns(taskId);
-        original.Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        original.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         await store.AddAsync(original.Object, TestContext.Current.CancellationToken);
         var updated = new Mock<ITaskState>();
         updated.Setup(s => s.WorkflowId).Returns(workflowId);
         updated.Setup(s => s.Id).Returns(taskId);
-        updated.Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        updated.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         //act
         await store.UpdateAsync(updated.Object, TestContext.Current.CancellationToken);
         var result = await store.GetAsync(workflowId, taskId, TestContext.Current.CancellationToken);
 
         //assert
-        result.Status.Should().Be(TaskInstanceStatus.Completed);
+        result.Status.Should().Be(Sdk.Runtime.TaskStatus.Completed);
     }
 
 }

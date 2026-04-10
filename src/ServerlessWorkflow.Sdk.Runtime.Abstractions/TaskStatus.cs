@@ -3,7 +3,7 @@
 /// <summary>
 /// Exposes default task instance statuses
 /// </summary>
-public static class TaskInstanceStatus
+public static class TaskStatus
 {
 
     /// <summary>

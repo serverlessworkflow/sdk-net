@@ -19,7 +19,7 @@ public class TryTaskExecutorTests
         var input = new JsonObject { ["data"] = "test" };
         var taskContext = CreateTaskExecutionContext(definition, input);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var childExecutor = CreateCompletingChildExecutor(new JsonObject { ["result"] = "ok" });
         var executorFactory = new Mock<ITaskExecutorFactory>();
@@ -36,7 +36,7 @@ public class TryTaskExecutorTests
             {
                 var childCtx = new Mock<ITaskExecutionContext>();
                 childCtx.Setup(c => c.Workflow).Returns(wf);
-                childCtx.Setup(c => c.Instance).Returns(inst);
+                childCtx.Setup(c => c.State).Returns(inst);
                 childCtx.Setup(c => c.Definition).Returns(def);
                 childCtx.Setup(c => c.ContextData).Returns(ctx);
                 childCtx.Setup(c => c.Arguments).Returns(args ?? new JsonObject());
@@ -82,7 +82,7 @@ public class TryTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var childExecutor = CreateCompletingChildExecutor(new JsonObject { ["result"] = "success" });
         var executorFactory = new Mock<ITaskExecutorFactory>();
@@ -99,7 +99,7 @@ public class TryTaskExecutorTests
             {
                 var childCtx = new Mock<ITaskExecutionContext>();
                 childCtx.Setup(c => c.Workflow).Returns(wf);
-                childCtx.Setup(c => c.Instance).Returns(inst);
+                childCtx.Setup(c => c.State).Returns(inst);
                 childCtx.Setup(c => c.Definition).Returns(def);
                 childCtx.Setup(c => c.ContextData).Returns(ctx);
                 childCtx.Setup(c => c.Arguments).Returns(args ?? new JsonObject());
@@ -119,7 +119,7 @@ public class TryTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -138,7 +138,7 @@ public class TryTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var executor = new TryTaskExecutor(
             CreateServiceProvider().Object,
@@ -152,7 +152,7 @@ public class TryTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }
@@ -160,7 +160,7 @@ public class TryTaskExecutorTests
     static Mock<ITaskExecutor> CreateCompletingChildExecutor(JsonNode? output = null)
     {
         var childState = new Mock<ITaskState>();
-        childState.Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        childState.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         childState.Setup(s => s.Output).Returns(output);
         childState.Setup(s => s.Next).Returns(FlowDirective.Continue);
         childState.Setup(s => s.Reference).Returns(JsonPointer.Parse("/try"));
@@ -170,7 +170,7 @@ public class TryTaskExecutorTests
         childInstance.Setup(i => i.State).Returns(childState.Object);
 
         var childTaskContext = new Mock<ITaskExecutionContext>();
-        childTaskContext.Setup(c => c.Instance).Returns(childInstance.Object);
+        childTaskContext.Setup(c => c.State).Returns(childInstance.Object);
         childTaskContext.Setup(c => c.Output).Returns(output);
         childTaskContext.Setup(c => c.ContextData).Returns(new JsonObject());
 

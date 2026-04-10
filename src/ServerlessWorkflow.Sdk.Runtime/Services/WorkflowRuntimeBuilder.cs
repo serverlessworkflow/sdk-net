@@ -150,18 +150,6 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
     public IWorkflowRuntimeBuilder UseScriptExecutorProvider(Func<IServiceProvider, IScriptExecutorProvider> factory) => ReplaceService<IScriptExecutorProvider>(factory);
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseWorkflowInstanceFactory<TFactory>() where TFactory : class, IWorkflowInstanceFactory => ReplaceService<IWorkflowInstanceFactory>(typeof(TFactory));
-
-    /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseWorkflowInstanceFactory(Func<IServiceProvider, IWorkflowInstanceFactory> factory) => ReplaceService<IWorkflowInstanceFactory>(factory);
-
-    /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseTaskInstanceFactory<TFactory>() where TFactory : class, ITaskInstanceFactory => ReplaceService<ITaskInstanceFactory>(typeof(TFactory));
-
-    /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseTaskInstanceFactory(Func<IServiceProvider, ITaskInstanceFactory> factory)  => ReplaceService<ITaskInstanceFactory>(factory);
-
-    /// <inheritdoc/>
     public IWorkflowRuntimeBuilder UseTaskExecutor<TDefinition, TExecutor>()
         where TDefinition : TaskDefinition
         where TExecutor : class, ITaskExecutor<TDefinition>
@@ -193,15 +181,39 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
     public IWorkflowRuntimeBuilder UseTaskExecutorFactory(Func<IServiceProvider, ITaskExecutorFactory> factory) => ReplaceService<ITaskExecutorFactory>(factory);
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseTaskStateStore<TStore>() where TStore : class, ITaskStateStore => ReplaceService<ITaskStateStore>(typeof(TStore));
+    public IWorkflowRuntimeBuilder UseWorkflowProcessFactory<TFactory>() where TFactory : class, IWorkflowProcessFactory => ReplaceService<IWorkflowProcessFactory>(typeof(TFactory));
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseTaskStateStore(Func<IServiceProvider, ITaskStateStore> factory) => ReplaceService<ITaskStateStore>(factory);
+    public IWorkflowRuntimeBuilder UseWorkflowProcessFactory(Func<IServiceProvider, IWorkflowProcessFactory> factory) => ReplaceService<IWorkflowProcessFactory>(factory);
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseWorkflowExecutionContextFactory<TFactory>() where TFactory : class, IWorkflowExecutionContextFactory => ReplaceService<IWorkflowExecutionContextFactory>(typeof(TFactory));
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseWorkflowExecutionContextFactory(Func<IServiceProvider, IWorkflowExecutionContextFactory> factory) => ReplaceService<IWorkflowExecutionContextFactory>(factory);
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseTaskExecutionContextFactory<TFactory>() where TFactory : class, ITaskExecutionContextFactory => ReplaceService<ITaskExecutionContextFactory>(typeof(TFactory));
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseTaskExecutionContextFactory(Func<IServiceProvider, ITaskExecutionContextFactory> factory) => ReplaceService<ITaskExecutionContextFactory>(factory);
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseWorkflowDefinitionStore<TStore>() where TStore : class, IWorkflowDefinitionStore => ReplaceService<IWorkflowDefinitionStore>(typeof(TStore));
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseWorkflowDefinitionStore(Func<IServiceProvider, IWorkflowDefinitionStore> factory) => ReplaceService<IWorkflowDefinitionStore>(factory);
 
     /// <inheritdoc/>
     public IWorkflowRuntimeBuilder UseWorkflowStateStore<TStore>() where TStore : class, IWorkflowStateStore => ReplaceService<IWorkflowStateStore>(typeof(TStore));
 
     /// <inheritdoc/>
     public IWorkflowRuntimeBuilder UseWorkflowStateStore(Func<IServiceProvider, IWorkflowStateStore> factory) => ReplaceService<IWorkflowStateStore>(factory);
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseTaskStateStore<TStore>() where TStore : class, ITaskStateStore => ReplaceService<ITaskStateStore>(typeof(TStore));
+
+    /// <inheritdoc/>
+    public IWorkflowRuntimeBuilder UseTaskStateStore(Func<IServiceProvider, ITaskStateStore> factory) => ReplaceService<ITaskStateStore>(factory);
 
 }

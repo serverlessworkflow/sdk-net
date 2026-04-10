@@ -32,7 +32,7 @@ public class OpenApiCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.OpenApi, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var requestIndex = 0;
         var handler = new MockHttpMessageHandler(request =>
         {
@@ -50,7 +50,7 @@ public class OpenApiCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -81,7 +81,7 @@ public class OpenApiCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.OpenApi, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var requestIndex = 0;
         var handler = new MockHttpMessageHandler(request =>
         {
@@ -99,7 +99,7 @@ public class OpenApiCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.SetErrorAsync(
                 It.Is<Error>(e => e.Status == 500),
                 It.IsAny<CancellationToken>()),
@@ -117,7 +117,7 @@ public class OpenApiCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.OpenApi, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         var httpClientFactory = new Mock<IHttpClientFactory>();
         var authHandler = new Mock<IAuthenticationHandler>();
         var executor = CreateExecutor(taskContext, httpClientFactory.Object, authHandler.Object);
@@ -127,7 +127,7 @@ public class OpenApiCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }

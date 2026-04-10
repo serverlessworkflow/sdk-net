@@ -5,19 +5,19 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 /// </summary>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
 /// <param name="logger">The service used to perform logging</param>
-/// <param name="taskProcessFactory">The service used to create <see cref="ITaskProcess"/>s</param>
+/// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
 /// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
 /// <param name="schemaHandlerProvider">The service used to provide <see cref="ISchemaHandler"/> implementations</param>
-/// <param name="task">The current <see cref="ITaskProcess"/></param>
-public sealed class RaiseTaskExecutor(IServiceProvider serviceProvider, ILogger<RaiseTaskExecutor> logger, ITaskProcessFactory taskProcessFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, ITaskProcess<RaiseTaskDefinition> task)
-    : TaskExecutor<RaiseTaskDefinition>(serviceProvider, logger, taskProcessFactory, executorFactory, schemaHandlerProvider, task)
+/// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
+public sealed class RaiseTaskExecutor(IServiceProvider serviceProvider, ILogger<RaiseTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, ITaskExecutionContext<RaiseTaskDefinition> task)
+    : TaskExecutor<RaiseTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
 {
 
     /// <inheritdoc/>
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
-        var input = Task.Instance.State.Input;
-        var errorDefinition = Task.Instance.Definition.Raise.Error.Match(
+        var input = Task.State.Input;
+        var errorDefinition = Task.Definition.Raise.Error.Match(
             e => e,
             reference =>
             {
@@ -45,7 +45,7 @@ public sealed class RaiseTaskExecutor(IServiceProvider serviceProvider, ILogger<
             Type = type,
             Title = title,
             Detail = detail,
-            Instance = new(Task.Instance.State.Reference.ToString(), UriKind.Relative)
+            Instance = new(Task.State.Reference.ToString(), UriKind.Relative)
         };
         await SetErrorAsync(errorInstance, cancellationToken).ConfigureAwait(false);
     }

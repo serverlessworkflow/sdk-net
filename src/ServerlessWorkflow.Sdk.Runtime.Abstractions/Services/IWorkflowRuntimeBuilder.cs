@@ -202,36 +202,6 @@ public interface IWorkflowRuntimeBuilder
     IWorkflowRuntimeBuilder UseScriptExecutorProvider(Func<IServiceProvider, IScriptExecutorProvider> factory);
 
     /// <summary>
-    /// Configures the <see cref="IWorkflowInstanceFactory"/> implementation to use
-    /// </summary>
-    /// <typeparam name="TFactory">The type of <see cref="IWorkflowInstanceFactory"/> to use</typeparam>
-    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
-    IWorkflowRuntimeBuilder UseWorkflowInstanceFactory<TFactory>()
-        where TFactory : class, IWorkflowInstanceFactory;
-
-    /// <summary>
-    /// Configures the <see cref="IWorkflowInstanceFactory"/> implementation to use
-    /// </summary>
-    /// <param name="factory">A factory function used to create the <see cref="IWorkflowInstanceFactory"/></param>
-    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
-    IWorkflowRuntimeBuilder UseWorkflowInstanceFactory(Func<IServiceProvider, IWorkflowInstanceFactory> factory);
-
-    /// <summary>
-    /// Configures the <see cref="ITaskInstanceFactory"/> implementation to use
-    /// </summary>
-    /// <typeparam name="TFactory">The type of <see cref="ITaskInstanceFactory"/> to use</typeparam>
-    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
-    IWorkflowRuntimeBuilder UseTaskInstanceFactory<TFactory>()
-        where TFactory : class, ITaskInstanceFactory;
-
-    /// <summary>
-    /// Configures the <see cref="ITaskInstanceFactory"/> implementation to use
-    /// </summary>
-    /// <param name="factory">A factory function used to create the <see cref="IWorkflowInstanceFactory"/></param>
-    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
-    IWorkflowRuntimeBuilder UseTaskInstanceFactory(Func<IServiceProvider, ITaskInstanceFactory> factory);
-
-    /// <summary>
     /// Registers a <see cref="ITaskExecutor{TDefinition}"/> for the specified <see cref="TaskDefinition"/> type
     /// </summary>
     /// <typeparam name="TDefinition">The type of <see cref="TaskDefinition"/> handled by the executor</typeparam>
@@ -260,6 +230,21 @@ public interface IWorkflowRuntimeBuilder
         where TExecutor : class, ITaskExecutor<RunTaskDefinition>;
 
     /// <summary>
+    /// Configures the <see cref="IWorkflowProcessFactory"/> implementation to use
+    /// </summary>
+    /// <typeparam name="TFactory">The type of <see cref="IWorkflowProcessFactory"/> to use</typeparam>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseWorkflowProcessFactory<TFactory>()
+        where TFactory : class, IWorkflowProcessFactory;
+
+    /// <summary>
+    /// Configures the <see cref="IWorkflowProcessFactory"/> implementation to use
+    /// </summary>
+    /// <param name="factory">An <see cref="IWorkflowProcessFactory"/> to use</param>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseWorkflowProcessFactory(Func<IServiceProvider, IWorkflowProcessFactory> factory);
+
+    /// <summary>
     /// Configures the <see cref="ITaskExecutorFactory"/> implementation to use
     /// </summary>
     /// <typeparam name="TFactory">The type of <see cref="ITaskExecutorFactory"/> to use</typeparam>
@@ -275,19 +260,49 @@ public interface IWorkflowRuntimeBuilder
     IWorkflowRuntimeBuilder UseTaskExecutorFactory(Func<IServiceProvider, ITaskExecutorFactory> factory);
 
     /// <summary>
-    /// Configures the <see cref="ITaskStateStore"/> implementation to use
+    /// Configures the <see cref="IWorkflowExecutionContextFactory"/> implementation to use
     /// </summary>
-    /// <typeparam name="TStore">The type of <see cref="ITaskStateStore"/> to use</typeparam>
+    /// <typeparam name="TFactory">The type of <see cref="IWorkflowExecutionContextFactory"/> to use</typeparam>
     /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
-    IWorkflowRuntimeBuilder UseTaskStateStore<TStore>()
-        where TStore : class, ITaskStateStore;
+    IWorkflowRuntimeBuilder UseWorkflowExecutionContextFactory<TFactory>()
+        where TFactory : class, IWorkflowExecutionContextFactory;
 
     /// <summary>
-    /// Configures the <see cref="ITaskStateStore"/> implementation to use
+    /// Configures the <see cref="IWorkflowExecutionContextFactory"/> implementation to use
     /// </summary>
-    /// <param name="factory">A factory function used to create the <see cref="ITaskStateStore"/></param>
+    /// <param name="factory">An <see cref="IWorkflowExecutionContextFactory"/> to use</param>
     /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
-    IWorkflowRuntimeBuilder UseTaskStateStore(Func<IServiceProvider, ITaskStateStore> factory);
+    IWorkflowRuntimeBuilder UseWorkflowExecutionContextFactory(Func<IServiceProvider, IWorkflowExecutionContextFactory> factory);
+
+    /// <summary>
+    /// Configures the <see cref="ITaskExecutionContextFactory"/> implementation to use
+    /// </summary>
+    /// <typeparam name="TFactory">The type of <see cref="ITaskExecutionContextFactory"/> to use</typeparam>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseTaskExecutionContextFactory<TFactory>()
+        where TFactory : class, ITaskExecutionContextFactory;
+
+    /// <summary>
+    /// Configures the <see cref="ITaskExecutionContextFactory"/> implementation to use
+    /// </summary>
+    /// <param name="factory">A factory function used to create the <see cref="ITaskExecutionContextFactory"/></param>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseTaskExecutionContextFactory(Func<IServiceProvider, ITaskExecutionContextFactory> factory);
+
+    /// <summary>
+    /// Configures the <see cref="IWorkflowDefinitionStore"/> implementation to use
+    /// </summary>
+    /// <typeparam name="TStore">The type of <see cref="IWorkflowDefinitionStore"/> to use</typeparam>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseWorkflowDefinitionStore<TStore>()
+        where TStore : class, IWorkflowDefinitionStore;
+
+    /// <summary>
+    /// Configures the <see cref="IWorkflowDefinitionStore"/> implementation to use
+    /// </summary>
+    /// <param name="factory">A factory function used to create the <see cref="IWorkflowDefinitionStore"/></param>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseWorkflowDefinitionStore(Func<IServiceProvider, IWorkflowDefinitionStore> factory);
 
     /// <summary>
     /// Configures the <see cref="IWorkflowStateStore"/> implementation to use
@@ -303,5 +318,20 @@ public interface IWorkflowRuntimeBuilder
     /// <param name="factory">A factory function used to create the <see cref="IWorkflowStateStore"/></param>
     /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
     IWorkflowRuntimeBuilder UseWorkflowStateStore(Func<IServiceProvider, IWorkflowStateStore> factory);
+
+    /// <summary>
+    /// Configures the <see cref="ITaskStateStore"/> implementation to use
+    /// </summary>
+    /// <typeparam name="TStore">The type of <see cref="ITaskStateStore"/> to use</typeparam>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseTaskStateStore<TStore>()
+        where TStore : class, ITaskStateStore;
+
+    /// <summary>
+    /// Configures the <see cref="ITaskStateStore"/> implementation to use
+    /// </summary>
+    /// <param name="factory">A factory function used to create the <see cref="ITaskStateStore"/></param>
+    /// <returns>The configured <see cref="IWorkflowRuntimeBuilder"/></returns>
+    IWorkflowRuntimeBuilder UseTaskStateStore(Func<IServiceProvider, ITaskStateStore> factory);
 
 }

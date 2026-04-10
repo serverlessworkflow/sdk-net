@@ -15,7 +15,7 @@ public class DoTaskExecutorTests
         var definition = new DoTaskDefinition { Do = subtasks };
         var input = new JsonObject { ["initial"] = true };
         var taskContext = CreateTaskExecutionContext(definition, input);
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var childExecutor = CreateCompletingChildExecutor(new JsonObject { ["name"] = "test" });
         var executorFactory = new Mock<ITaskExecutorFactory>();
         executorFactory.Setup(f => f.Create(It.IsAny<ITaskExecutionContext>())).Returns(childExecutor.Object);
@@ -25,7 +25,7 @@ public class DoTaskExecutorTests
             {
                 var childContext = new Mock<ITaskExecutionContext>();
                 childContext.Setup(c => c.Workflow).Returns(wf);
-                childContext.Setup(c => c.Instance).Returns(inst);
+                childContext.Setup(c => c.State).Returns(inst);
                 childContext.Setup(c => c.Definition).Returns(def);
                 childContext.Setup(c => c.ContextData).Returns(ctx);
                 childContext.Setup(c => c.Arguments).Returns(args ?? new JsonObject());
@@ -48,7 +48,7 @@ public class DoTaskExecutorTests
         var subtasks = new Map<string, TaskDefinition>();
         var definition = new DoTaskDefinition { Do = subtasks };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var executor = new DoTaskExecutor(
             CreateServiceProvider().Object,
             Mock.Of<ILogger<DoTaskExecutor>>(),
@@ -59,7 +59,7 @@ public class DoTaskExecutorTests
         // act
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
+        Mock.Get(taskContext.Object.State).Verify(i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
     }
 
     [Fact]
@@ -70,7 +70,7 @@ public class DoTaskExecutorTests
         subtasks.Add(new("task1", new SetTaskDefinition { Set = new JsonObject { ["k"] = "v" } }));
         var definition = new DoTaskDefinition { Do = subtasks };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         var executor = new DoTaskExecutor(
             CreateServiceProvider().Object,
             Mock.Of<ILogger<DoTaskExecutor>>(),
@@ -81,7 +81,7 @@ public class DoTaskExecutorTests
         // act
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }
@@ -89,7 +89,7 @@ public class DoTaskExecutorTests
     static Mock<ITaskExecutor> CreateCompletingChildExecutor(JsonNode? output = null, string? next = FlowDirective.Continue)
     {
         var childState = new Mock<ITaskState>();
-        childState.Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        childState.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         childState.Setup(s => s.Output).Returns(output);
         childState.Setup(s => s.Next).Returns(next);
         childState.Setup(s => s.Reference).Returns(JsonPointer.Parse("/sub"));
@@ -99,7 +99,7 @@ public class DoTaskExecutorTests
         childInstance.Setup(i => i.State).Returns(childState.Object);
 
         var childTaskContext = new Mock<ITaskExecutionContext>();
-        childTaskContext.Setup(c => c.Instance).Returns(childInstance.Object);
+        childTaskContext.Setup(c => c.State).Returns(childInstance.Object);
         childTaskContext.Setup(c => c.Output).Returns(output);
         childTaskContext.Setup(c => c.ContextData).Returns(new JsonObject());
 

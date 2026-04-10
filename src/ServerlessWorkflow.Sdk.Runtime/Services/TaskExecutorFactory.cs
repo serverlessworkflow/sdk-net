@@ -12,7 +12,7 @@ public sealed class TaskExecutorFactory(IServiceProvider serviceProvider, TaskEx
 {
 
     /// <inheritdoc/>
-    public ITaskExecutor Create(ITaskProcess context)
+    public ITaskExecutor Create(ITaskExecutionContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
         if (context.Definition is CallTaskDefinition callDefinition)
@@ -30,7 +30,7 @@ public sealed class TaskExecutorFactory(IServiceProvider serviceProvider, TaskEx
     }
 
     /// <inheritdoc/>
-    public ITaskExecutor<TDefinition> Create<TDefinition>(ITaskProcess<TDefinition> context)
+    public ITaskExecutor<TDefinition> Create<TDefinition>(ITaskExecutionContext<TDefinition> context)
         where TDefinition : TaskDefinition
     {
         ArgumentNullException.ThrowIfNull(context);

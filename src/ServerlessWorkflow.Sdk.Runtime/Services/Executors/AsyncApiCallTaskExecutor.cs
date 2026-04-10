@@ -1,3 +1,4 @@
+extern alias LinqAsync;
 using Neuroglia.AsyncApi;
 using Neuroglia.AsyncApi.Client;
 using Neuroglia.AsyncApi.Client.Services;
@@ -12,16 +13,16 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 /// </summary>
 /// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
 /// <param name="logger">The service used to perform logging</param>
-/// <param name="taskProcessFactory">The service used to create <see cref="ITaskProcess"/>s</param>
+/// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
 /// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
 /// <param name="schemaHandlerProvider">The service used to provide <see cref="ISchemaHandler"/> implementations</param>
 /// <param name="httpClientFactory">The service used to create <see cref="HttpClient"/>s</param>
 /// <param name="authenticationHandler">The service used to handle authentication policies</param>
 /// <param name="asyncApiDocumentReader">The service used to read <see cref="IAsyncApiDocument"/>s</param>
 /// <param name="asyncApiClientFactory">The service used to create <see cref="IAsyncApiClient"/>s</param>
-/// <param name="task">The current <see cref="ITaskProcess"/></param>
-public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, ILogger<AsyncApiCallTaskExecutor> logger, ITaskProcessFactory taskProcessFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IHttpClientFactory httpClientFactory, IAuthenticationHandler authenticationHandler, IAsyncApiDocumentReader asyncApiDocumentReader, IAsyncApiClientFactory asyncApiClientFactory, ITaskProcess<CallTaskDefinition> task)
-    : TaskExecutor<CallTaskDefinition>(serviceProvider, logger, taskProcessFactory, executorFactory, schemaHandlerProvider, task)
+/// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
+public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, ILogger<AsyncApiCallTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, IHttpClientFactory httpClientFactory, IAuthenticationHandler authenticationHandler, IAsyncApiDocumentReader asyncApiDocumentReader, IAsyncApiClientFactory asyncApiClientFactory, ITaskExecutionContext<CallTaskDefinition> task)
+    : TaskExecutor<CallTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
 {
 
     AsyncApiCallDefinition? asyncApi;
@@ -33,12 +34,12 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
     uint? offset;
     bool keepConsume = true;
 
-    static string GetPathFor(uint offset) => $"foreach/{offset}/do";
+    static JsonPointer GetPathFor(uint offset) => JsonPointer.Parse($"foreach/{offset}/do");
 
     /// <inheritdoc/>
-    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskInstance instance, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskState state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
-        var executor = await base.CreateTaskExecutorAsync(instance, definition, contextData, arguments, cancellationToken).ConfigureAwait(false);
+        var executor = await base.CreateTaskExecutorAsync(state, definition, contextData, arguments, cancellationToken).ConfigureAwait(false);
         executor.SubscribeAsync(
             _ => System.Threading.Tasks.Task.CompletedTask,
             async ex => await OnMessageProcessingErrorAsync(executor, CancellationTokenSource!.Token).ConfigureAwait(false),
@@ -50,7 +51,7 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
     /// <inheritdoc/>
     protected override async Task InitializeCoreAsync(CancellationToken cancellationToken)
     {
-        asyncApi = JsonSerializer.Deserialize(Task.Instance.Definition.With!, Sdk.Serialization.Json.JsonSerializationContext.Default.AsyncApiCallDefinition) ?? throw new InvalidOperationException("Failed to deserialize AsyncAPI call definition from 'with'");
+        asyncApi = JsonSerializer.Deserialize(Task.Definition.With!, Sdk.Serialization.Json.JsonSerializationContext.Default.AsyncApiCallDefinition) ?? throw new InvalidOperationException("Failed to deserialize AsyncAPI call definition from 'with'");
         var documentEndpointUri = asyncApi.Document.Endpoint.Match(
             endpoint => endpoint.Uri,
             uri => uri
@@ -62,7 +63,7 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
         using var httpClient = httpClientFactory.CreateClient();
         if (documentAuthentication != null)
         {
-            var authResult = await authenticationHandler.HandleAsync(documentAuthentication, Task.Workflow.Instance.Definition, cancellationToken).ConfigureAwait(false);
+            var authResult = await authenticationHandler.HandleAsync(documentAuthentication, Task.Workflow.Definition, cancellationToken).ConfigureAwait(false);
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authResult.Scheme, authResult.Value);
         }
         using var request = new HttpRequestMessage(HttpMethod.Get, documentEndpointUri);
@@ -80,7 +81,7 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
         document = v3Document;
         if (string.IsNullOrWhiteSpace(asyncApi.Operation)) throw new NullReferenceException("The 'operation' parameter must be set when performing an AsyncAPI v3 call");
         var operationId = asyncApi.Operation;
-        if (operationId.IsRuntimeExpression()) operationId = await Task.Workflow.Expressions.EvaluateAsync<string>(operationId, Task.Instance.State.Input ?? new JsonObject(), GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
+        if (operationId.IsRuntimeExpression()) operationId = await Task.Workflow.Expressions.EvaluateAsync<string>(operationId, Task.State.Input ?? new JsonObject(), GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
         if (string.IsNullOrWhiteSpace(operationId)) throw new NullReferenceException("The operation ref cannot be null or empty");
         operation = document.Operations.FirstOrDefault(o => o.Key == operationId);
         if (operation.Value == null) throw new NullReferenceException($"Failed to find an operation with id '{operationId}' in AsyncAPI document at '{documentEndpointUri}'");
@@ -104,7 +105,7 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
         if (asyncApi == null || operation.Value == null) throw new InvalidOperationException("The executor must be initialized before execution");
         if (asyncApi.Message?.Payload == null) return;
         var arguments = GetExpressionEvaluationArguments();
-        messagePayload = await Task.Workflow.Expressions.EvaluateAsync(asyncApi.Message.Payload, Task.Instance.State.Input ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false);
+        messagePayload = await Task.Workflow.Expressions.EvaluateAsync(asyncApi.Message.Payload, Task.State.Input ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false);
     }
 
     async Task BuildMessageHeadersAsync(CancellationToken cancellationToken = default)
@@ -112,7 +113,7 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
         if (asyncApi == null || operation.Value == null) throw new InvalidOperationException("The executor must be initialized before execution");
         if (asyncApi.Message?.Headers == null) return;
         var arguments = GetExpressionEvaluationArguments();
-        messageHeaders = await Task.Workflow.Expressions.EvaluateAsync(asyncApi.Message.Headers, Task.Instance.State.Input ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false);
+        messageHeaders = await Task.Workflow.Expressions.EvaluateAsync(asyncApi.Message.Headers, Task.State.Input ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
@@ -138,7 +139,7 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
         };
         await using var result = await asyncApiClient.PublishAsync(parameters, cancellationToken).ConfigureAwait(false);
         if (!result.IsSuccessful) throw new Exception("Failed to execute the AsyncAPI publish operation");
-        await SetResultAsync(null, Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
+        await SetResultAsync(null, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
     }
 
     async Task DoExecuteSubscribeOperationAsync(CancellationToken cancellationToken)
@@ -151,7 +152,7 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
         if (!result.IsSuccessful) throw new Exception("Failed to execute the AsyncAPI subscribe operation");
         if (result.Messages == null)
         {
-            await SetResultAsync(null, Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
+            await SetResultAsync(null, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
             return;
         }
         var observable = result.Messages;
@@ -160,14 +161,14 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
         if (asyncApi.Subscription.Foreach == null)
         {
             var messages = new List<IAsyncApiMessage>();
-            await foreach (var m in observable.ToAsyncEnumerable().WithCancellation(cancellationToken).ConfigureAwait(false))
+            await foreach (var m in LinqAsync.System.Linq.AsyncEnumerable.ToAsyncEnumerable(observable).WithCancellation(cancellationToken).ConfigureAwait(false))
             {
-                if (!string.IsNullOrWhiteSpace(asyncApi.Subscription.Consume.While) && !await Task.Workflow.Expressions.EvaluateConditionAsync(asyncApi.Subscription.Consume.While, Task.Instance.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false)) break;
-                if (!string.IsNullOrWhiteSpace(asyncApi.Subscription.Consume.Until) && await Task.Workflow.Expressions.EvaluateConditionAsync(asyncApi.Subscription.Consume.Until, Task.Instance.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false)) break;
+                if (!string.IsNullOrWhiteSpace(asyncApi.Subscription.Consume.While) && !await Task.Workflow.Expressions.EvaluateConditionAsync(asyncApi.Subscription.Consume.While, Task.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false)) break;
+                if (!string.IsNullOrWhiteSpace(asyncApi.Subscription.Consume.Until) && await Task.Workflow.Expressions.EvaluateConditionAsync(asyncApi.Subscription.Consume.Until, Task.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false)) break;
                 messages.Add(m);
             }
             var messagesJson = JsonSerializer.SerializeToNode(messages);
-            await SetResultAsync(messagesJson, Task.Instance.Definition.Then, cancellationToken).ConfigureAwait(false);
+            await SetResultAsync(messagesJson, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
         }
         else
         {
@@ -183,7 +184,7 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
     {
         if (asyncApi == null || document == null || operation.Value == null) throw new InvalidOperationException("The executor must be initialized before execution");
         if (asyncApi.Subscription == null) throw new NullReferenceException("The 'subscription' must be set when performing an AsyncAPI v3 subscribe operation");
-        if (!string.IsNullOrWhiteSpace(asyncApi.Subscription.Consume.While) && !await Task.Workflow.Expressions.EvaluateConditionAsync(asyncApi.Subscription.Consume.While, Task.Instance.State.Input, GetExpressionEvaluationArguments(), CancellationTokenSource!.Token).ConfigureAwait(false))
+        if (!string.IsNullOrWhiteSpace(asyncApi.Subscription.Consume.While) && !await Task.Workflow.Expressions.EvaluateConditionAsync(asyncApi.Subscription.Consume.While, Task.State.Input, GetExpressionEvaluationArguments(), CancellationTokenSource!.Token).ConfigureAwait(false))
         {
             keepConsume = false;
             return;
@@ -204,23 +205,23 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
             if (asyncApi.Subscription.Foreach.Output?.As != null)
             {
                 var messageNode = JsonSerializer.SerializeToNode(messageData) ?? new JsonObject();
-                var outputExpression = asyncApi.Subscription.Foreach.Output.As!.Match(obj => (JsonNode)obj, str => (JsonNode)JsonValue.Create(str)!);
+                var outputExpression = asyncApi.Subscription.Foreach.Output.As!.Match(obj => obj, str => (JsonNode)JsonValue.Create(str)!);
                 messageData = await Task.Workflow.Expressions.EvaluateAsync(outputExpression, messageNode, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
             }
             if (asyncApi.Subscription.Foreach.Export?.As != null)
             {
                 var messageNode = JsonSerializer.SerializeToNode(messageData) ?? new JsonObject();
-                var exportExpression = asyncApi.Subscription.Foreach.Export.As!.Match(obj => (JsonNode)obj, str => (JsonNode)JsonValue.Create(str)!);
+                var exportExpression = asyncApi.Subscription.Foreach.Export.As!.Match(obj => obj, str => (JsonNode)JsonValue.Create(str)!);
                 var context = await Task.Workflow.Expressions.EvaluateAsync(exportExpression, messageNode, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
                 if (context is JsonObject contextObj) await Task.SetContextDataAsync(contextObj, CancellationTokenSource!.Token).ConfigureAwait(false);
             }
-            var taskInstance = await Task.Workflow.Instance.CreateTaskAsync(taskDefinition, GetPathFor(currentOffset), Task.Instance.State.Input, null, Task, false, CancellationTokenSource!.Token).ConfigureAwait(false);
-            var taskExecutor = await CreateTaskExecutorAsync(taskInstance, taskDefinition, Task.Instance.State.ContextData, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
+            var taskInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, GetPathFor(currentOffset), Task.State.Input, Task, false, CancellationTokenSource!.Token).ConfigureAwait(false);
+            var taskExecutor = await CreateTaskExecutorAsync(taskInstance, taskDefinition, Task.Workflow.State.ContextData, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
             await taskExecutor.ExecuteAsync(CancellationTokenSource!.Token).ConfigureAwait(false);
-            if (Task.Instance.State.ContextData != taskExecutor.Task.Instance.State.ContextData) await Task.SetContextDataAsync(taskExecutor.Task.Instance.State.ContextData, CancellationTokenSource!.Token).ConfigureAwait(false);
+            if (Task.Workflow.State.ContextData != taskExecutor.Task.Workflow.State.ContextData) await Task.SetContextDataAsync(taskExecutor.Task.Workflow.State.ContextData, CancellationTokenSource!.Token).ConfigureAwait(false);
             offset++;
         }
-        if (!string.IsNullOrWhiteSpace(asyncApi.Subscription.Consume.Until) && await Task.Workflow.Expressions.EvaluateConditionAsync(asyncApi.Subscription.Consume.Until, Task.Instance.State.Input, GetExpressionEvaluationArguments(), CancellationTokenSource!.Token).ConfigureAwait(false))
+        if (!string.IsNullOrWhiteSpace(asyncApi.Subscription.Consume.Until) && await Task.Workflow.Expressions.EvaluateConditionAsync(asyncApi.Subscription.Consume.Until, Task.State.Input, GetExpressionEvaluationArguments(), CancellationTokenSource!.Token).ConfigureAwait(false))
         {
             keepConsume = false;
         }
@@ -232,25 +233,25 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
         Title = ErrorTitle.Communication,
         Status = ErrorStatus.Communication,
         Detail = ex.Message,
-        Instance = new Uri(Task.Instance.State.Reference.ToString(), UriKind.RelativeOrAbsolute)
+        Instance = new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute)
     }, CancellationTokenSource!.Token);
 
     async Task OnStreamingCompletedAsync()
     {
-        ITaskInstance? last = null;
-        await foreach (var t in Task.Instance.GetSubTasksAsync(CancellationTokenSource!.Token).ConfigureAwait(false))
+        ITaskState? last = null;
+        await foreach (var t in Task.GetSubTasksAsync(CancellationTokenSource!.Token).ConfigureAwait(false))
         {
-            if (last == null || t.State.StartedAt > last.State.StartedAt) last = t;
+            if (last == null || t.StartedAt > last.StartedAt) last = t;
         }
         JsonNode? output = null;
-        if (last?.State.Output != null) output = last.State.Output;
-        await SetResultAsync(output, Task.Instance.Definition.Then, CancellationTokenSource!.Token).ConfigureAwait(false);
+        if (last?.Output != null) output = last.Output;
+        await SetResultAsync(output, Task.Definition.Then, CancellationTokenSource!.Token).ConfigureAwait(false);
     }
 
     async Task OnMessageProcessingErrorAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(executor);
-        var error = executor.Task.Instance.State.Error ?? throw new NullReferenceException();
+        var error = executor.Task.State.Error ?? throw new NullReferenceException();
         Executors.Remove(executor);
         await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
     }
@@ -259,7 +260,7 @@ public sealed class AsyncApiCallTaskExecutor(IServiceProvider serviceProvider, I
     {
         ArgumentNullException.ThrowIfNull(executor);
         Executors.Remove(executor);
-        if (Task.Instance.State.ContextData != executor.Task.Instance.State.ContextData) await Task.SetContextDataAsync(executor.Task.Instance.State.ContextData, cancellationToken).ConfigureAwait(false);
+        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>

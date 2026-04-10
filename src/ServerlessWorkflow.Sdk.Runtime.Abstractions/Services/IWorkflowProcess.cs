@@ -1,26 +1,11 @@
-namespace ServerlessWorkflow.Sdk.Runtime;
+namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
 /// Defines the fundamentals of a workflow process, which holds the methods to manage a workflow's execution
 /// </summary>
 public interface IWorkflowProcess
-    : IObservable<IWorkflowLifeCycleEvent>
+    : IObservable<IWorkflowLifeCycleEvent>, IAsyncDisposable
 {
-
-    /// <summary>
-    /// Gets the <see cref="IWorkflowInstance"/> being executed
-    /// </summary>
-    IWorkflowInstance Instance { get; }
-
-    /// <summary>
-    /// Gets the workflow's expression evaluator
-    /// </summary>
-    IRuntimeExpressionEvaluator Expressions { get; }
-
-    /// <summary>
-    /// Gets the service used to run workflows
-    /// </summary>
-    IWorkflowRuntime Runtime { get; }
 
     /// <summary>
     /// Waits for the workflow to reach a non-running state, such as completion, suspension, cancellation, or failure.
@@ -51,3 +36,4 @@ public interface IWorkflowProcess
     Task CancelAsync(CancellationToken cancellationToken = default);
 
 }
+

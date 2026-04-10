@@ -72,11 +72,6 @@ public interface ITaskState
     JsonNode Input { get; }
 
     /// <summary>
-    /// Gets the task's context data
-    /// </summary>
-    JsonObject ContextData { get; }
-
-    /// <summary>
     /// Gets the task's output data, if any
     /// </summary>
     JsonNode? Output { get; }
@@ -89,6 +84,6 @@ public interface ITaskState
     /// <summary>
     /// Gets a value indicating whether the task is in an operative state
     /// </summary>
-    bool IsOperative => Status == TaskInstanceStatus.Pending || Status == TaskInstanceStatus.Running || Status == TaskInstanceStatus.Suspended;
+    bool IsOperative => Status == TaskStatus.Pending || Status == TaskStatus.Running || Status == TaskStatus.Suspended;
 
 }

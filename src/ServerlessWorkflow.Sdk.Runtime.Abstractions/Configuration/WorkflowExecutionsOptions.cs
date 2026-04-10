@@ -3,7 +3,7 @@
 /// <summary>
 /// Represents the options used to configure an <see cref="IWorkflowProcess"/>
 /// </summary>
-public sealed class WorkflowProcessOptions
+public sealed class WorkflowExecutionsOptions
 {
 
     /// <summary>

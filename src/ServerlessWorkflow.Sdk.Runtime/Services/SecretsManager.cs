@@ -24,7 +24,7 @@ public sealed class SecretsManager(ILogger<SecretsManager> logger, IOptions<Secr
                 using var stream = file.OpenRead();
                 try
                 {
-                    var secret = (await JsonSerializer.DeserializeAsync(stream, Serialization.Json.JsonSerializationContext.Default.JsonObject, stoppingToken))!;
+                    var secret = (await JsonSerializer.DeserializeAsync(stream, Sdk.Serialization.Json.JsonSerializationContext.Default.JsonObject, stoppingToken))!;
                     secrets.Add(file.Name, secret);
                 }
                 catch (Exception ex)

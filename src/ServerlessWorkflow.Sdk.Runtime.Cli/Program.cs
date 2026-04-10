@@ -1,5 +1,6 @@
 ﻿var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddServerlessWorkflowRuntime(builder.Configuration);
+builder.Services.AddSingleton<RunWorkflowCommand>();
 
 using var host = builder.Build();
 await host.StartAsync();

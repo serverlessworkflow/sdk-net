@@ -1,4 +1,5 @@
-﻿global using Json.Schema;
+﻿global using Json.Pointer;
+global using Json.Schema;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.DependencyInjection.Extensions;

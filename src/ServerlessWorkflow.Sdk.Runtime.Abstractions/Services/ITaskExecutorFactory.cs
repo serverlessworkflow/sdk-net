@@ -7,19 +7,19 @@ public interface ITaskExecutorFactory
 {
 
     /// <summary>
-    /// Creates a new <see cref="ITaskExecutor"/> for the specified <see cref="ITaskInstance"/>
+    /// Creates a new <see cref="ITaskExecutor"/> for the specified task
     /// </summary>
-    /// <param name="process">The <see cref="ITaskProcess"/> to create a new <see cref="ITaskExecutor"/> for</param>
-    /// <returns>A new <see cref="ITaskExecutor"/> for the specified <see cref="ITaskInstance"/></returns>
-    ITaskExecutor Create(ITaskProcess process);
+    /// <param name="context">The <see cref="ITaskExecutionContext"/> to create a new <see cref="ITaskExecutor"/> for</param>
+    /// <returns>A new <see cref="ITaskExecutor"/> for the specified task</returns>
+    ITaskExecutor Create(ITaskExecutionContext context);
 
     /// <summary>
-    /// Creates a new <see cref="ITaskExecutor"/> for the specified <see cref="ITaskInstance"/>
+    /// Creates a new <see cref="ITaskExecutor"/> for the specified task
     /// </summary>
-    /// <typeparam name="TDefinition">The <see cref="TaskDefinition"/> of the <see cref="ITaskInstance"/> to execute</typeparam>
-    /// <param name="process">The <see cref="ITaskProcess"/> to create a new <see cref="ITaskExecutor"/> for</param>
-    /// <returns>A new <see cref="ITaskExecutor"/> for the specified <see cref="ITaskInstance"/></returns>
-    ITaskExecutor<TDefinition> Create<TDefinition>(ITaskProcess<TDefinition> process)
+    /// <typeparam name="TDefinition">The <see cref="TaskDefinition"/> of the task to execute</typeparam>
+    /// <param name="context">The <see cref="ITaskExecutionContext"/> to create a new <see cref="ITaskExecutor"/> for</param>
+    /// <returns>A new <see cref="ITaskExecutor"/> for the specified task</returns>
+    ITaskExecutor<TDefinition> Create<TDefinition>(ITaskExecutionContext<TDefinition> context)
         where TDefinition : TaskDefinition;
 
 }

@@ -1,31 +1,48 @@
 ﻿namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IWorkflowRuntime"/>
+/// Represents the default implementation of the <see cref="IWorkflowRuntime"/> interface
 /// </summary>
-/// <param name="serviceProvider">The current <see cref="IServiceProvider"/>.</param>
-/// <param name="expressionEvaluatorProvider">The service used to provide <see cref="IRuntimeExpressionEvaluator"/>s.</param>
-/// <param name="workflowInstanceFactory">The service used to create <see cref="IWorkflowInstance"/>s.</param>
-public sealed class WorkflowRuntime(IServiceProvider serviceProvider, IRuntimeExpressionEvaluatorProvider expressionEvaluatorProvider, IWorkflowInstanceFactory workflowInstanceFactory)
+/// <param name="definitions">The service used to manage <see cref="WorkflowDefinition"/>s</param>
+/// <param name="states">The service used to manage <see cref="IWorkflowState"/>s</param>
+/// <param name="processFactory">The service used to create <see cref="IWorkflowProcess"/>es</param>
+public sealed class WorkflowRuntime(IWorkflowDefinitionStore definitions, IWorkflowStateStore states, IWorkflowProcessFactory processFactory)
     : IWorkflowRuntime
 {
+
+    readonly ConcurrentDictionary<string, IWorkflowProcess> processes = [];
 
     /// <inheritdoc/>
     public RuntimeDescriptor Descriptor { get; } = new()
     {
         Name = "Serverless Workflow Runtime",
-        Version = typeof(WorkflowRuntime).Assembly.GetName().Version?.ToString(3) ?? "1.0.0"
+        Version = "1.0.0"
     };
 
     /// <inheritdoc/>
-    public async Task<IWorkflowProcess> RunAsync(WorkflowDefinition workflowDefinition, JsonObject input, WorkflowProcessOptions? options = null, CancellationToken cancellationToken = default)
+    public async Task<IWorkflowProcess> RunAsync(string @namespace, string name, string? version = null, JsonObject? input = null, WorkflowExecutionsOptions? executionOptions = null, CancellationToken cancellationToken = default)
     {
-        var instance = workflowInstanceFactory.CreateAsync(workflowDefinition, input);
-        var language = workflowDefinition.Evaluate?.Language ?? RuntimeExpressions.Languages.JQ;
-        var expressions = expressionEvaluatorProvider.GetEvaluator(language) ?? throw new NullReferenceException($"Failed to find an expression evaluator for the specified language '{language}'");
-        var process = ActivatorUtilities.CreateInstance<WorkflowProcess>(serviceProvider, options ?? new(), expressions, instance);
-        await process.StartAsync(cancellationToken).ConfigureAwait(false);
+        ArgumentException.ThrowIfNullOrWhiteSpace(@namespace);
+        ArgumentException.ThrowIfNullOrWhiteSpace(name);
+        var definition = await definitions.GetAsync(@namespace, name, version, cancellationToken).ConfigureAwait(false) ?? throw new NullReferenceException($"Failed to find the specified workflow definition '{@namespace}.{name}:{version ?? "latest"}'");
+        return await RunAsync(definition, input, executionOptions, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    public async Task<IWorkflowProcess> RunAsync(WorkflowDefinition definition, JsonObject? input = null, WorkflowExecutionsOptions? executionOptions = null, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(definition);
+        var state = await states.AddAsync(definition, input, cancellationToken).ConfigureAwait(false);
+        var process = await processFactory.CreateAsync(definition, state, executionOptions ?? new(), cancellationToken).ConfigureAwait(false);
+        processes[state.Id] = process;
         return process;
     }
+
+    /// <inheritdoc/>
+    public async ValueTask DisposeAsync()
+    {
+        foreach (var processId in processes.Keys.ToList()) if (processes.TryRemove(processId, out var process) && process is not null) await process.DisposeAsync().ConfigureAwait(false);
+    }
+
 
 }

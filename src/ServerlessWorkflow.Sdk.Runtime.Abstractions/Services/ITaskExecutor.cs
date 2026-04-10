@@ -8,33 +8,33 @@ public interface ITaskExecutor
 {
 
     /// <summary>
-    /// Gets the <see cref="ITaskProcess"/> to run
+    /// Gets the <see cref="ITaskExecutionContext"/> to run
     /// </summary>
-    ITaskProcess Task { get; }
+    ITaskExecutionContext Task { get; }
 
     /// <summary>
-    /// Initializes the <see cref="ITaskInstance"/>
+    /// Initializes the task
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
     Task InitializeAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Runs the <see cref="ITaskInstance"/>
+    /// Runs the task
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task ExecuteAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Suspends the <see cref="ITaskInstance"/>
+    /// Suspends the task
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
     Task SuspendAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Retries to run the <see cref="ITaskInstance"/>
+    /// Retries to run the task
     /// </summary>
     /// <param name="cause">The <see cref="Error"/> that caused the retry attempt</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
@@ -42,7 +42,7 @@ public interface ITaskExecutor
     Task RetryAsync(Error cause, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Faults the handled <see cref="ITaskInstance"/>
+    /// Faults the handled task
     /// </summary>
     /// <param name="error"></param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
@@ -50,16 +50,16 @@ public interface ITaskExecutor
     Task SetErrorAsync(Error error, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Sets the <see cref="ITaskInstance"/>'s result and transitions to '<see cref="TaskInstanceStatus.Completed"/>'.
+    /// Sets the task's result and transitions to '<see cref="TaskStatus.Completed"/>'.
     /// </summary>
-    /// <param name="result">The <see cref="ITaskInstance"/>'s result, if any</param>
+    /// <param name="result">The task's result, if any</param>
     /// <param name="then">The <see cref="FlowDirective"/> to perform next</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
     Task SetResultAsync(JsonNode? result = null, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Cancels the <see cref="ITaskInstance"/>
+    /// Cancels the task
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
@@ -76,8 +76,8 @@ public interface ITaskExecutor<TDefinition>
 {
 
     /// <summary>
-    /// Gets the <see cref="ITaskProcess"/> to run
+    /// Gets the <see cref="ITaskExecutionContext"/> to run
     /// </summary>
-    new ITaskProcess<TDefinition> Task { get; }
+    new ITaskExecutionContext<TDefinition> Task { get; }
 
 }

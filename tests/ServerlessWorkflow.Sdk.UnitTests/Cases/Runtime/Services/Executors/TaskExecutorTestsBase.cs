@@ -90,7 +90,7 @@ public abstract class TaskExecutorTestsBase
         var taskContext = new Mock<ITaskExecutionContext<TDefinition>>();
         taskContext.Setup(c => c.Workflow).Returns(workflow.Object);
         taskContext.Setup(c => c.Definition).Returns(definition);
-        taskContext.Setup(c => c.Instance).Returns(taskInstance.Object);
+        taskContext.Setup(c => c.State).Returns(taskInstance.Object);
         taskContext.Setup(c => c.Input).Returns(() => input.DeepClone());
         taskContext.Setup(c => c.ContextData).Returns(() => contextData.DeepClone().AsObject()!);
         taskContext.Setup(c => c.Arguments).Returns(() => arguments.DeepClone().AsObject()!);

@@ -7,5 +7,6 @@ global using ServerlessWorkflow.Sdk.Models.Tasks;
 global using ServerlessWorkflow.Sdk.Runtime.Configuration;
 global using ServerlessWorkflow.Sdk.Runtime.Services;
 global using System.Diagnostics;
+global using System.Net.Mime;
 global using System.Text.Json;
 global using System.Text.Json.Nodes;

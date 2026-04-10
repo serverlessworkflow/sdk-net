@@ -11,10 +11,16 @@ public sealed class InMemoryWorkflowStateStore(IMemoryCache cache)
 {
 
     /// <inheritdoc/>
-    public Task<IWorkflowState> AddAsync(IWorkflowState state, CancellationToken cancellationToken = default)
+    public Task<IWorkflowState> AddAsync(WorkflowDefinition definition, JsonObject? input = null, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(state);
-        return Task.FromResult(cache.Set(state.Id, state));
+        ArgumentNullException.ThrowIfNull(definition);
+        var state = new WorkflowState()
+        {
+            Definition = definition.GetReference(),
+            Input = input
+        };
+        cache.Set(state.Id, state);
+        return Task.FromResult((IWorkflowState)state);
     }
 
     /// <inheritdoc/>

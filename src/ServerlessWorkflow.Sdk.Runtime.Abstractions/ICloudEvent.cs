@@ -1,6 +1,4 @@
-﻿using System.Net.Mime;
-
-namespace ServerlessWorkflow.Sdk.Runtime;
+﻿namespace ServerlessWorkflow.Sdk.Runtime;
 
 /// <summary>
 /// Defines the fundamentals of a <see href="https://cloudevents.io/">Cloud Event</see>

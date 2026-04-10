@@ -1,5 +1,5 @@
 #pragma warning disable IDE0130 // Namespace does not match folder structure
-namespace Microsoft.Extensions.DependencyInjection;
+namespace ServerlessWorkflow.Sdk.Runtime;
 
 /// <summary>
 /// Defines extensions for <see cref="IServiceCollection"/>
@@ -46,11 +46,14 @@ public static class ServiceCollectionExtensions
         builder.UseScriptExecutor<NodeJSScriptExecutor>();
         builder.UseScriptExecutor<PythonScriptExecutor>();
         builder.UseScriptExecutorProvider<ScriptExecutorProvider>();
-        builder.UseWorkflowInstanceFactory<WorkflowInstanceFactory>();
-        builder.UseTaskInstanceFactory<TaskInstanceFactory>();
         builder.UseTaskExecutorFactory<TaskExecutorFactory>();
-        builder.UseTaskStateStore<InMemoryTaskStateStore>();
+        builder.UseWorkflowProcessFactory<WorkflowProcessFactory>();
+        builder.UseWorkflowExecutionContextFactory<WorkflowExecutionContextFactory>();
+        builder.UseTaskExecutionContextFactory<TaskExecutionContextFactory>();
+        builder.UseWorkflowDefinitionStore<InMemoryWorkflowDefinitionStore>();
         builder.UseWorkflowStateStore<InMemoryWorkflowStateStore>();
+        builder.UseTaskStateStore<InMemoryTaskStateStore>();
+
     }
 
     static void RegisterDefaultTaskExecutors(WorkflowRuntimeBuilder builder)
@@ -70,18 +73,18 @@ public static class ServiceCollectionExtensions
 
     static void RegisterDefaultCallTaskExecutors(WorkflowRuntimeBuilder builder)
     {
-        builder.UseCallTaskExecutor<HttpCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.Http);
-        builder.UseCallTaskExecutor<OpenApiCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.OpenApi);
-        builder.UseCallTaskExecutor<AsyncApiCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.AsyncApi);
-        builder.UseCallTaskExecutor<GrpcCallTaskExecutor>(ServerlessWorkflow.Sdk.Function.Grpc);
+        builder.UseCallTaskExecutor<HttpCallTaskExecutor>(Function.Http);
+        builder.UseCallTaskExecutor<OpenApiCallTaskExecutor>(Function.OpenApi);
+        builder.UseCallTaskExecutor<AsyncApiCallTaskExecutor>(Function.AsyncApi);
+        builder.UseCallTaskExecutor<GrpcCallTaskExecutor>(Function.Grpc);
     }
 
     static void RegisterDefaultRunTaskExecutors(WorkflowRuntimeBuilder builder)
     {
-        builder.UseRunTaskExecutor<ContainerRunTaskExecutor>(ServerlessWorkflow.Sdk.ProcessType.Container);
-        builder.UseRunTaskExecutor<ShellRunTaskExecutor>(ServerlessWorkflow.Sdk.ProcessType.Shell);
-        builder.UseRunTaskExecutor<ScriptRunTaskExecutor>(ServerlessWorkflow.Sdk.ProcessType.Script);
-        builder.UseRunTaskExecutor<WorkflowRunTaskExecutor>(ServerlessWorkflow.Sdk.ProcessType.Workflow);
+        builder.UseRunTaskExecutor<ContainerRunTaskExecutor>(ProcessType.Container);
+        builder.UseRunTaskExecutor<ShellRunTaskExecutor>(ProcessType.Shell);
+        builder.UseRunTaskExecutor<ScriptRunTaskExecutor>(ProcessType.Script);
+        builder.UseRunTaskExecutor<WorkflowRunTaskExecutor>(ProcessType.Workflow);
     }
 
 }

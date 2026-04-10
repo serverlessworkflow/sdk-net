@@ -12,7 +12,7 @@ public class WaitTaskExecutorTests
         var input = new JsonObject { ["data"] = "test" };
         var taskContext = CreateTaskExecutionContext(definition, input);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         taskContext.Object.Workflow.Expressions
             .AsIMock()
@@ -31,7 +31,7 @@ public class WaitTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -43,7 +43,7 @@ public class WaitTaskExecutorTests
         var definition = new WaitTaskDefinition { Wait = Duration.FromMilliseconds(10), Then = FlowDirective.End };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         taskContext.Object.Workflow.Expressions
             .AsIMock()
@@ -62,7 +62,7 @@ public class WaitTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -74,7 +74,7 @@ public class WaitTaskExecutorTests
         var definition = new WaitTaskDefinition { Wait = Duration.FromSeconds(5) };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Running);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var executor = new WaitTaskExecutor(
             CreateServiceProvider().Object,
@@ -97,7 +97,7 @@ public class WaitTaskExecutorTests
         var definition = new WaitTaskDefinition { Wait = Duration.FromMilliseconds(10) };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup(s => s.Status).Returns(TaskInstanceStatus.Completed);
+        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var executor = new WaitTaskExecutor(
             CreateServiceProvider().Object,
@@ -111,7 +111,7 @@ public class WaitTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        Mock.Get(taskContext.Object.State).Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }
