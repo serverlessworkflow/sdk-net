@@ -1,8 +1,11 @@
 ﻿global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
+global using Microsoft.Extensions.Logging;
+global using Serilog;
 global using ServerlessWorkflow.Sdk.Models;
 global using ServerlessWorkflow.Sdk.Runtime;
 global using ServerlessWorkflow.Sdk.Runtime.Cli.Commands;
+global using ServerlessWorkflow.Sdk.Runtime.Cli.Extensions;
 global using ServerlessWorkflow.Sdk.Runtime.Cli.Services;
 global using ServerlessWorkflow.Sdk.Runtime.Services;
 global using Spectre.Console;
