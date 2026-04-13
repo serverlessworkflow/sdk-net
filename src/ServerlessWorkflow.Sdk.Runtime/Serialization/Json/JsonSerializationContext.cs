@@ -6,9 +6,16 @@
 [JsonSourceGenerationOptions(DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]
 [JsonSerializable(typeof(AuthenticationResult))]
 [JsonSerializable(typeof(CloudEvent))]
+[JsonSerializable(typeof(CorrelationContext))]
 [JsonSerializable(typeof(OAuth2Token))]
 [JsonSerializable(typeof(SchemaValidationResult))]
 [JsonSerializable(typeof(TaskLifeCycleEvent))]
+[JsonSerializable(typeof(TaskRetryAttempt))]
+[JsonSerializable(typeof(TaskRun))]
+[JsonSerializable(typeof(TaskState))]
+[JsonSerializable(typeof(WorkflowLifeCycleEvent))]
+[JsonSerializable(typeof(WorkflowRun))]
+[JsonSerializable(typeof(WorkflowState))]
 public partial class JsonSerializationContext
     : JsonSerializerContext
 {

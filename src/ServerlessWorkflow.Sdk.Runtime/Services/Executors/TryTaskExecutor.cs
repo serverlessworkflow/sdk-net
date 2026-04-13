@@ -98,8 +98,7 @@ public sealed class TryTaskExecutor(IServiceProvider serviceProvider, ILogger<Tr
 
     async Task OnTryCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
-        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData)
-            await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
+        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
         var output = executor.Task.State.Output ?? new JsonObject();
         Executors.Remove(executor);
         var then = executor.Task.State.Next == FlowDirective.End ? FlowDirective.End : Task.Definition.Then;
@@ -115,8 +114,7 @@ public sealed class TryTaskExecutor(IServiceProvider serviceProvider, ILogger<Tr
 
     async Task OnHandlerCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
-        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData)
-            await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
+        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
         var output = executor.Task.State.Output ?? new JsonObject();
         Executors.Remove(executor);
         var then = executor.Task.State.Next == FlowDirective.End ? FlowDirective.End : Task.Definition.Then;

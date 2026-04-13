@@ -15,7 +15,7 @@ public sealed class TaskExecutionContextFactory(IServiceProvider serviceProvider
         ArgumentNullException.ThrowIfNull(state);
         ArgumentNullException.ThrowIfNull(definition);
         var contextType = typeof(TaskExecutionContext<>).MakeGenericType(definition.GetType());
-        return (ITaskExecutionContext)ActivatorUtilities.CreateInstance(serviceProvider, contextType, workflow, definition, state, arguments!);
+        return (ITaskExecutionContext)ActivatorUtilities.CreateInstance(serviceProvider, contextType, workflow, definition, state, arguments ?? new JsonObject());
     }
 
 }

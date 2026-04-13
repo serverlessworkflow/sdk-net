@@ -88,7 +88,6 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         try
         {
             await InitializeCoreAsync(cancellationToken).ConfigureAwait(false);
-            await Task.InitializeAsync(cancellationToken).ConfigureAwait(false);
             Subject.OnNext(new TaskLifeCycleEvent(TaskLifeCycleEventType.Initialized));
         }
         catch (HttpRequestException ex)
@@ -329,7 +328,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         if (string.IsNullOrWhiteSpace(then)) then = FlowDirective.Continue;
         var output = result;
         var arguments = GetExpressionEvaluationArguments() ?? [];
-        arguments[RuntimeExpressions.Arguments.Output] = output!;
+        arguments[RuntimeExpressions.Arguments.Output] = output?.DeepClone();
         output = (await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Output?.As, output ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false))?.AsObject();
         if (Task.Definition.Export?.As is not null)
         {
@@ -399,10 +398,10 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     {
         var parameters = Task.Arguments?.DeepClone().AsObject()! ?? [];
         parameters[RuntimeExpressions.Arguments.Runtime] = JsonSerializer.SerializeToNode(Task.Workflow.Runtime.Descriptor, Sdk.Serialization.Json.JsonSerializationContext.Default.RuntimeDescriptor);
-        parameters[RuntimeExpressions.Arguments.Context] = Task.Workflow.State.ContextData;
+        parameters[RuntimeExpressions.Arguments.Context] = Task.Workflow.State.ContextData.DeepClone();
         parameters[RuntimeExpressions.Arguments.Workflow] = JsonSerializer.SerializeToNode(Task.Workflow.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowDescriptor);
         parameters[RuntimeExpressions.Arguments.Task] = JsonSerializer.SerializeToNode(Task.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.TaskDescriptor);
-        parameters[RuntimeExpressions.Arguments.Input] = Task.State.Input;
+        parameters[RuntimeExpressions.Arguments.Input] = Task.State.Input.DeepClone();
         return parameters;
     }
 

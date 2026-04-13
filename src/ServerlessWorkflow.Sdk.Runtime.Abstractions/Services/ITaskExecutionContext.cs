@@ -27,13 +27,6 @@ public interface ITaskExecutionContext
     JsonObject? Arguments { get; }
 
     /// <summary>
-    /// Initializes the task
-    /// </summary>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task InitializeAsync(CancellationToken cancellationToken = default);
-
-    /// <summary>
     /// Executes the task
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
@@ -86,14 +79,6 @@ public interface ITaskExecutionContext
     Task SetErrorAsync(Error error, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Sets the task's context data
-    /// </summary>
-    /// <param name="context">The updated context data</param>
-    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new awaitable <see cref="Task"/></returns>
-    Task SetContextDataAsync(JsonObject context, CancellationToken cancellationToken = default);
-
-    /// <summary>
     /// Sets the task's result, if any
     /// </summary>
     /// <param name="result">The task's result, if any</param>
@@ -101,6 +86,14 @@ public interface ITaskExecutionContext
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task SetResultAsync(JsonNode? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Sets the task's context data
+    /// </summary>
+    /// <param name="contextData">The task's context data</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    Task SetContextDataAsync(JsonObject contextData, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Skips the task

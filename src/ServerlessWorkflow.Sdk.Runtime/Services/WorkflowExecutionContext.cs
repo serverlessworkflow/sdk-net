@@ -10,7 +10,9 @@
 /// <param name="runtimeExpressionEvaluator">The service used to evaluate runtime expressions</param>
 /// <param name="runtime">The <see cref="IWorkflowRuntime"/> in which the workflow is being executed</param>
 /// <param name="eventBus">The service used to publish and subscribe to <see cref="ICloudEvent"/>s</param>
-public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> logger, WorkflowExecutionsOptions options, WorkflowDefinition definition, IWorkflowState state, IRuntimeExpressionEvaluator runtimeExpressionEvaluator, IWorkflowRuntime runtime, ICloudEventBus eventBus)
+/// <param name="tasks">The service used to manage <see cref="ITaskState"/>s</param>
+public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> logger, WorkflowExecutionsOptions options, WorkflowDefinition definition, 
+    IWorkflowState state, IRuntimeExpressionEvaluator runtimeExpressionEvaluator, IWorkflowRuntime runtime, ICloudEventBus eventBus, ITaskStateStore tasks)
     : IWorkflowExecutionContext
 {
 
@@ -29,6 +31,9 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
     public IWorkflowRuntime Runtime => runtime;
 
     /// <inheritdoc/>
+    public WorkflowExecutionsOptions Options => options;
+
+    /// <inheritdoc/>
     public Task ContinueWithAsync(TaskDefinition task, CancellationToken cancellationToken = default) => Task.CompletedTask;
 
     /// <inheritdoc/>
@@ -36,26 +41,44 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
     {
         ArgumentNullException.ThrowIfNull(definition);
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        throw new NotImplementedException();
+        if (options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
+        {
+            SpecVersion = CloudEvent.DefaultVersion,
+            Id = Guid.NewGuid().ToString(),
+            Time = DateTimeOffset.Now,
+            Source = options.LifecycleEvents.Source,
+            Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Created.v1,
+            Subject = State.Id,
+            DataContentType = MediaTypeNames.Application.Json,
+            Data = JsonSerializer.SerializeToNode(new()
+            {
+                Workflow = State.GetQualifiedName(),
+                Task = path,
+                CreatedAt = state.CreatedAt
+            }, Sdk.Serialization.Json.JsonSerializationContext.Default.TaskCreatedEvent)
+        }, cancellationToken).ConfigureAwait(false);
+        return await tasks.AddAsync(new TaskState()
+        {
+            WorkflowId = state.Id,
+            Name = path.ToString().Split('/', StringSplitOptions.RemoveEmptyEntries).Last(),
+            Reference = path,
+            ParentId = parent?.State.Id,
+            IsExtension = isExtension,
+            Input = input
+        }, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<ITaskState> GetTasksAsync(CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
+    public IAsyncEnumerable<ITaskState> GetTasksAsync(CancellationToken cancellationToken = default) => tasks.ListAsync(State.Id, cancellationToken);
 
     /// <inheritdoc/>
-    public Task PublishAsync(ICloudEvent e, CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
+    public Task PublishAsync(ICloudEvent e, CancellationToken cancellationToken = default) => eventBus.PublishAsync(e, cancellationToken);
 
     /// <inheritdoc/>
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Starting workflow state with id '{state}'...", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Starting workflow with id '{WorkflowId}'...", state.Id);
         await state.StartAsync(cancellationToken).ConfigureAwait(false);
         if (options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
@@ -73,7 +96,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
                 StartedAt = state.StartedAt ?? DateTimeOffset.Now
             }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowStartedEvent)
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Workflow state with id '{state}' started", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Workflow with id '{WorkflowId}' started", state.Id);
     }
 
     /// <inheritdoc/>
@@ -81,7 +104,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
     {
         if (state.Status == WorkflowStatus.Suspended) return;
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Suspending the execution of the workflow state with id '{state}'...", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Suspending the execution of the workflow with id '{WorkflowId}'...", state.Id);
         await state.SuspendAsync(cancellationToken).ConfigureAwait(false);
         if (options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
@@ -98,7 +121,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
                 SuspendedAt = DateTimeOffset.Now
             }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowSuspendedEvent)
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the workflow state with id '{state}' has been suspended", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the workflow with id '{WorkflowId}' has been suspended", state.Id);
     }
 
     /// <inheritdoc/>
@@ -106,7 +129,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
     {
         if (state.Status != WorkflowStatus.Suspended) return;
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Resuming the execution of the workflow state with id '{state}'...", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Resuming the execution of the workflow with id '{WorkflowId}'...", state.Id);
         await state.ResumeAsync(cancellationToken).ConfigureAwait(false);
         if (options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
@@ -123,7 +146,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
                 ResumedAt = DateTimeOffset.Now
             }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowResumedEvent)
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the workflow state with id '{state}' has been resumed", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the workflow with id '{WorkflowId}' has been resumed", state.Id);
 
     }
 
@@ -174,15 +197,18 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
                 Output = result
             }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowCompletedEvent)
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The workflow state with id '{state}' ran to completion", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The workflow with id '{WorkflowId}' ran to completion", state.Id);
     }
+
+    /// <inheritdoc/>
+    public Task SetContextDataAsync(JsonObject contextData, CancellationToken cancellationToken = default) => State.SetContextDataAsync(contextData, cancellationToken);
 
     /// <inheritdoc/>
     public async Task CancelAsync(CancellationToken cancellationToken = default)
     {
         if (state.Status == WorkflowStatus.Cancelled) return;
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Cancelling the execution of the workflow state with id '{state}'...", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Cancelling the execution of the workflow with id '{WorkflowId}'...", state.Id);
         await state.CancelAsync(cancellationToken).ConfigureAwait(false);
         if (options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
@@ -199,7 +225,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
                 CancelledAt = DateTimeOffset.Now
             }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowCancelledEvent)
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the workflow state with id '{state}' has been cancelled", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the workflow with id '{WorkflowId}' has been cancelled", state.Id);
     }
 
 }

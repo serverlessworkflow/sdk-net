@@ -1,20 +1,20 @@
-﻿using Microsoft.Extensions.Caching.Memory;
-
-namespace ServerlessWorkflow.Sdk.Runtime.Services;
+﻿namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
 /// Represents an in-memory implementation of the <see cref="ITaskStateStore"/> interface
 /// </summary>
-/// <param name="cache">The <see cref="IMemoryCache"/> instance used to store task states</param>
-public sealed class InMemoryTaskStateStore(IMemoryCache cache)
+public sealed class InMemoryTaskStateStore
     : ITaskStateStore
 {
+
+    readonly ConcurrentDictionary<string, ITaskState> tasks = [];
 
     /// <inheritdoc/>
     public Task<ITaskState> AddAsync(ITaskState state, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(state);
-        return Task.FromResult(cache.Set(GetCacheKey(state.WorkflowId, state.Id), state));
+        tasks[GetCacheKey(state.WorkflowId, state.Id)] = state;
+        return Task.FromResult(state);
     }
 
     /// <inheritdoc/>
@@ -22,14 +22,30 @@ public sealed class InMemoryTaskStateStore(IMemoryCache cache)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(workflowId);
         ArgumentException.ThrowIfNullOrWhiteSpace(taskId);
-        return cache.TryGetValue(GetCacheKey(workflowId, taskId), out ITaskState? state) && state is not null ? Task.FromResult(state) : throw new KeyNotFoundException($"Task with id '{taskId}' not found in workflow '{workflowId}'");
+        return tasks.TryGetValue(GetCacheKey(workflowId, taskId), out var state) && state is not null ? Task.FromResult(state) : throw new KeyNotFoundException($"Task with id '{taskId}' not found in workflow '{workflowId}'");
+    }
+
+    /// <inheritdoc/>
+    public IAsyncEnumerable<ITaskState> ListAsync(string workflowId, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(workflowId);
+        return tasks.Values.Where(t => t.WorkflowId == workflowId).ToAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
+    public IAsyncEnumerable<ITaskState> ListAsync(string workflowId, string taskId, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(workflowId);
+        ArgumentException.ThrowIfNullOrWhiteSpace(taskId);
+        return tasks.Values.Where(t => t.WorkflowId == workflowId && t.ParentId == taskId).ToAsyncEnumerable();
     }
 
     /// <inheritdoc/>
     public Task<ITaskState> UpdateAsync(ITaskState state, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(state);
-        return Task.FromResult(cache.Set(GetCacheKey(state.WorkflowId, state.Id), state));
+        tasks[GetCacheKey(state.WorkflowId, state.Id)] = state;
+        return Task.FromResult(state);
     }
 
     static string GetCacheKey(string workflowId, string taskId) => $"{workflowId}:{taskId}";

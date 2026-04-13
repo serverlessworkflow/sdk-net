@@ -30,7 +30,7 @@ public sealed record TaskSuspendedEvent
     /// Gets/sets the reference of the task that has been suspended
     /// </summary>
     [DataMember(Name = "task", Order = 2), JsonPropertyName("task"), JsonPropertyOrder(2)]
-    public required Uri Task { get; set; }
+    public required JsonPointer Task { get; set; }
 
     /// <summary>
     /// Gets/sets the date and time at which the task has been suspended

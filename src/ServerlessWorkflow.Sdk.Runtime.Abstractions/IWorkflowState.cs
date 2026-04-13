@@ -62,6 +62,11 @@ public interface IWorkflowState
     bool IsOperative => Status == TaskStatus.Pending || Status == TaskStatus.Running || Status == TaskStatus.Suspended;
 
     /// <summary>
+    /// Gets a collection containing the workflow's runs
+    /// </summary>
+    IReadOnlyCollection<IWorkflowRun>? Runs { get; }
+
+    /// <summary>
     /// Starts the workflow
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
@@ -97,6 +102,14 @@ public interface IWorkflowState
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task SetErrorAsync(Error error, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Sets the workflow's context data
+    /// </summary>
+    /// <param name="contextData">The workflow's context data</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    Task SetContextDataAsync(JsonObject contextData, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Cancels the workflow's execution

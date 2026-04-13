@@ -149,7 +149,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
     {
         if (value is null) return null;
         var properties = new List<KeyValuePair<string, JsonNode?>>(value.Count);
-        foreach (var property in value) properties.Add(new KeyValuePair<string, JsonNode?>(property.Key, await expressionEvaluator.EvaluateAsync(property.Value, input, arguments, cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Unexpected null value")));
+        foreach (var property in value) properties.Add(new KeyValuePair<string, JsonNode?>(property.Key, (await expressionEvaluator.EvaluateAsync(property.Value, input, arguments, cancellationToken).ConfigureAwait(false) ?? throw new InvalidOperationException("Unexpected null value")).DeepClone()));
         return new JsonObject(properties);
     }
 

@@ -27,6 +27,11 @@ public interface IWorkflowExecutionContext
     IWorkflowRuntime Runtime { get; }
 
     /// <summary>
+    /// Gets the options used to configure the workflow's execution
+    /// </summary>
+    WorkflowExecutionsOptions Options { get; }
+
+    /// <summary>
     /// Continues execution with the provided <see cref="TaskDefinition"/>
     /// </summary>
     /// <param name="task">The <see cref="TaskDefinition"/> to continue with</param>
@@ -97,6 +102,14 @@ public interface IWorkflowExecutionContext
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new awaitable <see cref="Task"/></returns>
     Task SetResultAsync(JsonNode? result, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Sets the workflow's context data
+    /// </summary>
+    /// <param name="contextData">The workflow's context data</param>
+    /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
+    /// <returns>A new awaitable <see cref="Task"/></returns>
+    Task SetContextDataAsync(JsonObject contextData, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Cancels the workflow's execution
