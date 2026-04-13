@@ -15,7 +15,7 @@ public sealed class ForTaskExecutor(IServiceProvider serviceProvider, ILogger<Fo
 
     JsonArray? collection;
 
-    static JsonPointer GetPathFor(string subTaskName) => JsonPointer.Create("for", subTaskName, "do");
+    JsonPointer GetPathFor(string subTaskName) => JsonPointer.Parse($"{Task.State.Reference}/{subTaskName}/do");
 
     /// <inheritdoc/>
     protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskState state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)

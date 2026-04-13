@@ -15,7 +15,7 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
 
     Map<string, TaskDefinition> Tasks => Task.Definition.Do;
 
-    static JsonPointer GetPathFor(int index, string name) => JsonPointer.Create("do", index, name);
+    JsonPointer GetPathFor(int index, string name) => JsonPointer.Parse($"{Task.State.Reference}/{index}/{name}");
 
     MapEntry<string, TaskDefinition>? GetNextTask(string? currentName)
     {
