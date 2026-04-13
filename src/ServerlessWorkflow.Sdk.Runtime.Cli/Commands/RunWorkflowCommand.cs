@@ -267,7 +267,17 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
         if (tracker.Output != null)
         {
             var json = tracker.Output.ToJsonString(new JsonSerializerOptions { WriteIndented = true });
-            var outputPanel = new Panel(new JsonText(json))
+            var jsonText = new JsonText(json)
+                .BracesColor(Color.Grey70)
+                .BracketColor(Color.Grey70)
+                .ColonColor(Color.Grey)
+                .CommaColor(Color.Grey)
+                .MemberColor(Color.White)
+                .StringColor(Color.DarkSeaGreen2)
+                .NumberColor(Color.DeepSkyBlue1)
+                .BooleanColor(Color.Gold1)
+                .NullColor(Color.Grey);
+            var outputPanel = new Panel(jsonText)
             {
                 Header = new PanelHeader(" [bold deepskyblue1]output[/] "),
                 Border = BoxBorder.Rounded,

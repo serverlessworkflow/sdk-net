@@ -77,7 +77,7 @@ public sealed class HttpCallTaskExecutor(IServiceProvider serviceProvider, ILogg
             var authResult = await authenticationHandler.HandleAsync(authentication, Task.Workflow.Definition, cancellationToken).ConfigureAwait(false);
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authResult.Scheme, authResult.Value);
         }
-        var parameters = Task.State.Input is JsonObject jsonObject ? jsonObject.ToDictionary(kvp => kvp.Key, kvp => kvp.Value?.GetValue<object>()) : [];
+        var parameters = Task.State.Input is JsonObject jsonObject ? jsonObject.Where(kvp => kvp.Value is JsonValue).ToDictionary(kvp => kvp.Key, kvp => kvp.Value?.GetValue<object>()) : [];
         var uri = StringFormatter.Format(endpointUri.OriginalString, parameters);
         if (uri.IsRuntimeExpression()) uri = await Task.Workflow.Expressions.EvaluateAsync<string>(uri, Task.State.Input, this.GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
         using var request = new HttpRequestMessage(new HttpMethod(http.Method), uri) { Content = requestContent };

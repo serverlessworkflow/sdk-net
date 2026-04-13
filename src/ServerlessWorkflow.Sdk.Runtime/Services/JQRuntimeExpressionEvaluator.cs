@@ -67,7 +67,7 @@ public sealed class JQRuntimeExpressionEvaluator
             catch { }
         });
         process.Start();
-        process.StandardInput.Write(JsonSerializer.Serialize(input, Sdk.Serialization.Json.JsonSerializationContext.Default.JsonObject));
+        process.StandardInput.Write(JsonSerializer.Serialize(input, Sdk.Serialization.Json.JsonSerializationContext.Default.JsonNode));
         process.StandardInput.Close();
         var output = process.StandardOutput.ReadToEnd();
         var error = process.StandardError.ReadToEnd();

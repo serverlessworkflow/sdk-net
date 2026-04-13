@@ -15,10 +15,10 @@ public sealed class TaskDefinitionJsonConverter
         var root = document.RootElement;
         if (root.ValueKind != JsonValueKind.Object) throw new JsonException($"Expected a JSON object to deserialize a {nameof(TaskDefinition)}.");
         if (root.TryGetProperty(namingPolicy.ConvertName(nameof(CallTaskDefinition.Call)), out var _)) return JsonSerializer.Deserialize(root, JsonSerializationContext.Default.CallTaskDefinition);
-        if (root.TryGetProperty(namingPolicy.ConvertName(nameof(DoTaskDefinition.Do)), out var _)) return JsonSerializer.Deserialize(root, JsonSerializationContext.Default.DoTaskDefinition);
         if (root.TryGetProperty(namingPolicy.ConvertName(nameof(EmitTaskDefinition.Emit)), out var _)) return JsonSerializer.Deserialize(root, JsonSerializationContext.Default.EmitTaskDefinition);
         if (root.TryGetProperty(namingPolicy.ConvertName(nameof(ForkTaskDefinition.Fork)), out var _)) return JsonSerializer.Deserialize(root, JsonSerializationContext.Default.ForkTaskDefinition);
         if (root.TryGetProperty(namingPolicy.ConvertName(nameof(ForTaskDefinition.For)), out var _)) return JsonSerializer.Deserialize(root, JsonSerializationContext.Default.ForTaskDefinition);
+        if (root.TryGetProperty(namingPolicy.ConvertName(nameof(DoTaskDefinition.Do)), out var _)) return JsonSerializer.Deserialize(root, JsonSerializationContext.Default.DoTaskDefinition);
         if (root.TryGetProperty(namingPolicy.ConvertName(nameof(ListenTaskDefinition.Listen)), out var _)) return JsonSerializer.Deserialize(root, JsonSerializationContext.Default.ListenTaskDefinition);
         if (root.TryGetProperty(namingPolicy.ConvertName(nameof(RaiseTaskDefinition.Raise)), out var _)) return JsonSerializer.Deserialize(root, JsonSerializationContext.Default.RaiseTaskDefinition);
         if (root.TryGetProperty(namingPolicy.ConvertName(nameof(RunTaskDefinition.Run)), out var _)) return JsonSerializer.Deserialize(root, JsonSerializationContext.Default.RunTaskDefinition);

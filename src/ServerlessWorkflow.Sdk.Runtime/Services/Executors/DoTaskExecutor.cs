@@ -33,7 +33,7 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
         var executor = await base.CreateTaskExecutorAsync(state, definition, contextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
         executor.SubscribeAsync(
             _ => System.Threading.Tasks.Task.CompletedTask,
-            async ex => await OnSubTaskFaultAsync(executor, CancellationTokenSource?.Token ?? default).ConfigureAwait(false),
+            async ex => await OnSubTaskFaultAsync(executor, ex, CancellationTokenSource?.Token ?? default).ConfigureAwait(false),
             async () => await OnSubtaskCompletedAsync(executor, CancellationTokenSource?.Token ?? default).ConfigureAwait(false)
         );
         return executor;
@@ -66,9 +66,14 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
         await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    async Task OnSubTaskFaultAsync(ITaskExecutor executor, CancellationToken cancellationToken)
+    async Task OnSubTaskFaultAsync(ITaskExecutor executor, Exception ex, CancellationToken cancellationToken)
     {
-        var error = executor.Task.State.Error ?? throw new NullReferenceException();
+        var error = executor.Task.State.Error;
+        if (error is null)
+        {
+            if (ex is RuntimeErrorException rex) error = rex.Error;
+            else error = Error.Runtime(new(executor.Task.State.Reference.ToString(), UriKind.Relative), $"An unhandled exception was thrown during the execution of task '{executor.Task.State.Reference}': {ex}");
+        }
         Executors.Remove(executor);
         await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
     }
