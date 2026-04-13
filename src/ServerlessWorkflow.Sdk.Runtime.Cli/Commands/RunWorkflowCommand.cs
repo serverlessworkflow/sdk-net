@@ -346,9 +346,17 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
         public string Status { get; private set; } = WorkflowStatus.Pending;
         public JsonNode? Output { get; private set; }
         public Error? Error { get; private set; }
-        public int CompletedCount { get; private set; }
-        public int FaultedCount { get; private set; }
-        public int SkippedCount { get; private set; }
+
+        public int CompletedCount => CountBy(TaskRunStatus.Completed);
+        public int FaultedCount => CountBy(TaskRunStatus.Faulted);
+        public int SkippedCount => CountBy(TaskRunStatus.Skipped);
+
+        int CountBy(TaskRunStatus status)
+        {
+            var n = 0;
+            foreach (var t in Tasks.Values) if (t.Status == status) n++;
+            return n;
+        }
 
         public void Apply(ICloudEvent ev)
         {
@@ -387,12 +395,8 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
                 case TaskCompletedEvent taskCompleted:
                     {
                         var task = GetOrAdd(taskCompleted.Task);
-                        if (task.Status != TaskRunStatus.Completed)
-                        {
-                            task.Status = TaskRunStatus.Completed;
-                            task.EndedAt = taskCompleted.CompletedAt;
-                            CompletedCount++;
-                        }
+                        task.Status = TaskRunStatus.Completed;
+                        task.EndedAt = taskCompleted.CompletedAt;
                         break;
                     }
                 case TaskFaultedEvent taskFaulted:
@@ -400,7 +404,6 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
                         var task = GetOrAdd(taskFaulted.Task);
                         task.Status = TaskRunStatus.Faulted;
                         task.EndedAt = taskFaulted.FaultedAt;
-                        FaultedCount++;
                         break;
                     }
                 case TaskSkippedEvent skipped:
@@ -408,7 +411,6 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
                         var task = GetOrAdd(skipped.Task);
                         task.Status = TaskRunStatus.Skipped;
                         task.EndedAt = skipped.SkippedAt;
-                        SkippedCount++;
                         break;
                     }
                 case TaskCancelledEvent cancelled:
