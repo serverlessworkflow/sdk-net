@@ -32,6 +32,12 @@ public interface IWorkflowExecutionContext
     WorkflowExecutionsOptions Options { get; }
 
     /// <summary>
+    /// Gets a new <see cref="JsonObject"/>, if any, containing the runtime expression evaluation arguments for the <see cref="ITaskState"/> to run
+    /// </summary>
+    /// <returns>A new <see cref="JsonObject"/>, if any, containing the runtime expression evaluation arguments for the <see cref="ITaskState"/> to run</returns>
+    JsonObject GetExpressionEvaluationArguments();
+
+    /// <summary>
     /// Continues execution with the provided <see cref="TaskDefinition"/>
     /// </summary>
     /// <param name="task">The <see cref="TaskDefinition"/> to continue with</param>

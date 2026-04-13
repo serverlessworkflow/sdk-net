@@ -20,6 +20,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
 {
 
     readonly AsyncLock asyncLock = new();
+    JsonObject? expressionEvaluationArguments;
 
     /// <inheritdoc/>
     public WorkflowDefinition Definition => definition;
@@ -35,6 +36,17 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
 
     /// <inheritdoc/>
     public WorkflowExecutionsOptions Options => options;
+
+    /// <inheritdoc/>
+    public JsonObject GetExpressionEvaluationArguments()
+    {
+        expressionEvaluationArguments ??= new()
+        {
+            [RuntimeExpressions.Arguments.Runtime] = JsonSerializer.SerializeToNode(Runtime.Descriptor, Sdk.Serialization.Json.JsonSerializationContext.Default.RuntimeDescriptor),
+            [RuntimeExpressions.Arguments.Workflow] = JsonSerializer.SerializeToNode(this.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowDescriptor)
+        };
+        return expressionEvaluationArguments;
+    }
 
     /// <inheritdoc/>
     public Task ContinueWithAsync(TaskDefinition task, CancellationToken cancellationToken = default) => Task.CompletedTask;

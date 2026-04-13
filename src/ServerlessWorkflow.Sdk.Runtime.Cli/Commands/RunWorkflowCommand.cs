@@ -1,7 +1,8 @@
 using System.Diagnostics;
 using System.Threading.Channels;
+using ServerlessWorkflow.Sdk.Events.Tasks;
+using ServerlessWorkflow.Sdk.Events.Workflows;
 using Spectre.Console.Json;
-using SwfDefaults = ServerlessWorkflow.Sdk.ServerlessWorkflowSpecificationDefaults;
 
 namespace ServerlessWorkflow.Sdk.Runtime.Cli.Commands;
 
@@ -335,82 +336,98 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
 
         public void Apply(ICloudEvent ev)
         {
-            var type = ev.Type;
-            if (type == SwfDefaults.CloudEvents.Workflow.Started.v1) Status = WorkflowStatus.Running;
-            else if (type == SwfDefaults.CloudEvents.Workflow.Completed.v1)
+            switch (ev.Data)
             {
-                Status = WorkflowStatus.Completed;
-                Output = ev.Data?["output"]?.DeepClone();
-            }
-            else if (type == SwfDefaults.CloudEvents.Workflow.Faulted.v1)
-            {
-                Status = WorkflowStatus.Faulted;
-                Error = TryDeserializeError(ev.Data?["error"]);
-            }
-            else if (type == SwfDefaults.CloudEvents.Workflow.Cancelled.v1) Status = WorkflowStatus.Cancelled;
-            else if (type == SwfDefaults.CloudEvents.Workflow.Suspended.v1) Status = WorkflowStatus.Suspended;
-            else if (type == SwfDefaults.CloudEvents.Workflow.Resumed.v1) Status = WorkflowStatus.Running;
-            else if (type == SwfDefaults.CloudEvents.Task.Created.v1) GetOrAdd(ev);
-            else if (type == SwfDefaults.CloudEvents.Task.Started.v1)
-            {
-                var task = GetOrAdd(ev);
-                task.Status = TaskRunStatus.Running;
-                task.StartedAt = ev.Time ?? DateTimeOffset.Now;
-            }
-            else if (type == SwfDefaults.CloudEvents.Task.Completed.v1)
-            {
-                var task = GetOrAdd(ev);
-                if (task.Status != TaskRunStatus.Completed)
-                {
-                    task.Status = TaskRunStatus.Completed;
-                    task.EndedAt = ev.Time ?? DateTimeOffset.Now;
-                    CompletedCount++;
-                }
-            }
-            else if (type == SwfDefaults.CloudEvents.Task.Faulted.v1)
-            {
-                var task = GetOrAdd(ev);
-                task.Status = TaskRunStatus.Faulted;
-                task.EndedAt = ev.Time ?? DateTimeOffset.Now;
-                FaultedCount++;
-            }
-            else if (type == SwfDefaults.CloudEvents.Task.Skipped.v1)
-            {
-                var task = GetOrAdd(ev);
-                task.Status = TaskRunStatus.Skipped;
-                task.EndedAt = ev.Time ?? DateTimeOffset.Now;
-                SkippedCount++;
-            }
-            else if (type == SwfDefaults.CloudEvents.Task.Cancelled.v1)
-            {
-                var task = GetOrAdd(ev);
-                task.Status = TaskRunStatus.Cancelled;
-                task.EndedAt = ev.Time ?? DateTimeOffset.Now;
-            }
-            else if (type == SwfDefaults.CloudEvents.Task.Suspended.v1)
-            {
-                var task = GetOrAdd(ev);
-                task.Status = TaskRunStatus.Suspended;
+                case WorkflowStartedEvent:
+                    Status = WorkflowStatus.Running;
+                    break;
+                case WorkflowCompletedEvent completed:
+                    Status = WorkflowStatus.Completed;
+                    Output = ToJsonNode(completed.Output);
+                    break;
+                case WorkflowFaultedEvent faulted:
+                    Status = WorkflowStatus.Faulted;
+                    Error = faulted.Error;
+                    break;
+                case WorkflowCancelledEvent:
+                    Status = WorkflowStatus.Cancelled;
+                    break;
+                case WorkflowSuspendedEvent:
+                    Status = WorkflowStatus.Suspended;
+                    break;
+                case WorkflowResumedEvent:
+                    Status = WorkflowStatus.Running;
+                    break;
+                case TaskCreatedEvent created:
+                    GetOrAdd(created.Task);
+                    break;
+                case TaskStartedEvent started:
+                    {
+                        var task = GetOrAdd(started.Task);
+                        task.Status = TaskRunStatus.Running;
+                        task.StartedAt = started.StartedAt;
+                        break;
+                    }
+                case TaskCompletedEvent taskCompleted:
+                    {
+                        var task = GetOrAdd(taskCompleted.Task);
+                        if (task.Status != TaskRunStatus.Completed)
+                        {
+                            task.Status = TaskRunStatus.Completed;
+                            task.EndedAt = taskCompleted.CompletedAt;
+                            CompletedCount++;
+                        }
+                        break;
+                    }
+                case TaskFaultedEvent taskFaulted:
+                    {
+                        var task = GetOrAdd(taskFaulted.Task);
+                        task.Status = TaskRunStatus.Faulted;
+                        task.EndedAt = taskFaulted.FaultedAt;
+                        FaultedCount++;
+                        break;
+                    }
+                case TaskSkippedEvent skipped:
+                    {
+                        var task = GetOrAdd(skipped.Task);
+                        task.Status = TaskRunStatus.Skipped;
+                        task.EndedAt = skipped.SkippedAt;
+                        SkippedCount++;
+                        break;
+                    }
+                case TaskCancelledEvent cancelled:
+                    {
+                        var task = GetOrAdd(cancelled.Task);
+                        task.Status = TaskRunStatus.Cancelled;
+                        task.EndedAt = cancelled.CancelledAt;
+                        break;
+                    }
+                case TaskSuspendedEvent suspended:
+                    {
+                        var task = GetOrAdd(suspended.Task);
+                        task.Status = TaskRunStatus.Suspended;
+                        break;
+                    }
             }
         }
 
-        TaskRunInfo GetOrAdd(ICloudEvent ev)
+        TaskRunInfo GetOrAdd(Json.Pointer.JsonPointer reference)
         {
-            var reference = ev.Data?["task"]?.GetValue<string>() ?? ev.Subject ?? "(unknown)";
-            if (!Tasks.TryGetValue(reference, out var task))
+            var key = reference.ToString();
+            if (!Tasks.TryGetValue(key, out var task))
             {
-                task = new TaskRunInfo { Reference = reference };
-                Tasks[reference] = task;
+                task = new TaskRunInfo { Reference = key };
+                Tasks[key] = task;
             }
             return task;
         }
 
-        static Error? TryDeserializeError(JsonNode? node)
+        static JsonNode? ToJsonNode(object? value) => value switch
         {
-            if (node == null) return null;
-            try { return JsonSerializer.Deserialize<Error>(node, Sdk.Serialization.Json.JsonSerializationContext.Default.Options); }
-            catch { return null; }
-        }
+            null => null,
+            JsonNode node => node.DeepClone(),
+            _ => JsonSerializer.SerializeToNode(value, Sdk.Serialization.Json.JsonSerializationContext.Default.Options)
+        };
 
     }
 

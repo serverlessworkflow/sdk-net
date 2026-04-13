@@ -137,7 +137,7 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
         executor.SubscribeAsync
         (
             _ => Task.CompletedTask,
-            async ex => await OnTaskFaultedAsync(executor, cancellationToken).ConfigureAwait(false),
+            async ex => await OnTaskFaultedAsync(executor, ex, cancellationToken).ConfigureAwait(false),
             async () => await OnTaskCompletedAsync(executor, cancellationToken).ConfigureAwait(false)
         );
         await executor.InitializeAsync(cancellationToken).ConfigureAwait(false);
@@ -145,9 +145,15 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
         return executor;
     }
 
-    async Task OnTaskFaultedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
+    async Task OnTaskFaultedAsync(ITaskExecutor executor, Exception ex, CancellationToken cancellationToken)
     {
-        await SetErrorAsync(executor.Task.State.Error ?? throw new Exception("Faulted tasks must document an error"), cancellationToken).ConfigureAwait(false);
+        var error = executor.Task.State.Error;
+        if (error is null)
+        {
+            if (ex is RuntimeErrorException rex) error = rex.Error;
+            else error = Error.Runtime(new(executor.Task.State.Reference.ToString(), UriKind.Relative), $"An unhandled exception was thrown during the execution of task '{executor.Task.State.Reference}': {ex}");
+        }
+        await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
         executors.TryRemove(executor, out _);
     }
 

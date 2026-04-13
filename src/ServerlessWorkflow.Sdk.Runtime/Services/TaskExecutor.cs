@@ -14,7 +14,9 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
      where TDefinition : TaskDefinition
 {
 
+    readonly JsonNode descriptor = JsonSerializer.SerializeToNode(task.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.TaskDescriptor)!;
     bool disposed;
+    
 
     /// <summary>
     /// Gets the current <see cref="IServiceProvider"/>
@@ -396,11 +398,10 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     /// <returns>A new <see cref="JsonObject"/>, if any, containing the runtime expression evaluation arguments for the <see cref="ITaskState"/> to run</returns>
     protected virtual JsonObject? GetExpressionEvaluationArguments()
     {
-        var parameters = Task.Arguments?.DeepClone().AsObject()! ?? [];
-        parameters[RuntimeExpressions.Arguments.Runtime] = JsonSerializer.SerializeToNode(Task.Workflow.Runtime.Descriptor, Sdk.Serialization.Json.JsonSerializationContext.Default.RuntimeDescriptor);
+        var parameters = Task.Workflow.GetExpressionEvaluationArguments();
+        if (Task.Arguments?.Count > 0) foreach (var (key, value) in Task.Arguments) parameters.TryAdd(key, value?.DeepClone());
         parameters[RuntimeExpressions.Arguments.Context] = Task.Workflow.State.ContextData.DeepClone();
-        parameters[RuntimeExpressions.Arguments.Workflow] = JsonSerializer.SerializeToNode(Task.Workflow.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowDescriptor);
-        parameters[RuntimeExpressions.Arguments.Task] = JsonSerializer.SerializeToNode(Task.GetDescriptor(), Sdk.Serialization.Json.JsonSerializationContext.Default.TaskDescriptor);
+        parameters[RuntimeExpressions.Arguments.Task] = descriptor.DeepClone();
         parameters[RuntimeExpressions.Arguments.Input] = Task.State.Input.DeepClone();
         return parameters;
     }
