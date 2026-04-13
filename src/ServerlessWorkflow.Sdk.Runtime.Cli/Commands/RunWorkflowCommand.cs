@@ -65,7 +65,7 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
                 .Cropping(VerticalOverflowCropping.Bottom)
                 .StartAsync(async ctx =>
                 {
-                    UpdateTable(table, tracker);
+                    UpdateTable(table, tracker, 0);
                     ctx.UpdateTarget(new Rows(RenderStatus(tracker, TimeSpan.Zero, 0), table));
                     ctx.Refresh();
 
@@ -74,21 +74,22 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
                     {
                         var process = await workflowRuntime.RunAsync(definition, input, new(), cancellationToken).ConfigureAwait(false);
                         try { await process.WaitAsync(cancellationToken).ConfigureAwait(false); }
-                        catch { /* faulted state captured via events */ }
+                        catch { }
                     }, cancellationToken);
 
                     var frame = 0;
                     while (true)
                     {
                         while (channel.Reader.TryRead(out var ev)) tracker.Apply(ev);
-                        UpdateTable(table, tracker);
-                        ctx.UpdateTarget(new Rows(RenderStatus(tracker, stopwatch.Elapsed, frame++), table));
+                        UpdateTable(table, tracker, frame);
+                        ctx.UpdateTarget(new Rows(RenderStatus(tracker, stopwatch.Elapsed, frame), table));
                         ctx.Refresh();
                         if (runTask.IsCompleted) break;
+                        frame++;
                         await Task.Delay(80, cancellationToken).ConfigureAwait(false);
                     }
                     while (channel.Reader.TryRead(out var ev)) tracker.Apply(ev);
-                    UpdateTable(table, tracker);
+                    UpdateTable(table, tracker, frame);
                     ctx.UpdateTarget(new Rows(RenderStatus(tracker, stopwatch.Elapsed, frame), table));
                     ctx.Refresh();
                 }).ConfigureAwait(false);
@@ -122,6 +123,7 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
         where T : class
     {
         var text = await File.ReadAllTextAsync(file.FullName, cancellationToken).ConfigureAwait(false);
+        if (string.IsNullOrWhiteSpace(text)) return default;
         return file.Extension.ToLowerInvariant() switch
         {
             ".json" => JsonSerializer.Deserialize<T>(text, Sdk.Serialization.Json.JsonSerializationContext.Default.Options),
@@ -169,15 +171,16 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
         return table;
     }
 
-    static void UpdateTable(Table table, WorkflowRunTracker tracker)
+    static void UpdateTable(Table table, WorkflowRunTracker tracker, int frame)
     {
         table.Rows.Clear();
+        var now = DateTimeOffset.Now;
         foreach (var task in tracker.Tasks.Values)
         {
             var (glyph, color, label) = task.Status switch
             {
                 TaskRunStatus.Pending => ("•", "grey", "pending"),
-                TaskRunStatus.Running => (Spinner.Known.Dots.Frames[0], "deepskyblue1", "running"),
+                TaskRunStatus.Running => (SpinnerFrames[frame % SpinnerFrames.Length], "deepskyblue1", "running"),
                 TaskRunStatus.Completed => ("✓", "green", "completed"),
                 TaskRunStatus.Faulted => ("✗", "red", "faulted"),
                 TaskRunStatus.Skipped => ("»", "yellow", "skipped"),
@@ -185,7 +188,10 @@ internal sealed class RunWorkflowCommand(IWorkflowRuntime workflowRuntime, IClou
                 TaskRunStatus.Suspended => ("‖", "grey70", "suspended"),
                 _ => ("?", "grey", "unknown")
             };
-            var duration = task.Duration is { } d ? FormatDuration(d) : task.Status == TaskRunStatus.Running ? "[grey]…[/]" : "[grey]-[/]";
+            string duration;
+            if (task.Duration is { } d) duration = FormatDuration(d);
+            else if (task.Status == TaskRunStatus.Running && task.StartedAt is { } startedAt) duration = $"[deepskyblue1]{FormatDuration(now - startedAt)}[/]";
+            else duration = "[grey]-[/]";
             var reference = Markup.Escape(task.Reference);
             table.AddRow(
                 $"[{color}]{glyph}[/]",

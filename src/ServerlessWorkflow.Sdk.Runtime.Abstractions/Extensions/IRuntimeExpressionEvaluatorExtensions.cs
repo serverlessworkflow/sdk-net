@@ -89,11 +89,7 @@ public static class IRuntimeExpressionEvaluatorExtensions
         return await value.MatchAsync
         (
             async (jsonObject, ct) => await expressionEvaluator.EvaluateAsync(jsonObject, input, arguments, cancellationToken).ConfigureAwait(false),
-            async (expression, ct) =>
-            {
-                if (!expression.IsRuntimeExpression()) return JsonSerializer.Deserialize(expression, Serialization.Json.JsonSerializationContext.Default.JsonNode);
-                return await expressionEvaluator.EvaluateAsync(expression, input, arguments, ct).ConfigureAwait(false);
-            },
+            async (expression, ct) => await expressionEvaluator.EvaluateAsync(expression, input, arguments, ct).ConfigureAwait(false),
             cancellationToken
         );
     }

@@ -2,7 +2,7 @@
   "profiles": {
     "ServerlessWorkflow.Sdk.Runtime.Cli": {
       "commandName": "Project",
-      "commandLineArgs": "run -f test.yaml -l logs.txt"
+      "commandLineArgs": "run -f test.yaml -i input.yaml -o output.yaml -l logs.txt"
     }
   }
 }

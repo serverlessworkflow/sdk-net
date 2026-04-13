@@ -328,10 +328,10 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         if (Task.State.Status != TaskStatus.Running) return;
         Stopwatch.Stop();
         if (string.IsNullOrWhiteSpace(then)) then = FlowDirective.Continue;
-        var output = result;
+        var output = result ?? new JsonObject();
         var arguments = GetExpressionEvaluationArguments() ?? [];
-        arguments[RuntimeExpressions.Arguments.Output] = output?.DeepClone();
-        output = (await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Output?.As, output ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false))?.AsObject();
+        arguments[RuntimeExpressions.Arguments.Output] = output.DeepClone();
+        if (Task.Definition.Output?.As is not null)  output = (await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Output.As, output, arguments, cancellationToken).ConfigureAwait(false))?.AsObject();
         if (Task.Definition.Export?.As is not null)
         {
             var context = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Export.As, output ?? new JsonObject(), arguments, cancellationToken).ConfigureAwait(false);

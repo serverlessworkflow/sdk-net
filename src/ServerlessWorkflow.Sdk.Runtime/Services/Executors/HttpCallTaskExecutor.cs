@@ -1,4 +1,5 @@
 using ServerlessWorkflow.Sdk.Models.Calls;
+using System.Reflection;
 
 namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
 
@@ -76,7 +77,10 @@ public sealed class HttpCallTaskExecutor(IServiceProvider serviceProvider, ILogg
             var authResult = await authenticationHandler.HandleAsync(authentication, Task.Workflow.Definition, cancellationToken).ConfigureAwait(false);
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authResult.Scheme, authResult.Value);
         }
-        using var request = new HttpRequestMessage(new HttpMethod(http.Method), endpointUri) { Content = requestContent };
+        var parameters = Task.State.Input is JsonObject jsonObject ? jsonObject.ToDictionary(kvp => kvp.Key, kvp => kvp.Value?.GetValue<object>()) : [];
+        var uri = StringFormatter.Format(endpointUri.OriginalString, parameters);
+        if (uri.IsRuntimeExpression()) uri = await Task.Workflow.Expressions.EvaluateAsync<string>(uri, Task.State.Input, this.GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
+        using var request = new HttpRequestMessage(new HttpMethod(http.Method), uri) { Content = requestContent };
         if (http.Headers != null)
         {
             foreach (var header in http.Headers)
@@ -135,3 +139,4 @@ public sealed class HttpCallTaskExecutor(IServiceProvider serviceProvider, ILogg
     }
 
 }
+
