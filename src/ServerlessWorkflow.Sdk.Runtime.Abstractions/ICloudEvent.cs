@@ -44,7 +44,7 @@ public interface ICloudEvent
     /// <summary>
     /// Gets/sets the event's data, if any. Only used if the event has been formatted using the structured mode
     /// </summary>
-    JsonNode? Data { get; }
+    object? Data { get; }
 
     /// <summary>
     /// Gets/sets the event's binary data, encoded in base 64. Only used if the event has been formatted using the binary mode

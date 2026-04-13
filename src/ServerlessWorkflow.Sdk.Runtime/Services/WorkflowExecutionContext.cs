@@ -1,4 +1,7 @@
-﻿namespace ServerlessWorkflow.Sdk.Runtime.Services;
+﻿using ServerlessWorkflow.Sdk.Events.Tasks;
+using ServerlessWorkflow.Sdk.Events.Workflows;
+
+namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IWorkflowExecutionContext"/> interface
@@ -50,12 +53,12 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Created.v1,
             Subject = State.Id,
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new TaskCreatedEvent()
             {
                 Workflow = State.GetQualifiedName(),
                 Task = path,
                 CreatedAt = state.CreatedAt
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.TaskCreatedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         return await tasks.AddAsync(new TaskState()
         {
@@ -89,12 +92,12 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Workflow.Started.v1,
             Subject = state.GetQualifiedName(),
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new WorkflowStartedEvent()
             {
                 Name = state.GetQualifiedName(),
                 Definition = definition.GetQualifiedName(),
                 StartedAt = state.StartedAt ?? DateTimeOffset.Now
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowStartedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Workflow with id '{WorkflowId}' started", state.Id);
     }
@@ -115,11 +118,11 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Workflow.Suspended.v1,
             Subject = state.GetQualifiedName(),
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new WorkflowSuspendedEvent()
             {
                 Name = state.GetQualifiedName(),
                 SuspendedAt = DateTimeOffset.Now
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowSuspendedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the workflow with id '{WorkflowId}' has been suspended", state.Id);
     }
@@ -140,11 +143,11 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Workflow.Resumed.v1,
             Subject = state.GetQualifiedName(),
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new WorkflowResumedEvent()
             {
                 Name = state.GetQualifiedName(),
                 ResumedAt = DateTimeOffset.Now
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowResumedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the workflow with id '{WorkflowId}' has been resumed", state.Id);
 
@@ -166,12 +169,12 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Workflow.Faulted.v1,
             Subject = state.GetQualifiedName(),
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new WorkflowFaultedEvent()
             {
                 Name = state.GetQualifiedName(),
                 Error = error,
                 FaultedAt = DateTimeOffset.Now
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowFaultedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
     }
 
@@ -190,12 +193,12 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Workflow.Completed.v1,
             Subject = state.GetQualifiedName(),
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new WorkflowCompletedEvent()
             {
                 Name = state.GetQualifiedName(),
                 CompletedAt = DateTimeOffset.Now,
                 Output = result
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowCompletedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The workflow with id '{WorkflowId}' ran to completion", state.Id);
     }
@@ -219,11 +222,11 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Workflow.Cancelled.v1,
             Subject = state.GetQualifiedName(),
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new WorkflowCancelledEvent()
             {
                 Name = state.GetQualifiedName(),
                 CancelledAt = DateTimeOffset.Now
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.WorkflowCancelledEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the workflow with id '{WorkflowId}' has been cancelled", state.Id);
     }

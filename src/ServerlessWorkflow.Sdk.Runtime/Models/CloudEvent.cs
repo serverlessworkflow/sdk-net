@@ -80,7 +80,7 @@ public sealed record CloudEvent
     /// </summary>
     [Description("The event's data, if any. Only used if the event has been formatted using the structured mode")]
     [DataMember(Order = 9, Name = "data"), JsonPropertyOrder(9), JsonPropertyName("data")]
-    public JsonNode? Data { get; set; }
+    public object? Data { get; set; }
 
     /// <summary>
     /// Gets/sets the event's binary data, encoded in base 64. Only used if the event has been formatted using the binary mode

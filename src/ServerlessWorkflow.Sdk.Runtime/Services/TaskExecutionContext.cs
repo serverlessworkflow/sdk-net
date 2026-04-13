@@ -1,4 +1,6 @@
-﻿namespace ServerlessWorkflow.Sdk.Runtime.Services;
+﻿using ServerlessWorkflow.Sdk.Events.Tasks;
+
+namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="ITaskExecutionContext"/> interface
@@ -65,12 +67,12 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Started.v1,
             Subject = State.Id,
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new TaskStartedEvent()
             {
                 Workflow = workflow.State.GetQualifiedName(),
                 Task = state.Reference,
                 StartedAt = state.StartedAt!.Value
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.TaskStartedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' started", state.Id);
     }
@@ -90,12 +92,12 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Suspended.v1,
             Subject = State.Id,
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new TaskSuspendedEvent()
             {
                 Workflow = workflow.State.GetQualifiedName(),
                 Task = state.Reference,
                 SuspendedAt = state.Runs?.LastOrDefault()?.EndedAt ?? DateTimeOffset.Now,
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.TaskSuspendedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' suspended", state.Id);
     }
@@ -115,12 +117,12 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Retrying.v1,
             Subject = State.Id,
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new RetryingTaskEvent()
             {
                 Workflow = workflow.State.GetQualifiedName(),
                 Task = state.Reference,
                 RetryingAt = state.Runs?.LastOrDefault()?.StartedAt ?? DateTimeOffset.Now
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.RetryingTaskEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' retried", state.Id);
     }
@@ -140,13 +142,13 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Faulted.v1,
             Subject = State.Id,
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new TaskFaultedEvent()
             {
                 Workflow = workflow.State.GetQualifiedName(),
                 Task = state.Reference,
                 Error = error,
                 FaultedAt = state.EndedAt!.Value
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.TaskFaultedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' faulted", state.Id);
     }
@@ -165,12 +167,12 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Completed.v1,
             Subject = State.Id,
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new TaskCompletedEvent()
             {
                 Workflow = workflow.State.GetQualifiedName(),
                 Task = state.Reference,
                 CompletedAt = state.EndedAt!.Value
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.TaskCompletedEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' ran to completion", state.Id);
     }
@@ -193,12 +195,12 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Skipped.v1,
             Subject = State.Id,
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new TaskSkippedEvent()
             {
                 Workflow = workflow.State.GetQualifiedName(),
                 Task = state.Reference,
-                CompletedAt = state.EndedAt!.Value
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.TaskCompletedEvent)
+                SkippedAt = state.EndedAt!.Value
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the task with id '{TaskId}' has been skipped", state.Id);
     }
@@ -218,12 +220,12 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Cancelled.v1,
             Subject = State.Id,
             DataContentType = MediaTypeNames.Application.Json,
-            Data = JsonSerializer.SerializeToNode(new()
+            Data = new TaskCancelledEvent()
             {
                 Workflow = workflow.State.GetQualifiedName(),
                 Task = state.Reference,
                 CancelledAt = state.EndedAt!.Value
-            }, Sdk.Serialization.Json.JsonSerializationContext.Default.TaskCancelledEvent)
+            }
         }, cancellationToken).ConfigureAwait(false);
         if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' faulted", state.Id);
     }
