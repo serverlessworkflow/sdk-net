@@ -1,5 +1,3 @@
-using ServerlessWorkflow.Sdk.Runtime.Models;
-
 namespace ServerlessWorkflow.Sdk.UnitTests.Services;
 
 internal static class RuntimeErrorFactory

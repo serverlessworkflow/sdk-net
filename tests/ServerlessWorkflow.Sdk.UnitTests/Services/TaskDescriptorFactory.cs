@@ -4,6 +4,7 @@ internal static class TaskDescriptorFactory
 {
     internal static TaskDescriptor Create() => new()
     {
+        Id = "test-task",
         Name = "test",
         Definition = TaskDefinitionFactory.CreateSetTask(),
         Reference = JsonPointer.Parse("/test"),

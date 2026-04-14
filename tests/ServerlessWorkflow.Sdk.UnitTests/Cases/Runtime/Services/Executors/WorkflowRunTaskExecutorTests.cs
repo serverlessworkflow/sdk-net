@@ -14,7 +14,7 @@ public class WorkflowRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var executor = new WorkflowRunTaskExecutor(
             CreateServiceProvider().Object,
@@ -28,7 +28,7 @@ public class WorkflowRunTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }
@@ -43,7 +43,7 @@ public class WorkflowRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var expressionMock = Mock.Get(taskContext.Object.Workflow.Expressions);
         expressionMock.Setup(e => e.EvaluateAsync(
@@ -62,8 +62,8 @@ public class WorkflowRunTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert - should set error because workflow process is not yet supported
-        Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
+        taskContext.Verify(
+            c => c.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
 

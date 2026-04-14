@@ -1,5 +1,4 @@
-using ServerlessWorkflow.Sdk.Runtime.Models;
-using RuntimeJsonSerializationContext = ServerlessWorkflow.Sdk.Runtime.Serialization.Json.JsonSerializationContext;
+using SdkJsonSerializationContext = ServerlessWorkflow.Sdk.Serialization.Json.JsonSerializationContext;
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Runtime.Models;
 
@@ -12,8 +11,8 @@ public class RuntimeErrorTests
         //arrange
         var toSerialize = RuntimeErrorFactory.Create();
         //act
-        var json = JsonSerializer.Serialize(toSerialize, RuntimeJsonSerializationContext.Default.RuntimeError);
-        var deserialized = JsonSerializer.Deserialize(json, RuntimeJsonSerializationContext.Default.RuntimeError);
+        var json = JsonSerializer.Serialize(toSerialize, SdkJsonSerializationContext.Default.Error);
+        var deserialized = JsonSerializer.Deserialize(json, SdkJsonSerializationContext.Default.Error);
         //assert
         json.Should().NotBeNullOrWhiteSpace();
         deserialized.Should().BeEquivalentTo(toSerialize);
@@ -25,8 +24,8 @@ public class RuntimeErrorTests
         //arrange
         var toSerialize = RuntimeErrorFactory.Create();
         //act
-        var yaml = YamlSerializer.Serialize(toSerialize, RuntimeJsonSerializationContext.Default.Options);
-        var deserialized = YamlSerializer.Deserialize<Error>(yaml, RuntimeJsonSerializationContext.Default.Options);
+        var yaml = YamlSerializer.Serialize(toSerialize, SdkJsonSerializationContext.Default.Options);
+        var deserialized = YamlSerializer.Deserialize<Error>(yaml, SdkJsonSerializationContext.Default.Options);
         //assert
         yaml.Should().NotBeNullOrWhiteSpace();
         deserialized.Should().BeEquivalentTo(toSerialize);

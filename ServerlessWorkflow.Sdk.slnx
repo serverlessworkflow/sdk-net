@@ -9,9 +9,7 @@
     <File Path="SECURITY.md" />
   </Folder>
   <Folder Name="/src/">
-    <Project Path="src/ServerlessWorkflow.Sdk.Builders/ServerlessWorkflow.Sdk.Builders.csproj" Id="861e7c93-d882-47c6-819c-1b6bb24bb383">
-      <Build Solution="Debug|*" Project="false" />
-    </Project>
+    <Project Path="src/ServerlessWorkflow.Sdk.Builders/ServerlessWorkflow.Sdk.Builders.csproj" Id="861e7c93-d882-47c6-819c-1b6bb24bb383" />
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Abstractions/ServerlessWorkflow.Sdk.Runtime.Abstractions.csproj" />
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Cli/ServerlessWorkflow.Sdk.Runtime.Cli.csproj">
       <Build Solution="Debug|*" Project="false" />

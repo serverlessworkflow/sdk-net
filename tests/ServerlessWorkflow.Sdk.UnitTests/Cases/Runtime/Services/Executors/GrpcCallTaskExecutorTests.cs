@@ -16,7 +16,7 @@ public class GrpcCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.Grpc, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var externalResourceReader = new Mock<IExternalResourceReader>();
         externalResourceReader
             .Setup(r => r.ReadAsync(It.IsAny<ExternalResourceDefinition>(), It.IsAny<WorkflowDefinition?>(), It.IsAny<CancellationToken>()))
@@ -28,7 +28,7 @@ public class GrpcCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.SetErrorAsync(
                 It.Is<Error>(e => e.Type == ErrorType.Validation),
                 It.IsAny<CancellationToken>()),
@@ -42,7 +42,7 @@ public class GrpcCallTaskExecutorTests
         var with = new JsonObject { ["invalid"] = "data" };
         var definition = new CallTaskDefinition { Call = Function.Grpc, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var externalResourceReader = new Mock<IExternalResourceReader>();
         var executor = CreateExecutor(taskContext, externalResourceReader.Object);
 
@@ -51,7 +51,7 @@ public class GrpcCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.SetErrorAsync(
                 It.Is<Error>(e => e.Type == ErrorType.Validation),
                 It.IsAny<CancellationToken>()),
@@ -70,7 +70,7 @@ public class GrpcCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.Grpc, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         var externalResourceReader = new Mock<IExternalResourceReader>();
         var executor = CreateExecutor(taskContext, externalResourceReader.Object);
 
@@ -79,7 +79,7 @@ public class GrpcCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }

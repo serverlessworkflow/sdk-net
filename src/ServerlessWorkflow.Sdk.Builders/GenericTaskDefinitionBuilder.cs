@@ -100,7 +100,7 @@ public sealed class GenericTaskDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public IRaiseTaskDefinitionBuilder Raise(Action<ErrorDefinitionBuilder> setup)
+    public IRaiseTaskDefinitionBuilder Raise(Action<IErrorDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ErrorDefinitionBuilder();

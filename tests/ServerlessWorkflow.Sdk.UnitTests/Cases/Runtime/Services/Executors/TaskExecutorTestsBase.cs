@@ -13,23 +13,20 @@ public abstract class TaskExecutorTestsBase
         arguments ??= [];
         var effectiveReference = reference ?? JsonPointer.Parse("/test");
 
-        var taskState = new Mock<ITaskInstance> { CallBase = true };
-        taskState.Setup(s => s.Status).Returns(taskStatus);
-        taskState.Setup(s => s.Name).Returns(taskName);
-        taskState.Setup(s => s.Reference).Returns(effectiveReference);
-        taskState.Setup(s => s.IsExtension).Returns(false);
-
-        var taskInstance = new Mock<ITaskInstance>();
-        taskInstance.Setup(i => i.State).Returns(taskState.Object);
-        taskInstance.Setup(i => i.InitializeAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        var taskInstance = new Mock<ITaskInstance> { CallBase = true };
+        taskInstance.Setup(i => i.Id).Returns("task-1");
+        taskInstance.Setup(i => i.WorkflowId).Returns("workflow-1");
+        taskInstance.Setup(i => i.Status).Returns(taskStatus);
+        taskInstance.Setup(i => i.Name).Returns(taskName);
+        taskInstance.Setup(i => i.Reference).Returns(effectiveReference);
+        taskInstance.Setup(i => i.IsExtension).Returns(false);
+        taskInstance.Setup(i => i.Input).Returns(input);
         taskInstance.Setup(i => i.StartAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        taskInstance.Setup(i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        taskInstance.Setup(i => i.SetOutputAsync(It.IsAny<JsonNode?>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         taskInstance.Setup(i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        taskInstance.Setup(i => i.SetContextDataAsync(It.IsAny<JsonObject>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         taskInstance.Setup(i => i.CancelAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         taskInstance.Setup(i => i.SuspendAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        taskInstance.Setup(i => i.SkipAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        taskInstance.Setup(i => i.GetSubTasksAsync(It.IsAny<CancellationToken>())).Returns(AsyncEnumerableEmpty<ITaskInstance>());
+        taskInstance.Setup(i => i.SkipAsync(It.IsAny<JsonNode?>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
         var expressionEvaluator = new Mock<IRuntimeExpressionEvaluator>();
         expressionEvaluator.Setup(e => e.EvaluateAsync(It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
@@ -51,50 +48,50 @@ public abstract class TaskExecutorTestsBase
             Do = []
         };
 
-        var workflowState = new Mock<IWorkflowInstance>();
-        workflowState.Setup(s => s.Id).Returns("workflow-1");
-
         var workflowInstance = new Mock<IWorkflowInstance>();
-        workflowInstance.Setup(i => i.State).Returns(workflowState.Object);
-        workflowInstance.Setup(i => i.CreateTaskAsync(
-            It.IsAny<TaskDefinition>(), It.IsAny<string?>(), It.IsAny<JsonNode>(),
-            It.IsAny<JsonObject?>(), It.IsAny<ITaskInstance?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
-            .Returns((TaskDefinition def, string? path, JsonNode inp, JsonObject? ctx, ITaskInstance? parent, bool isExt, CancellationToken ct) =>
-            {
-                var subState = new Mock<ITaskInstance> { CallBase = true };
-                subState.Setup(s => s.Reference).Returns(JsonPointer.Parse($"/{path ?? "sub"}"));
-                subState.Setup(s => s.Name).Returns(path?.Split('/').Last());
-                subState.Setup(s => s.IsExtension).Returns(isExt);
-                var subInstance = new Mock<ITaskInstance>();
-                subInstance.As<ITaskInstance<ITaskInstance>>().Setup(i => i.State).Returns(subState.Object);
-                subInstance.Setup(i => i.State).Returns(subState.Object);
-                subInstance.Setup(i => i.InitializeAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-                subInstance.Setup(i => i.StartAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-                subInstance.Setup(i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-                subInstance.Setup(i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-                subInstance.Setup(i => i.SetContextDataAsync(It.IsAny<JsonObject>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-                subInstance.Setup(i => i.CancelAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-                subInstance.Setup(i => i.SuspendAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-                subInstance.Setup(i => i.GetSubTasksAsync(It.IsAny<CancellationToken>())).Returns(AsyncEnumerableEmpty<ITaskInstance>());
-                return Task.FromResult(subInstance.As<ITaskInstance<ITaskInstance>>().Object);
-            });
+        workflowInstance.Setup(i => i.Id).Returns("workflow-1");
+        workflowInstance.Setup(i => i.ContextData).Returns(contextData);
 
         var workflow = new Mock<IWorkflowExecutionContext>();
         workflow.Setup(w => w.Definition).Returns(workflowDefinition);
         workflow.Setup(w => w.Instance).Returns(workflowInstance.Object);
         workflow.Setup(w => w.Expressions).Returns(expressionEvaluator.Object);
         workflow.Setup(w => w.Runtime).Returns(runtime.Object);
-        workflow.Setup(w => w.ContextData).Returns(new JsonObject());
-        workflow.Setup(w => w.Arguments).Returns(new JsonObject());
+        workflow.Setup(w => w.GetExpressionEvaluationArguments()).Returns(new JsonObject());
+        workflow.Setup(w => w.CreateTaskAsync(
+            It.IsAny<TaskDefinition>(), It.IsAny<JsonPointer>(), It.IsAny<JsonNode>(),
+            It.IsAny<ITaskExecutionContext?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
+            .Returns((TaskDefinition def, JsonPointer path, JsonNode inp, ITaskExecutionContext? parent, bool isExt, CancellationToken ct) =>
+            {
+                var subInstance = new Mock<ITaskInstance> { CallBase = true };
+                subInstance.Setup(i => i.Id).Returns(Guid.NewGuid().ToString());
+                subInstance.Setup(i => i.WorkflowId).Returns("workflow-1");
+                subInstance.Setup(i => i.Reference).Returns(path);
+                subInstance.Setup(i => i.Name).Returns(path.ToString().Split('/').Last());
+                subInstance.Setup(i => i.IsExtension).Returns(isExt);
+                subInstance.Setup(i => i.Input).Returns(inp);
+                subInstance.Setup(i => i.StartAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+                subInstance.Setup(i => i.SetOutputAsync(It.IsAny<JsonNode?>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+                subInstance.Setup(i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+                subInstance.Setup(i => i.CancelAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+                subInstance.Setup(i => i.SuspendAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+                subInstance.Setup(i => i.SkipAsync(It.IsAny<JsonNode?>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+                return Task.FromResult(subInstance.Object);
+            });
 
         var taskContext = new Mock<ITaskExecutionContext<TDefinition>>();
         taskContext.Setup(c => c.Workflow).Returns(workflow.Object);
         taskContext.Setup(c => c.Definition).Returns(definition);
         taskContext.Setup(c => c.Instance).Returns(taskInstance.Object);
-        taskContext.Setup(c => c.Input).Returns(() => input.DeepClone());
-        taskContext.Setup(c => c.ContextData).Returns(() => contextData.DeepClone().AsObject()!);
         taskContext.Setup(c => c.Arguments).Returns(() => arguments.DeepClone().AsObject()!);
-        taskContext.Setup(c => c.Output).Returns((JsonNode?)null);
+        taskContext.Setup(c => c.StartAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        taskContext.Setup(c => c.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        taskContext.Setup(c => c.SetContextDataAsync(It.IsAny<JsonObject>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        taskContext.Setup(c => c.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        taskContext.Setup(c => c.SkipAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        taskContext.Setup(c => c.SuspendAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        taskContext.Setup(c => c.CancelAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
+        taskContext.Setup(c => c.GetSubTasksAsync(It.IsAny<CancellationToken>())).Returns(AsyncEnumerableEmpty<ITaskInstance>());
 
         return taskContext;
     }

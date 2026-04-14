@@ -11,7 +11,7 @@ public class CustomFunctionCallTaskExecutorTests
         var innerTask = new SetTaskDefinition { Set = new JsonObject { ["result"] = "ok" } };
         var definition = new CallTaskDefinition { Call = "myFunction" };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var workflowDef = new WorkflowDefinition
         {
             Document = new WorkflowDefinitionMetadata { Dsl = "1.0.0", Name = "test", Namespace = "test", Version = "1.0.0" },
@@ -23,7 +23,8 @@ public class CustomFunctionCallTaskExecutorTests
         subExecutor.Setup(e => e.Task).Returns(taskContext.Object);
         subExecutor.Setup(e => e.InitializeAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
         subExecutor.Setup(e => e.ExecuteAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
-        subExecutor.Setup(e => e.Subscribe(It.IsAny<IObserver<ITaskLifeCycleEvent>>())).Returns(Mock.Of<IDisposable>());
+        subExecutor.Setup(e => e.Subscribe(It.IsAny<IObserver<ITaskLifeCycleEvent>>()))
+            .Returns((IObserver<ITaskLifeCycleEvent> observer) => { observer.OnCompleted(); return Mock.Of<IDisposable>(); });
         var executorFactory = new Mock<ITaskExecutorFactory>();
         executorFactory.Setup(f => f.Create(It.IsAny<ITaskExecutionContext>())).Returns(subExecutor.Object);
         var httpClientFactory = new Mock<IHttpClientFactory>();
@@ -35,8 +36,8 @@ public class CustomFunctionCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Workflow.Instance).Verify(
-            i => i.CreateTaskAsync(It.IsAny<TaskDefinition>(), It.IsAny<string?>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<ITaskInstance?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()),
+        Mock.Get(taskContext.Object.Workflow).Verify(
+            w => w.CreateTaskAsync(It.IsAny<TaskDefinition>(), It.IsAny<JsonPointer>(), It.IsAny<JsonNode>(), It.IsAny<ITaskExecutionContext?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
@@ -46,7 +47,7 @@ public class CustomFunctionCallTaskExecutorTests
         // arrange
         var definition = new CallTaskDefinition { Call = "unknownFunction" };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var httpClientFactory = new Mock<IHttpClientFactory>();
         var authHandler = new Mock<IAuthenticationHandler>();
         var executor = CreateExecutor(taskContext, httpClientFactory.Object, authHandler.Object);
@@ -56,7 +57,7 @@ public class CustomFunctionCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -67,7 +68,7 @@ public class CustomFunctionCallTaskExecutorTests
         // arrange
         var definition = new CallTaskDefinition { Call = "myFunction" };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         var httpClientFactory = new Mock<IHttpClientFactory>();
         var authHandler = new Mock<IAuthenticationHandler>();
         var executor = CreateExecutor(taskContext, httpClientFactory.Object, authHandler.Object);
@@ -77,7 +78,7 @@ public class CustomFunctionCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }

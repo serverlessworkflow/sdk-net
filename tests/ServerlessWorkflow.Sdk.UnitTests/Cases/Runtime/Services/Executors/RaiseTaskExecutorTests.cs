@@ -21,7 +21,7 @@ public class RaiseTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var executor = new RaiseTaskExecutor(
             CreateServiceProvider().Object,
@@ -35,8 +35,8 @@ public class RaiseTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(
+        taskContext.Verify(
+            c => c.SetErrorAsync(
                 It.Is<Error>(e =>
                     e.Status == 404 &&
                     e.Title == "Not Found"),
@@ -60,7 +60,7 @@ public class RaiseTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         // Set up the workflow definition with the referenced error
         var errors = new EquatableDictionary<string, ErrorDefinition> { ["timeoutError"] = errorDef };
@@ -84,8 +84,8 @@ public class RaiseTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(
+        taskContext.Verify(
+            c => c.SetErrorAsync(
                 It.Is<Error>(e =>
                     e.Status == 408 &&
                     e.Title == "Timeout"),
@@ -103,7 +103,7 @@ public class RaiseTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var executor = new RaiseTaskExecutor(
             CreateServiceProvider().Object,
@@ -117,8 +117,8 @@ public class RaiseTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert - should set a runtime error because the reference was not found
-        Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(
+        taskContext.Verify(
+            c => c.SetErrorAsync(
                 It.Is<Error>(e => e.Type == ErrorType.Runtime),
                 It.IsAny<CancellationToken>()),
             Times.Once);
@@ -141,7 +141,7 @@ public class RaiseTaskExecutorTests
         var reference = JsonPointer.Parse("/do/0/myTask");
         var taskContext = CreateTaskExecutionContext(definition, reference: reference);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var executor = new RaiseTaskExecutor(
             CreateServiceProvider().Object,
@@ -155,8 +155,8 @@ public class RaiseTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(
+        taskContext.Verify(
+            c => c.SetErrorAsync(
                 It.Is<Error>(e => e.Instance != null),
                 It.IsAny<CancellationToken>()),
             Times.Once);

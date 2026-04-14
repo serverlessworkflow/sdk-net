@@ -14,10 +14,10 @@
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="ErrorCatcherDefinitionBuilder"/> interface
+/// Represents the default implementation of the <see cref="IErrorCatcherDefinitionBuilder"/> interface
 /// </summary>
 public sealed class ErrorCatcherDefinitionBuilder
-    : ErrorCatcherDefinitionBuilder
+    : IErrorCatcherDefinitionBuilder
 {
 
     ErrorFilterDefinition? catchErrors;
@@ -28,7 +28,7 @@ public sealed class ErrorCatcherDefinitionBuilder
     Map<string, TaskDefinition>? retryDo;
 
     /// <inheritdoc/>
-    public ErrorCatcherDefinitionBuilder Errors(ErrorFilterDefinition filter)
+    public IErrorCatcherDefinitionBuilder Errors(ErrorFilterDefinition filter)
     {
         ArgumentNullException.ThrowIfNull(filter);
         catchErrors = filter;
@@ -36,7 +36,7 @@ public sealed class ErrorCatcherDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public ErrorCatcherDefinitionBuilder Errors(Action<ErrorFilterDefinitionBuilder> setup)
+    public IErrorCatcherDefinitionBuilder Errors(Action<IErrorFilterDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ErrorFilterDefinitionBuilder();
@@ -45,28 +45,28 @@ public sealed class ErrorCatcherDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public ErrorCatcherDefinitionBuilder As(string variableName)
+    public IErrorCatcherDefinitionBuilder As(string variableName)
     {
         catchAs = variableName;
         return this;
     }
 
     /// <inheritdoc/>
-    public ErrorCatcherDefinitionBuilder When(string expression)
+    public IErrorCatcherDefinitionBuilder When(string expression)
     {
         catchWhen = expression;
         return this;
     }
 
     /// <inheritdoc/>
-    public ErrorCatcherDefinitionBuilder ExceptWhen(string expression)
+    public IErrorCatcherDefinitionBuilder ExceptWhen(string expression)
     {
         catchExceptWhen = expression;
         return this;
     }
 
     /// <inheritdoc/>
-    public ErrorCatcherDefinitionBuilder Retry(Uri reference)
+    public IErrorCatcherDefinitionBuilder Retry(Uri reference)
     {
         retryPolicy = new RetryPolicyDefinition()
         {
@@ -76,14 +76,14 @@ public sealed class ErrorCatcherDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public ErrorCatcherDefinitionBuilder Retry(RetryPolicyDefinition retryPolicy)
+    public IErrorCatcherDefinitionBuilder Retry(RetryPolicyDefinition retryPolicy)
     {
         this.retryPolicy = retryPolicy;
         return this;
     }
 
     /// <inheritdoc/>
-    public ErrorCatcherDefinitionBuilder Retry(Action<IRetryPolicyDefinitionBuilder> setup)
+    public IErrorCatcherDefinitionBuilder Retry(Action<IRetryPolicyDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new RetryPolicyDefinitionBuilder();
@@ -92,7 +92,7 @@ public sealed class ErrorCatcherDefinitionBuilder
     }
 
     /// <inheritdoc/>
-    public ErrorCatcherDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
+    public IErrorCatcherDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TaskDefinitionMapBuilder();

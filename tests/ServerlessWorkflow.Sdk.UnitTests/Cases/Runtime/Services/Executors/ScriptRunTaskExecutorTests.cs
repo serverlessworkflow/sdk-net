@@ -14,7 +14,7 @@ public class ScriptRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var externalResourceReader = new Mock<IExternalResourceReader>();
         var scriptExecutorProvider = new Mock<IScriptExecutorProvider>();
@@ -32,7 +32,7 @@ public class ScriptRunTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }
@@ -47,7 +47,7 @@ public class ScriptRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var expressionMock = Mock.Get(taskContext.Object.Workflow.Expressions);
         expressionMock.Setup(e => e.EvaluateAsync(
@@ -73,8 +73,8 @@ public class ScriptRunTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert - should set error due to exception
-        Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
+        taskContext.Verify(
+            c => c.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
 
@@ -88,7 +88,7 @@ public class ScriptRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var expressionMock = Mock.Get(taskContext.Object.Workflow.Expressions);
         expressionMock.Setup(e => e.EvaluateAsync(
@@ -113,8 +113,8 @@ public class ScriptRunTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert - should set error due to unsupported language
-        Mock.Get(taskContext.Object.Instance).Verify(
-            i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
+        taskContext.Verify(
+            c => c.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
 

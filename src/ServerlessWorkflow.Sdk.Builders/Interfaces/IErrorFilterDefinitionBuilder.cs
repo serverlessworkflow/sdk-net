@@ -16,7 +16,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Defines the fundamentals of a service used to build <see cref="ErrorFilterDefinition"/>s
 /// </summary>
-public interface ErrorFilterDefinitionBuilder
+public interface IErrorFilterDefinitionBuilder
 {
 
     /// <summary>
@@ -24,15 +24,15 @@ public interface ErrorFilterDefinitionBuilder
     /// </summary>
     /// <param name="name">The name of the attribute to filter errors by</param>
     /// <param name="value">The value of the attribute to filter errors by. Supports runtime expressions</param>
-    /// <returns>The configured <see cref="ErrorFilterDefinitionBuilder"/></returns>
-    ErrorFilterDefinitionBuilder With(string name, JsonNode value);
+    /// <returns>The configured <see cref="IErrorFilterDefinitionBuilder"/></returns>
+    IErrorFilterDefinitionBuilder With(string name, JsonNode value);
 
     /// <summary>
     /// Sets a name/value mapping of the attributes to filter errors by
     /// </summary>
     /// <param name="attributes">A name/value mapping of the attributes to filter errors by. Supports runtime expressions</param>
-    /// <returns>The configured <see cref="ErrorFilterDefinitionBuilder"/></returns>
-    ErrorFilterDefinitionBuilder With(JsonObject attributes);
+    /// <returns>The configured <see cref="IErrorFilterDefinitionBuilder"/></returns>
+    IErrorFilterDefinitionBuilder With(JsonObject attributes);
 
     /// <summary>
     /// Builds the configured <see cref="ErrorFilterDefinition"/>

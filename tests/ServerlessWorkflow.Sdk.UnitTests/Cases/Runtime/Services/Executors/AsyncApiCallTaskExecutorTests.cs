@@ -18,7 +18,7 @@ public class AsyncApiCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.AsyncApi, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var handler = new MockHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.NotFound) { Content = new StringContent("Not Found") });
         var httpClientFactory = new Mock<IHttpClientFactory>();
         httpClientFactory.Setup(f => f.CreateClient(It.IsAny<string>())).Returns(new HttpClient(handler));
@@ -32,7 +32,7 @@ public class AsyncApiCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -48,7 +48,7 @@ public class AsyncApiCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.AsyncApi, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         var httpClientFactory = new Mock<IHttpClientFactory>();
         var authHandler = new Mock<IAuthenticationHandler>();
         var asyncApiDocReader = new Mock<IAsyncApiDocumentReader>();
@@ -60,7 +60,7 @@ public class AsyncApiCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }
@@ -72,7 +72,7 @@ public class AsyncApiCallTaskExecutorTests
         var with = new JsonObject { ["invalid"] = "data" };
         var definition = new CallTaskDefinition { Call = Function.AsyncApi, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var httpClientFactory = new Mock<IHttpClientFactory>();
         var authHandler = new Mock<IAuthenticationHandler>();
         var asyncApiDocReader = new Mock<IAsyncApiDocumentReader>();
@@ -84,7 +84,7 @@ public class AsyncApiCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.Instance).Verify(
+        taskContext.Verify(
             i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }

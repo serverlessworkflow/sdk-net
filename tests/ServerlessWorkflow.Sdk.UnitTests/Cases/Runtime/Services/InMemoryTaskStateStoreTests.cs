@@ -1,4 +1,3 @@
-using Microsoft.Extensions.Caching.Memory;
 using ServerlessWorkflow.Sdk.Runtime.Services;
 
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Runtime.Services;
@@ -10,8 +9,7 @@ public class InMemoryTaskStateStoreTests
     public async Task AddAsync_Should_Store_And_Return_State()
     {
         //arrange
-        using var cache = new MemoryCache(new MemoryCacheOptions());
-        var store = new InMemoryTaskStateStore(cache);
+        var store = new InMemoryTaskStateStore();
         var workflowId = "wf-1";
         var taskId = "task-1";
         var state = new Mock<ITaskInstance>();
@@ -29,8 +27,7 @@ public class InMemoryTaskStateStoreTests
     public async Task GetAsync_Should_Return_Stored_State()
     {
         //arrange
-        using var cache = new MemoryCache(new MemoryCacheOptions());
-        var store = new InMemoryTaskStateStore(cache);
+        var store = new InMemoryTaskStateStore();
         var workflowId = "wf-1";
         var taskId = "task-1";
         var state = new Mock<ITaskInstance>();
@@ -49,8 +46,7 @@ public class InMemoryTaskStateStoreTests
     public async Task GetAsync_Should_Throw_When_Not_Found()
     {
         //arrange
-        using var cache = new MemoryCache(new MemoryCacheOptions());
-        var store = new InMemoryTaskStateStore(cache);
+        var store = new InMemoryTaskStateStore();
         var workflowId = "wf-missing";
         var taskId = "task-missing";
 
@@ -65,8 +61,7 @@ public class InMemoryTaskStateStoreTests
     public async Task UpdateAsync_Should_Overwrite_Existing_State()
     {
         //arrange
-        using var cache = new MemoryCache(new MemoryCacheOptions());
-        var store = new InMemoryTaskStateStore(cache);
+        var store = new InMemoryTaskStateStore();
         var workflowId = "wf-1";
         var taskId = "task-1";
         var original = new Mock<ITaskInstance>();

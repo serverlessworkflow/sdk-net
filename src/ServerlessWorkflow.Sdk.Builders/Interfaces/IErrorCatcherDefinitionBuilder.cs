@@ -16,7 +16,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Defines the fundamentals of a service used to build <see cref="ErrorCatcherDefinition"/>s
 /// </summary>
-public interface ErrorCatcherDefinitionBuilder
+public interface IErrorCatcherDefinitionBuilder
 {
 
     /// <summary>
@@ -24,63 +24,63 @@ public interface ErrorCatcherDefinitionBuilder
     /// </summary>
     /// <param name="filter">The filter used to catch errors. If not set, catches all errors.</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ErrorCatcherDefinitionBuilder Errors(ErrorFilterDefinition filter);
+    IErrorCatcherDefinitionBuilder Errors(ErrorFilterDefinition filter);
 
     /// <summary>
     /// Catches errors matching the specified filter
     /// </summary>
     /// <param name="setup">An <see cref="Action{T}"/> used to setup the filter used to catch errors. If not set, catches all errors.</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ErrorCatcherDefinitionBuilder Errors(Action<ErrorFilterDefinitionBuilder> setup);
+    IErrorCatcherDefinitionBuilder Errors(Action<IErrorFilterDefinitionBuilder> setup);
 
     /// <summary>
     /// Sets the name of the variable that contains caught errors
     /// </summary>
     /// <param name="variableName">The name of the variable that contains caught errors</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ErrorCatcherDefinitionBuilder As(string variableName);
+    IErrorCatcherDefinitionBuilder As(string variableName);
 
     /// <summary>
     /// Sets the runtime expression used to determine whether to catch the filtered error
     /// </summary>
     /// <param name="expression">The runtime expression used to determine whether to catch the filtered error</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ErrorCatcherDefinitionBuilder When(string expression);
+    IErrorCatcherDefinitionBuilder When(string expression);
 
     /// <summary>
     /// Sets the runtime expression used to determine whether not to catch the filtered error
     /// </summary>
     /// <param name="expression">The runtime expression used to determine whether not to catch the filtered error</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ErrorCatcherDefinitionBuilder ExceptWhen(string expression);
+    IErrorCatcherDefinitionBuilder ExceptWhen(string expression);
 
     /// <summary>
     /// Sets the reference to the retry policy to use
     /// </summary>
     /// <param name="reference">A reference to the retry policy to use</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ErrorCatcherDefinitionBuilder Retry(Uri reference);
+    IErrorCatcherDefinitionBuilder Retry(Uri reference);
 
     /// <summary>
     /// Sets the reference to the retry policy to use
     /// </summary>
     /// <param name="retryPolicy">The retry policy to use</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ErrorCatcherDefinitionBuilder Retry(RetryPolicyDefinition retryPolicy);
+    IErrorCatcherDefinitionBuilder Retry(RetryPolicyDefinition retryPolicy);
 
     /// <summary>
     /// Sets the reference to the retry policy to use
     /// </summary>
     /// <param name="setup">An <see cref="Action{T}"/> used to setup the retry policy to use</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ErrorCatcherDefinitionBuilder Retry(Action<IRetryPolicyDefinitionBuilder> setup);
+    IErrorCatcherDefinitionBuilder Retry(Action<IRetryPolicyDefinitionBuilder> setup);
 
     /// <summary>
     /// Configures the tasks to execute the specified task after catching or after retry exhaustion
     /// </summary>
     /// <param name="setup">An <see cref="Action{T}"/> used to setup the tasks to execute</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ErrorCatcherDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup);
+    IErrorCatcherDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup);
 
     /// <summary>
     /// Builds the configured <see cref="ErrorCatcherDefinition"/>

@@ -12,15 +12,18 @@ public class InMemoryWorkflowStateStoreTests
         //arrange
         using var cache = new MemoryCache(new MemoryCacheOptions());
         var store = new InMemoryWorkflowStore(cache);
-        var id = "wf-1";
-        var state = new Mock<IWorkflowInstance>();
-        state.Setup(s => s.Id).Returns(id);
+        var definition = new WorkflowDefinition
+        {
+            Document = new WorkflowDefinitionMetadata { Dsl = "1.0.0", Name = "test-workflow", Namespace = "test", Version = "1.0.0" },
+            Do = []
+        };
 
         //act
-        var result = await store.AddAsync(state.Object, TestContext.Current.CancellationToken);
+        var result = await store.AddAsync(definition, null, TestContext.Current.CancellationToken);
 
         //assert
-        result.Should().Be(state.Object);
+        result.Should().NotBeNull();
+        result.Id.Should().NotBeNullOrWhiteSpace();
     }
 
     [Fact]
@@ -29,16 +32,18 @@ public class InMemoryWorkflowStateStoreTests
         //arrange
         using var cache = new MemoryCache(new MemoryCacheOptions());
         var store = new InMemoryWorkflowStore(cache);
-        var id = "wf-1";
-        var state = new Mock<IWorkflowInstance>();
-        state.Setup(s => s.Id).Returns(id);
-        await store.AddAsync(state.Object, TestContext.Current.CancellationToken);
+        var definition = new WorkflowDefinition
+        {
+            Document = new WorkflowDefinitionMetadata { Dsl = "1.0.0", Name = "test-workflow", Namespace = "test", Version = "1.0.0" },
+            Do = []
+        };
+        var added = await store.AddAsync(definition, null, TestContext.Current.CancellationToken);
 
         //act
-        var result = await store.GetAsync(id, TestContext.Current.CancellationToken);
+        var result = await store.GetAsync(added.Id, TestContext.Current.CancellationToken);
 
         //assert
-        result.Should().Be(state.Object);
+        result.Should().Be(added);
     }
 
     [Fact]

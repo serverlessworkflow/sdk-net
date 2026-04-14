@@ -32,6 +32,6 @@ public interface ITryTaskDefinitionBuilder
     /// </summary>
     /// <param name="setup">An <see cref="Action{T}"/> used to setup the <see cref="ErrorCatcherDefinition"/> to use</param>
     /// <returns>The configured <see cref="ITryTaskDefinitionBuilder"/></returns>
-    ITryTaskDefinitionBuilder Catch(Action<ErrorCatcherDefinitionBuilder> setup);
+    ITryTaskDefinitionBuilder Catch(Action<IErrorCatcherDefinitionBuilder> setup);
 
 }
