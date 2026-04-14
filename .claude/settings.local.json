@@ -44,7 +44,9 @@
       "Bash(grep -n \"class.*Expressions\\\\|EvaluateAsync\\\\|EvaluateConditionAsync\" /c/Dev/ServerlessWorkflow/sdk-net/src/ServerlessWorkflow.Sdk.Runtime/Services/*.cs)",
       "Bash(grep -rn \"JsonPointer\\\\.\" C:/Dev/ServerlessWorkflow/sdk-net/src/ServerlessWorkflow.Sdk.Runtime/Services/Executors/*.cs)",
       "Bash(taskkill //f //im \"ServerlessWorkflow.Sdk.UnitTests.exe\")",
-      "Bash(taskkill //f //im dotnet.exe)"
+      "Bash(taskkill //f //im dotnet.exe)",
+      "Bash(git -C \"C:/Dev/CNCF/ServerlessWorkflow/sdk-net\" status -s)",
+      "Bash(git:*)"
     ]
   }
 }
