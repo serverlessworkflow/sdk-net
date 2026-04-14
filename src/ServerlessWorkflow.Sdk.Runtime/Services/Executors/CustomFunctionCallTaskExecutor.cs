@@ -118,7 +118,7 @@ public sealed class CustomFunctionCallTaskExecutor(IServiceProvider serviceProvi
     }
 
     /// <inheritdoc/>
-    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskState state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskInstance state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         var executor = await base.CreateTaskExecutorAsync(state, definition, contextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
         executor.SubscribeAsync(
@@ -134,7 +134,7 @@ public sealed class CustomFunctionCallTaskExecutor(IServiceProvider serviceProvi
         JsonNode? input;
         if (Task.Definition.With != null)
         {
-            var evaluated = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.With, Task.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
+            var evaluated = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.With, Task.Instance.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
             input = evaluated ?? new JsonObject();
         }
         else
@@ -142,15 +142,15 @@ public sealed class CustomFunctionCallTaskExecutor(IServiceProvider serviceProvi
             input = new JsonObject();
         }
         var taskInstance = await Task.Workflow.CreateTaskAsync(function, JsonPointer.Empty, input, Task, false, cancellationToken).ConfigureAwait(false);
-        var executor = await CreateTaskExecutorAsync(taskInstance, function, Task.Workflow.State.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+        var executor = await CreateTaskExecutorAsync(taskInstance, function, Task.Workflow.Instance.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
         await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
-        await SetResultAsync(executor.Task.State.Output, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+        await SetResultAsync(executor.Task.Instance.Output, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
     }
 
     async Task OnSubTaskFaultAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(executor);
-        var error = executor.Task.State.Error ?? throw new NullReferenceException();
+        var error = executor.Task.Instance.Error ?? throw new NullReferenceException();
         Executors.Remove(executor);
         await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
     }

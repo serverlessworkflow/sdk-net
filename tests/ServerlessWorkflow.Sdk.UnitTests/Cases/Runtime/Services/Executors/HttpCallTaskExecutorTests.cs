@@ -13,7 +13,7 @@ public class HttpCallTaskExecutorTests
         var with = new JsonObject { ["method"] = "GET", ["endpoint"] = "https://api.example.com/data" };
         var definition = new CallTaskDefinition { Call = Function.Http, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var handler = new MockHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent("{\"id\":1}", System.Text.Encoding.UTF8, "application/json")
@@ -28,7 +28,7 @@ public class HttpCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
         handler.RequestReceived.Should().NotBeNull();
@@ -42,7 +42,7 @@ public class HttpCallTaskExecutorTests
         var with = new JsonObject { ["method"] = "GET", ["endpoint"] = "https://api.example.com/data" };
         var definition = new CallTaskDefinition { Call = Function.Http, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var handler = new MockHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.InternalServerError)
         {
             Content = new StringContent("Server Error")
@@ -57,7 +57,7 @@ public class HttpCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(
                 It.Is<Error>(e => e.Status == 500),
                 It.IsAny<CancellationToken>()),
@@ -77,7 +77,7 @@ public class HttpCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.Http, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var handler = new MockHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.Created)
         {
             Content = new StringContent("{\"created\":true}", System.Text.Encoding.UTF8, "application/json")
@@ -92,7 +92,7 @@ public class HttpCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -112,7 +112,7 @@ public class HttpCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.Http, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var handler = new MockHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent("{}", System.Text.Encoding.UTF8, "application/json")
@@ -152,7 +152,7 @@ public class HttpCallTaskExecutorTests
         };
         var definition = new CallTaskDefinition { Call = Function.Http, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         var handler = new MockHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK)
         {
             Content = new StringContent("{\"data\":\"value\"}", System.Text.Encoding.UTF8, "application/json")
@@ -167,10 +167,10 @@ public class HttpCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.Never);
     }
@@ -182,7 +182,7 @@ public class HttpCallTaskExecutorTests
         var with = new JsonObject { ["method"] = "GET", ["endpoint"] = "https://example.com" };
         var definition = new CallTaskDefinition { Call = Function.Http, With = with };
         var taskContext = CreateTaskExecutionContext(definition);
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         var httpClientFactory = new Mock<IHttpClientFactory>();
         var authHandler = new Mock<IAuthenticationHandler>();
         var executor = CreateExecutor(taskContext, httpClientFactory.Object, authHandler.Object);
@@ -191,7 +191,7 @@ public class HttpCallTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }

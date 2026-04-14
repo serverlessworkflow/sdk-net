@@ -12,10 +12,10 @@
 [JsonSerializable(typeof(TaskLifeCycleEvent))]
 [JsonSerializable(typeof(TaskRetryAttempt))]
 [JsonSerializable(typeof(TaskRun))]
-[JsonSerializable(typeof(TaskState))]
+[JsonSerializable(typeof(TaskInstance))]
 [JsonSerializable(typeof(WorkflowLifeCycleEvent))]
 [JsonSerializable(typeof(WorkflowRun))]
-[JsonSerializable(typeof(WorkflowState))]
+[JsonSerializable(typeof(WorkflowInstance))]
 public partial class JsonSerializationContext
     : JsonSerializerContext
 {

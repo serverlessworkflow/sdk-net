@@ -16,7 +16,7 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
     static JsonPointer GetPathFor(int index, string name) => JsonPointer.Create("fork", "branches", index, name);
 
     /// <inheritdoc/>
-    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskState state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskInstance state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         var executor = await base.CreateTaskExecutorAsync(state, definition, contextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
         executor.SubscribeAsync(
@@ -35,8 +35,8 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
         var index = 0;
         foreach (var branch in branches)
         {
-            var branchInstance = await Task.Workflow.CreateTaskAsync(branch.Value, GetPathFor(index, branch.Key), Task.State.Input, Task, false, cancellationToken).ConfigureAwait(false);
-            var executor = await CreateTaskExecutorAsync(branchInstance, branch.Value, Task.Workflow.State.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+            var branchInstance = await Task.Workflow.CreateTaskAsync(branch.Value, GetPathFor(index, branch.Key), Task.Instance.Input, Task, false, cancellationToken).ConfigureAwait(false);
+            var executor = await CreateTaskExecutorAsync(branchInstance, branch.Value, Task.Workflow.Instance.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
             executionTasks.Add(executor.ExecuteAsync(cancellationToken));
             index++;
         }
@@ -46,7 +46,7 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
     async Task OnSubTaskFaultAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
         using var @lock = await Lock.LockAsync(cancellationToken).ConfigureAwait(false);
-        var error = executor.Task.State.Error ?? throw new NullReferenceException();
+        var error = executor.Task.Instance.Error ?? throw new NullReferenceException();
         Executors.Remove(executor);
         foreach (var subExecutor in Executors.ToList())
         {
@@ -59,14 +59,14 @@ public sealed class ForkTaskExecutor(IServiceProvider serviceProvider, ILogger<F
     async Task OnSubTaskCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
         using var @lock = await Lock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (Task.State.Status != TaskStatus.Running)
+        if (Task.Instance.Status != TaskStatus.Running)
         {
             if (Executors.Remove(executor)) await executor.CancelAsync(cancellationToken).ConfigureAwait(false);
             return;
         }
         if (Task.Definition.Fork.Compete)
         {
-            var output = executor.Task.State.Output ?? new JsonObject();
+            var output = executor.Task.Instance.Output ?? new JsonObject();
             foreach (var concurrentExecutor in Executors.ToList())
             {
                 Executors.Remove(concurrentExecutor);

@@ -19,7 +19,7 @@ public class ListenTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var eventSubject = new ReplaySubject<ICloudEvent>();
         var cloudEventBus = new Mock<ICloudEventBus>();
@@ -68,7 +68,7 @@ public class ListenTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var eventSubject = new ReplaySubject<ICloudEvent>();
         var cloudEventBus = new Mock<ICloudEventBus>();
@@ -100,7 +100,7 @@ public class ListenTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert - should set result with collected events
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -119,7 +119,7 @@ public class ListenTaskExecutorTests
         var taskContext = CreateTaskExecutionContext(definition);
         var cloudEventBus = new Mock<ICloudEventBus>();
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var executor = new ListenTaskExecutor(
             CreateServiceProvider().Object,

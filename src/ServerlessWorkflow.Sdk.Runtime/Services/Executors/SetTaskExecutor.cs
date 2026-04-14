@@ -16,8 +16,8 @@ public sealed class SetTaskExecutor(IServiceProvider serviceProvider, ILogger<Se
     /// <inheritdoc/>
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
-        var output = Task.State.Input is JsonObject inputObject ? (JsonObject)inputObject.DeepClone() : [];
-        var result = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Set, Task.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
+        var output = Task.Instance.Input is JsonObject inputObject ? (JsonObject)inputObject.DeepClone() : [];
+        var result = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.Set, Task.Instance.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
         if (result is JsonObject resultObject) foreach (var (key, value) in resultObject) output[key] = value?.DeepClone();
         await SetResultAsync(output, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
     }

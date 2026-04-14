@@ -16,7 +16,7 @@ public class SwitchTaskExecutorTests
         var input = new JsonObject { ["status"] = "active" };
         var taskContext = CreateTaskExecutionContext(definition, input);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var expressionMock = Mock.Get(taskContext.Object.Workflow.Expressions);
         // First case matches
@@ -42,7 +42,7 @@ public class SwitchTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -59,7 +59,7 @@ public class SwitchTaskExecutorTests
         var input = new JsonObject { ["status"] = "unknown" };
         var taskContext = CreateTaskExecutionContext(definition, input);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var expressionMock = Mock.Get(taskContext.Object.Workflow.Expressions);
         // No cases match
@@ -79,7 +79,7 @@ public class SwitchTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -95,7 +95,7 @@ public class SwitchTaskExecutorTests
         var input = new JsonObject { ["status"] = "unknown" };
         var taskContext = CreateTaskExecutionContext(definition, input);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var expressionMock = Mock.Get(taskContext.Object.Workflow.Expressions);
         expressionMock.Setup(e => e.EvaluateAsync(
@@ -114,7 +114,7 @@ public class SwitchTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -129,7 +129,7 @@ public class SwitchTaskExecutorTests
         var definition = new SwitchTaskDefinition { Switch = switchCases };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var executor = new SwitchTaskExecutor(
             CreateServiceProvider().Object,
@@ -143,7 +143,7 @@ public class SwitchTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.StartAsync(It.IsAny<CancellationToken>()),
             Times.Never);
     }

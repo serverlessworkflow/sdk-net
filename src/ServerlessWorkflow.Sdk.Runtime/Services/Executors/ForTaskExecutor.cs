@@ -15,10 +15,10 @@ public sealed class ForTaskExecutor(IServiceProvider serviceProvider, ILogger<Fo
 
     JsonArray? collection;
 
-    JsonPointer GetPathFor(string subTaskName) => JsonPointer.Parse($"{Task.State.Reference}/{subTaskName}/do");
+    JsonPointer GetPathFor(string subTaskName) => JsonPointer.Parse($"{Task.Instance.Reference}/{subTaskName}/do");
 
     /// <inheritdoc/>
-    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskState state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskInstance state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         var executor = await base.CreateTaskExecutorAsync(state, definition, contextData, arguments, cancellationToken).ConfigureAwait(false);
         executor.SubscribeAsync(
@@ -32,7 +32,7 @@ public sealed class ForTaskExecutor(IServiceProvider serviceProvider, ILogger<Fo
     /// <inheritdoc/>
     protected override async Task InitializeCoreAsync(CancellationToken cancellationToken)
     {
-        var result = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.For.In, Task.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
+        var result = await Task.Workflow.Expressions.EvaluateAsync(Task.Definition.For.In, Task.Instance.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
         collection = result?.AsArray() ?? throw new InvalidOperationException("The 'for.in' expression must evaluate to an array");
     }
 
@@ -40,7 +40,7 @@ public sealed class ForTaskExecutor(IServiceProvider serviceProvider, ILogger<Fo
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
         if (collection == null) throw new InvalidOperationException("The executor must be initialized before execution");
-        ITaskState? lastSubtask = null;
+        ITaskInstance? lastSubtask = null;
         await foreach (var subtask in Task.GetSubTasksAsync(cancellationToken).ConfigureAwait(false)) lastSubtask = subtask;
         var index = 0;
         if (lastSubtask != null)
@@ -49,15 +49,15 @@ public sealed class ForTaskExecutor(IServiceProvider serviceProvider, ILogger<Fo
             if (parts.Length > 0 && int.TryParse(parts[^1], out var lastIndex)) index = lastIndex;
             if (index == collection.Count - 1)
             {
-                await SetResultAsync(Task.State.Input, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+                await SetResultAsync(Task.Instance.Input, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
                 return;
             }
             if (!lastSubtask.IsOperative) index++;
         }
         var item = collection[index];
         var taskDefinition = new DoTaskDefinition() { Do = Task.Definition.Do };
-        var taskInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, GetPathFor(index.ToString()), Task.State.Input, Task, false, cancellationToken).ConfigureAwait(false);
-        var contextData = Task.Workflow.State.ContextData.DeepClone().AsObject()!;
+        var taskInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, GetPathFor(index.ToString()), Task.Instance.Input, Task, false, cancellationToken).ConfigureAwait(false);
+        var contextData = Task.Workflow.Instance.ContextData.DeepClone().AsObject()!;
         var arguments = Task.Arguments?.DeepClone().AsObject()! ?? [];
         arguments[Task.Definition.For.Each] = item?.DeepClone();
         arguments[Task.Definition.For.At ?? RuntimeExpressions.Arguments.Index] = index;
@@ -68,7 +68,7 @@ public sealed class ForTaskExecutor(IServiceProvider serviceProvider, ILogger<Fo
     async Task OnIterationFaultAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
         if (collection == null) throw new InvalidOperationException("The executor must be initialized before execution");
-        var error = executor.Task.State.Error ?? throw new NullReferenceException();
+        var error = executor.Task.Instance.Error ?? throw new NullReferenceException();
         Executors.Remove(executor);
         await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
     }
@@ -76,10 +76,10 @@ public sealed class ForTaskExecutor(IServiceProvider serviceProvider, ILogger<Fo
     async Task OnIterationCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
         if (collection == null) throw new InvalidOperationException("The executor must be initialized before execution");
-        var output = executor.Task.State.Output ?? new JsonObject();
+        var output = executor.Task.Instance.Output ?? new JsonObject();
         Executors.Remove(executor);
-        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
-        var lastReference = executor.Task.State.Reference.ToString();
+        if (Task.Workflow.Instance.ContextData != executor.Task.Workflow.Instance.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.Instance.ContextData, cancellationToken).ConfigureAwait(false);
+        var lastReference = executor.Task.Instance.Reference.ToString();
         var parts = lastReference.Split('/', StringSplitOptions.RemoveEmptyEntries);
         var index = 0;
         if (parts.Length >= 2 && int.TryParse(parts[^2], out var parsedIndex)) index = parsedIndex + 1;
@@ -88,13 +88,13 @@ public sealed class ForTaskExecutor(IServiceProvider serviceProvider, ILogger<Fo
             await SetResultAsync(output, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
             return;
         }
-        switch (executor.Task.State.Next)
+        switch (executor.Task.Instance.Next)
         {
             case FlowDirective.Continue:
                 var taskDefinition = new DoTaskDefinition() { Do = Task.Definition.Do };
                 var next = await Task.Workflow.CreateTaskAsync(taskDefinition, GetPathFor(index.ToString()), output, Task, false, cancellationToken).ConfigureAwait(false);
                 var item = collection[index];
-                var contextData = Task.Workflow.State.ContextData.DeepClone().AsObject()!;
+                var contextData = Task.Workflow.Instance.ContextData.DeepClone().AsObject()!;
                 var arguments = Task.Arguments?.DeepClone().AsObject()! ?? [];
                 arguments[Task.Definition.For.Each] = item?.DeepClone();
                 arguments[Task.Definition.For.At ?? RuntimeExpressions.Arguments.Index] = index;
@@ -108,7 +108,7 @@ public sealed class ForTaskExecutor(IServiceProvider serviceProvider, ILogger<Fo
                 await SetResultAsync(output, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
                 break;
             default:
-                await SetErrorAsync(Error.Configuration(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), "Unable to continue with a specific task within a loop"), cancellationToken).ConfigureAwait(false);
+                await SetErrorAsync(Error.Configuration(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), "Unable to continue with a specific task within a loop"), cancellationToken).ConfigureAwait(false);
                 break;
         }
     }

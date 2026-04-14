@@ -1,13 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
-
-namespace ServerlessWorkflow.Sdk.Runtime;
+﻿namespace ServerlessWorkflow.Sdk.Runtime;
 
 /// <summary>
-/// Defines the state of a task instance
+/// Defines the fundamentals of a task instance
 /// </summary>
-public interface ITaskState
+public interface ITaskInstance
 {
 
     /// <summary>

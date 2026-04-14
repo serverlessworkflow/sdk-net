@@ -10,10 +10,10 @@ public interface IWorkflowProcessFactory
     /// Creates a new <see cref="IWorkflowProcess"/>
     /// </summary>
     /// <param name="definition">The <see cref="WorkflowDefinition"/> to create the process for</param>
-    /// <param name="state">The <see cref="IWorkflowState"/> to create the process for</param>
+    /// <param name="state">The <see cref="IWorkflowInstance"/> to create the process for</param>
     /// <param name="executionOptions">The options used to configure the workflow's execution</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IWorkflowProcess"/></returns>
-    Task<IWorkflowProcess> CreateAsync(WorkflowDefinition definition, IWorkflowState state, WorkflowExecutionsOptions executionOptions, CancellationToken cancellationToken = default);
+    Task<IWorkflowProcess> CreateAsync(WorkflowDefinition definition, IWorkflowInstance state, WorkflowExecutionsOptions executionOptions, CancellationToken cancellationToken = default);
 
 }

@@ -11,9 +11,9 @@ public static class WorkflowDefinitionExtensions
     /// Gets the next <see cref="TaskDefinition"/> to perform next, if any
     /// </summary>
     /// <param name="workflow">The extended <see cref="WorkflowDefinition"/></param>
-    /// <param name="after">The <see cref="ITaskState"/> to perform the next <see cref="ITaskState"/> after</param>
+    /// <param name="after">The <see cref="ITaskInstance"/> to perform the next <see cref="ITaskInstance"/> after</param>
     /// <returns>The next <see cref="TaskDefinition"/> to perform next, if any</returns>
-    public static MapEntry<string, TaskDefinition>? GetTaskAfter(this WorkflowDefinition workflow, ITaskState after)
+    public static MapEntry<string, TaskDefinition>? GetTaskAfter(this WorkflowDefinition workflow, ITaskInstance after)
     {
         ArgumentNullException.ThrowIfNull(after);
         switch (after.Status == TaskStatus.Skipped ? FlowDirective.Continue : after.Next)
@@ -30,10 +30,10 @@ public static class WorkflowDefinitionExtensions
     /// Attempts to get the next <see cref="TaskDefinition"/> to perform next, if any
     /// </summary>
     /// <param name="workflow">The extended <see cref="WorkflowDefinition"/></param>
-    /// <param name="after">The <see cref="ITaskState"/> to perform the next <see cref="ITaskState"/> after</param>
+    /// <param name="after">The <see cref="ITaskInstance"/> to perform the next <see cref="ITaskInstance"/> after</param>
     /// <param name="task">The next <see cref="TaskDefinition"/> to perform next, if any</param>
-    /// <returns>A boolean indicating whether or not a next <see cref="ITaskState"/> must be executed next</returns>
-    public static bool TryGetTaskAfter(this WorkflowDefinition workflow, ITaskState after, out MapEntry<string, TaskDefinition> task)
+    /// <returns>A boolean indicating whether or not a next <see cref="ITaskInstance"/> must be executed next</returns>
+    public static bool TryGetTaskAfter(this WorkflowDefinition workflow, ITaskInstance after, out MapEntry<string, TaskDefinition> task)
     {
         ArgumentNullException.ThrowIfNull(after);
         task = workflow.GetTaskAfter(after)!;

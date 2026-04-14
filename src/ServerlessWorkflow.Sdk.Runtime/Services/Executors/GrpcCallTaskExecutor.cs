@@ -38,8 +38,8 @@ public sealed class GrpcCallTaskExecutor(IServiceProvider serviceProvider, ILogg
         }
         catch (Exception ex)
         {
-            logger.LogError("An error occurred while initializing the gRPC call task '{task}': {ex}", Task.State.Reference, ex);
-            await SetErrorAsync(Error.Validation(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Invalid/missing call parameters for function 'grpc': {ex.Message}"), cancellationToken).ConfigureAwait(false);
+            logger.LogError("An error occurred while initializing the gRPC call task '{task}': {ex}", Task.Instance.Reference, ex);
+            await SetErrorAsync(Error.Validation(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Invalid/missing call parameters for function 'grpc': {ex.Message}"), cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -49,12 +49,12 @@ public sealed class GrpcCallTaskExecutor(IServiceProvider serviceProvider, ILogg
         if (grpc == null || grpcClient == null) throw new InvalidOperationException("The executor must be initialized before execution");
         if (!grpcClient.TryFindMethod(grpc.Service.Name, grpc.Method, out _))
         {
-            await SetErrorAsync(Error.Configuration(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Failed to find a method with name '{grpc.Method}' in GRPC service with name '{grpc.Service.Name}'"), cancellationToken).ConfigureAwait(false);
+            await SetErrorAsync(Error.Configuration(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Failed to find a method with name '{grpc.Method}' in GRPC service with name '{grpc.Service.Name}'"), cancellationToken).ConfigureAwait(false);
             return;
         }
         var arguments = GetExpressionEvaluationArguments();
         var requestArgs = grpc.Arguments != null
-            ? await Task.Workflow.Expressions.EvaluateAsync(grpc.Arguments, Task.State.Input, arguments, cancellationToken).ConfigureAwait(false)
+            ? await Task.Workflow.Expressions.EvaluateAsync(grpc.Arguments, Task.Instance.Input, arguments, cancellationToken).ConfigureAwait(false)
             : null;
         var requestDictionary = requestArgs is JsonObject jsonObj
             ? jsonObj.Deserialize<Dictionary<string, object>>() ?? []
@@ -67,7 +67,7 @@ public sealed class GrpcCallTaskExecutor(IServiceProvider serviceProvider, ILogg
         catch (Exception ex)
         {
             logger.LogError("Failed to call the gRPC method '{method}' on '{service}' service at '{host}:{port}': {ex}", grpc.Method, grpc.Service.Name, grpc.Service.Host, grpc.Service.Port, ex.Message);
-            await SetErrorAsync(Error.Communication(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), ErrorStatus.Communication, ex.Message), cancellationToken).ConfigureAwait(false);
+            await SetErrorAsync(Error.Communication(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), ErrorStatus.Communication, ex.Message), cancellationToken).ConfigureAwait(false);
             return;
         }
         var result = JsonSerializer.SerializeToNode(response);

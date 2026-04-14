@@ -14,7 +14,7 @@ public class InMemoryTaskStateStoreTests
         var store = new InMemoryTaskStateStore(cache);
         var workflowId = "wf-1";
         var taskId = "task-1";
-        var state = new Mock<ITaskState>();
+        var state = new Mock<ITaskInstance>();
         state.Setup(s => s.WorkflowId).Returns(workflowId);
         state.Setup(s => s.Id).Returns(taskId);
 
@@ -33,7 +33,7 @@ public class InMemoryTaskStateStoreTests
         var store = new InMemoryTaskStateStore(cache);
         var workflowId = "wf-1";
         var taskId = "task-1";
-        var state = new Mock<ITaskState>();
+        var state = new Mock<ITaskInstance>();
         state.Setup(s => s.WorkflowId).Returns(workflowId);
         state.Setup(s => s.Id).Returns(taskId);
         await store.AddAsync(state.Object, TestContext.Current.CancellationToken);
@@ -69,12 +69,12 @@ public class InMemoryTaskStateStoreTests
         var store = new InMemoryTaskStateStore(cache);
         var workflowId = "wf-1";
         var taskId = "task-1";
-        var original = new Mock<ITaskState>();
+        var original = new Mock<ITaskInstance>();
         original.Setup(s => s.WorkflowId).Returns(workflowId);
         original.Setup(s => s.Id).Returns(taskId);
         original.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
         await store.AddAsync(original.Object, TestContext.Current.CancellationToken);
-        var updated = new Mock<ITaskState>();
+        var updated = new Mock<ITaskInstance>();
         updated.Setup(s => s.WorkflowId).Returns(workflowId);
         updated.Setup(s => s.Id).Returns(taskId);
         updated.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);

@@ -17,13 +17,13 @@ public static class ITaskExecutionContextExtensions
     {
         return new()
         {
-            Id = task.State.Id,
-            Name = task.State.Name,
-            Reference = task.State.Reference,
+            Id = task.Instance.Id,
+            Name = task.Instance.Name,
+            Reference = task.Instance.Reference,
             Definition = task.Definition,
-            Input = task.State.Input,
-            Output = task.State.Output,
-            StartedAt = task.State.StartedAt?.GetDescriptor()
+            Input = task.Instance.Input,
+            Output = task.Instance.Output,
+            StartedAt = task.Instance.StartedAt?.GetDescriptor()
         };
     }
 

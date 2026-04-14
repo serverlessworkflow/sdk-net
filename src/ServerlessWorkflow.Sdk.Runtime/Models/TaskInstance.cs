@@ -1,11 +1,11 @@
 ﻿namespace ServerlessWorkflow.Sdk.Runtime.Models;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="ITaskState"/> interface
+/// Represents the default implementation of the <see cref="ITaskInstance"/> interface
 /// </summary>
 [DataContract]
-public sealed class TaskState
-    : ITaskState
+public sealed class TaskInstance
+    : ITaskInstance
 {
 
     List<TaskRun>? runs;
@@ -83,9 +83,9 @@ public sealed class TaskState
     [DataMember(Order = 17, Name = "retries"), JsonPropertyOrder(17), JsonPropertyName("retries")]
     public IReadOnlyCollection<TaskRetryAttempt>? Retries => retries;
 
-    IReadOnlyCollection<ITaskRun>? ITaskState.Runs => Runs;
+    IReadOnlyCollection<ITaskRun>? ITaskInstance.Runs => Runs;
 
-    IReadOnlyCollection<ITaskRetryAttempt>? ITaskState.Retries => Retries;
+    IReadOnlyCollection<ITaskRetryAttempt>? ITaskInstance.Retries => Retries;
 
     /// <inheritdoc/>
     public Task StartAsync(CancellationToken cancellationToken = default)

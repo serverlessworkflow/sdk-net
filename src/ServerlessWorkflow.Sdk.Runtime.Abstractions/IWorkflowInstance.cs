@@ -1,9 +1,9 @@
 ﻿namespace ServerlessWorkflow.Sdk.Runtime;
 
 /// <summary>
-/// Defines the fundamentals of a workflow state
+/// Defines the fundamentals of a workflow instance
 /// </summary>
-public interface IWorkflowState
+public interface IWorkflowInstance
 {
 
     /// <summary>

@@ -61,7 +61,7 @@ public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, IL
         using var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
         document = new OpenApiStreamReader().Read(responseStream, out _);
         var operationId = openApi.OperationId;
-        if (operationId.IsRuntimeExpression()) operationId = await Task.Workflow.Expressions.EvaluateAsync<string>(operationId, Task.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
+        if (operationId.IsRuntimeExpression()) operationId = await Task.Workflow.Expressions.EvaluateAsync<string>(operationId, Task.Instance.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
         var op = document.Paths
             .SelectMany(p => p.Value.Operations)
             .FirstOrDefault(o => o.Value.OperationId == operationId);
@@ -117,7 +117,7 @@ public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, IL
         if (openApi == null || operation == null) throw new InvalidOperationException("The executor must be initialized before execution");
         if (openApi.Parameters == null) return;
         var arguments = GetExpressionEvaluationArguments();
-        var evaluated = await Task.Workflow.Expressions.EvaluateAsync(openApi.Parameters, Task.State.Input, arguments, cancellationToken).ConfigureAwait(false);
+        var evaluated = await Task.Workflow.Expressions.EvaluateAsync(openApi.Parameters, Task.Instance.Input, arguments, cancellationToken).ConfigureAwait(false);
         if (evaluated is JsonObject jsonObject)
         {
             parameters = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -158,7 +158,7 @@ public sealed class OpenApiCallTaskExecutor(IServiceProvider serviceProvider, IL
                 var detail = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
                 logger.LogError("Failed to execute the OpenAPI operation '{operationId}' at '{uri}'. The remote server responded with a non-success status code '{statusCode}'.", operation.OperationId, response.RequestMessage!.RequestUri, response.StatusCode);
                 if (logger.IsEnabled(LogLevel.Debug)) logger.LogDebug("Response content:\r\n{responseContent}", detail ?? "None");
-                await SetErrorAsync(Error.Communication(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), (ushort)response.StatusCode, detail), cancellationToken).ConfigureAwait(false);
+                await SetErrorAsync(Error.Communication(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), (ushort)response.StatusCode, detail), cancellationToken).ConfigureAwait(false);
                 return;
             }
             var responseText = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);

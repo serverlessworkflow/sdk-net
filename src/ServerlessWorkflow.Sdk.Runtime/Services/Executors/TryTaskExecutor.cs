@@ -17,7 +17,7 @@ public sealed class TryTaskExecutor(IServiceProvider serviceProvider, ILogger<Tr
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
         var taskDefinition = new DoTaskDefinition() { Do = Task.Definition.Try };
-        var tryInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, JsonPointer.Create("try"), Task.State.Input, Task, false, cancellationToken).ConfigureAwait(false);
+        var tryInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, JsonPointer.Create("try"), Task.Instance.Input, Task, false, cancellationToken).ConfigureAwait(false);
         var executor = await CreateTryExecutorAsync(tryInstance, taskDefinition, cancellationToken).ConfigureAwait(false);
         await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -26,14 +26,14 @@ public sealed class TryTaskExecutor(IServiceProvider serviceProvider, ILogger<Tr
     protected override async Task RetryCoreAsync(Error cause, CancellationToken cancellationToken)
     {
         var taskDefinition = new DoTaskDefinition() { Do = Task.Definition.Try };
-        var retryInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, JsonPointer.Create("retry", "try"), Task.State.Input, Task, false, cancellationToken).ConfigureAwait(false);
+        var retryInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, JsonPointer.Create("retry", "try"), Task.Instance.Input, Task, false, cancellationToken).ConfigureAwait(false);
         var executor = await CreateTryExecutorAsync(retryInstance, taskDefinition, cancellationToken).ConfigureAwait(false);
         await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    async Task<ITaskExecutor> CreateTryExecutorAsync(ITaskState state, TaskDefinition definition, CancellationToken cancellationToken)
+    async Task<ITaskExecutor> CreateTryExecutorAsync(ITaskInstance instance, TaskDefinition definition, CancellationToken cancellationToken)
     {
-        var executor = await base.CreateTaskExecutorAsync(state, definition, Task.Workflow.State.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+        var executor = await base.CreateTaskExecutorAsync(instance, definition, Task.Workflow.Instance.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
         executor.SubscribeAsync(
             _ => System.Threading.Tasks.Task.CompletedTask,
             async ex => await OnTryFaultedAsync(executor, ex, CancellationTokenSource?.Token ?? default).ConfigureAwait(false),
@@ -81,10 +81,10 @@ public sealed class TryTaskExecutor(IServiceProvider serviceProvider, ILogger<Tr
         if (Task.Definition.Catch.Do != null)
         {
             var handlerDefinition = new DoTaskDefinition() { Do = Task.Definition.Catch.Do };
-            var handlerInstance = await Task.Workflow.CreateTaskAsync(handlerDefinition, JsonPointer.Create("catch", "do"), Task.State.Input, Task, false, cancellationToken).ConfigureAwait(false);
+            var handlerInstance = await Task.Workflow.CreateTaskAsync(handlerDefinition, JsonPointer.Create("catch", "do"), Task.Instance.Input, Task, false, cancellationToken).ConfigureAwait(false);
             var arguments = Task.Arguments?.DeepClone().AsObject()! ?? [];
             arguments[Task.Definition.Catch.As ?? RuntimeExpressions.Arguments.Error] = JsonSerializer.SerializeToNode(error)!;
-            var handlerExecutor = await base.CreateTaskExecutorAsync(handlerInstance, handlerDefinition, Task.Workflow.State.ContextData, arguments, cancellationToken).ConfigureAwait(false);
+            var handlerExecutor = await base.CreateTaskExecutorAsync(handlerInstance, handlerDefinition, Task.Workflow.Instance.ContextData, arguments, cancellationToken).ConfigureAwait(false);
             handlerExecutor.SubscribeAsync(
                 _ => System.Threading.Tasks.Task.CompletedTask,
                 async handlerEx => await OnHandlerFaultAsync(handlerExecutor, cancellationToken).ConfigureAwait(false),
@@ -98,26 +98,26 @@ public sealed class TryTaskExecutor(IServiceProvider serviceProvider, ILogger<Tr
 
     async Task OnTryCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
-        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
-        var output = executor.Task.State.Output ?? new JsonObject();
+        if (Task.Workflow.Instance.ContextData != executor.Task.Workflow.Instance.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.Instance.ContextData, cancellationToken).ConfigureAwait(false);
+        var output = executor.Task.Instance.Output ?? new JsonObject();
         Executors.Remove(executor);
-        var then = executor.Task.State.Next == FlowDirective.End ? FlowDirective.End : Task.Definition.Then;
+        var then = executor.Task.Instance.Next == FlowDirective.End ? FlowDirective.End : Task.Definition.Then;
         await SetResultAsync(output, then, cancellationToken).ConfigureAwait(false);
     }
 
     async Task OnHandlerFaultAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
-        var error = executor.Task.State.Error ?? throw new NullReferenceException();
+        var error = executor.Task.Instance.Error ?? throw new NullReferenceException();
         Executors.Remove(executor);
         await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
     }
 
     async Task OnHandlerCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
-        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
-        var output = executor.Task.State.Output ?? new JsonObject();
+        if (Task.Workflow.Instance.ContextData != executor.Task.Workflow.Instance.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.Instance.ContextData, cancellationToken).ConfigureAwait(false);
+        var output = executor.Task.Instance.Output ?? new JsonObject();
         Executors.Remove(executor);
-        var then = executor.Task.State.Next == FlowDirective.End ? FlowDirective.End : Task.Definition.Then;
+        var then = executor.Task.Instance.Next == FlowDirective.End ? FlowDirective.End : Task.Definition.Then;
         await SetResultAsync(output, then, cancellationToken).ConfigureAwait(false);
     }
 

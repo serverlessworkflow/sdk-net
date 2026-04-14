@@ -25,7 +25,7 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
     {
         try
         {
-            switch (workflow.State.Status)
+            switch (workflow.Instance.Status)
             {
                 case null or WorkflowStatus.Pending:
                     await StartAsync(cancellationTokenSource.Token).ConfigureAwait(false);
@@ -38,14 +38,14 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
                     taskCompletionSource.SetResult();
                     return;
                 default:
-                    if (logger.IsEnabled(LogLevel.Warning)) logger.LogWarning("The workflow instance '{instance}' is in an unexpected status phase '{status}'", workflow.State.GetQualifiedName(), workflow.State.Status);
+                    if (logger.IsEnabled(LogLevel.Warning)) logger.LogWarning("The workflow instance '{instance}' is in an unexpected status phase '{status}'", workflow.Instance.GetQualifiedName(), workflow.Instance.Status);
                     return;
             }
         }
         catch (Exception ex)
         {
-            if (logger.IsEnabled(LogLevel.Error)) logger.LogError("A critical exception occurred while executing the workflow instance '{instance}': {ex}", workflow.State.GetQualifiedName(), ex);
-            await workflow.SetErrorAsync(Error.Runtime(new Uri("/", UriKind.Relative), $"A critical exception occurred while executing the workflow instance '{workflow.State.GetQualifiedName()}': {ex}"), cancellationTokenSource.Token).ConfigureAwait(false);
+            if (logger.IsEnabled(LogLevel.Error)) logger.LogError("A critical exception occurred while executing the workflow instance '{instance}': {ex}", workflow.Instance.GetQualifiedName(), ex);
+            await workflow.SetErrorAsync(Error.Runtime(new Uri("/", UriKind.Relative), $"A critical exception occurred while executing the workflow instance '{workflow.Instance.GetQualifiedName()}': {ex}"), cancellationTokenSource.Token).ConfigureAwait(false);
         }
     }
 
@@ -56,8 +56,8 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
     {
         await workflow.StartAsync(cancellationToken).ConfigureAwait(false);
         var taskDefinition = workflow.Definition.Do.First();
-        var task = await workflow.CreateTaskAsync(taskDefinition.Value, JsonPointer.Create(taskDefinition.Key), workflow.State.Input ?? [], null, false, cancellationToken).ConfigureAwait(false);
-        var executor = await CreateTaskExecutorAsync(task, taskDefinition.Value, workflow.State.ContextData ?? [], null, cancellationToken).ConfigureAwait(false);
+        var task = await workflow.CreateTaskAsync(taskDefinition.Value, JsonPointer.Create(taskDefinition.Key), workflow.Instance.Input ?? [], null, false, cancellationToken).ConfigureAwait(false);
+        var executor = await CreateTaskExecutorAsync(task, taskDefinition.Value, workflow.Instance.ContextData ?? [], null, cancellationToken).ConfigureAwait(false);
         stopwatch.Start();
         await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
     }
@@ -103,7 +103,7 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
 
     async Task SetResultAsync(JsonNode? result, CancellationToken cancellationToken = default)
     {
-        if (workflow.State.Status != WorkflowStatus.Running) return;
+        if (workflow.Instance.Status != WorkflowStatus.Running) return;
         stopwatch.Stop();
         var output = result;
         await workflow.SetResultAsync(output, cancellationToken).ConfigureAwait(false);
@@ -127,7 +127,7 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
         cancellationTokenSource?.Cancel();
     }
 
-    async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskState task, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskInstance task, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(task);
         ArgumentNullException.ThrowIfNull(definition);
@@ -147,11 +147,11 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
 
     async Task OnTaskFaultedAsync(ITaskExecutor executor, Exception ex, CancellationToken cancellationToken)
     {
-        var error = executor.Task.State.Error;
+        var error = executor.Task.Instance.Error;
         if (error is null)
         {
             if (ex is RuntimeErrorException rex) error = rex.Error;
-            else error = Error.Runtime(new(executor.Task.State.Reference.ToString(), UriKind.Relative), $"An unhandled exception was thrown during the execution of task '{executor.Task.State.Reference}': {ex}");
+            else error = Error.Runtime(new(executor.Task.Instance.Reference.ToString(), UriKind.Relative), $"An unhandled exception was thrown during the execution of task '{executor.Task.Instance.Reference}': {ex}");
         }
         await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
         executors.TryRemove(executor, out _);
@@ -159,20 +159,20 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
 
     async Task OnTaskCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
-        var nextDefinition = (executor.Task.State.Status == TaskStatus.Skipped ? FlowDirective.Continue : executor.Task.State.Next) switch
+        var nextDefinition = (executor.Task.Instance.Status == TaskStatus.Skipped ? FlowDirective.Continue : executor.Task.Instance.Next) switch
         {
             FlowDirective.End or FlowDirective.Exit => null,
-            _ => workflow.Definition.GetTaskAfter(executor.Task.State)
+            _ => workflow.Definition.GetTaskAfter(executor.Task.Instance)
         };
         var completedTask = executor.Task;
         executors.TryRemove(executor, out _);
         if (nextDefinition == null)
         {
-            await SetResultAsync(completedTask.State.Output, cancellationToken).ConfigureAwait(false);
+            await SetResultAsync(completedTask.Instance.Output, cancellationToken).ConfigureAwait(false);
             return;
         }
-        var nextTask = await workflow.CreateTaskAsync(nextDefinition.Value, JsonPointer.Create(nextDefinition.Key), completedTask.State.Output ?? new JsonObject(), cancellationToken: cancellationToken).ConfigureAwait(false);
-        var nextExecutor = await CreateTaskExecutorAsync(nextTask, nextDefinition.Value, executor.Task.Workflow.State.ContextData, [], cancellationToken).ConfigureAwait(false);
+        var nextTask = await workflow.CreateTaskAsync(nextDefinition.Value, JsonPointer.Create(nextDefinition.Key), completedTask.Instance.Output ?? new JsonObject(), cancellationToken: cancellationToken).ConfigureAwait(false);
+        var nextExecutor = await CreateTaskExecutorAsync(nextTask, nextDefinition.Value, executor.Task.Workflow.Instance.ContextData, [], cancellationToken).ConfigureAwait(false);
         await nextExecutor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
     }
 

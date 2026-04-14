@@ -9,13 +9,13 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services;
 /// <param name="logger">The service used to perform logging</param>
 /// <param name="options">The options used to configure workflow execution</param>
 /// <param name="definition">The <see cref="WorkflowDefinition"/> of the workflow being executed</param>
-/// <param name="state">The <see cref="IWorkflowState"/> of the workflow being executed</param>
+/// <param name="state">The <see cref="IWorkflowInstance"/> of the workflow being executed</param>
 /// <param name="runtimeExpressionEvaluator">The service used to evaluate runtime expressions</param>
 /// <param name="runtime">The <see cref="IWorkflowRuntime"/> in which the workflow is being executed</param>
 /// <param name="eventBus">The service used to publish and subscribe to <see cref="ICloudEvent"/>s</param>
-/// <param name="tasks">The service used to manage <see cref="ITaskState"/>s</param>
+/// <param name="tasks">The service used to manage <see cref="ITaskInstance"/>s</param>
 public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> logger, WorkflowExecutionsOptions options, WorkflowDefinition definition, 
-    IWorkflowState state, IRuntimeExpressionEvaluator runtimeExpressionEvaluator, IWorkflowRuntime runtime, ICloudEventBus eventBus, ITaskStateStore tasks)
+    IWorkflowInstance state, IRuntimeExpressionEvaluator runtimeExpressionEvaluator, IWorkflowRuntime runtime, ICloudEventBus eventBus, ITaskStore tasks)
     : IWorkflowExecutionContext
 {
 
@@ -26,7 +26,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
     public WorkflowDefinition Definition => definition;
 
     /// <inheritdoc/>
-    public IWorkflowState State => state;
+    public IWorkflowInstance Instance => state;
 
     /// <inheritdoc/>
     public IRuntimeExpressionEvaluator Expressions => runtimeExpressionEvaluator;
@@ -52,7 +52,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
     public Task ContinueWithAsync(TaskDefinition task, CancellationToken cancellationToken = default) => Task.CompletedTask;
 
     /// <inheritdoc/>
-    public async Task<ITaskState> CreateTaskAsync(TaskDefinition definition, JsonPointer path, JsonNode input, ITaskExecutionContext? parent = null, bool isExtension = false, CancellationToken cancellationToken = default)
+    public async Task<ITaskInstance> CreateTaskAsync(TaskDefinition definition, JsonPointer path, JsonNode input, ITaskExecutionContext? parent = null, bool isExtension = false, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(definition);
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
@@ -63,28 +63,28 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
             Time = DateTimeOffset.Now,
             Source = options.LifecycleEvents.Source,
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Created.v1,
-            Subject = State.Id,
+            Subject = Instance.Id,
             DataContentType = MediaTypeNames.Application.Json,
             Data = new TaskCreatedEvent()
             {
-                Workflow = State.GetQualifiedName(),
+                Workflow = Instance.GetQualifiedName(),
                 Task = path,
                 CreatedAt = state.CreatedAt
             }
         }, cancellationToken).ConfigureAwait(false);
-        return await tasks.AddAsync(new TaskState()
+        return await tasks.AddAsync(new TaskInstance()
         {
             WorkflowId = state.Id,
             Name = path.ToString().Split('/', StringSplitOptions.RemoveEmptyEntries).Last(),
             Reference = path,
-            ParentId = parent?.State.Id,
+            ParentId = parent?.Instance.Id,
             IsExtension = isExtension,
             Input = input
         }, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<ITaskState> GetTasksAsync(CancellationToken cancellationToken = default) => tasks.ListAsync(State.Id, cancellationToken);
+    public IAsyncEnumerable<ITaskInstance> GetTasksAsync(CancellationToken cancellationToken = default) => tasks.ListAsync(Instance.Id, cancellationToken);
 
     /// <inheritdoc/>
     public Task PublishAsync(ICloudEvent e, CancellationToken cancellationToken = default) => eventBus.PublishAsync(e, cancellationToken);
@@ -216,7 +216,7 @@ public sealed class WorkflowExecutionContext(ILogger<WorkflowExecutionContext> l
     }
 
     /// <inheritdoc/>
-    public Task SetContextDataAsync(JsonObject contextData, CancellationToken cancellationToken = default) => State.SetContextDataAsync(contextData, cancellationToken);
+    public Task SetContextDataAsync(JsonObject contextData, CancellationToken cancellationToken = default) => Instance.SetContextDataAsync(contextData, cancellationToken);
 
     /// <inheritdoc/>
     public async Task CancelAsync(CancellationToken cancellationToken = default)

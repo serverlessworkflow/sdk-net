@@ -17,7 +17,7 @@ public sealed class WaitTaskExecutor(IServiceProvider serviceProvider, ILogger<W
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
         await System.Threading.Tasks.Task.Delay(Task.Definition.Wait.ToTimeSpan(), cancellationToken).ConfigureAwait(false);
-        await SetResultAsync(Task.State.Input, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+        await SetResultAsync(Task.Instance.Input, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
     }
 
 }

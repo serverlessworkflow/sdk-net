@@ -11,9 +11,9 @@ public class InMemoryWorkflowStateStoreTests
     {
         //arrange
         using var cache = new MemoryCache(new MemoryCacheOptions());
-        var store = new InMemoryWorkflowStateStore(cache);
+        var store = new InMemoryWorkflowStore(cache);
         var id = "wf-1";
-        var state = new Mock<IWorkflowState>();
+        var state = new Mock<IWorkflowInstance>();
         state.Setup(s => s.Id).Returns(id);
 
         //act
@@ -28,9 +28,9 @@ public class InMemoryWorkflowStateStoreTests
     {
         //arrange
         using var cache = new MemoryCache(new MemoryCacheOptions());
-        var store = new InMemoryWorkflowStateStore(cache);
+        var store = new InMemoryWorkflowStore(cache);
         var id = "wf-1";
-        var state = new Mock<IWorkflowState>();
+        var state = new Mock<IWorkflowInstance>();
         state.Setup(s => s.Id).Returns(id);
         await store.AddAsync(state.Object, TestContext.Current.CancellationToken);
 
@@ -46,7 +46,7 @@ public class InMemoryWorkflowStateStoreTests
     {
         //arrange
         using var cache = new MemoryCache(new MemoryCacheOptions());
-        var store = new InMemoryWorkflowStateStore(cache);
+        var store = new InMemoryWorkflowStore(cache);
         var id = "wf-missing";
 
         //act

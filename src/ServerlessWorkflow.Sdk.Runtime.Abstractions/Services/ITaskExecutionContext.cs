@@ -19,7 +19,7 @@ public interface ITaskExecutionContext
     /// <summary>
     /// Gets the task to execute
     /// </summary>
-    ITaskState State { get; }
+    ITaskInstance Instance { get; }
 
     /// <summary>
     /// Gets a name/value mapping of the task's arguments, if any
@@ -115,8 +115,8 @@ public interface ITaskExecutionContext
     /// Gets the subtasks the task is made out of
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>A new <see cref="IAsyncEnumerable{T}"/> used to enumerate <see cref="ITaskState">subtasks</see></returns>
-    IAsyncEnumerable<ITaskState> GetSubTasksAsync(CancellationToken cancellationToken = default);
+    /// <returns>A new <see cref="IAsyncEnumerable{T}"/> used to enumerate <see cref="ITaskInstance">subtasks</see></returns>
+    IAsyncEnumerable<ITaskInstance> GetSubTasksAsync(CancellationToken cancellationToken = default);
 
 }
 

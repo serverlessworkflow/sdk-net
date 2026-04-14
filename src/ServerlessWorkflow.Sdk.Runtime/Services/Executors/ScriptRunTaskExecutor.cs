@@ -59,7 +59,7 @@ public sealed class ScriptRunTaskExecutor(IServiceProvider serviceProvider, ILog
         var rawOutput = (await process.StandardOutput.ReadToEndAsync(cancellationToken).ConfigureAwait(false)).Trim();
         var errorMessage = (await process.StandardError.ReadToEndAsync(cancellationToken).ConfigureAwait(false)).Trim();
         if (process.ExitCode == 0) await SetResultAsync(new JsonObject { ["output"] = rawOutput }, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
-        else await SetErrorAsync(Error.Runtime(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), errorMessage), cancellationToken).ConfigureAwait(false);
+        else await SetErrorAsync(Error.Runtime(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), errorMessage), cancellationToken).ConfigureAwait(false);
         process.Dispose();
     }
 
@@ -68,7 +68,7 @@ public sealed class ScriptRunTaskExecutor(IServiceProvider serviceProvider, ILog
         if (value == null) return null;
         if (value is string str && str.IsRuntimeExpression())
         {
-            var evaluated = await Task.Workflow.Expressions.EvaluateAsync(str, Task.State.Input, expressionArguments, cancellationToken).ConfigureAwait(false);
+            var evaluated = await Task.Workflow.Expressions.EvaluateAsync(str, Task.Instance.Input, expressionArguments, cancellationToken).ConfigureAwait(false);
             if (evaluated == null) return null;
             if (evaluated is JsonValue jsonValue) return jsonValue.ToString();
             return evaluated.ToJsonString();

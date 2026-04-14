@@ -15,7 +15,7 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
 
     Map<string, TaskDefinition> Tasks => Task.Definition.Do;
 
-    JsonPointer GetPathFor(int index, string name) => JsonPointer.Parse($"{Task.State.Reference}/{index}/{name}");
+    JsonPointer GetPathFor(int index, string name) => JsonPointer.Parse($"{Task.Instance.Reference}/{index}/{name}");
 
     MapEntry<string, TaskDefinition>? GetNextTask(string? currentName)
     {
@@ -28,7 +28,7 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
     }
 
     /// <inheritdoc/>
-    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskState state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskInstance state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         var executor = await base.CreateTaskExecutorAsync(state, definition, contextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
         executor.SubscribeAsync(
@@ -42,15 +42,15 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
     /// <inheritdoc/>
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
-        ITaskState? last = null;
+        ITaskInstance? last = null;
         await foreach (var subtask in Task.GetSubTasksAsync(cancellationToken).ConfigureAwait(false)) last = subtask;
         MapEntry<string, TaskDefinition>? nextEntry;
         if (last == null) nextEntry = Tasks.FirstOrDefault();
-        else if (last.Status == null || last.IsOperative || last.Status == TaskStatus.Suspended) nextEntry = Tasks.FirstOrDefault(e => e.Key == last.Name) ?? throw new NullReferenceException($"Failed to find a task with the specified name '{last.Name}' at '{Task.State.Reference}'");
+        else if (last.Status == null || last.IsOperative || last.Status == TaskStatus.Suspended) nextEntry = Tasks.FirstOrDefault(e => e.Key == last.Name) ?? throw new NullReferenceException($"Failed to find a task with the specified name '{last.Name}' at '{Task.Instance.Reference}'");
         else  nextEntry = GetNextTask(last.Name);
         if (last != null && (last.Status == null || last.IsOperative || last.Status == TaskStatus.Suspended))
         {
-            ITaskState? lastCompleted = null;
+            ITaskInstance? lastCompleted = null;
             await foreach (var subtask in Task.GetSubTasksAsync(cancellationToken).ConfigureAwait(false)) if (subtask.Status != null && !subtask.IsOperative && subtask.Status != TaskStatus.Suspended) lastCompleted = subtask;
             if (lastCompleted != null) last = lastCompleted;
         }
@@ -60,19 +60,19 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
             return;
         }
         var nextIndex = Tasks.Keys.ToList().IndexOf(nextEntry.Key);
-        var input = last == null ? Task.State.Input : last.Output ?? new JsonObject();
-        var next = await Task.Workflow.CreateTaskAsync(nextEntry.Value, GetPathFor(nextIndex, nextEntry.Key), input, Task, Task.State.IsExtension, cancellationToken).ConfigureAwait(false);
-        var executor = await CreateTaskExecutorAsync(next, nextEntry.Value, Task.Workflow.State.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+        var input = last == null ? Task.Instance.Input : last.Output ?? new JsonObject();
+        var next = await Task.Workflow.CreateTaskAsync(nextEntry.Value, GetPathFor(nextIndex, nextEntry.Key), input, Task, Task.Instance.IsExtension, cancellationToken).ConfigureAwait(false);
+        var executor = await CreateTaskExecutorAsync(next, nextEntry.Value, Task.Workflow.Instance.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
         await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
     }
 
     async Task OnSubTaskFaultAsync(ITaskExecutor executor, Exception ex, CancellationToken cancellationToken)
     {
-        var error = executor.Task.State.Error;
+        var error = executor.Task.Instance.Error;
         if (error is null)
         {
             if (ex is RuntimeErrorException rex) error = rex.Error;
-            else error = Error.Runtime(new(executor.Task.State.Reference.ToString(), UriKind.Relative), $"An unhandled exception was thrown during the execution of task '{executor.Task.State.Reference}': {ex}");
+            else error = Error.Runtime(new(executor.Task.Instance.Reference.ToString(), UriKind.Relative), $"An unhandled exception was thrown during the execution of task '{executor.Task.Instance.Reference}': {ex}");
         }
         Executors.Remove(executor);
         await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
@@ -80,10 +80,10 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
 
     async Task OnSubtaskCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
-        var lastState = executor.Task.State;
-        var output = executor.Task.State.Output ?? new JsonObject();
+        var lastState = executor.Task.Instance;
+        var output = executor.Task.Instance.Output ?? new JsonObject();
         Executors.Remove(executor);
-        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
+        if (Task.Workflow.Instance.ContextData != executor.Task.Workflow.Instance.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.Instance.ContextData, cancellationToken).ConfigureAwait(false);
         var nextEntry = GetNextTask(lastState.Name);
         if (nextEntry == null)
         {
@@ -103,7 +103,7 @@ public sealed class DoTaskExecutor(IServiceProvider serviceProvider, ILogger<DoT
                 break;
             default:
                 var next = await Task.Workflow.CreateTaskAsync(nextEntry.Value, GetPathFor(nextIndex, nextEntry.Key), output, Task, false, cancellationToken).ConfigureAwait(false);
-                var nextExecutor = await CreateTaskExecutorAsync(next, nextEntry.Value, Task.Workflow.State.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+                var nextExecutor = await CreateTaskExecutorAsync(next, nextEntry.Value, Task.Workflow.Instance.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
                 await nextExecutor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
                 break;
         }

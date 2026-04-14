@@ -20,13 +20,13 @@ public sealed class SwitchTaskExecutor(IServiceProvider serviceProvider, ILogger
         var defaultCase = Task.Definition.Switch.FirstOrDefault(kvp => string.IsNullOrWhiteSpace(kvp.Value.When));
         foreach (var @case in Task.Definition.Switch.Where(c => !string.IsNullOrWhiteSpace(c.Value.When)))
         {
-            if (!await Task.Workflow.Expressions.EvaluateConditionAsync(@case.Value.When!, Task.State.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false)) continue;
+            if (!await Task.Workflow.Expressions.EvaluateConditionAsync(@case.Value.When!, Task.Instance.Input, GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false)) continue;
             match = @case;
             break;
         }
-        if (match != null) await SetResultAsync(Task.State.Input, match.Value.Then, cancellationToken).ConfigureAwait(false);
-        else if (defaultCase != null) await SetResultAsync(Task.State.Input, defaultCase.Value.Then, cancellationToken).ConfigureAwait(false);
-        else await SetResultAsync(Task.State.Input, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+        if (match != null) await SetResultAsync(Task.Instance.Input, match.Value.Then, cancellationToken).ConfigureAwait(false);
+        else if (defaultCase != null) await SetResultAsync(Task.Instance.Input, defaultCase.Value.Then, cancellationToken).ConfigureAwait(false);
+        else await SetResultAsync(Task.Instance.Input, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
     }
 
 }

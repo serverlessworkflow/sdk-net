@@ -34,8 +34,8 @@ public sealed class HttpCallTaskExecutor(IServiceProvider serviceProvider, ILogg
         }
         catch (Exception ex)
         {
-            logger.LogError("An error occurred while initializing the HTTP call task '{task}': {ex}", Task.State.Reference, ex);
-            await SetErrorAsync(Error.Validation(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Invalid/missing call parameters for function 'http': {ex.Message}"), cancellationToken).ConfigureAwait(false);
+            logger.LogError("An error occurred while initializing the HTTP call task '{task}': {ex}", Task.Instance.Reference, ex);
+            await SetErrorAsync(Error.Validation(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), $"Invalid/missing call parameters for function 'http': {ex.Message}"), cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -53,7 +53,7 @@ public sealed class HttpCallTaskExecutor(IServiceProvider serviceProvider, ILogg
             if (mediaType.StartsWith("text"))
             {
                 var rawContent = http.Body.ToString();
-                if (!string.IsNullOrWhiteSpace(rawContent) && rawContent.IsRuntimeExpression()) rawContent = await Task.Workflow.Expressions.EvaluateAsync<string>(rawContent, Task.State.Input, arguments, cancellationToken).ConfigureAwait(false);
+                if (!string.IsNullOrWhiteSpace(rawContent) && rawContent.IsRuntimeExpression()) rawContent = await Task.Workflow.Expressions.EvaluateAsync<string>(rawContent, Task.Instance.Input, arguments, cancellationToken).ConfigureAwait(false);
                 if (!string.IsNullOrWhiteSpace(rawContent)) requestContent = new StringContent(rawContent, Encoding.UTF8, mediaType);
             }
             else if (mediaType == MediaTypeNames.Application.Octet)
@@ -63,7 +63,7 @@ public sealed class HttpCallTaskExecutor(IServiceProvider serviceProvider, ILogg
             }
             else
             {
-                var evaluatedBody = await Task.Workflow.Expressions.EvaluateAsync(http.Body, Task.State.Input, arguments, cancellationToken).ConfigureAwait(false);
+                var evaluatedBody = await Task.Workflow.Expressions.EvaluateAsync(http.Body, Task.Instance.Input, arguments, cancellationToken).ConfigureAwait(false);
                 if (evaluatedBody != null) requestContent = new StringContent(evaluatedBody.ToJsonString(), Encoding.UTF8, mediaType);
             }
         }
@@ -77,16 +77,16 @@ public sealed class HttpCallTaskExecutor(IServiceProvider serviceProvider, ILogg
             var authResult = await authenticationHandler.HandleAsync(authentication, Task.Workflow.Definition, cancellationToken).ConfigureAwait(false);
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authResult.Scheme, authResult.Value);
         }
-        var parameters = Task.State.Input is JsonObject jsonObject ? jsonObject.Where(kvp => kvp.Value is JsonValue).ToDictionary(kvp => kvp.Key, kvp => kvp.Value?.GetValue<object>()) : [];
+        var parameters = Task.Instance.Input is JsonObject jsonObject ? jsonObject.Where(kvp => kvp.Value is JsonValue).ToDictionary(kvp => kvp.Key, kvp => kvp.Value?.GetValue<object>()) : [];
         var uri = StringFormatter.Format(endpointUri.OriginalString, parameters);
-        if (uri.IsRuntimeExpression()) uri = await Task.Workflow.Expressions.EvaluateAsync<string>(uri, Task.State.Input, this.GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
+        if (uri.IsRuntimeExpression()) uri = await Task.Workflow.Expressions.EvaluateAsync<string>(uri, Task.Instance.Input, this.GetExpressionEvaluationArguments(), cancellationToken).ConfigureAwait(false);
         using var request = new HttpRequestMessage(new HttpMethod(http.Method), uri) { Content = requestContent };
         if (http.Headers != null)
         {
             foreach (var header in http.Headers)
             {
                 var headerValue = header.Value;
-                if (headerValue.IsRuntimeExpression()) headerValue = await Task.Workflow.Expressions.EvaluateAsync<string>(headerValue, Task.State.Input, arguments, cancellationToken).ConfigureAwait(false);
+                if (headerValue.IsRuntimeExpression()) headerValue = await Task.Workflow.Expressions.EvaluateAsync<string>(headerValue, Task.Instance.Input, arguments, cancellationToken).ConfigureAwait(false);
                 request.Headers.TryAddWithoutValidation(header.Key, headerValue);
             }
         }
@@ -97,7 +97,7 @@ public sealed class HttpCallTaskExecutor(IServiceProvider serviceProvider, ILogg
             var detail = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
             logger.LogError("Failed to request '{method} {uri}'. The remote server responded with a non-success status code '{statusCode}'.", http.Method, endpointUri, response.StatusCode);
             if (logger.IsEnabled(LogLevel.Debug)) logger.LogDebug("Response content:\r\n{responseContent}", detail ?? "None");
-            await SetErrorAsync(Error.Communication(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), (ushort)response.StatusCode, detail), cancellationToken).ConfigureAwait(false);
+            await SetErrorAsync(Error.Communication(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), (ushort)response.StatusCode, detail), cancellationToken).ConfigureAwait(false);
             return;
         }
         JsonNode? content = null;

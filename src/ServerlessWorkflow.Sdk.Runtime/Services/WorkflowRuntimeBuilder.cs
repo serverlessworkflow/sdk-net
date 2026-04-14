@@ -205,15 +205,15 @@ public sealed class WorkflowRuntimeBuilder(IServiceCollection services, IConfigu
     public IWorkflowRuntimeBuilder UseWorkflowDefinitionStore(Func<IServiceProvider, IWorkflowDefinitionStore> factory) => ReplaceService<IWorkflowDefinitionStore>(factory);
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseWorkflowStateStore<TStore>() where TStore : class, IWorkflowStateStore => ReplaceService<IWorkflowStateStore>(typeof(TStore));
+    public IWorkflowRuntimeBuilder UseWorkflowStateStore<TStore>() where TStore : class, IWorkflowStore => ReplaceService<IWorkflowStore>(typeof(TStore));
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseWorkflowStateStore(Func<IServiceProvider, IWorkflowStateStore> factory) => ReplaceService<IWorkflowStateStore>(factory);
+    public IWorkflowRuntimeBuilder UseWorkflowStateStore(Func<IServiceProvider, IWorkflowStore> factory) => ReplaceService<IWorkflowStore>(factory);
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseTaskStateStore<TStore>() where TStore : class, ITaskStateStore => ReplaceService<ITaskStateStore>(typeof(TStore));
+    public IWorkflowRuntimeBuilder UseTaskStateStore<TStore>() where TStore : class, ITaskStore => ReplaceService<ITaskStore>(typeof(TStore));
 
     /// <inheritdoc/>
-    public IWorkflowRuntimeBuilder UseTaskStateStore(Func<IServiceProvider, ITaskStateStore> factory) => ReplaceService<ITaskStateStore>(factory);
+    public IWorkflowRuntimeBuilder UseTaskStateStore(Func<IServiceProvider, ITaskStore> factory) => ReplaceService<ITaskStore>(factory);
 
 }

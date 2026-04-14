@@ -1,11 +1,11 @@
 ﻿namespace ServerlessWorkflow.Sdk.Runtime.Models;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IWorkflowState"/> interface
+/// Represents the default implementation of the <see cref="IWorkflowInstance"/> interface
 /// </summary>
 [DataContract]
-public sealed class WorkflowState
-    : IWorkflowState
+public sealed class WorkflowInstance
+    : IWorkflowInstance
 {
 
     List<WorkflowRun>? runs;
@@ -56,7 +56,7 @@ public sealed class WorkflowState
     [DataMember(Order = 11, Name = "runs"), JsonPropertyOrder(11), JsonPropertyName("runs")]
     public IReadOnlyCollection<WorkflowRun>? Runs => runs;
 
-    IReadOnlyCollection<IWorkflowRun>? IWorkflowState.Runs => Runs;
+    IReadOnlyCollection<IWorkflowRun>? IWorkflowInstance.Runs => Runs;
 
     /// <inheritdoc/>
     public Task StartAsync(CancellationToken cancellationToken = default)

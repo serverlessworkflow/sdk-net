@@ -9,7 +9,7 @@ public sealed class TaskExecutionContextFactory(IServiceProvider serviceProvider
 {
 
     /// <inheritdoc/>
-    public ITaskExecutionContext Create(IWorkflowExecutionContext workflow, TaskDefinition definition, ITaskState state, JsonObject? arguments = null)
+    public ITaskExecutionContext Create(IWorkflowExecutionContext workflow, TaskDefinition definition, ITaskInstance state, JsonObject? arguments = null)
     {
         ArgumentNullException.ThrowIfNull(workflow);
         ArgumentNullException.ThrowIfNull(state);

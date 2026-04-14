@@ -9,11 +9,11 @@ namespace ServerlessWorkflow.Sdk.Runtime.Services;
 /// <param name="logger">The service used to perform logging</param>
 /// <param name="workflow">The workflow the task to execute belongs to</param>
 /// <param name="eventBus">The service used to publish and subscribe to <see cref="ICloudEvent"/>s</param>
-/// <param name="tasks">The service used to manage <see cref="ITaskState"/>s</param>
+/// <param name="tasks">The service used to manage <see cref="ITaskInstance"/>s</param>
 /// <param name="definition">The definition of the task to execute</param>
-/// <param name="state">The initial state of the task to execute</param>
+/// <param name="instance">The initial state of the task to execute</param>
 /// <param name="arguments">A name/value mapping of the task's arguments, if any</param>
-public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionContext<TDefinition>> logger, IWorkflowExecutionContext workflow, ICloudEventBus eventBus, ITaskStateStore tasks, TDefinition definition, ITaskState state, JsonObject? arguments)
+public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionContext<TDefinition>> logger, IWorkflowExecutionContext workflow, ICloudEventBus eventBus, ITaskStore tasks, TDefinition definition, ITaskInstance instance, JsonObject? arguments)
     : ITaskExecutionContext<TDefinition>
     where TDefinition : TaskDefinition
 {
@@ -29,13 +29,13 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
     TaskDefinition ITaskExecutionContext.Definition => Definition;
 
     /// <inheritdoc/>
-    public ITaskState State => state;
+    public ITaskInstance Instance => instance;
 
     /// <inheritdoc/>
     public JsonObject? Arguments => arguments;
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<ITaskState> GetSubTasksAsync(CancellationToken cancellationToken = default) => tasks.ListAsync(state.WorkflowId, state.Id, cancellationToken);
+    public IAsyncEnumerable<ITaskInstance> GetSubTasksAsync(CancellationToken cancellationToken = default) => tasks.ListAsync(instance.WorkflowId, instance.Id, cancellationToken);
 
     /// <inheritdoc/>
     public Task<IObservable<IStreamedCloudEvent>> StreamAsync(CancellationToken cancellationToken = default)
@@ -56,8 +56,8 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
     public async Task StartAsync(CancellationToken cancellationToken = default)
     {
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Starting task with id '{TaskId}'...", state.Id);
-        await state.StartAsync(cancellationToken).ConfigureAwait(false);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Starting task with id '{TaskId}'...", instance.Id);
+        await instance.StartAsync(cancellationToken).ConfigureAwait(false);
         if (workflow.Options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
             SpecVersion = CloudEvent.DefaultVersion,
@@ -65,24 +65,24 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Time = DateTimeOffset.Now,
             Source = workflow.Options.LifecycleEvents.Source,
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Started.v1,
-            Subject = State.Id,
+            Subject = Instance.Id,
             DataContentType = MediaTypeNames.Application.Json,
             Data = new TaskStartedEvent()
             {
-                Workflow = workflow.State.GetQualifiedName(),
-                Task = state.Reference,
-                StartedAt = state.StartedAt!.Value
+                Workflow = workflow.Instance.GetQualifiedName(),
+                Task = instance.Reference,
+                StartedAt = instance.StartedAt!.Value
             }
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' started", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' started", instance.Id);
     }
 
     /// <inheritdoc/>
     public async Task SuspendAsync(CancellationToken cancellationToken = default)
     {
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Suspending task with id '{TaskId}'...", state.Id);
-        await state.SuspendAsync(cancellationToken).ConfigureAwait(false);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Suspending task with id '{TaskId}'...", instance.Id);
+        await instance.SuspendAsync(cancellationToken).ConfigureAwait(false);
         if (workflow.Options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
             SpecVersion = CloudEvent.DefaultVersion,
@@ -90,24 +90,24 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Time = DateTimeOffset.Now,
             Source = workflow.Options.LifecycleEvents.Source,
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Suspended.v1,
-            Subject = State.Id,
+            Subject = Instance.Id,
             DataContentType = MediaTypeNames.Application.Json,
             Data = new TaskSuspendedEvent()
             {
-                Workflow = workflow.State.GetQualifiedName(),
-                Task = state.Reference,
-                SuspendedAt = state.Runs?.LastOrDefault()?.EndedAt ?? DateTimeOffset.Now,
+                Workflow = workflow.Instance.GetQualifiedName(),
+                Task = instance.Reference,
+                SuspendedAt = instance.Runs?.LastOrDefault()?.EndedAt ?? DateTimeOffset.Now,
             }
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' suspended", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' suspended", instance.Id);
     }
 
     /// <inheritdoc/>
     public async Task RetryAsync(Error cause, CancellationToken cancellationToken = default)
     {
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Retrying task with id '{TaskId}'...", state.Id);
-        await state.RetryAsync(cause, cancellationToken).ConfigureAwait(false);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Retrying task with id '{TaskId}'...", instance.Id);
+        await instance.RetryAsync(cause, cancellationToken).ConfigureAwait(false);
         if (workflow.Options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
             SpecVersion = CloudEvent.DefaultVersion,
@@ -115,24 +115,24 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Time = DateTimeOffset.Now,
             Source = workflow.Options.LifecycleEvents.Source,
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Retrying.v1,
-            Subject = State.Id,
+            Subject = Instance.Id,
             DataContentType = MediaTypeNames.Application.Json,
             Data = new RetryingTaskEvent()
             {
-                Workflow = workflow.State.GetQualifiedName(),
-                Task = state.Reference,
-                RetryingAt = state.Runs?.LastOrDefault()?.StartedAt ?? DateTimeOffset.Now
+                Workflow = workflow.Instance.GetQualifiedName(),
+                Task = instance.Reference,
+                RetryingAt = instance.Runs?.LastOrDefault()?.StartedAt ?? DateTimeOffset.Now
             }
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' retried", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' retried", instance.Id);
     }
 
     /// <inheritdoc/>
     public async Task SetErrorAsync(Error error, CancellationToken cancellationToken = default)
     {
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Faulting task with id '{TaskId}'...", state.Id);
-        await state.SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Faulting task with id '{TaskId}'...", instance.Id);
+        await instance.SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
         if (workflow.Options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
             SpecVersion = CloudEvent.DefaultVersion,
@@ -140,24 +140,24 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Time = DateTimeOffset.Now,
             Source = workflow.Options.LifecycleEvents.Source,
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Faulted.v1,
-            Subject = State.Id,
+            Subject = Instance.Id,
             DataContentType = MediaTypeNames.Application.Json,
             Data = new TaskFaultedEvent()
             {
-                Workflow = workflow.State.GetQualifiedName(),
-                Task = state.Reference,
+                Workflow = workflow.Instance.GetQualifiedName(),
+                Task = instance.Reference,
                 Error = error,
-                FaultedAt = state.EndedAt!.Value
+                FaultedAt = instance.EndedAt!.Value
             }
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' faulted", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' faulted", instance.Id);
     }
 
     /// <inheritdoc/>
     public async Task SetResultAsync(JsonNode? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default)
     {
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        await state.SetOutputAsync(result, then ?? FlowDirective.Continue, cancellationToken).ConfigureAwait(false);
+        await instance.SetOutputAsync(result, then ?? FlowDirective.Continue, cancellationToken).ConfigureAwait(false);
         if (workflow.Options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
             SpecVersion = CloudEvent.DefaultVersion,
@@ -165,16 +165,16 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Time = DateTimeOffset.Now,
             Source = workflow.Options.LifecycleEvents.Source,
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Completed.v1,
-            Subject = State.Id,
+            Subject = Instance.Id,
             DataContentType = MediaTypeNames.Application.Json,
             Data = new TaskCompletedEvent()
             {
-                Workflow = workflow.State.GetQualifiedName(),
-                Task = state.Reference,
-                CompletedAt = state.EndedAt!.Value
+                Workflow = workflow.Instance.GetQualifiedName(),
+                Task = instance.Reference,
+                CompletedAt = instance.EndedAt!.Value
             }
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' ran to completion", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' ran to completion", instance.Id);
     }
 
     /// <inheritdoc/>
@@ -184,8 +184,8 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
     public async Task SkipAsync(JsonNode? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default)
     {
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Skipping the execution of the task with id '{TaskId}'...", state.Id);
-        await state.SkipAsync(result, then ?? FlowDirective.Continue, cancellationToken).ConfigureAwait(false);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Skipping the execution of the task with id '{TaskId}'...", instance.Id);
+        await instance.SkipAsync(result, then ?? FlowDirective.Continue, cancellationToken).ConfigureAwait(false);
         if (workflow.Options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
             SpecVersion = CloudEvent.DefaultVersion,
@@ -193,24 +193,24 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Time = DateTimeOffset.Now,
             Source = workflow.Options.LifecycleEvents.Source,
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Skipped.v1,
-            Subject = State.Id,
+            Subject = Instance.Id,
             DataContentType = MediaTypeNames.Application.Json,
             Data = new TaskSkippedEvent()
             {
-                Workflow = workflow.State.GetQualifiedName(),
-                Task = state.Reference,
-                SkippedAt = state.EndedAt!.Value
+                Workflow = workflow.Instance.GetQualifiedName(),
+                Task = instance.Reference,
+                SkippedAt = instance.EndedAt!.Value
             }
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the task with id '{TaskId}' has been skipped", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("The execution of the task with id '{TaskId}' has been skipped", instance.Id);
     }
 
     /// <inheritdoc/>
     public async Task CancelAsync(CancellationToken cancellationToken = default)
     {
         using var @lock = await asyncLock.LockAsync(cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Faulting task with id '{TaskId}'...", state.Id);
-        await state.CancelAsync(cancellationToken).ConfigureAwait(false);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Faulting task with id '{TaskId}'...", instance.Id);
+        await instance.CancelAsync(cancellationToken).ConfigureAwait(false);
         if (workflow.Options.LifecycleEvents.Publish) await eventBus.PublishAsync(new CloudEvent()
         {
             SpecVersion = CloudEvent.DefaultVersion,
@@ -218,16 +218,16 @@ public sealed class TaskExecutionContext<TDefinition>(ILogger<TaskExecutionConte
             Time = DateTimeOffset.Now,
             Source = workflow.Options.LifecycleEvents.Source,
             Type = ServerlessWorkflowSpecificationDefaults.CloudEvents.Task.Cancelled.v1,
-            Subject = State.Id,
+            Subject = Instance.Id,
             DataContentType = MediaTypeNames.Application.Json,
             Data = new TaskCancelledEvent()
             {
-                Workflow = workflow.State.GetQualifiedName(),
-                Task = state.Reference,
-                CancelledAt = state.EndedAt!.Value
+                Workflow = workflow.Instance.GetQualifiedName(),
+                Task = instance.Reference,
+                CancelledAt = instance.EndedAt!.Value
             }
         }, cancellationToken).ConfigureAwait(false);
-        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' faulted", state.Id);
+        if (logger.IsEnabled(LogLevel.Information)) logger.LogInformation("Task with id '{TaskId}' faulted", instance.Id);
     }
 
 }

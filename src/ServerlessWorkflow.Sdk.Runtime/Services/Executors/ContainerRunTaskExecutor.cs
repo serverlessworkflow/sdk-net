@@ -40,7 +40,7 @@ public sealed class ContainerRunTaskExecutor(IServiceProvider serviceProvider, I
             logger.LogError("An error occurred while executing the container process: {ex}", ex);
             var message = ex.Message;
             try { if (container.StandardError != null) message = await container.StandardError.ReadToEndAsync(cancellationToken).ConfigureAwait(false); } catch { }
-            await SetErrorAsync(Error.Runtime(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), message), cancellationToken).ConfigureAwait(false);
+            await SetErrorAsync(Error.Runtime(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), message), cancellationToken).ConfigureAwait(false);
         }
     }
 

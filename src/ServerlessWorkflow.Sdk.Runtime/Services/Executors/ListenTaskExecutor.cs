@@ -20,7 +20,7 @@ public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger
     static JsonPointer GetPathFor(uint offset) => JsonPointer.Create("foreach", $"{offset - 1}", "do");
 
     /// <inheritdoc/>
-    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskState state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
+    protected override async Task<ITaskExecutor> CreateTaskExecutorAsync(ITaskInstance state, TaskDefinition definition, JsonObject contextData, JsonObject? arguments = null, CancellationToken cancellationToken = default)
     {
         var executor = await base.CreateTaskExecutorAsync(state, definition, contextData, arguments, cancellationToken).ConfigureAwait(false);
         executor.SubscribeAsync(
@@ -59,7 +59,7 @@ public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger
         }
         else
         {
-            ITaskState? lastSubtask = null;
+            ITaskInstance? lastSubtask = null;
             await foreach (var subtask in Task.GetSubTasksAsync(cancellationToken).ConfigureAwait(false)) lastSubtask = subtask;
             if (lastSubtask != null && lastSubtask.IsOperative && Task.Definition.Foreach.Do != null)
             {
@@ -68,7 +68,7 @@ public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger
                     Do = Task.Definition.Foreach.Do 
                 };
                 var arguments = GetExpressionEvaluationArguments();
-                var taskExecutor = await CreateTaskExecutorAsync(lastSubtask, taskDefinition, Task.Workflow.State.ContextData, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
+                var taskExecutor = await CreateTaskExecutorAsync(lastSubtask, taskDefinition, Task.Workflow.Instance.ContextData, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
                 await taskExecutor.ExecuteAsync(CancellationTokenSource!.Token).ConfigureAwait(false);
             }
             var events = await cloudEventBus.SubscribeAsync(cancellationToken).ConfigureAwait(false);
@@ -104,8 +104,8 @@ public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger
         }
         arguments[Task.Definition.Foreach.Item ?? RuntimeExpressions.Arguments.Each] = eventData!;
         arguments[Task.Definition.Foreach.At ?? RuntimeExpressions.Arguments.Index] = eventOffset - 1;
-        var taskInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, GetPathFor(eventOffset), Task.State.Input, Task, false, CancellationTokenSource!.Token).ConfigureAwait(false);
-        var taskExecutor = await CreateTaskExecutorAsync(taskInstance, taskDefinition, Task.Workflow.State.ContextData, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
+        var taskInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, GetPathFor(eventOffset), Task.Instance.Input, Task, false, CancellationTokenSource!.Token).ConfigureAwait(false);
+        var taskExecutor = await CreateTaskExecutorAsync(taskInstance, taskDefinition, Task.Workflow.Instance.ContextData, arguments, CancellationTokenSource!.Token).ConfigureAwait(false);
         await taskExecutor.ExecuteAsync(CancellationTokenSource!.Token).ConfigureAwait(false);
     }
 
@@ -115,12 +115,12 @@ public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger
         Title = ErrorTitle.Communication,
         Status = ErrorStatus.Communication,
         Detail = ex.Message,
-        Instance = new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute)
+        Instance = new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute)
     }, CancellationTokenSource!.Token);
 
     async Task OnStreamingCompletedAsync()
     {
-        ITaskState? last = null;
+        ITaskInstance? last = null;
         await foreach (var subtask in Task.GetSubTasksAsync(CancellationTokenSource!.Token).ConfigureAwait(false)) last = subtask;
         var output = last?.Output;
         await SetResultAsync(output, Task.Definition.Then, CancellationTokenSource!.Token).ConfigureAwait(false);
@@ -128,7 +128,7 @@ public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger
 
     async Task OnEventProcessingErrorAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
-        var error = executor.Task.State.Error ?? throw new NullReferenceException();
+        var error = executor.Task.Instance.Error ?? throw new NullReferenceException();
         Executors.Remove(executor);
         await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
     }
@@ -136,7 +136,7 @@ public sealed class ListenTaskExecutor(IServiceProvider serviceProvider, ILogger
     async Task OnEventProcessingCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
     {
         Executors.Remove(executor);
-        if (Task.Workflow.State.ContextData != executor.Task.Workflow.State.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.State.ContextData, cancellationToken).ConfigureAwait(false);
+        if (Task.Workflow.Instance.ContextData != executor.Task.Workflow.Instance.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.Instance.ContextData, cancellationToken).ConfigureAwait(false);
     }
 
     /// <inheritdoc/>

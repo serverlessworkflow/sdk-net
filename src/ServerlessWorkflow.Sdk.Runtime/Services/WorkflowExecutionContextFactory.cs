@@ -10,7 +10,7 @@ public sealed class WorkflowExecutionContextFactory(IServiceProvider serviceProv
 {
 
     /// <inheritdoc/>
-    public IWorkflowExecutionContext Create(WorkflowDefinition definition, IWorkflowState state, WorkflowExecutionsOptions executionsOptions)
+    public IWorkflowExecutionContext Create(WorkflowDefinition definition, IWorkflowInstance state, WorkflowExecutionsOptions executionsOptions)
     {
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(state);

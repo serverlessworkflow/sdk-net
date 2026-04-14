@@ -12,9 +12,9 @@ public interface IWorkflowExecutionContext
     WorkflowDefinition Definition { get; }
 
     /// <summary>
-    /// Gets the current <see cref="IWorkflowState"/>
+    /// Gets the current <see cref="IWorkflowInstance"/>
     /// </summary>
-    IWorkflowState State { get; }
+    IWorkflowInstance Instance { get; }
 
     /// <summary>
     /// Gets the current <see cref="IRuntimeExpressionEvaluator"/>
@@ -32,9 +32,9 @@ public interface IWorkflowExecutionContext
     WorkflowExecutionsOptions Options { get; }
 
     /// <summary>
-    /// Gets a new <see cref="JsonObject"/>, if any, containing the runtime expression evaluation arguments for the <see cref="ITaskState"/> to run
+    /// Gets a new <see cref="JsonObject"/>, if any, containing the runtime expression evaluation arguments for the <see cref="ITaskInstance"/> to run
     /// </summary>
-    /// <returns>A new <see cref="JsonObject"/>, if any, containing the runtime expression evaluation arguments for the <see cref="ITaskState"/> to run</returns>
+    /// <returns>A new <see cref="JsonObject"/>, if any, containing the runtime expression evaluation arguments for the <see cref="ITaskInstance"/> to run</returns>
     JsonObject GetExpressionEvaluationArguments();
 
     /// <summary>
@@ -46,23 +46,23 @@ public interface IWorkflowExecutionContext
     Task ContinueWithAsync(TaskDefinition task, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Creates a new <see cref="ITaskState"/>
+    /// Creates a new <see cref="ITaskInstance"/>
     /// </summary>
-    /// <param name="definition">The <see cref="TaskDefinition"/> of the <see cref="ITaskState"/> to create</param>
-    /// <param name="path">The path used to reference the <see cref="TaskDefinition"/> of the <see cref="ITaskState"/> to create</param>
+    /// <param name="definition">The <see cref="TaskDefinition"/> of the <see cref="ITaskInstance"/> to create</param>
+    /// <param name="path">The path used to reference the <see cref="TaskDefinition"/> of the <see cref="ITaskInstance"/> to create</param>
     /// <param name="input">The input data, if any</param>
-    /// <param name="parent">The parent of the <see cref="ITaskState"/> to create, if any</param>
+    /// <param name="parent">The parent of the <see cref="ITaskInstance"/> to create, if any</param>
     /// <param name="isExtension">Indicates whether or not the task is part of an extension</param>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
-    /// <returns>The updated <see cref="ITaskState"/></returns>
-    Task<ITaskState> CreateTaskAsync(TaskDefinition definition, JsonPointer path, JsonNode input, ITaskExecutionContext? parent = null, bool isExtension = false, CancellationToken cancellationToken = default);
+    /// <returns>The updated <see cref="ITaskInstance"/></returns>
+    Task<ITaskInstance> CreateTaskAsync(TaskDefinition definition, JsonPointer path, JsonNode input, ITaskExecutionContext? parent = null, bool isExtension = false, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the workflow's tasks
     /// </summary>
     /// <param name="cancellationToken">A <see cref="CancellationToken"/></param>
     /// <returns>A new <see cref="IAsyncEnumerable{T}"/> to asynchronously enumerate the tasks the workflow owns</returns>
-    IAsyncEnumerable<ITaskState> GetTasksAsync(CancellationToken cancellationToken = default);
+    IAsyncEnumerable<ITaskInstance> GetTasksAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Starts the workflow

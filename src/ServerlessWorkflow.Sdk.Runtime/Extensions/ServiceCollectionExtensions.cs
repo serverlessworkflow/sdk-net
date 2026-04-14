@@ -51,7 +51,7 @@ public static class ServiceCollectionExtensions
         builder.UseWorkflowExecutionContextFactory<WorkflowExecutionContextFactory>();
         builder.UseTaskExecutionContextFactory<TaskExecutionContextFactory>();
         builder.UseWorkflowDefinitionStore<InMemoryWorkflowDefinitionStore>();
-        builder.UseWorkflowStateStore<InMemoryWorkflowStateStore>();
+        builder.UseWorkflowStateStore<InMemoryWorkflowStore>();
         builder.UseTaskStateStore<InMemoryTaskStateStore>();
 
     }

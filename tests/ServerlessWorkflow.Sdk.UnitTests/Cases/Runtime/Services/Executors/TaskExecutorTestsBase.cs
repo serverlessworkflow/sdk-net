@@ -13,7 +13,7 @@ public abstract class TaskExecutorTestsBase
         arguments ??= [];
         var effectiveReference = reference ?? JsonPointer.Parse("/test");
 
-        var taskState = new Mock<ITaskState> { CallBase = true };
+        var taskState = new Mock<ITaskInstance> { CallBase = true };
         taskState.Setup(s => s.Status).Returns(taskStatus);
         taskState.Setup(s => s.Name).Returns(taskName);
         taskState.Setup(s => s.Reference).Returns(effectiveReference);
@@ -51,7 +51,7 @@ public abstract class TaskExecutorTestsBase
             Do = []
         };
 
-        var workflowState = new Mock<IWorkflowState>();
+        var workflowState = new Mock<IWorkflowInstance>();
         workflowState.Setup(s => s.Id).Returns("workflow-1");
 
         var workflowInstance = new Mock<IWorkflowInstance>();
@@ -61,12 +61,12 @@ public abstract class TaskExecutorTestsBase
             It.IsAny<JsonObject?>(), It.IsAny<ITaskInstance?>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
             .Returns((TaskDefinition def, string? path, JsonNode inp, JsonObject? ctx, ITaskInstance? parent, bool isExt, CancellationToken ct) =>
             {
-                var subState = new Mock<ITaskState> { CallBase = true };
+                var subState = new Mock<ITaskInstance> { CallBase = true };
                 subState.Setup(s => s.Reference).Returns(JsonPointer.Parse($"/{path ?? "sub"}"));
                 subState.Setup(s => s.Name).Returns(path?.Split('/').Last());
                 subState.Setup(s => s.IsExtension).Returns(isExt);
                 var subInstance = new Mock<ITaskInstance>();
-                subInstance.As<ITaskInstance<ITaskState>>().Setup(i => i.State).Returns(subState.Object);
+                subInstance.As<ITaskInstance<ITaskInstance>>().Setup(i => i.State).Returns(subState.Object);
                 subInstance.Setup(i => i.State).Returns(subState.Object);
                 subInstance.Setup(i => i.InitializeAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
                 subInstance.Setup(i => i.StartAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
@@ -76,7 +76,7 @@ public abstract class TaskExecutorTestsBase
                 subInstance.Setup(i => i.CancelAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
                 subInstance.Setup(i => i.SuspendAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
                 subInstance.Setup(i => i.GetSubTasksAsync(It.IsAny<CancellationToken>())).Returns(AsyncEnumerableEmpty<ITaskInstance>());
-                return Task.FromResult(subInstance.As<ITaskInstance<ITaskState>>().Object);
+                return Task.FromResult(subInstance.As<ITaskInstance<ITaskInstance>>().Object);
             });
 
         var workflow = new Mock<IWorkflowExecutionContext>();
@@ -90,7 +90,7 @@ public abstract class TaskExecutorTestsBase
         var taskContext = new Mock<ITaskExecutionContext<TDefinition>>();
         taskContext.Setup(c => c.Workflow).Returns(workflow.Object);
         taskContext.Setup(c => c.Definition).Returns(definition);
-        taskContext.Setup(c => c.State).Returns(taskInstance.Object);
+        taskContext.Setup(c => c.Instance).Returns(taskInstance.Object);
         taskContext.Setup(c => c.Input).Returns(() => input.DeepClone());
         taskContext.Setup(c => c.ContextData).Returns(() => contextData.DeepClone().AsObject()!);
         taskContext.Setup(c => c.Arguments).Returns(() => arguments.DeepClone().AsObject()!);

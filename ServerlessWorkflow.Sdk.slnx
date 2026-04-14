@@ -13,7 +13,9 @@
       <Build Solution="Debug|*" Project="false" />
     </Project>
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Abstractions/ServerlessWorkflow.Sdk.Runtime.Abstractions.csproj" />
-    <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Cli/ServerlessWorkflow.Sdk.Runtime.Cli.csproj" />
+    <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Cli/ServerlessWorkflow.Sdk.Runtime.Cli.csproj">
+      <Build Solution="Debug|*" Project="false" />
+    </Project>
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Docker/ServerlessWorkflow.Sdk.Runtime.Docker.csproj" Id="75437264-81aa-4a4b-9fb5-07a80bd176e2">
       <Build Solution="Debug|*" Project="false" />
     </Project>

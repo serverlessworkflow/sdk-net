@@ -10,7 +10,7 @@ public sealed class WorkflowProcessFactory(IServiceProvider serviceProvider, IWo
 {
 
     /// <inheritdoc/>
-    public async Task<IWorkflowProcess> CreateAsync(WorkflowDefinition definition, IWorkflowState state, WorkflowExecutionsOptions executionsOptions, CancellationToken cancellationToken = default)
+    public async Task<IWorkflowProcess> CreateAsync(WorkflowDefinition definition, IWorkflowInstance state, WorkflowExecutionsOptions executionsOptions, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(state);

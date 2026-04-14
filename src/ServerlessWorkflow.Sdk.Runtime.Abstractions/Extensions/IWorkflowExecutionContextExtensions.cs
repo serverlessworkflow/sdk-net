@@ -17,10 +17,10 @@ public static class IWorkflowExecutionContextExtensions
     {
         return new()
         {
-            Id = workflow.State.Id,
+            Id = workflow.Instance.Id,
             Definition = workflow.Definition,
-            Input = workflow.State.Input,
-            StartedAt = workflow.State.StartedAt?.GetDescriptor()
+            Input = workflow.Instance.Input,
+            StartedAt = workflow.Instance.StartedAt?.GetDescriptor()
         };
     }
 

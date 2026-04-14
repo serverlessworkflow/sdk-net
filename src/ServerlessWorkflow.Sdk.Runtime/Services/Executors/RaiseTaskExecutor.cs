@@ -16,7 +16,7 @@ public sealed class RaiseTaskExecutor(IServiceProvider serviceProvider, ILogger<
     /// <inheritdoc/>
     protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
     {
-        var input = Task.State.Input;
+        var input = Task.Instance.Input;
         var errorDefinition = Task.Definition.Raise.Error.Match(
             e => e,
             reference =>
@@ -45,7 +45,7 @@ public sealed class RaiseTaskExecutor(IServiceProvider serviceProvider, ILogger<
             Type = type,
             Title = title,
             Detail = detail,
-            Instance = new(Task.State.Reference.ToString(), UriKind.Relative)
+            Instance = new(Task.Instance.Reference.ToString(), UriKind.Relative)
         };
         await SetErrorAsync(errorInstance, cancellationToken).ConfigureAwait(false);
     }

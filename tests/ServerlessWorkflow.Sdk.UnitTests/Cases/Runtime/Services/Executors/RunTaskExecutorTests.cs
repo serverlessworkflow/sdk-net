@@ -15,7 +15,7 @@ public class ContainerRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var stdoutReader = new StreamReader(new MemoryStream(System.Text.Encoding.UTF8.GetBytes("hello world")));
         var container = new Mock<IContainer>();
@@ -61,7 +61,7 @@ public class ContainerRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var stdoutReader = new StreamReader(new MemoryStream(System.Text.Encoding.UTF8.GetBytes("container output")));
         var container = new Mock<IContainer>();
@@ -92,7 +92,7 @@ public class ContainerRunTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -108,7 +108,7 @@ public class ContainerRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var container = new Mock<IContainer>();
         container.Setup(c => c.StartAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
@@ -136,7 +136,7 @@ public class ContainerRunTaskExecutorTests
 
         // Assert - should NOT wait for exit
         container.Verify(c => c.WaitForExitAsync(It.IsAny<CancellationToken>()), Times.Never);
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -152,7 +152,7 @@ public class ContainerRunTaskExecutorTests
         };
         var taskContext = CreateTaskExecutionContext(definition);
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
 
         var container = new Mock<IContainer>();
         container.Setup(c => c.StartAsync(It.IsAny<CancellationToken>())).ThrowsAsync(new InvalidOperationException("Container failed to start"));
@@ -180,7 +180,7 @@ public class ContainerRunTaskExecutorTests
         await executor.ExecuteAsync(TestContext.Current.CancellationToken);
 
         // Assert
-        Mock.Get(taskContext.Object.State).Verify(
+        Mock.Get(taskContext.Object.Instance).Verify(
             i => i.SetErrorAsync(It.IsAny<Error>(), It.IsAny<CancellationToken>()),
             Times.AtLeastOnce);
     }
@@ -197,7 +197,7 @@ public class ContainerRunTaskExecutorTests
         var taskContext = CreateTaskExecutionContext(definition);
         var containerRuntime = new Mock<IContainerRuntime>();
 
-        Mock.Get(taskContext.Object.State.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        Mock.Get(taskContext.Object.Instance.State).Setup((T s) => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
 
         var executor = new ContainerRunTaskExecutor(
             CreateServiceProvider().Object,

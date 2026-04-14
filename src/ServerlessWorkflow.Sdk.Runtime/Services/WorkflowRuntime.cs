@@ -4,9 +4,9 @@
 /// Represents the default implementation of the <see cref="IWorkflowRuntime"/> interface
 /// </summary>
 /// <param name="definitions">The service used to manage <see cref="WorkflowDefinition"/>s</param>
-/// <param name="states">The service used to manage <see cref="IWorkflowState"/>s</param>
+/// <param name="states">The service used to manage <see cref="IWorkflowInstance"/>s</param>
 /// <param name="processFactory">The service used to create <see cref="IWorkflowProcess"/>es</param>
-public sealed class WorkflowRuntime(IWorkflowDefinitionStore definitions, IWorkflowStateStore states, IWorkflowProcessFactory processFactory)
+public sealed class WorkflowRuntime(IWorkflowDefinitionStore definitions, IWorkflowStore states, IWorkflowProcessFactory processFactory)
     : IWorkflowRuntime
 {
 

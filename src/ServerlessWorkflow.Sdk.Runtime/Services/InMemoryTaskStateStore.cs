@@ -1,24 +1,24 @@
 ﻿namespace ServerlessWorkflow.Sdk.Runtime.Services;
 
 /// <summary>
-/// Represents an in-memory implementation of the <see cref="ITaskStateStore"/> interface
+/// Represents an in-memory implementation of the <see cref="ITaskStore"/> interface
 /// </summary>
 public sealed class InMemoryTaskStateStore
-    : ITaskStateStore
+    : ITaskStore
 {
 
-    readonly ConcurrentDictionary<string, ITaskState> tasks = [];
+    readonly ConcurrentDictionary<string, ITaskInstance> tasks = [];
 
     /// <inheritdoc/>
-    public Task<ITaskState> AddAsync(ITaskState state, CancellationToken cancellationToken = default)
+    public Task<ITaskInstance> AddAsync(ITaskInstance instance, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(state);
-        tasks[GetCacheKey(state.WorkflowId, state.Id)] = state;
-        return Task.FromResult(state);
+        ArgumentNullException.ThrowIfNull(instance);
+        tasks[GetCacheKey(instance.WorkflowId, instance.Id)] = instance;
+        return Task.FromResult(instance);
     }
 
     /// <inheritdoc/>
-    public Task<ITaskState> GetAsync(string workflowId, string taskId, CancellationToken cancellationToken = default)
+    public Task<ITaskInstance> GetAsync(string workflowId, string taskId, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(workflowId);
         ArgumentException.ThrowIfNullOrWhiteSpace(taskId);
@@ -26,14 +26,14 @@ public sealed class InMemoryTaskStateStore
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<ITaskState> ListAsync(string workflowId, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<ITaskInstance> ListAsync(string workflowId, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(workflowId);
         return tasks.Values.Where(t => t.WorkflowId == workflowId).ToAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<ITaskState> ListAsync(string workflowId, string taskId, CancellationToken cancellationToken = default)
+    public IAsyncEnumerable<ITaskInstance> ListAsync(string workflowId, string taskId, CancellationToken cancellationToken = default)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(workflowId);
         ArgumentException.ThrowIfNullOrWhiteSpace(taskId);
@@ -41,11 +41,11 @@ public sealed class InMemoryTaskStateStore
     }
 
     /// <inheritdoc/>
-    public Task<ITaskState> UpdateAsync(ITaskState state, CancellationToken cancellationToken = default)
+    public Task<ITaskInstance> UpdateAsync(ITaskInstance instance, CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(state);
-        tasks[GetCacheKey(state.WorkflowId, state.Id)] = state;
-        return Task.FromResult(state);
+        ArgumentNullException.ThrowIfNull(instance);
+        tasks[GetCacheKey(instance.WorkflowId, instance.Id)] = instance;
+        return Task.FromResult(instance);
     }
 
     static string GetCacheKey(string workflowId, string taskId) => $"{workflowId}:{taskId}";

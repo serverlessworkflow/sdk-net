@@ -30,7 +30,7 @@ public sealed class ShellRunTaskExecutor(IServiceProvider serviceProvider, ILogg
             CreateNoWindow = true
         };
         if (processDefinition.Environment != null) foreach (var kvp in processDefinition.Environment) startInfo.EnvironmentVariables[kvp.Key] = kvp.Value;
-        var process = Process.Start(startInfo) ?? throw new NullReferenceException($"Failed to create the shell process defined at '{Task.State.Reference}'");
+        var process = Process.Start(startInfo) ?? throw new NullReferenceException($"Failed to create the shell process defined at '{Task.Instance.Reference}'");
         try
         {
             if (Task.Definition.Run.Await == false)
@@ -42,7 +42,7 @@ public sealed class ShellRunTaskExecutor(IServiceProvider serviceProvider, ILogg
             var rawOutput = (await process.StandardOutput.ReadToEndAsync(cancellationToken).ConfigureAwait(false)).Trim();
             var errorMessage = (await process.StandardError.ReadToEndAsync(cancellationToken).ConfigureAwait(false)).Trim();
             if (process.ExitCode == 0) await SetResultAsync(new JsonObject { ["output"] = rawOutput }, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
-            else await SetErrorAsync(Error.Runtime(new Uri(Task.State.Reference.ToString(), UriKind.RelativeOrAbsolute), errorMessage), cancellationToken).ConfigureAwait(false);
+            else await SetErrorAsync(Error.Runtime(new Uri(Task.Instance.Reference.ToString(), UriKind.RelativeOrAbsolute), errorMessage), cancellationToken).ConfigureAwait(false);
         }
         finally
         {
