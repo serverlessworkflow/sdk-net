@@ -37,7 +37,7 @@ public class TaskInstanceTests
         //arrange
         var instance = CreateInstance();
         //act
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(SdkTaskStatus.Running);
         instance.StartedAt.Should().NotBeNull();
@@ -50,9 +50,9 @@ public class TaskInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         //act
-        await instance.SuspendAsync();
+        await instance.SuspendAsync(TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(SdkTaskStatus.Suspended);
         instance.Runs.Should().NotBeNull();
@@ -66,10 +66,10 @@ public class TaskInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
-        await instance.SuspendAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
+        await instance.SuspendAsync(TestContext.Current.CancellationToken);
         //act
-        await instance.ResumeAsync();
+        await instance.ResumeAsync(TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(SdkTaskStatus.Running);
         instance.Runs.Should().NotBeNull();
@@ -81,11 +81,11 @@ public class TaskInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         var output = new JsonObject { ["result"] = "done" };
         var next = "/next-task";
         //act
-        await instance.SetOutputAsync(output, next);
+        await instance.SetOutputAsync(output, next, TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(SdkTaskStatus.Completed);
         instance.Output.Should().NotBeNull();
@@ -98,10 +98,10 @@ public class TaskInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         var error = CreateError();
         //act
-        await instance.SetErrorAsync(error);
+        await instance.SetErrorAsync(error, TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(SdkTaskStatus.Faulted);
         instance.EndedAt.Should().NotBeNull();
@@ -115,7 +115,7 @@ public class TaskInstanceTests
         var output = new JsonObject { ["skipped"] = true };
         var next = "/after-skip";
         //act
-        await instance.SkipAsync(output, next);
+        await instance.SkipAsync(output, next, TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(SdkTaskStatus.Skipped);
         instance.Output.Should().NotBeNull();
@@ -128,9 +128,9 @@ public class TaskInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         //act
-        await instance.CancelAsync();
+        await instance.CancelAsync(TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(SdkTaskStatus.Cancelled);
         instance.EndedAt.Should().NotBeNull();
@@ -143,7 +143,7 @@ public class TaskInstanceTests
         var instance = CreateInstance();
         var error = CreateError();
         //act
-        await instance.RetryAsync(error);
+        await instance.RetryAsync(error, TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(SdkTaskStatus.Running);
         instance.Retries.Should().NotBeNull();
@@ -163,8 +163,8 @@ public class TaskInstanceTests
         var error1 = CreateError();
         var error2 = CreateError();
         //act
-        await instance.RetryAsync(error1);
-        await instance.RetryAsync(error2);
+        await instance.RetryAsync(error1, TestContext.Current.CancellationToken);
+        await instance.RetryAsync(error2, TestContext.Current.CancellationToken);
         //assert
         instance.Retries.Should().NotBeNull();
         instance.Retries!.Count.Should().Be(2);

@@ -176,7 +176,7 @@ public class ForTaskExecutorTests
     static Mock<ITaskExecutor> CreateCompletingChildExecutor(string path = "/for/0/do")
     {
         var childInstance = new Mock<ITaskInstance> { CallBase = true };
-        childInstance.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        childInstance.Setup<string?>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         childInstance.Setup(s => s.Output).Returns(new JsonObject());
         childInstance.Setup(s => s.Next).Returns(FlowDirective.Continue);
         childInstance.Setup(s => s.Reference).Returns(JsonPointer.Parse(path));

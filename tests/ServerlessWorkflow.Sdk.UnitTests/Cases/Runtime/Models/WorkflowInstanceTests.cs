@@ -51,7 +51,7 @@ public class WorkflowInstanceTests
         //arrange
         var instance = CreateInstance();
         //act
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(WorkflowStatus.Running);
         instance.StartedAt.Should().NotBeNull();
@@ -64,9 +64,9 @@ public class WorkflowInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         //act
-        await instance.SuspendAsync();
+        await instance.SuspendAsync(TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(WorkflowStatus.Suspended);
     }
@@ -76,10 +76,10 @@ public class WorkflowInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
-        await instance.SuspendAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
+        await instance.SuspendAsync(TestContext.Current.CancellationToken);
         //act
-        await instance.ResumeAsync();
+        await instance.ResumeAsync(TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(WorkflowStatus.Running);
         instance.Runs.Should().NotBeNull();
@@ -91,10 +91,10 @@ public class WorkflowInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         var output = JsonNode.Parse("{\"result\": \"success\"}");
         //act
-        await instance.SetOutputAsync(output);
+        await instance.SetOutputAsync(output, TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(WorkflowStatus.Completed);
         instance.Output.Should().NotBeNull();
@@ -106,10 +106,10 @@ public class WorkflowInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         var error = Error.Runtime(new Uri("https://example.com"), "something went wrong");
         //act
-        await instance.SetErrorAsync(error);
+        await instance.SetErrorAsync(error, TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(WorkflowStatus.Faulted);
         instance.Error.Should().NotBeNull();
@@ -124,7 +124,7 @@ public class WorkflowInstanceTests
         var instance = CreateInstance();
         var contextData = new JsonObject { ["key"] = "value" };
         //act
-        await instance.SetContextDataAsync(contextData);
+        await instance.SetContextDataAsync(contextData, TestContext.Current.CancellationToken);
         //assert
         instance.ContextData.Should().NotBeNull();
         instance.ContextData["key"]?.ToString().Should().Be("value");
@@ -135,9 +135,9 @@ public class WorkflowInstanceTests
     {
         //arrange
         var instance = CreateInstance();
-        await instance.StartAsync();
+        await instance.StartAsync(TestContext.Current.CancellationToken);
         //act
-        await instance.CancelAsync();
+        await instance.CancelAsync(TestContext.Current.CancellationToken);
         //assert
         instance.Status.Should().Be(WorkflowStatus.Cancelled);
         instance.EndedAt.Should().NotBeNull();

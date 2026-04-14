@@ -87,7 +87,7 @@ public class DoTaskExecutorTests
     static Mock<ITaskExecutor> CreateCompletingChildExecutor(JsonNode? output = null, string? next = FlowDirective.Continue)
     {
         var childInstance = new Mock<ITaskInstance> { CallBase = true };
-        childInstance.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        childInstance.Setup<string?>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         childInstance.Setup(s => s.Output).Returns(output);
         childInstance.Setup(s => s.Next).Returns(next);
         childInstance.Setup(s => s.Reference).Returns(JsonPointer.Parse("/sub"));

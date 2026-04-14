@@ -56,9 +56,9 @@ public class ForkTaskExecutorTests
             .Returns(() =>
             {
                 var sub1 = new Mock<ITaskInstance> { CallBase = true };
-                sub1.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+                sub1.Setup<string?>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
                 var sub2 = new Mock<ITaskInstance> { CallBase = true };
-                sub2.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+                sub2.Setup<string?>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
                 return AsyncEnumerableOf(sub1.Object, sub2.Object);
             });
 
@@ -176,7 +176,7 @@ public class ForkTaskExecutorTests
     static Mock<ITaskExecutor> CreateAsyncCompletingChildExecutor(int index)
     {
         var childInstance = new Mock<ITaskInstance> { CallBase = true };
-        childInstance.Setup<string>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+        childInstance.Setup<string?>(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
         childInstance.Setup(s => s.Output).Returns(new JsonObject());
         childInstance.Setup(s => s.Next).Returns(FlowDirective.Continue);
         childInstance.Setup(s => s.Reference).Returns(JsonPointer.Parse($"/fork/branches/{index}/branch"));
