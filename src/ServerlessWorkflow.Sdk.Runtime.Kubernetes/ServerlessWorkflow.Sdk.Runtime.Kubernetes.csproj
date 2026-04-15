@@ -7,6 +7,23 @@
 	<RootNamespace>ServerlessWorkflow.Sdk.Runtime</RootNamespace>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	<VersionPrefix>1.0.1</VersionPrefix>
+	<AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
+	<FileVersion>$(VersionPrefix)</FileVersion>
+	<NeutralLanguage>en</NeutralLanguage>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<IsPackable>true</IsPackable>
+	<Title>Serverless Workflow SDK - Kubernetes Container Runtime</Title>
+	<Description>Contains the services used to execute ServerlessWorkflow workflow definitions in a Kubernetes environment</Description>
+	<PackageTags>serverless-workflow;serverless;workflow;dsl;sdk;runtime;kubernetes</PackageTags>
+	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	<Copyright>Copyright © 2024-Present The Serverless Workflow Authors. All rights reserved.</Copyright>
+	<PackageProjectUrl>https://github.com/serverlessworkflow/sdk-net</PackageProjectUrl>
+	<RepositoryUrl>https://github.com/serverlessworkflow/sdk-net</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,4 +35,11 @@
     <ProjectReference Include="..\ServerlessWorkflow.Sdk.Runtime.Abstractions\ServerlessWorkflow.Sdk.Runtime.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\README.md" Link="README.md">
+      <PackagePath>\</PackagePath>
+      <Pack>True</Pack>
+    </None>
+  </ItemGroup>
+	
 </Project>
