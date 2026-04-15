@@ -10,6 +10,7 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/ServerlessWorkflow.Sdk.Builders/ServerlessWorkflow.Sdk.Builders.csproj" Id="861e7c93-d882-47c6-819c-1b6bb24bb383" />
+    <Project Path="src/ServerlessWorkflow.Sdk.IO/ServerlessWorkflow.Sdk.IO.csproj" Id="d9aac545-b384-419c-aeba-fcbe4c6d1bad" />
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Abstractions/ServerlessWorkflow.Sdk.Runtime.Abstractions.csproj" />
     <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Cli/ServerlessWorkflow.Sdk.Runtime.Cli.csproj">
       <Build Solution="Debug|*" Project="false" />

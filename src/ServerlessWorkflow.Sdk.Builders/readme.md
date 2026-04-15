@@ -1,56 +1,52 @@
-# Serverless Workflow .NET SDK
+# ServerlessWorkflow.Sdk.Builders
 
-The official .NET SDK for the [Serverless Workflow DSL](https://github.com/serverlessworkflow/specification/blob/main/dsl.md).
+Fluent builders for constructing [Serverless Workflow DSL](https://github.com/serverlessworkflow/specification/blob/main/dsl.md) definitions programmatically in .NET.
 
-The SDK is composed of three Nuget packages:
-
-- [Core](#), which contains the models of the Serverless Workflow DSL
-- [Builders](#), which contains service used to build workflow definitions programmatically
-- [IO](#), which contains the services used to read and write workflow definitions
+This package provides a strongly-typed, chainable API for authoring `WorkflowDefinition` instances without having to hand-write JSON or YAML.
 
 ## Installation
 
-Core:
-
 ```bash
-dotnet add package ServerlessWorkflow.Sdk
-```
-
-Builders:
-
-```
 dotnet add package ServerlessWorkflow.Sdk.Builders
 ```
 
-IO:
+## Usage
 
-```
-dotnet add package ServerlessWorkflow.Sdk.IO
-```
+```csharp
+using ServerlessWorkflow.Sdk.Builders;
 
-## Example usage
-
-Building a workflow definition programmatically:
-
-```c#
 var definition = new WorkflowDefinitionBuilder()
+    .UseDsl("1.0.0")
+    .WithNamespace("samples")
     .WithName("fake-workflow")
-    .WithVersion("0.1.0:fake")
-    .Do("todo-1", task => task
+    .WithVersion("0.1.0")
+    .WithTitle("Fake Workflow")
+    .WithSummary("A sample workflow that calls an HTTP endpoint.")
+    .Do("fetch-data", task => task
         .Call("http")
         .With("method", "get")
         .With("uri", "https://fake-api.com"))
     .Build();
 ```
 
-Reading and writing a workflow definition:
+### Common builder methods
 
-```c#
-using var inputStream = File.OpenRead("workflow.yaml");
-var reader = WorkflowDefinitionReader.Create();
-var workflow = await reader.ReadAsync(inputStream);
+| Method | Purpose |
+|---|---|
+| `UseDsl(version)` | Sets the DSL version. |
+| `WithNamespace(ns)` | RFC1123 DNS label namespace. |
+| `WithName(name)` / `WithVersion(version)` | Identity of the workflow. |
+| `WithTitle` / `WithSummary` / `WithTag` | Metadata. |
+| `WithInput` / `WithOutput` | Input/output schemas. |
+| `UseAuthentication` / `UseExtension` / `UseFunction` / `UseRetry` / `UseSecret` | Reusable components. |
+| `Do(name, task => ...)` | Adds a task to the workflow. |
+| `Build()` | Returns a `WorkflowDefinition`. |
 
-using var outputStream = File.Create("workflow.yaml");
-var writer = WorkflowDefinitionWriter.Create();
-await writer.WriteAsync(workflow, stream, WorkflowDefinitionFormat.Yaml);
-```
+Dedicated builders are available for every DSL construct — call, do, for, fork, listen, raise, run, set, switch, try, wait, retry policies, authentication schemes, and more.
+
+## Related packages
+
+- [ServerlessWorkflow.Sdk](../ServerlessWorkflow.Sdk) — core DSL models
+- [ServerlessWorkflow.Sdk.Runtime](../ServerlessWorkflow.Sdk.Runtime) — workflow runtime
+- [ServerlessWorkflow.Sdk.Runtime.Cli](../ServerlessWorkflow.Sdk.Runtime.Cli) — `swf` command-line runner
+- [Project root](../../README.md)

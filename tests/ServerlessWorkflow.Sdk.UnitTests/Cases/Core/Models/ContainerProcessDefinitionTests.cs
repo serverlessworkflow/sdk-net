@@ -1,5 +1,3 @@
-using ServerlessWorkflow.Sdk.Models.Processes;
-
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Core.Models;
 
 public class ContainerProcessDefinitionTests
