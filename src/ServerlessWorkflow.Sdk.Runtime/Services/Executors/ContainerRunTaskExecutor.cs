@@ -61,6 +61,6 @@ public sealed class ContainerRunTaskExecutor(IServiceProvider serviceProvider, I
     protected override Task SuspendCoreAsync(CancellationToken cancellationToken) => container?.StopAsync(cancellationToken) ?? System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>
-    protected override Task DoCancelAsync(CancellationToken cancellationToken) => container?.StopAsync(cancellationToken) ?? System.Threading.Tasks.Task.CompletedTask;
+    protected override Task CancelCoreAsync(CancellationToken cancellationToken) => container?.StopAsync(cancellationToken) ?? System.Threading.Tasks.Task.CompletedTask;
 
 }

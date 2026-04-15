@@ -377,7 +377,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
         }
         Stopwatch.Stop();
         await Task.CancelAsync(cancellationToken).ConfigureAwait(false);
-        await DoCancelAsync(cancellationToken).ConfigureAwait(false);
+        await CancelCoreAsync(cancellationToken).ConfigureAwait(false);
         Subject.OnNext(new TaskLifeCycleEvent(TaskLifeCycleEventType.Cancelled));
         if (!TaskCompletionSource.Task.IsCompleted) TaskCompletionSource.SetCanceled(cancellationToken);
         CancellationTokenSource?.Cancel();
@@ -387,7 +387,7 @@ public abstract class TaskExecutor<TDefinition>(IServiceProvider serviceProvider
     /// Cancels the <see cref="ITaskInstance"/>
     /// </summary>
     /// <returns>A new awaitable <see cref="System.Threading.Tasks.Task"/></returns>
-    protected virtual Task DoCancelAsync(CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
+    protected virtual Task CancelCoreAsync(CancellationToken cancellationToken) => System.Threading.Tasks.Task.CompletedTask;
 
     /// <inheritdoc/>
     public virtual async Task SkipAsync(JsonNode? result, string? then = FlowDirective.Continue, CancellationToken cancellationToken = default)

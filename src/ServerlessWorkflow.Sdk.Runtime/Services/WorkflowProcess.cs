@@ -109,7 +109,7 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
     {
         stopwatch.Stop();
         await workflow.SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
-        lifeCycleEvents.OnNext(new WorkflowLifeCycleEvent(WorkflowLifeCycleEventType.Faulted));
+        lifeCycleEvents.OnNext(new WorkflowLifeCycleEvent(WorkflowLifeCycleEventType.Faulted, error));
         lifeCycleEvents.OnError(new RuntimeErrorException(error));
         taskCompletionSource.TrySetException(new RuntimeErrorException(error));
     }
@@ -120,7 +120,7 @@ public sealed class WorkflowProcess(ILogger<WorkflowProcess> logger, IWorkflowEx
         stopwatch.Stop();
         var output = result;
         await workflow.SetResultAsync(output, cancellationToken).ConfigureAwait(false);
-        lifeCycleEvents.OnNext(new WorkflowLifeCycleEvent(WorkflowLifeCycleEventType.Completed));
+        lifeCycleEvents.OnNext(new WorkflowLifeCycleEvent(WorkflowLifeCycleEventType.Completed, output));
         lifeCycleEvents.OnCompleted();
         taskCompletionSource.TrySetResult();
     }

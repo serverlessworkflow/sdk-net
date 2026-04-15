@@ -47,7 +47,8 @@
       "Bash(taskkill //f //im dotnet.exe)",
       "Bash(git -C \"C:/Dev/CNCF/ServerlessWorkflow/sdk-net\" status -s)",
       "Bash(git:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(grep -l \"IWorkflowRuntime\\\\|IWorkflowDefinitionStore\\\\|IWorkflowProcess\" \"C:\\\\Dev\\\\ServerlessWorkflow\\\\sdk-net\\\\src\\\\ServerlessWorkflow.Sdk.Runtime\"/**/*.cs)"
     ]
   }
 }
