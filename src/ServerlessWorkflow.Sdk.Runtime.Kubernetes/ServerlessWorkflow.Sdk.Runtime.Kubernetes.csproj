@@ -19,6 +19,7 @@
 	<PackageTags>serverless-workflow;serverless;workflow;dsl;sdk;runtime;kubernetes</PackageTags>
 	<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
 	<Copyright>Copyright © 2024-Present The Serverless Workflow Authors. All rights reserved.</Copyright>
 	<PackageProjectUrl>https://github.com/serverlessworkflow/sdk-net</PackageProjectUrl>
 	<RepositoryUrl>https://github.com/serverlessworkflow/sdk-net</RepositoryUrl>
