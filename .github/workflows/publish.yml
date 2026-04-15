@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  SOLUTION: ./ServerlessWorkflow.Sdk.sln
+  SOLUTION: ./ServerlessWorkflow.Sdk.slnx
   REGISTRY: ghcr.io
 
 jobs:
