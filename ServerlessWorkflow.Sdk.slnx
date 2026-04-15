@@ -1,4 +1,20 @@
 <Solution>
+  <Folder Name="/.github/">
+    <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
+  </Folder>
+  <Folder Name="/.github/ISSUE_TEMPLATE/">
+    <File Path=".github/ISSUE_TEMPLATE/bug.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/config.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/feature.yml" />
+  </Folder>
+  <Folder Name="/.github/workflows/">
+    <File Path=".github/workflows/build-dotnet.yml" />
+    <File Path=".github/workflows/ci-pipeline.yml" />
+    <File Path=".github/workflows/publish.yml" />
+    <File Path=".github/workflows/release.yml" />
+    <File Path=".github/workflows/test-dotnet.yml" />
+    <File Path=".github/workflows/versioning.yml" />
+  </Folder>
   <Folder Name="/docs/">
     <File Path="CODE_OF_CONDUCT.md" />
     <File Path="CONTRIBUTING.md" />

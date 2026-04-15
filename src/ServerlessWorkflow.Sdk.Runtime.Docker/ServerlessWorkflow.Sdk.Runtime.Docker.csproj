@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 	<RootNamespace>ServerlessWorkflow.Sdk.Runtime</RootNamespace>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	<VersionPrefix>1.0.1</VersionPrefix>
+	<VersionPrefix>1.0.2</VersionPrefix>
 	<AssemblyVersion>$(VersionPrefix)</AssemblyVersion>
 	<FileVersion>$(VersionPrefix)</FileVersion>
 	<NeutralLanguage>en</NeutralLanguage>
