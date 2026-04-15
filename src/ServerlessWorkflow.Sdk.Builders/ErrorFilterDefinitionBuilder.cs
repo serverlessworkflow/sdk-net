@@ -11,40 +11,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Neuroglia;
-
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IErrorFilterDefinitionBuilder"/> interface
 /// </summary>
 /// <param name="attributes">A name/value mapping of the attributes to filter errors by. Supports runtime expressions</param>
-public class ErrorFilterDefinitionBuilder(IDictionary<string, object>? attributes = null)
+public sealed class ErrorFilterDefinitionBuilder(JsonObject? attributes = null)
     : IErrorFilterDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets a name/value mapping of the attributes to filter errors by
-    /// </summary>
-    protected virtual EquatableDictionary<string, object> Attributes { get; set; } = [.. attributes];
+    JsonObject attributes = attributes ?? [];
 
     /// <inheritdoc/>
-    public virtual IErrorFilterDefinitionBuilder With(string name, object value)
+    public IErrorFilterDefinitionBuilder With(string name, JsonNode value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        this.Attributes[name] = value;
+        attributes[name] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IErrorFilterDefinitionBuilder With(IDictionary<string, object> attributes)
+    public IErrorFilterDefinitionBuilder With(JsonObject attributes)
     {
         ArgumentNullException.ThrowIfNull(attributes);
-        this.Attributes = new(attributes);
+        this.attributes = [..attributes];
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ErrorFilterDefinition Build() => new() { With = this.Attributes };
+    public ErrorFilterDefinition Build() => new() 
+    { 
+        With = attributes 
+    };
 
 }

@@ -16,49 +16,42 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IDigestAuthenticationSchemeDefinitionBuilder"/> interface
 /// </summary>
-public class DigestAuthenticationSchemeDefinitionBuilder
+public sealed class DigestAuthenticationSchemeDefinitionBuilder
     : AuthenticationSchemeDefinitionBuilder<DigestAuthenticationSchemeDefinition>, IDigestAuthenticationSchemeDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the username to use
-    /// </summary>
-    protected string? Username { get; set; }
-
-    /// <summary>
-    /// Gets/sets the password to use
-    /// </summary>
-    protected string? Password { get; set; }
+    string? username;
+    string? password;
 
     /// <inheritdoc/>
-    public virtual IDigestAuthenticationSchemeDefinitionBuilder WithUsername(string username)
+    public IDigestAuthenticationSchemeDefinitionBuilder WithUsername(string username)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(username);
-        this.Username = username;
+        this.username = username;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IDigestAuthenticationSchemeDefinitionBuilder WithPassword(string password)
+    public IDigestAuthenticationSchemeDefinitionBuilder WithPassword(string password)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(password);
-        this.Password = password;
+        this.password = password;
         return this;
     }
 
     /// <inheritdoc/>
     public override DigestAuthenticationSchemeDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(this.Username)) throw new NullReferenceException("The username must be set");
-        if (string.IsNullOrWhiteSpace(this.Password)) throw new NullReferenceException("The password must be set");
+        if (string.IsNullOrWhiteSpace(username)) throw new NullReferenceException("The username must be set");
+        if (string.IsNullOrWhiteSpace(password)) throw new NullReferenceException("The password must be set");
         return new()
         {
-            Use = this.Secret,
-            Username = this.Username,
-            Password = this.Password
+            Use = Secret,
+            Username = username,
+            Password = password
         };
     }
 
-    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => this.Build();
+    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => Build();
 
 }

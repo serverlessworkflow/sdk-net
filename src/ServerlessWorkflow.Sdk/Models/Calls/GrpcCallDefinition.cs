@@ -16,36 +16,41 @@ namespace ServerlessWorkflow.Sdk.Models.Calls;
 /// <summary>
 /// Represents the definition of a GRPC call
 /// </summary>
+[Description("Represents the definition of a GRPC call")]
 [DataContract]
-public record GrpcCallDefinition
+public sealed record GrpcCallDefinition
     : CallDefinition
 {
 
     /// <summary>
     /// Gets the proto resource that describes the GRPC service to call
     /// </summary>
+    [Description("The proto resource that describes the GRPC service to call")]
     [Required]
-    [DataMember(Name = "proto", Order = 1), JsonPropertyName("proto"), JsonPropertyOrder(1), YamlMember(Alias = "proto", Order = 1)]
-    public required virtual ExternalResourceDefinition Proto { get; set; }
+    [DataMember(Order = 1, Name = "proto"), JsonPropertyOrder(1), JsonPropertyName("proto")]
+    public required ExternalResourceDefinition Proto { get; init; }
 
     /// <summary>
     /// Gets/sets the definition of the GRPC service to call
     /// </summary>
+    [Description("The definition of the GRPC service to call")]
     [Required]
-    [DataMember(Name = "service", Order = 2), JsonPropertyName("service"), JsonPropertyOrder(2), YamlMember(Alias = "service", Order = 2)]
-    public required virtual GrpcServiceDefinition Service { get; set; }
+    [DataMember(Order = 2, Name = "service"), JsonPropertyOrder(2), JsonPropertyName("service")]
+    public required GrpcServiceDefinition Service { get; init; }
 
     /// <summary>
     /// Gets/sets the name of the GRPC service method to call
     /// </summary>
+    [Description("The name of the GRPC service method to call")]
     [Required, MinLength(1)]
-    [DataMember(Name = "method", Order = 3), JsonPropertyName("method"), JsonPropertyOrder(3), YamlMember(Alias = "method", Order = 3)]
-    public required virtual string Method { get; set; }
+    [DataMember(Order = 3, Name = "method"), JsonPropertyOrder(3), JsonPropertyName("method")]
+    public required string Method { get; init; }
 
     /// <summary>
     /// Gets/sets the method call's arguments, if any
     /// </summary>
-    [DataMember(Name = "arguments", Order = 4), JsonPropertyName("arguments"), JsonPropertyOrder(4), YamlMember(Alias = "arguments", Order = 4)]
-    public virtual IDictionary<string, object>? Arguments { get; set; }
+    [Description("The method call's arguments, if any")]
+    [DataMember(Order = 4, Name = "arguments"), JsonPropertyOrder(4), JsonPropertyName("arguments")]
+    public JsonObject? Arguments { get; init; }
 
 }

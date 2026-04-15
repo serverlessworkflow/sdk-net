@@ -1,0 +1,56 @@
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#pragma warning disable IDE0130 // Namespace does not match folder structure
+namespace ServerlessWorkflow.Sdk.Runtime;
+
+/// <summary>
+/// Defines extensions for <see cref="WorkflowDefinition"/>s
+/// </summary>
+public static class WorkflowDefinitionExtensions
+{
+
+    /// <summary>
+    /// Gets the next <see cref="TaskDefinition"/> to perform next, if any
+    /// </summary>
+    /// <param name="workflow">The extended <see cref="WorkflowDefinition"/></param>
+    /// <param name="after">The <see cref="ITaskInstance"/> to perform the next <see cref="ITaskInstance"/> after</param>
+    /// <returns>The next <see cref="TaskDefinition"/> to perform next, if any</returns>
+    public static MapEntry<string, TaskDefinition>? GetTaskAfter(this WorkflowDefinition workflow, ITaskInstance after)
+    {
+        ArgumentNullException.ThrowIfNull(after);
+        switch (after.Status == TaskStatus.Skipped ? FlowDirective.Continue : after.Next)
+        {
+            case FlowDirective.Continue:
+                var afterIndex = workflow.Do.Select(kvp => kvp.Key).ToList().IndexOf(after.Name!);
+                return workflow.Do.Skip(afterIndex + 1).FirstOrDefault();
+            case FlowDirective.End: case FlowDirective.Exit: return default;
+            default: return new(after.Next!, workflow.Do[after.Next!]);
+        }
+    }
+
+    /// <summary>
+    /// Attempts to get the next <see cref="TaskDefinition"/> to perform next, if any
+    /// </summary>
+    /// <param name="workflow">The extended <see cref="WorkflowDefinition"/></param>
+    /// <param name="after">The <see cref="ITaskInstance"/> to perform the next <see cref="ITaskInstance"/> after</param>
+    /// <param name="task">The next <see cref="TaskDefinition"/> to perform next, if any</param>
+    /// <returns>A boolean indicating whether or not a next <see cref="ITaskInstance"/> must be executed next</returns>
+    public static bool TryGetTaskAfter(this WorkflowDefinition workflow, ITaskInstance after, out MapEntry<string, TaskDefinition> task)
+    {
+        ArgumentNullException.ThrowIfNull(after);
+        task = workflow.GetTaskAfter(after)!;
+        return task != null;
+    }
+
+}

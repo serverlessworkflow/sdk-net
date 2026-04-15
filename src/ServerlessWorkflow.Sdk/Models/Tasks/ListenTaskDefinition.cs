@@ -16,26 +16,29 @@ namespace ServerlessWorkflow.Sdk.Models.Tasks;
 /// <summary>
 /// Represents the configuration of a task used to listen to specific events
 /// </summary>
+[Description("Represents the configuration of a task used to listen to specific events")]
 [DataContract]
-public record ListenTaskDefinition
+public sealed record ListenTaskDefinition
     : TaskDefinition
 {
 
     /// <inheritdoc/>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    [IgnoreDataMember, JsonIgnore]
     public override string Type => TaskType.Listen;
 
     /// <summary>
     /// Gets/sets the configuration of the listener to use
     /// </summary>
+    [Description("The configuration of the listener to use")]
     [Required]
-    [DataMember(Name = "listen", Order = 1), JsonPropertyName("listen"), JsonPropertyOrder(1), YamlMember(Alias = "listen", Order = 1)]
-    public required virtual ListenerDefinition Listen { get; set; }
+    [DataMember(Order = 1, Name = "listen"), JsonPropertyOrder(1), JsonPropertyName("listen")]
+    public required ListenerDefinition Listen { get; init; }
 
     /// <summary>
     /// Gets/sets the configuration of the iterator, if any, used to process each consumed event
     /// </summary>
-    [DataMember(Name = "foreach", Order = 2), JsonPropertyName("foreach"), JsonPropertyOrder(2), YamlMember(Alias = "foreach", Order = 2)]
-    public virtual SubscriptionIteratorDefinition? Foreach { get; set; }
+    [Description("The configuration of the iterator, if any, used to process each consumed event")]
+    [DataMember(Order = 2, Name = "foreach"), JsonPropertyOrder(2), JsonPropertyName("foreach")]
+    public SubscriptionIteratorDefinition? Foreach { get; init; }
 
 }

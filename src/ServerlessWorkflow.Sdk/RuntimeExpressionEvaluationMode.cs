@@ -28,4 +28,19 @@ public static class RuntimeExpressionEvaluationMode
     /// </summary>
     public const string Loose = "loose";
 
+    /// <summary>
+    /// Gets an <see cref="IEnumerable{T}"/> that contains all supported runtime expression evaluation modes
+    /// </summary>
+    public static readonly IEnumerable<string> All = AsEnumerable();
+
+    /// <summary>
+    /// Gets an <see cref="IEnumerable{T}"/> that contains all supported runtime expression evaluation modes
+    /// </summary>
+    /// <returns>A new <see cref="IEnumerable{T}"/> that contains all supported runtime expression evaluation modes</returns>
+    public static IEnumerable<string> AsEnumerable()
+    {
+        yield return Strict;
+        yield return Loose;
+    }
+
 }

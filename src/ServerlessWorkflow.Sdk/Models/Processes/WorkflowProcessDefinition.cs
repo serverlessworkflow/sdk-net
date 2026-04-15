@@ -11,43 +11,45 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using YamlDotNet.Core;
-
 namespace ServerlessWorkflow.Sdk.Models.Processes;
 
 /// <summary>
 /// Represents the definition of a (sub)workflow process
 /// </summary>
 [DataContract]
-public record WorkflowProcessDefinition
+public sealed record WorkflowProcessDefinition
     : ProcessDefinition
 {
 
     /// <summary>
     /// Gets/sets the namespace the workflow to run belongs to
     /// </summary>
-    [Required, MinLength(1), MaxLength(63)]
-    [DataMember(Name = "namespace", Order = 1), JsonPropertyName("namespace"), JsonPropertyOrder(1), YamlMember(Alias = "namespace", Order = 1)]
-    public required virtual string Namespace { get; set; }
+    [Description("The namespace the workflow to run belongs to")]
+    [Required, StringLength(63, MinimumLength = 1)]
+    [DataMember(Order = 1, Name = "namespace"), JsonPropertyOrder(1), JsonPropertyName("namespace")]
+    public required string Namespace { get; init; }
 
     /// <summary>
     /// Gets/sets the name of the workflow to run
     /// </summary>
-    [Required, MinLength(1), MaxLength(63)]
-    [DataMember(Name = "name", Order = 2), JsonPropertyName("name"), JsonPropertyOrder(2), YamlMember(Alias = "name", Order = 2)]
-    public required virtual string Name { get; set; }
+    [Description("The name of the workflow to run")]
+    [Required, StringLength(63, MinimumLength = 1)]
+    [DataMember(Order = 2, Name = "name"), JsonPropertyOrder(2), JsonPropertyName("name")]
+    public required string Name { get; init; }
 
     /// <summary>
     /// Gets/sets the version of the workflow to run. Defaults to `latest`
     /// </summary>
+    [Description("The version of the workflow to run. Defaults to `latest`")]
     [SemanticVersion]
-    [DataMember(Name = "version", Order = 3), JsonPropertyName("version"), JsonPropertyOrder(3), YamlMember(Alias = "version", Order = 3, ScalarStyle = ScalarStyle.SingleQuoted)]
-    public virtual string Version { get; set; } = "latest";
+    [DataMember(Order = 3, Name = "version"), JsonPropertyOrder(3), JsonPropertyName("version")]
+    public string Version { get; init; } = "latest";
 
     /// <summary>
     /// Gets/sets the data, if any, to pass as input to the workflow to execute. The value should be validated against the target workflow's input schema, if specified
     /// </summary>
-    [DataMember(Name = "input", Order = 4), JsonPropertyName("input"), JsonPropertyOrder(4), YamlMember(Alias = "input", Order = 4)]
-    public virtual object? Input { get; set; }
+    [Description("The data, if any, to pass as input to the workflow to execute. The value should be validated against the target workflow's input schema, if specified")]
+    [DataMember(Order = 4, Name = "input"), JsonPropertyOrder(4), JsonPropertyName("input")]
+    public JsonObject? Input { get; init; }
 
 }

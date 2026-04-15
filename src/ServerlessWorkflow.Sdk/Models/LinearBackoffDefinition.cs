@@ -16,15 +16,17 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of a linear backoff
 /// </summary>
+[Description("Represents the definition of a linear backoff")]
 [DataContract]
-public record LinearBackoffDefinition
+public sealed record LinearBackoffDefinition
     : BackoffDefinition
 {
 
     /// <summary>
     /// Gets/sets the linear incrementation to the delay between retry attempts
     /// </summary>
-    [DataMember(Name = "increment", Order = 1), JsonPropertyName("increment"), JsonPropertyOrder(1), YamlMember(Alias = "increment", Order = 1)]
-    public virtual Duration? Increment { get; set; }
+    [Description("The linear incrementation to the delay between retry attempts")]
+    [DataMember(Order = 1, Name = "increment"), JsonPropertyOrder(1), JsonPropertyName("increment")]
+    public Duration? Increment { get; init; }
 
 }

@@ -16,52 +16,60 @@ namespace ServerlessWorkflow.Sdk.Models.Processes;
 /// <summary>
 /// Represents the configuration of a container process
 /// </summary>
+[Description("Represents the configuration of a container process")]
 [DataContract]
-public record ContainerProcessDefinition
+public sealed record ContainerProcessDefinition
     : ProcessDefinition
 {
 
     /// <summary>
     /// Gets/sets the name of the container image to run
     /// </summary>
+    [Description("The name of the container image to run")]
     [Required, MinLength(1)]
-    [DataMember(Name = "image", Order = 1), JsonPropertyName("image"), JsonPropertyOrder(1), YamlMember(Alias = "image", Order = 1)]
-    public required virtual string Image { get; set; }
+    [DataMember(Order = 1, Name = "image"), JsonPropertyOrder(1), JsonPropertyName("image")]
+    public required string Image { get; init; }
 
     /// <summary>
     /// Gets/sets a runtime expression, if any, used to give specific name to the container
     /// </summary>
-    [DataMember(Name = "name", Order = 2), JsonPropertyName("name"), JsonPropertyOrder(2), YamlMember(Alias = "name", Order = 2)]
-    public virtual string? Name { get; set; }
+    [Description("A runtime expression, if any, used to give specific name to the container")]
+    [DataMember(Order = 2, Name = "name"), JsonPropertyOrder(2), JsonPropertyName("name")]
+    public string? Name { get; init; }
 
     /// <summary>
     /// Gets/sets the command, if any, to execute on the container
     /// </summary>
-    [DataMember(Name = "command", Order = 3), JsonPropertyName("command"), JsonPropertyOrder(3), YamlMember(Alias = "command", Order = 3)]
-    public virtual string? Command { get; set; }
+    [Description("The command, if any, to execute on the container")]
+    [DataMember(Order = 3, Name = "command"), JsonPropertyOrder(3), JsonPropertyName("command")]
+    public string? Command { get; init; }
 
     /// <summary>
     /// Gets/sets a list containing the container's port mappings, if any
     /// </summary>
-    [DataMember(Name = "ports", Order = 4), JsonPropertyName("ports"), JsonPropertyOrder(4), YamlMember(Alias = "ports", Order = 4)]
-    public virtual EquatableDictionary<ushort, ushort>? Ports { get; set; }
+    [Description("A list containing the container's port mappings, if any")]
+    [DataMember(Order = 4, Name = "ports"), JsonPropertyOrder(4), JsonPropertyName("ports")]
+    public EquatableDictionary<ushort, ushort>? Ports { get; init; }
 
     /// <summary>
     /// Gets/sets the volume mapping for the container, if any
     /// </summary>
-    [DataMember(Name = "volumes", Order = 5), JsonPropertyName("volumes"), JsonPropertyOrder(5), YamlMember(Alias = "volumes", Order = 5)]
-    public virtual EquatableDictionary<string, string>? Volumes { get; set; }
+    [Description("The volume mapping for the container, if any")]
+    [DataMember(Order = 5, Name = "volumes"), JsonPropertyOrder(5), JsonPropertyName("volumes")]
+    public EquatableDictionary<string, string>? Volumes { get; init; }
 
     /// <summary>
     /// Gets/sets a key/value mapping of the environment variables, if any, to use when running the configured process
     /// </summary>
-    [DataMember(Name = "environment", Order = 6), JsonPropertyName("environment"), JsonPropertyOrder(6), YamlMember(Alias = "environment", Order = 6)]
-    public virtual EquatableDictionary<string, string>? Environment { get; set; }
+    [Description("A key/value mapping of the environment variables, if any, to use when running the configured process")]
+    [DataMember(Order = 6, Name = "environment"), JsonPropertyOrder(6), JsonPropertyName("environment")]
+    public EquatableDictionary<string, string>? Environment { get; init; }
 
     /// <summary>
     /// Gets/sets an object object used to configure the container's lifetime
     /// </summary>
-    [DataMember(Name = "lifetime", Order = 7), JsonPropertyName("lifetime"), JsonPropertyOrder(7), YamlMember(Alias = "lifetime", Order = 7)]
-    public virtual ContainerLifetimeDefinition? Lifetime { get; set; }
+    [Description("An object object used to configure the container's lifetime")]
+    [DataMember(Order = 7, Name = "lifetime"), JsonPropertyOrder(7), JsonPropertyName("lifetime")]
+    public ContainerLifetimeDefinition? Lifetime { get; init; }
 
 }

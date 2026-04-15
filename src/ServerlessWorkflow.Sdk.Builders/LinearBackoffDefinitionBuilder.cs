@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -16,30 +16,26 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="ILinearBackoffDefinitionBuilder"/> interface
 /// </summary>
-/// <param name="increment">The linear incrementation to the delay between retry attempts</param>
-public class LinearBackoffDefinitionBuilder(Duration? increment = null)
+public sealed class LinearBackoffDefinitionBuilder(Duration? increment = null)
     : ILinearBackoffDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the linear incrementation to the delay between retry attempts
-    /// </summary>
-    protected Duration? LinearIncrement { get; set; } = increment;
+    Duration? linearIncrement = increment;
 
     /// <inheritdoc/>
-    public virtual ILinearBackoffDefinitionBuilder WithIncrement(Duration increment)
+    public ILinearBackoffDefinitionBuilder WithIncrement(Duration increment)
     {
         ArgumentNullException.ThrowIfNull(increment);
-        this.LinearIncrement = increment;
+        linearIncrement = increment;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual LinearBackoffDefinition Build() => new()
+    public LinearBackoffDefinition Build() => new()
     {
-        Increment = this.LinearIncrement
+        Increment = linearIncrement
     };
 
-    BackoffDefinition IBackoffDefinitionBuilder.Build() => this.Build();
+    BackoffDefinition IBackoffDefinitionBuilder.Build() => Build();
 
 }

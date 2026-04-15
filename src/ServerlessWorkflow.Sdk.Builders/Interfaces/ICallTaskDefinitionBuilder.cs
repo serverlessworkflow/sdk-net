@@ -33,13 +33,13 @@ public interface ICallTaskDefinitionBuilder
     /// <param name="name">The argument's name</param>
     /// <param name="value">The argument's value</param>
     /// <returns>The configured <see cref="ICallTaskDefinitionBuilder"/></returns>
-    ICallTaskDefinitionBuilder With(string name, object value);
+    ICallTaskDefinitionBuilder With(string name, JsonNode value);
 
     /// <summary>
     /// Sets the arguments to call the function with
     /// </summary>
     /// <param name="arguments">A name/value mapping of the arguments to call the function with</param>
     /// <returns>The configured <see cref="ICallTaskDefinitionBuilder"/></returns>
-    ICallTaskDefinitionBuilder With(IDictionary<string, object> arguments);
+    ICallTaskDefinitionBuilder With(JsonObject arguments);
 
 }

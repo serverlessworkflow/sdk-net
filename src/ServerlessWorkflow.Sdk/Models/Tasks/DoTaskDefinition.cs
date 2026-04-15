@@ -16,20 +16,22 @@ namespace ServerlessWorkflow.Sdk.Models.Tasks;
 /// <summary>
 /// Represents the configuration of a task that is composed of multiple subtasks to run sequentially
 /// </summary>
+[Description("Represents the configuration of a task that is composed of multiple subtasks to run sequentially")]
 [DataContract]
-public record DoTaskDefinition
+public sealed record DoTaskDefinition
     : TaskDefinition
 {
 
     /// <inheritdoc/>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    [IgnoreDataMember, JsonIgnore]
     public override string Type => TaskType.Do;
 
     /// <summary>
     /// Gets/sets a name/definition mapping of the subtasks to perform sequentially
     /// </summary>
     [Required, MinLength(1)]
-    [DataMember(Name = "do", Order = 1), JsonPropertyName("do"), JsonPropertyOrder(1), YamlMember(Alias = "do", Order = 1)]
-    public required virtual Map<string, TaskDefinition> Do { get; set; }
+    [Description("A name/definition mapping of the subtasks to perform sequentially")]
+    [DataMember(Order = 1, Name = "do"), JsonPropertyOrder(1), JsonPropertyName("do")]
+    public required Map<string, TaskDefinition> Do { get; init; }
 
 }

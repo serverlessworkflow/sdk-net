@@ -16,8 +16,9 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of a workflow component catalog
 /// </summary>
+[Description("Represents the definition of a workflow component catalog.")]
 [DataContract]
-public record CatalogDefinition
+public sealed record CatalogDefinition
 {
 
     /// <summary>
@@ -28,28 +29,9 @@ public record CatalogDefinition
     /// <summary>
     /// Gets/sets the endpoint that defines the root URL at which the catalog is located
     /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual EndpointDefinition Endpoint
-    {
-        get => this.EndpointValue.T1Value ?? new() { Uri = this.EndpointUri };
-        set => this.EndpointValue = value;
-    }
-
-    /// <summary>
-    /// Gets/sets the endpoint that defines the root URL at which the catalog is located
-    /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual Uri EndpointUri
-    {
-        get => this.EndpointValue.T1Value?.Uri ?? this.EndpointValue.T2Value!;
-        set => this.EndpointValue = value;
-    }
-
-    /// <summary>
-    /// Gets/sets the endpoint that defines the root URL at which the catalog is located
-    /// </summary>
+    [Description("The endpoint that defines the root URL at which the catalog is located.")]
     [Required]
-    [DataMember(Name = "endpoint", Order = 1), JsonInclude, JsonPropertyName("endpoint"), JsonPropertyOrder(1), YamlMember(Alias = "endpoint", Order = 1)]
-    protected virtual OneOf<EndpointDefinition, Uri> EndpointValue { get; set; } = null!;
+    [DataMember(Order = 1, Name = "endpoint"), JsonPropertyOrder(1), JsonPropertyName("endpoint"), JsonConverter(typeof(OneOfJsonConverter<EndpointDefinition, Uri>))]
+    public required OneOf<EndpointDefinition, Uri> Endpoint { get; init; }
 
 }

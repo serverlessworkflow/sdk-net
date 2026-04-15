@@ -25,14 +25,14 @@ public interface IEventDefinitionBuilder
     /// <param name="name">The attribute's name</param>
     /// <param name="value">The attribute's value. Supports runtime expressions</param>
     /// <returns>The configured <see cref="IEventDefinitionBuilder"/></returns>
-    IEventDefinitionBuilder With(string name, object value);
+    IEventDefinitionBuilder With(string name, JsonNode value);
 
     /// <summary>
     /// Sets the event's attributes
     /// </summary>
     /// <param name="attributes">A name/value mapping of the event's attributes. Supports runtime expressions</param>
     /// <returns>The configured <see cref="IEventDefinitionBuilder"/></returns>
-    IEventDefinitionBuilder With(IDictionary<string, object> attributes);
+    IEventDefinitionBuilder With(JsonObject attributes);
 
     /// <summary>
     /// Builds the configured <see cref="EventDefinition"/>

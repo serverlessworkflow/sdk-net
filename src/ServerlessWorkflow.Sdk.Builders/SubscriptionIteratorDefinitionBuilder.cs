@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -16,62 +16,70 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="ISubscriptionIteratorDefinitionBuilder"/> interface
 /// </summary>
-public class SubscriptionIteratorDefinitionBuilder
+public sealed class SubscriptionIteratorDefinitionBuilder
     : ISubscriptionIteratorDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the <see cref="SubscriptionIteratorDefinition"/> to configure
-    /// </summary>
-    protected SubscriptionIteratorDefinition Iterator { get; } = new();
+    string? itemValue;
+    string? atValue;
+    Map<string, TaskDefinition>? doTasks;
+    OutputDataModelDefinition? outputValue;
+    OutputDataModelDefinition? exportValue;
 
     /// <inheritdoc/>
-    public virtual ISubscriptionIteratorDefinitionBuilder Item(string item)
+    public ISubscriptionIteratorDefinitionBuilder Item(string item)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(item);
-        this.Iterator.Item = item;
+        itemValue = item;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ISubscriptionIteratorDefinitionBuilder At(string at)
+    public ISubscriptionIteratorDefinitionBuilder At(string at)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(at);
-        this.Iterator.At = at;
+        atValue = at;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ISubscriptionIteratorDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
+    public ISubscriptionIteratorDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        this.Iterator.Do = builder.Build();
+        doTasks = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ISubscriptionIteratorDefinitionBuilder Output(Action<IOutputDataModelDefinitionBuilder> setup)
+    public ISubscriptionIteratorDefinitionBuilder Output(Action<IOutputDataModelDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OutputDataModelDefinitionBuilder();
         setup(builder);
-        this.Iterator.Output = builder.Build();
+        outputValue = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ISubscriptionIteratorDefinitionBuilder Export(Action<IOutputDataModelDefinitionBuilder> setup)
+    public ISubscriptionIteratorDefinitionBuilder Export(Action<IOutputDataModelDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new OutputDataModelDefinitionBuilder();
         setup(builder);
-        this.Iterator.Export = builder.Build();
+        exportValue = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual SubscriptionIteratorDefinition Build() => this.Iterator;
+    public SubscriptionIteratorDefinition Build() => new()
+    {
+        Item = itemValue,
+        At = atValue,
+        Do = doTasks,
+        Output = outputValue,
+        Export = exportValue
+    };
 
 }

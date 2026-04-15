@@ -11,14 +11,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Models;
-using System.Collections;
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 using System.Reflection;
 
 namespace ServerlessWorkflow.Sdk;
 
 /// <summary>
-/// Defines extensions for <see cref="WorkflowDefinition"/>s
+/// Defines extensions for <see cref="WorkflowDefinition"/>s.
 /// </summary>
 public static class WorkflowDefinitionExtensions
 {
@@ -33,11 +32,11 @@ public static class WorkflowDefinitionExtensions
     /// <returns>A new <see cref="Uri"/> used to reference the <see cref="TaskDefinition"/></returns>
     public static Uri BuildReferenceTo(this WorkflowDefinition workflow, TaskDefinition task, string? path, Uri? parentReference = null)
     {
-        ArgumentNullException.ThrowIfNull(workflow);
-        ArgumentNullException.ThrowIfNull(task);
+        if (workflow is null) throw new ArgumentNullException(nameof(workflow));
+        if (task is null) throw new ArgumentNullException(nameof(task));
         if (string.IsNullOrWhiteSpace(path)) return parentReference ?? throw new ArgumentNullException(nameof(parentReference), "The parent must be set when the path to the task to execute is null (in case the task is a function)");
         return parentReference == null
-            ? new Uri($"/{nameof(WorkflowDefinition.Do).ToCamelCase()}/{workflow.Do.Keys.ToList().IndexOf(path)}/{path}", UriKind.Relative)
+            ? new Uri($"/{JsonNamingPolicy.CamelCase.ConvertName(nameof(WorkflowDefinition.Do))}/{workflow.Do.Keys.ToList().IndexOf(path!)}/{path}", UriKind.Relative)
             : new Uri($"{parentReference.OriginalString}/{path}", UriKind.Relative);
     }
 
@@ -59,8 +58,8 @@ public static class WorkflowDefinitionExtensions
     /// <returns>The component at the specified path</returns>
     public static TComponent GetComponent<TComponent>(this WorkflowDefinition workflow, string path)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(path);
-        var pathSegments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        if (string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
+        var pathSegments = path.Split('/');
         var currentObject = workflow as object;
         foreach (var pathSegment in pathSegments)
         {
@@ -88,9 +87,28 @@ public static class WorkflowDefinitionExtensions
     /// <returns>The specified <see cref="AuthenticationPolicyDefinition"/></returns>
     public static AuthenticationPolicyDefinition GetAuthenticationPolicy(this WorkflowDefinition workflow, string nameOrReference)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(nameOrReference);
-        if (nameOrReference.StartsWith('/') && Uri.TryCreate(nameOrReference, UriKind.Relative, out var uri) && uri != null) return workflow.GetComponent<AuthenticationPolicyDefinition>(nameOrReference);
+        if (string.IsNullOrWhiteSpace(nameOrReference)) throw new ArgumentNullException(nameof(nameOrReference));
+        if (nameOrReference.StartsWith("/") && Uri.TryCreate(nameOrReference, UriKind.Relative, out var uri) && uri != null) return workflow.GetComponent<AuthenticationPolicyDefinition>(nameOrReference);
         else return workflow.Use?.Authentications?.FirstOrDefault(a => string.Equals(a.Key, nameOrReference, StringComparison.OrdinalIgnoreCase)).Value ?? throw new NullReferenceException($"Failed to find an authentication policy definition with the specified name '{nameOrReference}'");
     }
+
+    /// <summary>
+    /// Gets the qualified name of the workflow definition, which is a combination of its namespace, name, and version in the format "namespace.name:version".
+    /// </summary>
+    /// <param name="definition">The workflow definition for which to get the qualified name.</param>
+    /// <returns>The qualified name of the workflow definition.</returns>
+    public static string GetQualifiedName(this WorkflowDefinition definition) => $"{definition.Document.Namespace}.{definition.Document.Name}:{definition.Document.Version}";
+
+    /// <summary>
+    /// Creates a new <see cref="WorkflowDefinitionReference"/> used to reference the <see cref="WorkflowDefinition"/>
+    /// </summary>
+    /// <param name="definition">The <see cref="WorkflowDefinition"/> to create a new reference for.</param>
+    /// <returns>A new <see cref="WorkflowDefinitionReference"/></returns>
+    public static WorkflowDefinitionReference GetReference(this WorkflowDefinition definition) => new()
+    {
+        Namespace = definition.Document.Namespace,
+        Name = definition.Document.Name,
+        Version = definition.Document.Version
+    };
 
 }

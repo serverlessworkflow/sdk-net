@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.IO;
-
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.IO;
 
 public class WorkflowDefinitionIOTests
@@ -28,10 +26,10 @@ public class WorkflowDefinitionIOTests
         var reader = WorkflowDefinitionReader.Create();
 
         //act
-        await writer.WriteAsync(toSerialize, stream, WorkflowDefinitionFormat.Yaml);
-        await stream.FlushAsync();
+        await writer.WriteAsync(toSerialize, stream, WorkflowDefinitionFormat.Yaml, TestContext.Current.CancellationToken);
+        await stream.FlushAsync(TestContext.Current.CancellationToken);
         stream.Position = 0;
-        var deserialized = await reader.ReadAsync(stream);
+        var deserialized = await reader.ReadAsync(stream, new(), TestContext.Current.CancellationToken);
 
         //assert
         deserialized.Should().NotBeNull();
@@ -48,10 +46,10 @@ public class WorkflowDefinitionIOTests
         var reader = WorkflowDefinitionReader.Create();
 
         //act
-        await writer.WriteAsync(toSerialize, stream, WorkflowDefinitionFormat.Json);
-        await stream.FlushAsync();
+        await writer.WriteAsync(toSerialize, stream, WorkflowDefinitionFormat.Json, TestContext.Current.CancellationToken);
+        await stream.FlushAsync(TestContext.Current.CancellationToken);
         stream.Position = 0;
-        var deserialized = await reader.ReadAsync(stream);
+        var deserialized = await reader.ReadAsync(stream, new(), TestContext.Current.CancellationToken);
 
         //assert
         deserialized.Should().NotBeNull();

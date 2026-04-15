@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -14,18 +14,15 @@
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Represents the default implementation of the <see cref="IConstantBackoffDefinitionBuilder"/> interface
+/// Represents the default implementation of the <see cref="IExponentialBackoffDefinitionBuilder"/> interface
 /// </summary>
-public class ExponentialBackoffDefinitionBuilder
+public sealed class ExponentialBackoffDefinitionBuilder
     : IExponentialBackoffDefinitionBuilder
 {
 
     /// <inheritdoc/>
-    public virtual ExponentialBackoffDefinition Build() => new()
-    {
+    public ExponentialBackoffDefinition Build() => new() { };
 
-    };
-
-    BackoffDefinition IBackoffDefinitionBuilder.Build() => this.Build();
+    BackoffDefinition IBackoffDefinitionBuilder.Build() => Build();
 
 }

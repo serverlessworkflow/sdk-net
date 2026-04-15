@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -11,186 +11,206 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Builders;
-using Neuroglia.Serialization.Yaml;
-
 namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Builders;
 
 public class WorkflowDefinitionBuilderTests
 {
 
     [Fact]
-    public void Build_Should_Work()
+    public void Build_Should_Create_Minimal_Workflow()
     {
         //arrange
-        var name = "fake-workflow";
-        var version = "1.0.0-alpha2";
-        var title = "Fake Title";
-        var summary = "fake Markdown summary";
-        var fakeTagName = "fakeTagName";
-        var fakeTagValue = "fakeTagValue";
+        var workflowName = "test-workflow";
+        var version = "1.0.0";
+        var taskName = "greet";
+        var key = "message";
+        var value = "hello";
+        var expectedTaskCount = 1;
 
         //act
         var workflow = new WorkflowDefinitionBuilder()
-            .WithName(name)
+            .WithName(workflowName)
             .WithVersion(version)
-            .WithTitle(title)
-            .WithSummary(summary)
-            .WithTag(fakeTagName, fakeTagValue)
-            .UseAuthentication("fakeBasic", authentication => authentication
-                .Basic()
-                    .WithUsername("fake-user")
-                    .WithPassword("fake-password"))
-            .UseAuthentication("fakeBearer", authentication => authentication
-                .Bearer()
-                    .WithToken("fake-token"))
-            .UseAuthentication("fakeOAuth2", authentication => authentication
-                .OAuth2()
-                    .WithAuthority(new("https://fake-authority.com"))
-                    .WithGrantType(OAuth2GrantType.ClientCredentials)
-                    .WithClient(client => client
-                        .WithId("fake-client-id")
-                        .WithSecret("fake-client-secret")))
-            .UseFunction("fakeFunction1", function => function
-                .Call()
-                    .Function("http")
-                        .With("method", "post")
-                        .With("uri", "https://test.com"))
-            .UseFunction("fakeFunction2", function => function
-                .Run()
-                    .Shell()
-                        .WithCommand(@"echo ""Hello, World!"""))
-            .UseExtension("fakeLoggingExtension", extension => extension
-                .ExtendAll()
-                .When("fake-expression")
-                .Before(tasks => tasks
-                    .Do("fake-http-call", task => task
-                        .Call("http")
-                            .With("method", "post")
-                            .With("uri", "https://fake.log.collector.com")
-                            .With("body", new
-                            {
-                                message = @"${ ""Executing task '\($task.reference)'..."" }"
-                            })))
-                .After(tasks => tasks
-                    .Do("fake-http-call", task => task
-                        .Call("http")
-                            .With("method", "post")
-                            .With("uri", "https://fake.log.collector.com")
-                            .With("body", new
-                            {
-                                message = @"${ ""Executed task '\($task.reference)'..."" }"
-                            }))))
-            .UseSecret("fake-secret")
-            .Do("todo-1", task => task
-                .Call("http")
-                .If("fake-condition")
-                .With("method", "get")
-                .With("uri", "https://unit-tests.serverlessworkflow.io"))
-            .Do("todo-2", task => task
-                .Emit(e => e
-                    .With("type", "io.serverlessworkflow.unit-tests.fake.event.type.v1")))
-            .Do("todo-3", task => task
-                .For()
-                    .Each("color")
-                    .In(".colors")
-                    .At("index")
-                    .Do(tasks => tasks
-                        .Do("fake-http-call", subtask => subtask
-                            .Set("processed", ".processed + [$color]"))))
-            .Do("todo-4", task => task
-                .Listen()
-                    .To(to => to
-                        .Any()
-                            .Event(e => e
-                                .With("foo", "bar"))
-                            .Event(e => e
-                                .With(new Dictionary<string, object>() { { "foo", "bar" }, { "bar", "baz" } }))))
-            .Do("todo-5", task => task
-                .Raise(error => error
-                    .WithType("fake-error-type")
-                    .WithStatus("400")
-                    .WithTitle("fake-error-title")))
-            .Do("todo-6", task => task
-                .Run()
-                    .Container()
-                        .WithImage("fake-image:latest")
-                        .WithCommand("fake command --arg1 arg1")
-                        .WithEnvironment("ASPNET_ENVIRONMENT", "Development"))
-            .Do("todo-7", task => task
-                .Run()
-                    .Shell()
-                        .WithCommand("fake command --arg1 arg1")
-                        .WithArgument("--arg2 arg2")
-                        .WithEnvironment("ASPNET_ENVIRONMENT", "Development"))
-            .Do("todo-8", task => task
-                .Run()
-                    .Script()
-                        .WithLanguage("js")
-                        .WithCode(@"console.log(""Hello, World!"")"))
-            .Do("todo-9", task => task
-                .Run()
-                    .Workflow()
-                        .WithName("fake-workflow")
-                        .WithVersion("1.0.0")
-                        .WithInput(new { foo = "bar" }))
-            .Do("todo-10", task => task
-                .Set("foo", "bar")
-                .Set("bar", new { baz = "foo" }))
-            .Do("todo-11", task => task
-                .Switch()
-                    .Case("case-1", @case => @case
-                        .When("fake-condition")
-                        .Then(FlowDirective.Continue))
-                    .Case("case-2", @case => @case
-                        .When("another-fake-condition")
-                        .Then(FlowDirective.Exit))
-                    .Case("default", @case => @case
-                        .Then(FlowDirective.End)))
-            .Do("todo-12", task => task
-                .Try()
-                    .Do(tasks => tasks
-                        .Do("setFoo", subtask => subtask
-                            .Set("foo", "bar")))
-                .Catch(error => error
-                    .Errors(filter => filter
-                        .With("status", ". == 400"))
-                    .As("error")
-                    .When("fake-condition")
-                    .ExceptWhen("another-fake-condition")
-                    .Retry(retry => retry
-                        .When("fake-condition")
-                        .ExceptWhen("another-fake-condition")
-                        .Limit(limits => limits
-                            .Attempt()
-                                .Count(10)))
-                    .Do(tasks => tasks
-                        .Do("setFoo", subtask => subtask
-                            .Set("foo", "bar")))))
-            .Do("todo-13", task => task
-                .Wait()
-                    .For(Duration.FromMinutes(5)))
-            .Do("todo-14", task => task
-                .Do(tasks => tasks
-                    .Do("todo-14-1", task => task
-                        .Call("http")
-                            .With("method", "get")
-                            .With("uri", "https://unit-tests.serverlessworkflow.io"))
-                    .Do("todo-14-2", task => task
-                        .Emit(e => e
-                            .With("type", "io.serverlessworkflow.unit-tests.fake.event.type.v1")))
-                    .Do("todo-14-3", task => task
-                        .For()
-                            .Each("color")
-                            .In(".colors")
-                            .At("index")
-                        .Do(tasks => tasks
-                            .Do("setProcessed", subtask => subtask
-                                .Set("processed", ".processed + [$color]"))))))
+            .Do(taskName, task => task.Set(key, value))
             .Build();
 
         //assert
-        var yaml = YamlSerializer.Default.Serialize(workflow);
+        workflow.Should().NotBeNull();
+        workflow.Document.Name.Should().Be(workflowName);
+        workflow.Document.Version.Should().Be(version);
+        workflow.Document.Namespace.Should().Be(WorkflowDefinitionMetadata.DefaultNamespace);
+        workflow.Do.Should().HaveCount(expectedTaskCount);
+    }
+
+    [Fact]
+    public void Build_Should_Set_All_Document_Properties()
+    {
+        //arrange
+        var dsl = "1.0.0";
+        var ns = "my-namespace";
+        var workflowName = "my-workflow";
+        var version = "2.0.0";
+        var title = "My Workflow";
+        var summary = "A test workflow";
+        var tagKey = "env";
+        var tagValue = "test";
+        var taskName = "step1";
+        var key = "k";
+        var value = "v";
+
+        //act
+        var workflow = new WorkflowDefinitionBuilder()
+            .UseDsl(dsl)
+            .WithNamespace(ns)
+            .WithName(workflowName)
+            .WithVersion(version)
+            .WithTitle(title)
+            .WithSummary(summary)
+            .WithTag(tagKey, tagValue)
+            .Do(taskName, task => task.Set(key, value))
+            .Build();
+
+        //assert
+        workflow.Document.Dsl.Should().Be(dsl);
+        workflow.Document.Namespace.Should().Be(ns);
+        workflow.Document.Name.Should().Be(workflowName);
+        workflow.Document.Version.Should().Be(version);
+        workflow.Document.Title.Should().Be(title);
+        workflow.Document.Summary.Should().Be(summary);
+        workflow.Document.Tags.Should().ContainKey(tagKey);
+    }
+
+    [Fact]
+    public void Build_Should_Throw_When_Name_Missing()
+    {
+        //arrange
+        var version = "1.0.0";
+        var taskName = "step";
+        var key = "k";
+        var value = "v";
+        var builder = new WorkflowDefinitionBuilder()
+            .WithVersion(version)
+            .Do(taskName, task => task.Set(key, value));
+
+        //act
+        var act = () => builder.Build();
+
+        //assert
+        act.Should().Throw<NullReferenceException>();
+    }
+
+    [Fact]
+    public void Build_Should_Throw_When_Version_Missing()
+    {
+        //arrange
+        var workflowName = "test";
+        var taskName = "step";
+        var key = "k";
+        var value = "v";
+        var builder = new WorkflowDefinitionBuilder()
+            .WithName(workflowName)
+            .Do(taskName, task => task.Set(key, value));
+
+        //act
+        var act = () => builder.Build();
+
+        //assert
+        act.Should().Throw<NullReferenceException>();
+    }
+
+    [Fact]
+    public void Build_Should_Throw_When_No_Tasks()
+    {
+        //arrange
+        var workflowName = "test";
+        var version = "1.0.0";
+        var builder = new WorkflowDefinitionBuilder()
+            .WithName(workflowName)
+            .WithVersion(version);
+
+        //act
+        var act = () => builder.Build();
+
+        //assert
+        act.Should().Throw<NullReferenceException>();
+    }
+
+    [Fact]
+    public void WithVersion_Should_Throw_For_Invalid_SemVer()
+    {
+        //arrange
+        var invalidVersion = "not-semver";
+
+        //act
+        var act = () => new WorkflowDefinitionBuilder().WithVersion(invalidVersion);
+
+        //assert
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void WithName_Should_Throw_For_Invalid_Name()
+    {
+        //arrange
+        var invalidName = "INVALID NAME!";
+
+        //act
+        var act = () => new WorkflowDefinitionBuilder().WithName(invalidName);
+
+        //assert
+        act.Should().Throw<ArgumentException>();
+    }
+
+    [Fact]
+    public void Build_Should_Configure_Timeout()
+    {
+        //arrange
+        var workflowName = "test";
+        var version = "1.0.0";
+        var timeoutDuration = Duration.FromSeconds(30);
+        var taskName = "step";
+        var key = "k";
+        var value = "v";
+
+        //act
+        var workflow = new WorkflowDefinitionBuilder()
+            .WithName(workflowName)
+            .WithVersion(version)
+            .WithTimeout(timeout => timeout.After(timeoutDuration))
+            .Do(taskName, task => task.Set(key, value))
+            .Build();
+
+        //assert
+        workflow.Timeout.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void Build_Should_Configure_Components()
+    {
+        //arrange
+        var workflowName = "test";
+        var version = "1.0.0";
+        var secret1 = "my-secret";
+        var secret2 = "secret1";
+        var secret3 = "secret2";
+        var taskName = "step";
+        var key = "k";
+        var value = "v";
+
+        //act
+        var workflow = new WorkflowDefinitionBuilder()
+            .WithName(workflowName)
+            .WithVersion(version)
+            .UseSecret(secret1)
+            .UseSecret(secret2)
+            .UseSecret(secret3)
+            .Do(taskName, task => task.Set(key, value))
+            .Build();
+
+        //assert
+        workflow.Use.Should().NotBeNull();
+        workflow.Use!.Secrets.Should().Contain(secret1);
+        workflow.Use.Secrets.Should().Contain(secret2);
     }
 
 }

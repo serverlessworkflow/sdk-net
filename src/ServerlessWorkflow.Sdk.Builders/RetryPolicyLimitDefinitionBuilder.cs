@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -16,39 +16,32 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IRetryPolicyLimitDefinitionBuilder"/> interface
 /// </summary>
-public class RetryPolicyLimitDefinitionBuilder
+public sealed class RetryPolicyLimitDefinitionBuilder
     : IRetryPolicyLimitDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the service used to build the definition of the limits for all retry attempts of a given policy
-    /// </summary>
-    protected IRetryAttemptLimitDefinitionBuilder? LimitAttempt { get; set; }
-
-    /// <summary>
-    /// Gets the maximum duration during which retrying is allowed 
-    /// </summary>
-    protected Duration? LimitDuration { get; set; }
+    RetryAttemptLimitDefinitionBuilder? limitAttempt;
+    Duration? limitDuration;
 
     /// <inheritdoc/>
-    public virtual IRetryAttemptLimitDefinitionBuilder Attempt()
+    public IRetryAttemptLimitDefinitionBuilder Attempt()
     {
-        this.LimitAttempt = new RetryAttemptLimitDefinitionBuilder();
-        return this.LimitAttempt;
+        limitAttempt = new RetryAttemptLimitDefinitionBuilder();
+        return limitAttempt;
     }
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyLimitDefinitionBuilder Duration(Duration duration)
+    public IRetryPolicyLimitDefinitionBuilder Duration(Duration duration)
     {
-        this.LimitDuration = duration;
+        limitDuration = duration;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual RetryPolicyLimitDefinition Build() => new()
+    public RetryPolicyLimitDefinition Build() => new()
     {
-        Attempt = this.LimitAttempt?.Build(),
-        Duration = this.LimitDuration,
+        Attempt = limitAttempt?.Build(),
+        Duration = limitDuration,
     };
 
 }

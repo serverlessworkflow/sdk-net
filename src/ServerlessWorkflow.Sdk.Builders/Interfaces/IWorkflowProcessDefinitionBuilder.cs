@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Models.Processes;
-
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
@@ -48,6 +46,6 @@ public interface IWorkflowProcessDefinitionBuilder
     /// </summary>
     /// <param name="input">The input of the workflow to run. Supports runtime expressions</param>
     /// <returns>The configured <see cref="IWorkflowProcessDefinitionBuilder"/></returns>
-    IWorkflowProcessDefinitionBuilder WithInput(object input);
+    IWorkflowProcessDefinitionBuilder WithInput(JsonObject input);
 
 }

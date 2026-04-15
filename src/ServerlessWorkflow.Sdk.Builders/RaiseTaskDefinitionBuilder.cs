@@ -17,41 +17,38 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="IRaiseTaskDefinitionBuilder"/> interface
 /// </summary>
 /// <param name="errorDefinition">The error to raise</param>
-public class RaiseTaskDefinitionBuilder(ErrorDefinition? errorDefinition = null)
+public sealed class RaiseTaskDefinitionBuilder(ErrorDefinition? errorDefinition = null)
     : TaskDefinitionBuilder<IRaiseTaskDefinitionBuilder, RaiseTaskDefinition>, IRaiseTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the error to raise
-    /// </summary>
-    protected ErrorDefinition? ErrorDefinition { get; set; } = errorDefinition;
+    ErrorDefinition? errorDefinition = errorDefinition;
 
     /// <inheritdoc/>
-    public virtual IRaiseTaskDefinitionBuilder Error(ErrorDefinition error)
+    public IRaiseTaskDefinitionBuilder Error(ErrorDefinition error)
     {
         ArgumentNullException.ThrowIfNull(error);
-        this.ErrorDefinition = error;
+        errorDefinition = error;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IRaiseTaskDefinitionBuilder Error(Action<IErrorDefinitionBuilder> setup)
+    public IRaiseTaskDefinitionBuilder Error(Action<IErrorDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ErrorDefinitionBuilder();
         setup(builder);
-        return this.Error(builder.Build());
+        return Error(builder.Build());
     }
 
     /// <inheritdoc/>
     public override RaiseTaskDefinition Build()
     {
-        if (this.ErrorDefinition == null) throw new NullReferenceException("The error to raise must be set");
-        return this.Configure(new() 
+        if (errorDefinition == null) throw new NullReferenceException("The error to raise must be set");
+        return Configure(new() 
         { 
             Raise = new() 
             { 
-                Error = this.ErrorDefinition 
+                Error = errorDefinition 
             } 
         });
     }

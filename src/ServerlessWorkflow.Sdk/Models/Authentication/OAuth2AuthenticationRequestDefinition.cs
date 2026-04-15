@@ -16,14 +16,17 @@ namespace ServerlessWorkflow.Sdk.Models.Authentication;
 /// <summary>
 /// Represents the configuration of an OAUTH2 authentication request
 /// </summary>
+[Description("Represents the configuration of an OAUTH2 authentication request")]
 [DataContract]
-public record OAuth2AuthenticationRequestDefinition
+public sealed record OAuth2AuthenticationRequestDefinition
 {
 
     /// <summary>
     /// Gets/sets the encoding of the authentication request. Defaults to 'application/x-www-form-urlencoded'. See <see cref="OAuth2RequestEncoding"/>
     /// </summary>
-    [DataMember(Name = "encoding", Order = 1), JsonPropertyName("encoding"), JsonPropertyOrder(1), YamlMember(Alias = "encoding", Order = 1)]
-    public virtual string Encoding { get; set; } = OAuth2RequestEncoding.FormUrl;
+    [Description("The encoding of the authentication request. Defaults to 'application/x-www-form-urlencoded'. See OAuth2RequestEncoding")]
+    [Required, StringLength(int.MaxValue, MinimumLength = 1)]
+    [DataMember(Order = 1, Name = "encoding"), JsonPropertyOrder(1), JsonPropertyName("encoding")]
+    public string Encoding { get; init; } = OAuth2RequestEncoding.FormUrl;
 
 }

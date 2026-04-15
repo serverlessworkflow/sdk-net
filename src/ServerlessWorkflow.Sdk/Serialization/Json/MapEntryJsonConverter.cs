@@ -11,37 +11,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Text.Json;
-
 namespace ServerlessWorkflow.Sdk.Serialization.Json;
-
-/// <summary>
-/// Represents the <see cref="JsonConverterFactory"/> used to create <see cref="MapEntryJsonConverter"/>
-/// </summary>
-public class MapEntryJsonConverter
-    : JsonConverterFactory
-{
-
-    /// <inheritdoc/>
-    public override bool CanConvert(Type typeToConvert) => typeToConvert.IsGenericType && typeToConvert.GetGenericTypeDefinition() == typeof(MapEntry<,>);
-
-    /// <inheritdoc/>
-    public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
-    {
-        var keyType = typeToConvert.GetGenericArguments()[0];
-        var valueType = typeToConvert.GetGenericArguments()[1];
-        var converterType = typeof(MapEntryJsonConverter<,>).MakeGenericType(keyType, valueType);
-        return (JsonConverter)Activator.CreateInstance(converterType)!;
-    }
-
-}
 
 /// <summary>
 /// Represents the <see cref="JsonConverter"/> used to write and read <see cref="MapEntry{TKey, TValue}"/> instances
 /// </summary>
 /// <typeparam name="TKey">The type of the <see cref="MapEntry{TKey, TValue}"/> key</typeparam>
 /// <typeparam name="TValue">The type of the <see cref="MapEntry{TKey, TValue}"/> value</typeparam>
-public class MapEntryJsonConverter<TKey, TValue> : JsonConverter<MapEntry<TKey, TValue>> where TKey : notnull
+public class MapEntryJsonConverter<TKey, TValue>
+    : JsonConverter<MapEntry<TKey, TValue>> where TKey : notnull
 {
 
     /// <inheritdoc/>

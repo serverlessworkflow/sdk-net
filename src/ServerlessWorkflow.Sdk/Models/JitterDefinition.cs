@@ -16,20 +16,23 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of the parameters that control the randomness or variability of a delay, typically between retry attempts
 /// </summary>
+[Description("Represents the definition of the parameters that control the randomness or variability of a delay, typically between retry attempts")]
 [DataContract]
-public record JitterDefinition
+public sealed record JitterDefinition
 {
 
     /// <summary>
     /// Gets/sets the minimum duration of the jitter range
     /// </summary>
-    [DataMember(Name = "from", Order = 1), JsonPropertyName("from"), JsonPropertyOrder(1), YamlMember(Alias = "from", Order = 1)]
-    public required virtual Duration From { get; set; }
+    [Description("The minimum duration of the jitter range")]
+    [DataMember(Order = 1, Name = "from"), JsonPropertyOrder(1), JsonPropertyName("from")]
+    public required Duration From { get; init; }
 
     /// <summary>
     /// Gets/sets the maximum duration of the jitter range
     /// </summary>
-    [DataMember(Name = "to", Order = 2), JsonPropertyName("to"), JsonPropertyOrder(2), YamlMember(Alias = "to", Order = 2)]
-    public required virtual Duration To { get; set; }
+    [Description("The maximum duration of the jitter range")]
+    [DataMember(Order = 2, Name = "to"), JsonPropertyOrder(2), JsonPropertyName("to")]
+    public required Duration To { get; init; }
 
 }

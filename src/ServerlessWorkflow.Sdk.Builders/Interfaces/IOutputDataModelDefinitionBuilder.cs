@@ -31,7 +31,7 @@ public interface IOutputDataModelDefinitionBuilder
     /// </summary>
     /// <param name="expression">The runtime expression used to filter the data to output</param>
     /// <returns>The configured <see cref="IOutputDataModelDefinitionBuilder"/></returns>
-    IOutputDataModelDefinitionBuilder As(object expression);
+    IOutputDataModelDefinitionBuilder As(OneOf<JsonObject, string> expression);
 
     /// <summary>
     /// Builds the configured <see cref="OutputDataModelDefinition"/>

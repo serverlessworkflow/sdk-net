@@ -16,27 +16,31 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents an object used to configure an AsyncAPI subscription
 /// </summary>
+[Description("Represents an object used to configure an AsyncAPI subscription")]
 [DataContract]
-public record AsyncApiSubscriptionDefinition
+public sealed record AsyncApiSubscriptionDefinition
 {
 
     /// <summary>
     /// Gets/sets a runtime expression, if any, used to filter consumed messages
     /// </summary>
-    [DataMember(Name = "filter", Order = 1), JsonPropertyName("filter"), JsonPropertyOrder(1), YamlMember(Alias = "filter", Order = 1)]
-    public virtual string? Filter { get; set; }
+    [Description("A runtime expression, if any, used to filter consumed messages")]
+    [DataMember(Order = 1, Name = "filter"), JsonPropertyOrder(1), JsonPropertyName("filter")]
+    public string? Filter { get; init; }
 
     /// <summary>
     /// Gets/sets an object used to configure the subscription's lifetime.
     /// </summary>
+    [Description("An object used to configure the subscription's lifetime")]
     [Required]
-    [DataMember(Name = "consume", Order = 2), JsonPropertyName("consume"), JsonPropertyOrder(2), YamlMember(Alias = "consume", Order = 2)]
-    public required virtual AsyncApiSubscriptionLifetimeDefinition Consume { get; set; }
+    [DataMember(Order = 2, Name = "consume"), JsonPropertyOrder(2), JsonPropertyName("consume")]
+    public required AsyncApiSubscriptionLifetimeDefinition Consume { get; init; }
 
     /// <summary>
     /// Gets/sets the configuration of the iterator, if any, used to process each consumed message
     /// </summary>
-    [DataMember(Name = "foreach", Order = 3), JsonPropertyName("foreach"), JsonPropertyOrder(3), YamlMember(Alias = "foreach", Order = 3)]
-    public virtual SubscriptionIteratorDefinition? Foreach { get; set; }
+    [Description("The configuration of the iterator, if any, used to process each consumed message")]
+    [DataMember(Order = 3, Name = "foreach"), JsonPropertyOrder(3), JsonPropertyName("foreach")]
+    public SubscriptionIteratorDefinition? Foreach { get; init; }
 
 }

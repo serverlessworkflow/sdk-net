@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -16,30 +16,37 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IListenerDefinitionBuilder"/> interface
 /// </summary>
-/// <param name="to">The listener's target</param>
-public class ListenerDefinitionBuilder(EventConsumptionStrategyDefinition? to = null)
+public sealed class ListenerDefinitionBuilder(EventConsumptionStrategyDefinition? to = null)
     : ListenerTargetDefinitionBuilder, IListenerDefinitionBuilder
 {
 
     /// <summary>
-    /// Gets/sets the <see cref="ListenerDefinition"/> to configure
+    /// Gets/sets the initial target value
     /// </summary>
-    protected ListenerDefinition Listener { get; } = new() { To = to! };
+    readonly EventConsumptionStrategyDefinition? initialTo = to;
+
+    /// <summary>
+    /// Gets/sets the read mode
+    /// </summary>
+    string? readMode;
 
     /// <inheritdoc/>
-    public virtual IListenerDefinitionBuilder Read(string readMode)
+    public IListenerDefinitionBuilder Read(string readMode)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(readMode);
-        this.Listener.Read = readMode;
-        return this;
+        this.readMode = readMode;
+        IListenerDefinitionBuilder self = this; return self;
     }
 
     /// <inheritdoc/>
-    public virtual new ListenerDefinition Build()
+    public new ListenerDefinition Build()
     {
-        var to = base.Build() ?? throw new NullReferenceException("The listener's target must be set");
-        this.Listener.To = to;
-        return this.Listener;
+        var target = initialTo ?? base.Build() ?? throw new NullReferenceException("The listener's target must be set");
+        return new()
+        {
+            To = target,
+            Read = readMode
+        };
     }
 
 }

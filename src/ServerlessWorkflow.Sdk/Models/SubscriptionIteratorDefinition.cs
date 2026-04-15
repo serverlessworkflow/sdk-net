@@ -16,40 +16,46 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of a subscription iterator, used to configure the processing of each event or message consumed by a subscription
 /// </summary>
+[Description("Represents the definition of a subscription iterator, used to configure the processing of each event or message consumed by a subscription")]
 [DataContract]
-public record SubscriptionIteratorDefinition
+public sealed record SubscriptionIteratorDefinition
 {
 
     /// <summary>
     /// Gets/sets the name of the variable used to store the item being enumerated.<para></para>
     /// Defaults to `item`
     /// </summary>
-    [DataMember(Name = "item", Order = 1), JsonPropertyName("item"), JsonPropertyOrder(1), YamlMember(Alias = "item", Order = 1)]
-    public virtual string? Item { get; set; }
+    [Description("The name of the variable used to store the item being enumerated. Defaults to `item`")]
+    [DataMember(Order = 1, Name = "item"), JsonPropertyOrder(1), JsonPropertyName("item")]
+    public string? Item { get; init; }
 
     /// <summary>
     /// Gets/sets the name of the variable used to store the index of the item being enumerates<para></para>
     /// Defaults to `index`
     /// </summary>
-    [DataMember(Name = "at", Order = 2), JsonPropertyName("at"), JsonPropertyOrder(2), YamlMember(Alias = "at", Order = 2)]
-    public virtual string? At { get; set; }
+    [Description("The name of the variable used to store the index of the item being enumerates. Defaults to `index`")]
+    [DataMember(Order = 2, Name = "index"), JsonPropertyOrder(2), JsonPropertyName("index")]
+    public string? At { get; init; }
 
     /// <summary>
     /// Gets/sets the tasks to run for each consumed event or message
     /// </summary>
-    [DataMember(Name = "do", Order = 3), JsonPropertyName("do"), JsonPropertyOrder(3), YamlMember(Alias = "do", Order = 3)]
-    public virtual Map<string, TaskDefinition>? Do { get; set; }
+    [Description("The tasks to run for each consumed event or message")]
+    [DataMember(Order = 3, Name = "do"), JsonPropertyOrder(3), JsonPropertyName("do")]
+    public Map<string, TaskDefinition>? Do { get; init; }
 
     /// <summary>
     /// Gets/sets the definition, if any, of the data to output for each iteration
     /// </summary>
-    [DataMember(Name = "output", Order = 4), JsonPropertyName("output"), JsonPropertyOrder(4), YamlMember(Alias = "output", Order = 4)]
-    public virtual OutputDataModelDefinition? Output { get; set; }
+    [Description("The definition, if any, of the data to output for each iteration")]
+    [DataMember(Order = 4, Name = "output"), JsonPropertyOrder(4), JsonPropertyName("output")]
+    public OutputDataModelDefinition? Output { get; init; }
 
     /// <summary>
     /// Gets/sets the definition, if any, of the data to export for each iteration
     /// </summary>
-    [DataMember(Name = "export", Order = 5), JsonPropertyName("export"), JsonPropertyOrder(5), YamlMember(Alias = "export", Order = 5)]
-    public virtual OutputDataModelDefinition? Export { get; set; }
+    [Description("The definition, if any, of the data to export for each iteration")]
+    [DataMember(Order = 5, Name = "export"), JsonPropertyOrder(5), JsonPropertyName("export")]
+    public OutputDataModelDefinition? Export { get; init; }
 
 }

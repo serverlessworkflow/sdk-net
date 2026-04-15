@@ -31,7 +31,7 @@ public interface IInputDataModelDefinitionBuilder
     /// </summary>
     /// <param name="expression">The runtime expression used to filter the input data</param>
     /// <returns>The configured <see cref="IInputDataModelDefinitionBuilder"/></returns>
-    IInputDataModelDefinitionBuilder From(object expression);
+    IInputDataModelDefinitionBuilder From(OneOf<JsonObject, string> expression);
 
     /// <summary>
     /// Builds the configured <see cref="InputDataModelDefinition"/>

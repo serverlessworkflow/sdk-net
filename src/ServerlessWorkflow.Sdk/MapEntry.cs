@@ -11,8 +11,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Serialization.Json;
-
 namespace ServerlessWorkflow.Sdk;
 
 /// <summary>
@@ -20,8 +18,8 @@ namespace ServerlessWorkflow.Sdk;
 /// </summary>
 /// <typeparam name="TKey">The type of the entry's key</typeparam>
 /// <typeparam name="TValue">The type of the entry's value</typeparam>
-[JsonConverter(typeof(MapEntryJsonConverter))]
-public record MapEntry<TKey, TValue>
+[JsonConverter(typeof(MapEntryJsonConverterFactory))]
+public sealed record MapEntry<TKey, TValue>
 {
 
     /// <summary>
@@ -43,11 +41,11 @@ public record MapEntry<TKey, TValue>
     /// <summary>
     /// Gets/sets the entry key
     /// </summary>
-    public TKey Key { get; set; } = default!;
+    public TKey Key { get; init; } = default!;
 
     /// <summary>
     /// Gets/sets the entry value
     /// </summary>
-    public TValue Value { get; set; } = default!;
+    public TValue Value { get; init; } = default!;
 
 }

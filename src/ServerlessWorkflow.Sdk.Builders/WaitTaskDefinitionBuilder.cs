@@ -17,30 +17,27 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// Represents the default implementation of the <see cref="IWaitTaskDefinitionBuilder"/> interface
 /// </summary>
 /// <param name="duration">The amount of time to wait for</param>
-public class WaitTaskDefinitionBuilder(Duration? duration = null)
+public sealed class WaitTaskDefinitionBuilder(Duration? duration = null)
     : TaskDefinitionBuilder<IWaitTaskDefinitionBuilder, WaitTaskDefinition>, IWaitTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the amount of time to wait for
-    /// </summary>
-    protected Duration? Duration { get; set; } = duration;
+    Duration? duration = duration;
 
     /// <inheritdoc/>
-    public virtual IWaitTaskDefinitionBuilder For(Duration duration)
+    public IWaitTaskDefinitionBuilder For(Duration duration)
     {
         ArgumentNullException.ThrowIfNull(duration);
-        this.Duration = duration;
+        this.duration = duration;
         return this;
     }
 
     /// <inheritdoc/>
     public override WaitTaskDefinition Build()
     {
-        if (this.Duration == null) throw new NullReferenceException("The amount of time to wait for must be set");
+        if (duration == null) throw new NullReferenceException("The amount of time to wait for must be set");
         return this.Configure(new()
         {
-            Wait = this.Duration
+            Wait = duration
         });
     }
 

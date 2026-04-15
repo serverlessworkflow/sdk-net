@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -16,72 +16,54 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IOAuth2AuthenticationClientDefinitionBuilder"/> interface
 /// </summary>
-public class OAuth2AuthenticationClientDefinitionBuilder
+public sealed class OAuth2AuthenticationClientDefinitionBuilder
     : IOAuth2AuthenticationClientDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the OAUTH2 `client_id` to use
-    /// </summary>
-    protected string? Id { get; set; }
-
-    /// <summary>
-    /// Gets/sets the OAUTH2 `client_secret` to use, if any
-    /// </summary>
-    protected string? Secret { get; set; }
-
-    /// <summary>
-    /// Gets/sets a JWT containing a signed assertion with the application credentials
-    /// </summary>
-    protected string? Assertion { get; set; }
-
-    /// <summary>
-    /// Gets/sets the authentication method to use to authenticate the client
-    /// </summary>
-    protected string? Authentication { get; set; }
+    string? id;
+    string? secret;
+    string? assertion;
+    string? authentication;
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationClientDefinitionBuilder WithId(string id)
+    public IOAuth2AuthenticationClientDefinitionBuilder WithId(string id)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(id);
-        this.Id = id;
+        this.id = id;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationClientDefinitionBuilder WithSecret(string secret)
+    public IOAuth2AuthenticationClientDefinitionBuilder WithSecret(string secret)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(secret);
-        this.Secret = secret;
+        this.secret = secret;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationClientDefinitionBuilder WithAssertion(string assertion)
+    public IOAuth2AuthenticationClientDefinitionBuilder WithAssertion(string assertion)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(assertion);
-        this.Assertion = assertion;
+        this.assertion = assertion;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IOAuth2AuthenticationClientDefinitionBuilder WithAuthenticationMethod(string method)
+    public IOAuth2AuthenticationClientDefinitionBuilder WithAuthenticationMethod(string method)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(method);
-        this.Authentication = method;
+        authentication = method;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual OAuth2AuthenticationClientDefinition Build()
+    public OAuth2AuthenticationClientDefinition Build() => new()
     {
-        return new()
-        {
-            Id = this.Id,
-            Secret = this.Secret,
-            Assertion = this.Assertion,
-            Authentication = this.Authentication
-        };
-    }
+        Id = id,
+        Secret = secret,
+        Assertion = assertion,
+        Authentication = authentication
+    };
 
 }

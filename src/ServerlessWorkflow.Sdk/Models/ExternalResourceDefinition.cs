@@ -16,41 +16,24 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of an external resource
 /// </summary>
+[Description("Represents the definition of an external resource")]
 [DataContract]
-public record ExternalResourceDefinition
+public sealed record ExternalResourceDefinition
 {
 
     /// <summary>
     /// Gets/sets the external resource's name, if any
     /// </summary>
-    [DataMember(Name = "name", Order = 1), JsonPropertyName("name"), JsonPropertyOrder(1), YamlMember(Alias = "name", Order = 1)]
-    public virtual string? Name { get; set; }
+    [Description("The external resource's name, if any")]
+    [DataMember(Order = 1, Name = "name"), JsonPropertyOrder(1), JsonPropertyName("name")]
+    public string? Name { get; init; }
 
     /// <summary>
     /// Gets/sets the endpoint at which to get the defined resource
     /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual EndpointDefinition Endpoint
-    {
-        get => this.EndpointValue.T1Value ?? new() { Uri = this.EndpointUri };
-        set => this.EndpointValue = value;
-    }
-
-    /// <summary>
-    /// Gets/sets the endpoint at which to get the defined resource
-    /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual Uri EndpointUri
-    {
-        get => this.EndpointValue.T1Value?.Uri ?? this.EndpointValue.T2Value!;
-        set => this.EndpointValue = value;
-    }
-
-    /// <summary>
-    /// Gets/sets the endpoint at which to get the defined resource
-    /// </summary>
+    [Description("The endpoint at which to get the defined resource")]
     [Required]
-    [DataMember(Name = "endpoint", Order = 2), JsonInclude, JsonPropertyName("endpoint"), JsonPropertyOrder(2), YamlMember(Alias = "endpoint", Order = 2)]
-    protected virtual OneOf<EndpointDefinition, Uri> EndpointValue { get; set; } = null!;
+    [DataMember(Order = 2, Name = "endpoint"), JsonPropertyOrder(2), JsonPropertyName("endpoint"), JsonConverter(typeof(OneOfJsonConverter<EndpointDefinition, Uri>))]
+    public required OneOf<EndpointDefinition, Uri> Endpoint { get; init; }
 
 }

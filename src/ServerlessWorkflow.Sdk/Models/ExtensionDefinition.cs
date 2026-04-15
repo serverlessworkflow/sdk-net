@@ -16,34 +16,39 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of a an extension
 /// </summary>
+[Description("Represents the definition of a an extension.")]
 [DataContract]
-public record ExtensionDefinition
+public sealed record ExtensionDefinition
     : Extendable
 {
 
     /// <summary>
     /// Gets/sets the type of task to extend
     /// </summary>
+    [Description("The type of task to extend.")]
     [Required]
-    [DataMember(Name = "extend", Order = 1), JsonPropertyName("extend"), JsonPropertyOrder(1), YamlMember(Alias = "extend", Order = 1)]
-    public required virtual string Extend { get; set; }
+    [DataMember(Order = 1, Name = "extend"), JsonPropertyOrder(1), JsonPropertyName("extend")]
+    public required string Extend { get; init; }
 
     /// <summary>
     /// Gets/sets a runtime expression, if any, used to determine whether or not the extension should apply in the specified context
     /// </summary>
-    [DataMember(Name = "when", Order = 2), JsonPropertyName("when"), JsonPropertyOrder(2), YamlMember(Alias = "when", Order = 2)]
-    public virtual string? When { get; set; }
+    [Description("A runtime expression, if any, used to determine whether or not the extension should apply in the specified context.")]
+    [DataMember(Order = 2, Name = "when"), JsonPropertyOrder(2), JsonPropertyName("when")]
+    public string? When { get; init; }
 
     /// <summary>
     /// Gets/sets a name/definition map of the tasks to execute before the extended task, if any
     /// </summary>
-    [DataMember(Name = "before", Order = 3), JsonPropertyName("before"), JsonPropertyOrder(3), YamlMember(Alias = "before", Order = 3)]
-    public virtual Map<string, TaskDefinition>? Before { get; set; }
+    [Description("A name/definition map of the tasks to execute before the extended task, if any.")]
+    [DataMember(Order = 3, Name = "before"), JsonPropertyOrder(3), JsonPropertyName("before")]
+    public Map<string, TaskDefinition>? Before { get; init; }
 
     /// <summary>
     /// Gets/sets a name/definition map of the tasks to execute after the extended task, if any
     /// </summary>
-    [DataMember(Name = "after", Order = 4), JsonPropertyName("after"), JsonPropertyOrder(4), YamlMember(Alias = "after", Order = 4)]
-    public virtual Map<string, TaskDefinition>? After { get; set; }
+    [Description("A name/definition map of the tasks to execute after the extended task, if any.")]
+    [DataMember(Order = 4, Name = "after"), JsonPropertyOrder(4), JsonPropertyName("after")]
+    public Map<string, TaskDefinition>? After { get; init; }
 
 }

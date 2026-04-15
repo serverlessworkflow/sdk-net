@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -11,84 +11,67 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Models.Processes;
-using Semver;
-
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IWorkflowProcessDefinitionBuilder"/> interface
 /// </summary>
-public class WorkflowProcessDefinitionBuilder
+public sealed partial class WorkflowProcessDefinitionBuilder
     : ProcessDefinitionBuilder<WorkflowProcessDefinition>, IWorkflowProcessDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the namespace of the workflow to run
-    /// </summary>
-    protected virtual string? Namespace { get; set; }
-
-    /// <summary>
-    /// Gets/sets the name of the workflow to run
-    /// </summary>
-    protected virtual string? Name { get; set; }
-
-    /// <summary>
-    /// Gets/sets the version of the workflow to run. Defaults to `latest`
-    /// </summary>
-    protected virtual string Version { get; set; } = "latest";
-
-    /// <summary>
-    /// Gets/sets the data, if any, to pass as input to the workflow to execute. The value should be validated against the target workflow's input schema, if specified
-    /// </summary>
-    protected virtual object? Input { get; set; }
+    string? @namespace;
+    string? name;
+    string version = "latest";
+    JsonObject? input;
 
     /// <inheritdoc/>
-    public virtual IWorkflowProcessDefinitionBuilder WithNamespace(string @namespace)
+    public IWorkflowProcessDefinitionBuilder WithNamespace(string @namespace)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(@namespace);
-        if (!NamingConvention.IsValidName(@namespace)) throw new ArgumentException($"The the specified value '{@namespace}' is not a valid RFC1123 DNS label name", nameof(@namespace));
-        this.Namespace = @namespace;
+        if (!DnsLabelRegex().IsMatch(@namespace)) throw new ArgumentException($"The specified value '{@namespace}' is not a valid RFC1123 DNS label name", nameof(@namespace));
+        this.@namespace = @namespace;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowProcessDefinitionBuilder WithName(string name)
+    public IWorkflowProcessDefinitionBuilder WithName(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        if (!NamingConvention.IsValidName(name)) throw new ArgumentException($"The the specified value '{name}' is not a valid RFC1123 DNS label name", nameof(name));
-        this.Name = name;
+        if (!DnsLabelRegex().IsMatch(name)) throw new ArgumentException($"The specified value '{name}' is not a valid RFC1123 DNS label name", nameof(name));
+        this.name = name;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowProcessDefinitionBuilder WithVersion(string version)
+    public IWorkflowProcessDefinitionBuilder WithVersion(string version)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(version);
-        if (!SemVersion.TryParse(version, SemVersionStyles.Strict, out _)) throw new ArgumentException($"The specified value '{version}' is not a valid semantic version (SemVer 2.0)", nameof(version));
-        this.Version = version;
+        this.version = version;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IWorkflowProcessDefinitionBuilder WithInput(object input)
+    public IWorkflowProcessDefinitionBuilder WithInput(JsonObject input)
     {
-        this.Input = input;
+        this.input = input;
         return this;
     }
 
     /// <inheritdoc/>
     public override WorkflowProcessDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(this.Name)) throw new NullReferenceException("The name of the workflow to run must be set");
-        if (string.IsNullOrWhiteSpace(this.Version)) throw new NullReferenceException("The version of the workflow to run must be set");
+        if (string.IsNullOrWhiteSpace(name)) throw new NullReferenceException("The name of the workflow to run must be set");
+        if (string.IsNullOrWhiteSpace(version)) throw new NullReferenceException("The version of the workflow to run must be set");
         return new()
         {
-            Namespace = string.IsNullOrWhiteSpace(this.Namespace) ? WorkflowDefinitionMetadata.DefaultNamespace : this.Namespace,
-            Name = this.Name,
-            Version = this.Version,
-            Input = this.Input
+            Namespace = string.IsNullOrWhiteSpace(@namespace) ? WorkflowDefinitionMetadata.DefaultNamespace : @namespace,
+            Name = name,
+            Version = version,
+            Input = input
         };
     }
 
+    [GeneratedRegex(@"^[a-z0-9]([a-z0-9\-]{0,61}[a-z0-9])?$", RegexOptions.Compiled)]
+    private static partial Regex DnsLabelRegex();
 }

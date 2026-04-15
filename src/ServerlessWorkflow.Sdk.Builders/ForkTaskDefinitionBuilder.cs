@@ -16,47 +16,40 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IForkTaskDefinitionBuilder"/> interface
 /// </summary>
-public class ForkTaskDefinitionBuilder
+public sealed class ForkTaskDefinitionBuilder
     : TaskDefinitionBuilder<IForkTaskDefinitionBuilder, ForkTaskDefinition>, IForkTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets a name/definition mapping of the tasks to execute concurrently, if any
-    /// </summary>
-    protected Map<string, TaskDefinition>? Tasks { get; set; }
-
-    /// <summary>
-    /// Gets/sets a boolean indicating whether or not the task to execute concurrently should compete each other
-    /// </summary>
-    protected bool ShouldCompete { get; set; }
+    Map<string, TaskDefinition>? tasks;
+    bool shouldCompete;
 
     /// <inheritdoc/>
-    public virtual IForkTaskDefinitionBuilder Branch(Action<ITaskDefinitionMapBuilder> setup)
+    public IForkTaskDefinitionBuilder Branch(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        this.Tasks = builder.Build();
+        tasks = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IForkTaskDefinitionBuilder Compete()
+    public IForkTaskDefinitionBuilder Compete()
     {
-        this.ShouldCompete = true;
+        shouldCompete = true;
         return this;
     }
 
     /// <inheritdoc/>
     public override ForkTaskDefinition Build()
     {
-        if (this.Tasks == null || this.Tasks.Count < 2) throw new NullReferenceException("The execution strategy must define at least two subtasks");
-        return this.Configure(new()
+        if (tasks == null || tasks.Count < 2) throw new NullReferenceException("The execution strategy must define at least two subtasks");
+        return Configure(new()
         {
             Fork = new() 
             {
-                Branches = this.Tasks,
-                Compete = this.ShouldCompete
+                Branches = tasks,
+                Compete = shouldCompete
             }
         });
     }

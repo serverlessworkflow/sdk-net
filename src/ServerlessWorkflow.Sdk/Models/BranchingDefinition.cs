@@ -16,21 +16,24 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents an object used to configure branches to perform concurrently
 /// </summary>
+[Description("Represents an object used to configure branches to perform concurrently")]
 [DataContract]
-public record BranchingDefinition
+public sealed record BranchingDefinition
 {
 
     /// <summary>
     /// Gets/sets a name/definition mapping of the subtasks to perform concurrently
     /// </summary>
+    [Description("A name/definition mapping of the subtasks to perform concurrently")]
     [Required, MinLength(1)]
-    [DataMember(Name = "branches", Order = 1), JsonPropertyName("branches"), JsonPropertyOrder(1), YamlMember(Alias = "branches", Order = 1)]
-    public required virtual Map<string, TaskDefinition> Branches { get; set; }
+    [DataMember(Order = 1, Name = "branches"), JsonPropertyOrder(1), JsonPropertyName("branches")]
+    public required Map<string, TaskDefinition> Branches { get; init; }
 
     /// <summary>
     /// Gets/sets a boolean indicating whether or not the branches should compete each other. If `true` and if a branch completes, it will cancel all other branches then it will return its output as the task's output
     /// </summary>
-    [DataMember(Name = "compete", Order = 1), JsonPropertyName("compete"), JsonPropertyOrder(1), YamlMember(Alias = "compete", Order = 1)]
-    public virtual bool Compete { get; set; }
+    [Description("A boolean indicating whether or not the branches should compete each other. If `true` and if a branch completes, it will cancel all other branches then it will return its output as the task's output")]
+    [DataMember(Order = 2, Name = "compete"), JsonPropertyOrder(2), JsonPropertyName("compete")]
+    public bool Compete { get; init; }
 
 }

@@ -16,79 +16,64 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IForTaskDefinitionBuilder"/> interface
 /// </summary>
-public class ForTaskDefinitionBuilder
+public sealed class ForTaskDefinitionBuilder
     : TaskDefinitionBuilder<IForTaskDefinitionBuilder, ForTaskDefinition>, IForTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the name of the variable that represents each element in the collection during iteration
-    /// </summary>
-    protected virtual string? EachVariableName { get; set; }
-
-    /// <summary>
-    /// Gets/sets the runtime expression used to get the collection to iterate over
-    /// </summary>
-    protected virtual string? InExpression { get; set; }
-
-    /// <summary>
-    /// Gets/sets the name of the variable used to hold the index of each element in the collection during iteration
-    /// </summary>
-    protected virtual string? AtVariableName { get; set; }
-
-    /// <summary>
-    /// Gets/sets a name/definition map of the tasks to perform for each element in the collection to enumerate
-    /// </summary>
-    protected virtual Map<string, TaskDefinition>? Tasks { get; set; }
+    string? eachVariableName;
+    string? inExpression;
+    string? atVariableName;
+    Map<string, TaskDefinition>? tasks;
 
     /// <inheritdoc/>
-    public virtual IForTaskDefinitionBuilder Each(string variableName)
+    public IForTaskDefinitionBuilder Each(string variableName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(variableName);
-        this.EachVariableName = variableName;
+        eachVariableName = variableName;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IForTaskDefinitionBuilder In(string expression)
+    public IForTaskDefinitionBuilder In(string expression)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(expression);
-        this.InExpression = expression;
+        inExpression = expression;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IForTaskDefinitionBuilder At(string variableName)
+    public IForTaskDefinitionBuilder At(string variableName)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(variableName);
-        this.AtVariableName = variableName;
+        atVariableName = variableName;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IForTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
+    public IForTaskDefinitionBuilder Do(Action<ITaskDefinitionMapBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new TaskDefinitionMapBuilder();
         setup(builder);
-        this.Tasks = builder.Build();
+        tasks = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
     public override ForTaskDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(this.EachVariableName)) throw new NullReferenceException("The variable name used to store the iterated items must be set");
-        if (string.IsNullOrWhiteSpace(this.InExpression)) throw new NullReferenceException("The runtime expression used to resolve the collection to iterate must be set");
-        if (this.Tasks == null || this.Tasks.Count < 1) throw new NullReferenceException("The task to perform at each iteration must be set");
-        return this.Configure(new()
+        if (string.IsNullOrWhiteSpace(eachVariableName)) throw new NullReferenceException("The variable name used to store the iterated items must be set");
+        if (string.IsNullOrWhiteSpace(inExpression)) throw new NullReferenceException("The runtime expression used to resolve the collection to iterate must be set");
+        if (tasks == null || tasks.Count < 1) throw new NullReferenceException("The task to perform at each iteration must be set");
+        return Configure(new()
         {
             For = new()
             {
-                Each = this.EachVariableName,
-                In = this.InExpression,
-                At = this.AtVariableName
+                Each = eachVariableName,
+                In = inExpression,
+                At = atVariableName
             },
-            Do = this.Tasks
+            Do = tasks
         });
     }
 

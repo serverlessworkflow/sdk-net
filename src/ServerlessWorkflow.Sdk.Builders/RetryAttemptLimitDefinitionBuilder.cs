@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -14,41 +14,34 @@
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
-/// Represents the default <see cref="IRetryAttemptLimitDefinitionBuilder"/> implementation
+/// Represents the default implementation of the <see cref="IRetryAttemptLimitDefinitionBuilder"/> interface
 /// </summary>
-public class RetryAttemptLimitDefinitionBuilder
+public sealed class RetryAttemptLimitDefinitionBuilder
     : IRetryAttemptLimitDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the maximum attempts count
-    /// </summary>
-    protected uint? AttemptCount { get; set; }
-
-    /// <summary>
-    /// Gets/sets the duration limit, if any, for all retry attempts
-    /// </summary>
-    protected Duration? AttemptDuration { get; set; }
+    uint? attemptCount;
+    Duration? attemptDuration;
 
     /// <inheritdoc/>
-    public virtual IRetryAttemptLimitDefinitionBuilder Count(uint count)
+    public IRetryAttemptLimitDefinitionBuilder Count(uint count)
     {
-        this.AttemptCount = count;
+        attemptCount = count;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IRetryAttemptLimitDefinitionBuilder Duration(Duration duration)
+    public IRetryAttemptLimitDefinitionBuilder Duration(Duration duration)
     {
-        this.AttemptDuration = duration;
+        attemptDuration = duration;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual RetryAttemptLimitDefinition Build() => new()
+    public RetryAttemptLimitDefinition Build() => new()
     {
-        Count = AttemptCount,
-        Duration = AttemptDuration
+        Count = attemptCount,
+        Duration = attemptDuration
     };
 
 }

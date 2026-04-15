@@ -33,6 +33,11 @@ public static class EventReadMode
     public const string Raw = "raw";
 
     /// <summary>
+    /// Gets an <see cref="IEnumerable{T}"/> containing all supported event read modes
+    /// </summary>
+    public static readonly IEnumerable<string> All = AsEnumerable();
+
+    /// <summary>
     /// Gets a new <see cref="IEnumerable{T}"/> containing all supported event read modes
     /// </summary>
     /// <returns>A new <see cref="IEnumerable{T}"/> containing all supported event read modes</returns>

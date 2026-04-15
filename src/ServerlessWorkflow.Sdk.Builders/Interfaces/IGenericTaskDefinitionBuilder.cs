@@ -98,7 +98,7 @@ public interface IGenericTaskDefinitionBuilder
     /// </summary>
     /// <param name="variables">A name/value mapping of the variables to set. Supports runtime expressions</param>
     /// <returns>A new <see cref="ISetTaskDefinitionBuilder"/></returns>
-    ISetTaskDefinitionBuilder Set(IDictionary<string, object>? variables = null);
+    ISetTaskDefinitionBuilder Set(JsonObject? variables = null);
 
     /// <summary>
     /// Configures the task to branch the flow based on defined conditions

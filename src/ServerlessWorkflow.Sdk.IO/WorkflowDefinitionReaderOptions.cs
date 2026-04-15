@@ -16,27 +16,27 @@ namespace ServerlessWorkflow.Sdk.IO;
 /// <summary>
 /// Represents the options used to configure an <see cref="IWorkflowDefinitionReader"/>
 /// </summary>
-public class WorkflowDefinitionReaderOptions
+public sealed class WorkflowDefinitionReaderOptions
 {
 
     /// <summary>
     /// Gets/sets the base <see cref="Uri"/> to use to combine to relative <see cref="Uri"/>s when the <see cref="RelativeUriResolutionMode"/> property is set to <see cref="RelativeUriReferenceResolutionMode.ConvertToAbsolute"/>
     /// </summary>
-    public virtual Uri? BaseUri { get; set; }
+    public Uri? BaseUri { get; set; }
 
     /// <summary>
     /// Gets/sets the base directory to use when resolving relative <see cref="Uri"/> when the <see cref="RelativeUriResolutionMode"/> property is set to <see cref="RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath"/>. Defaults to <see cref="AppContext.BaseDirectory"/>
     /// </summary>
-    public virtual string BaseDirectory { get; set; } = AppContext.BaseDirectory;
+    public string BaseDirectory { get; set; } = AppContext.BaseDirectory;
 
     /// <summary>
     /// Gets/sets the <see cref="RelativeUriReferenceResolutionMode"/> to use. Defaults to <see cref="RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath"/>
     /// </summary>
-    public virtual string RelativeUriResolutionMode { get; set; } = RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath;
+    public string RelativeUriResolutionMode { get; set; } = RelativeUriReferenceResolutionMode.ConvertToRelativeFilePath;
 
     /// <summary>
     /// Gets/sets a boolean indicating whether or not to load external definitions
     /// </summary>
-    public virtual bool LoadExternalDefinitions { get; set; }
+    public bool LoadExternalDefinitions { get; set; }
 
 }

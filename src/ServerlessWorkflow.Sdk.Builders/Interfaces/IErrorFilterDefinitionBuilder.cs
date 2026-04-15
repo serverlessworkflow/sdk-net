@@ -25,14 +25,14 @@ public interface IErrorFilterDefinitionBuilder
     /// <param name="name">The name of the attribute to filter errors by</param>
     /// <param name="value">The value of the attribute to filter errors by. Supports runtime expressions</param>
     /// <returns>The configured <see cref="IErrorFilterDefinitionBuilder"/></returns>
-    IErrorFilterDefinitionBuilder With(string name, object value);
+    IErrorFilterDefinitionBuilder With(string name, JsonNode value);
 
     /// <summary>
     /// Sets a name/value mapping of the attributes to filter errors by
     /// </summary>
     /// <param name="attributes">A name/value mapping of the attributes to filter errors by. Supports runtime expressions</param>
     /// <returns>The configured <see cref="IErrorFilterDefinitionBuilder"/></returns>
-    IErrorFilterDefinitionBuilder With(IDictionary<string, object> attributes);
+    IErrorFilterDefinitionBuilder With(JsonObject attributes);
 
     /// <summary>
     /// Builds the configured <see cref="ErrorFilterDefinition"/>

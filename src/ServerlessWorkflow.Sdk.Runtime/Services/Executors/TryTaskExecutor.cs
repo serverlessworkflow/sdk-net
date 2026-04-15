@@ -1,0 +1,137 @@
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+namespace ServerlessWorkflow.Sdk.Runtime.Services.Executors;
+
+/// <summary>
+/// Represents an <see cref="ITaskExecutor"/> implementation used to execute <see cref="TryTaskDefinition"/>s
+/// </summary>
+/// <param name="serviceProvider">The current <see cref="IServiceProvider"/></param>
+/// <param name="logger">The service used to perform logging</param>
+/// <param name="executionContextFactory">The service used to create <see cref="ITaskExecutionContext"/>s</param>
+/// <param name="executorFactory">The service used to create <see cref="ITaskExecutor"/>s</param>
+/// <param name="schemaHandlerProvider">The service used to provide <see cref="ISchemaHandler"/> implementations</param>
+/// <param name="task">The current <see cref="ITaskExecutionContext"/></param>
+public sealed class TryTaskExecutor(IServiceProvider serviceProvider, ILogger<TryTaskExecutor> logger, ITaskExecutionContextFactory executionContextFactory, ITaskExecutorFactory executorFactory, ISchemaHandlerProvider schemaHandlerProvider, ITaskExecutionContext<TryTaskDefinition> task)
+    : TaskExecutor<TryTaskDefinition>(serviceProvider, logger, executionContextFactory, executorFactory, schemaHandlerProvider, task)
+{
+
+    /// <inheritdoc/>
+    protected override async Task ExecuteCoreAsync(CancellationToken cancellationToken)
+    {
+        var taskDefinition = new DoTaskDefinition() { Do = Task.Definition.Try };
+        var tryInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, JsonPointer.Create("try"), Task.Instance.Input, Task, false, cancellationToken).ConfigureAwait(false);
+        var executor = await CreateTryExecutorAsync(tryInstance, taskDefinition, cancellationToken).ConfigureAwait(false);
+        await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    protected override async Task RetryCoreAsync(Error cause, CancellationToken cancellationToken)
+    {
+        var taskDefinition = new DoTaskDefinition() { Do = Task.Definition.Try };
+        var retryInstance = await Task.Workflow.CreateTaskAsync(taskDefinition, JsonPointer.Create("retry", "try"), Task.Instance.Input, Task, false, cancellationToken).ConfigureAwait(false);
+        var executor = await CreateTryExecutorAsync(retryInstance, taskDefinition, cancellationToken).ConfigureAwait(false);
+        await executor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    async Task<ITaskExecutor> CreateTryExecutorAsync(ITaskInstance instance, TaskDefinition definition, CancellationToken cancellationToken)
+    {
+        var executor = await base.CreateTaskExecutorAsync(instance, definition, Task.Workflow.Instance.ContextData, Task.Arguments, cancellationToken).ConfigureAwait(false);
+        executor.SubscribeAsync(
+            _ => System.Threading.Tasks.Task.CompletedTask,
+            async ex => await OnTryFaultedAsync(executor, ex, CancellationTokenSource?.Token ?? default).ConfigureAwait(false),
+            async () => await OnTryCompletedAsync(executor, CancellationTokenSource?.Token ?? default).ConfigureAwait(false)
+        );
+        return executor;
+    }
+
+    async Task OnTryFaultedAsync(ITaskExecutor executor, Exception ex, CancellationToken cancellationToken)
+    {
+        var error = ex is RuntimeErrorException errorEx ? errorEx.Error : new Error()
+        {
+            Status = ErrorStatus.Runtime,
+            Type = ErrorType.Runtime,
+            Title = ErrorTitle.Runtime,
+            Detail = ex.Message
+        };
+        Executors.Remove(executor);
+        var hasRetryPolicy = Task.Definition.Catch.Retry != null;
+        if (hasRetryPolicy)
+        {
+            var retryPolicy = Task.Definition.Catch.Retry!.Match(
+                policy => policy,
+                reference =>
+                {
+                    if (Task.Workflow.Definition.Use?.Retries?.TryGetValue(reference, out var referencedRetry) == true) return referencedRetry;
+                    return null;
+                }
+            );
+            if (retryPolicy != null)
+            {
+                var limit = retryPolicy.Limit;
+                var limitReached = false;
+                if (limit?.Attempt?.Count != null)
+                {
+                    var retryCount = 0;
+                    await foreach (var subtask in Task.GetSubTasksAsync(cancellationToken).ConfigureAwait(false)) if (subtask.Name?.StartsWith("retry") == true) retryCount++;
+                    if (retryCount >= limit.Attempt.Count) limitReached = true;
+                }
+                if (limitReached) await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
+                else await RetryAsync(error, cancellationToken).ConfigureAwait(false);
+                return;
+            }
+        }
+        if (Task.Definition.Catch.Do != null)
+        {
+            var handlerDefinition = new DoTaskDefinition() { Do = Task.Definition.Catch.Do };
+            var handlerInstance = await Task.Workflow.CreateTaskAsync(handlerDefinition, JsonPointer.Create("catch", "do"), Task.Instance.Input, Task, false, cancellationToken).ConfigureAwait(false);
+            var arguments = Task.Arguments?.DeepClone().AsObject()! ?? [];
+            arguments[Task.Definition.Catch.As ?? RuntimeExpressions.Arguments.Error] = JsonSerializer.SerializeToNode(error)!;
+            var handlerExecutor = await base.CreateTaskExecutorAsync(handlerInstance, handlerDefinition, Task.Workflow.Instance.ContextData, arguments, cancellationToken).ConfigureAwait(false);
+            handlerExecutor.SubscribeAsync(
+                _ => System.Threading.Tasks.Task.CompletedTask,
+                async handlerEx => await OnHandlerFaultAsync(handlerExecutor, cancellationToken).ConfigureAwait(false),
+                async () => await OnHandlerCompletedAsync(handlerExecutor, cancellationToken).ConfigureAwait(false)
+            );
+            await handlerExecutor.ExecuteAsync(cancellationToken).ConfigureAwait(false);
+            return;
+        }
+        await SetResultAsync(null, Task.Definition.Then, cancellationToken).ConfigureAwait(false);
+    }
+
+    async Task OnTryCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
+    {
+        if (Task.Workflow.Instance.ContextData != executor.Task.Workflow.Instance.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.Instance.ContextData, cancellationToken).ConfigureAwait(false);
+        var output = executor.Task.Instance.Output ?? new JsonObject();
+        Executors.Remove(executor);
+        var then = executor.Task.Instance.Next == FlowDirective.End ? FlowDirective.End : Task.Definition.Then;
+        await SetResultAsync(output, then, cancellationToken).ConfigureAwait(false);
+    }
+
+    async Task OnHandlerFaultAsync(ITaskExecutor executor, CancellationToken cancellationToken)
+    {
+        var error = executor.Task.Instance.Error ?? throw new NullReferenceException();
+        Executors.Remove(executor);
+        await SetErrorAsync(error, cancellationToken).ConfigureAwait(false);
+    }
+
+    async Task OnHandlerCompletedAsync(ITaskExecutor executor, CancellationToken cancellationToken)
+    {
+        if (Task.Workflow.Instance.ContextData != executor.Task.Workflow.Instance.ContextData) await Task.SetContextDataAsync(executor.Task.Workflow.Instance.ContextData, cancellationToken).ConfigureAwait(false);
+        var output = executor.Task.Instance.Output ?? new JsonObject();
+        Executors.Remove(executor);
+        var then = executor.Task.Instance.Next == FlowDirective.End ? FlowDirective.End : Task.Definition.Then;
+        await SetResultAsync(output, then, cancellationToken).ConfigureAwait(false);
+    }
+
+}

@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -12,134 +12,110 @@
 // limitations under the License.
 
 using ServerlessWorkflow.Sdk.Models.Processes;
-using Neuroglia;
 
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IContainerProcessDefinitionBuilder"/> interface
 /// </summary>
-public class ContainerProcessDefinitionBuilder
+public sealed class ContainerProcessDefinitionBuilder
     : ProcessDefinitionBuilder<ContainerProcessDefinition>, IContainerProcessDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the name of the container image to run
-    /// </summary>
-    protected virtual string? Image { get; set; }
-
-    /// <summary>
-    /// Gets/sets the name of the container to run
-    /// </summary>
-    protected virtual string? Name { get; set; }
-
-    /// <summary>
-    /// Gets/sets the command, if any, to execute on the container
-    /// </summary>
-    protected virtual string? Command { get; set; }
-
-    /// <summary>
-    /// Gets/sets a list containing the container's port mappings, if any
-    /// </summary>
-    protected virtual EquatableDictionary<ushort, ushort>? Ports { get; set; }
-
-    /// <summary>
-    /// Gets/sets the volumes mapping for the container, if any
-    /// </summary>
-    protected virtual EquatableDictionary<string, string>? Volumes { get; set; }
-
-    /// <summary>
-    /// Gets/sets a key/value mapping of the environment variables, if any, to use when running the configured process
-    /// </summary>
-    protected virtual EquatableDictionary<string, string>? Environment { get; set; }
+    string? image;
+    string? name;
+    string? command;
+    EquatableDictionary<ushort, ushort>? ports;
+    EquatableDictionary<string, string>? volumes;
+    EquatableDictionary<string, string>? environment;
 
     /// <inheritdoc/>
-    public virtual IContainerProcessDefinitionBuilder WithImage(string image)
+    public IContainerProcessDefinitionBuilder WithImage(string image)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(image);
-        this.Image = image;
+        this.image = image;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IContainerProcessDefinitionBuilder WithName(string name)
+    public IContainerProcessDefinitionBuilder WithName(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        this.Name = name;
+        this.name = name;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IContainerProcessDefinitionBuilder WithCommand(string command)
+    public IContainerProcessDefinitionBuilder WithCommand(string command)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(command);
-        this.Command = command;
+        this.command = command;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IContainerProcessDefinitionBuilder WithPort(ushort hostPort, ushort containerPort)
+    public IContainerProcessDefinitionBuilder WithPort(ushort hostPort, ushort containerPort)
     {
-        this.Ports ??= [];
-        this.Ports[hostPort] = containerPort;
+        ports ??= [];
+        ports[hostPort] = containerPort;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IContainerProcessDefinitionBuilder WithPorts(IDictionary<ushort, ushort> portMapping)
+    public IContainerProcessDefinitionBuilder WithPorts(IDictionary<ushort, ushort> portMapping)
     {
         ArgumentNullException.ThrowIfNull(portMapping);
-        this.Ports = new(portMapping);
+        ports = [.. portMapping];
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IContainerProcessDefinitionBuilder WithVolume(string key, string value)
+    public IContainerProcessDefinitionBuilder WithVolume(string key, string value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(key);
-        this.Volumes ??= [];
-        this.Volumes[key] = value;
+        volumes ??= [];
+        volumes[key] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IContainerProcessDefinitionBuilder WithVolumes(IDictionary<string, string> volumes)
+    public IContainerProcessDefinitionBuilder WithVolumes(IDictionary<string, string> volumes)
     {
         ArgumentNullException.ThrowIfNull(volumes);
-        this.Volumes = new(volumes);
+        this.volumes = [.. volumes];
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IContainerProcessDefinitionBuilder WithEnvironment(string name, string value)
+    public IContainerProcessDefinitionBuilder WithEnvironment(string name, string value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
         ArgumentException.ThrowIfNullOrWhiteSpace(value);
-        this.Environment ??= [];
-        this.Environment[name] = value;
+        environment ??= [];
+        environment[name] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IContainerProcessDefinitionBuilder WithEnvironment(IDictionary<string, string> environment)
+    public IContainerProcessDefinitionBuilder WithEnvironment(IDictionary<string, string> environment)
     {
         ArgumentNullException.ThrowIfNull(environment);
-        this.Environment = new(environment);
+        this.environment = [.. environment];
         return this;
     }
 
     /// <inheritdoc/>
     public override ContainerProcessDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(this.Image)) throw new NullReferenceException("The image of the container to run must be set");
+        if (string.IsNullOrWhiteSpace(image)) throw new NullReferenceException("The image of the container to run must be set");
         return new()
         {
-            Image = this.Image,
-            Name = this.Name,
-            Command = this.Command,
-            Ports = this.Ports,
-            Volumes = this.Volumes,
-            Environment = this.Environment
+            Image = image,
+            Name = name,
+            Command = command,
+            Ports = ports,
+            Volumes = volumes,
+            Environment = environment
         };
     }
 

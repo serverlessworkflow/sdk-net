@@ -16,20 +16,23 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of a case within a switch task, defining a condition and corresponding tasks to execute if the condition is met
 /// </summary>
+[Description("Represents the definition of a case within a switch task, defining a condition and corresponding tasks to execute if the condition is met")]
 [DataContract]
-public record SwitchCaseDefinition
+public sealed record SwitchCaseDefinition
 {
 
     /// <summary>
     /// Gets/sets the condition that determines whether or not the case should be executed in a switch task
     /// </summary>
-    [DataMember(Name = "when", Order = 1), JsonPropertyName("when"), JsonPropertyOrder(1), YamlMember(Alias = "when", Order = 1)]
-    public virtual string? When { get; set; }
+    [Description("The condition that determines whether or not the case should be executed in a switch task")]
+    [DataMember(Order = 1, Name = "when"), JsonPropertyOrder(1), JsonPropertyName("when")]
+    public string? When { get; init; }
 
     /// <summary>
     /// Gets/sets the transition to perform when the case matches
     /// </summary>
-    [DataMember(Name = "then", Order = 2), JsonPropertyName("then"), JsonPropertyOrder(2), YamlMember(Alias = "then", Order = 2)]
-    public virtual string? Then { get; set; }
+    [Description("The transition to perform when the case matches")]
+    [DataMember(Order = 2, Name = "then"), JsonPropertyOrder(2), JsonPropertyName("then")]
+    public string? Then { get; init; }
 
 }

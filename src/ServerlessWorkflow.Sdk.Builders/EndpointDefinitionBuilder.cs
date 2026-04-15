@@ -16,69 +16,67 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IEndpointDefinitionBuilder"/> interface
 /// </summary>
-public class EndpointDefinitionBuilder
+public sealed class EndpointDefinitionBuilder
     : IEndpointDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the uri that references the external resource
-    /// </summary>
-    protected virtual Uri? Uri { get; set; }
-
-    /// <summary>
-    /// Gets/sets a reference to the authentication policy to use
-    /// </summary>
-    protected virtual Uri? AuthenticationReference { get; set; }
-
-    /// <summary>
-    /// Gets/sets the authentication policy to use
-    /// </summary>
-    protected virtual AuthenticationPolicyDefinition? Authentication { get; set; }
+    Uri? uri;
+    Uri? authenticationReference;
+    AuthenticationPolicyDefinition? authentication;
 
     /// <inheritdoc/>
-    public virtual IEndpointDefinitionBuilder WithUri(Uri uri)
+    public IEndpointDefinitionBuilder WithUri(Uri uri)
     {
         ArgumentNullException.ThrowIfNull(uri);
-        this.Uri = uri;
+        this.uri = uri;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IEndpointDefinitionBuilder UseAuthentication(Uri reference)
+    public IEndpointDefinitionBuilder UseAuthentication(Uri reference)
     {
         ArgumentNullException.ThrowIfNull(reference);
-        this.AuthenticationReference = reference;
+        authenticationReference = reference;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IEndpointDefinitionBuilder UseAuthentication(AuthenticationPolicyDefinition authentication)
+    public IEndpointDefinitionBuilder UseAuthentication(AuthenticationPolicyDefinition authentication)
     {
         ArgumentNullException.ThrowIfNull(authentication);
-        this.Authentication = authentication;
+        this.authentication = authentication;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IEndpointDefinitionBuilder UseAuthentication(Action<IAuthenticationPolicyDefinitionBuilder> setup)
+    public IEndpointDefinitionBuilder UseAuthentication(Action<IAuthenticationPolicyDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new AuthenticationPolicyDefinitionBuilder();
         setup(builder);
-        this.Authentication = builder.Build();
+        authentication = builder.Build();
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual EndpointDefinition Build()
+    public EndpointDefinition Build()
     {
-        if (this.Uri == null) throw new NullReferenceException("The uri that references the external resource must be set");
+        if (uri == null) throw new NullReferenceException("The uri that references the external resource must be set");
         var endpoint = new EndpointDefinition()
         {
-            Uri = this.Uri
+            Uri = uri
         };
-        if (this.AuthenticationReference == null) endpoint.Authentication = new() { Ref = this.AuthenticationReference };
-        else if (this.Authentication != null) endpoint.Authentication = this.Authentication;
+        if (authenticationReference == null) endpoint = endpoint with
+        {
+            Authentication = new()
+            {
+                Ref = authenticationReference
+            }
+        };
+        else if (authentication != null) endpoint = endpoint with
+        {
+            Authentication = authentication
+        };
         return endpoint;
     }
 

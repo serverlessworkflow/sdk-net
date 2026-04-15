@@ -19,7 +19,7 @@ namespace ServerlessWorkflow.Sdk;
 public static class NamingConvention
 {
 
-    static readonly int _nameMaxLength = 63;
+    static readonly int maxLength = 63;
 
     /// <summary>
     /// Determines whether or not the specified value is a valid name, following <see href="https://datatracker.ietf.org/doc/html/rfc1123">RFC 1123</see> DNS label name
@@ -29,9 +29,8 @@ public static class NamingConvention
     public static bool IsValidName(string name)
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
-        return name.Length <= _nameMaxLength
-            && name.IsLowercased()
-            && name.IsAlphanumeric('-')
+        return name.Length <= maxLength
+            && name.All(c => char.IsDigit(c) || c == '-' || (char.IsLetter(c) && char.IsLower(c)))
             && char.IsLetterOrDigit(name.First())
             && char.IsLetterOrDigit(name.Last());
     }

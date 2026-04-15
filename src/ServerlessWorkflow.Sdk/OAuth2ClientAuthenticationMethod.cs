@@ -41,6 +41,11 @@ public static class OAuth2ClientAuthenticationMethod
     public const string None = "none";
 
     /// <summary>
+    /// Gets an <see cref="IEnumerable{T}"/> containing all supported values
+    /// </summary>
+    public static readonly IEnumerable<string> All = AsEnumerable();
+
+    /// <summary>
     /// Gets a new <see cref="IEnumerable{T}"/> containing all supported values
     /// </summary>
     /// <returns>A new <see cref="IEnumerable{T}"/> containing all supported values</returns>

@@ -16,7 +16,7 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="ICertificateAuthenticationSchemeDefinitionBuilder"/> interface
 /// </summary>
-public class CertificateAuthenticationSchemeDefinitionBuilder
+public sealed class CertificateAuthenticationSchemeDefinitionBuilder
     : AuthenticationSchemeDefinitionBuilder<CertificateAuthenticationSchemeDefinition>, ICertificateAuthenticationSchemeDefinitionBuilder
 {
 
@@ -25,10 +25,10 @@ public class CertificateAuthenticationSchemeDefinitionBuilder
     {
         return new()
         {
-            Use = this.Secret
+            Use = Secret
         };
     }
 
-    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => this.Build();
+    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => Build();
 
 }

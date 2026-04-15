@@ -16,34 +16,37 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IOutputDataModelDefinitionBuilder"/> interface
 /// </summary>
-public class OutputDataModelDefinitionBuilder
+public sealed class OutputDataModelDefinitionBuilder
     : IOutputDataModelDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the <see cref="OutputDataModelDefinition"/> to configure
-    /// </summary>
-    protected OutputDataModelDefinition Output { get; } = new();
+    OutputDataModelDefinition output = new();
 
     /// <inheritdoc/>
-    public virtual IOutputDataModelDefinitionBuilder As(object expression)
+    public IOutputDataModelDefinitionBuilder As(OneOf<JsonObject, string> expression)
     {
         ArgumentNullException.ThrowIfNull(expression);
-        this.Output.As = expression;
+        output = output with
+        {
+            As = expression
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IOutputDataModelDefinitionBuilder WithSchema(Action<ISchemaDefinitionBuilder> setup)
+    public IOutputDataModelDefinitionBuilder WithSchema(Action<ISchemaDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new SchemaDefinitionBuilder();
         setup(builder);
-        this.Output.Schema = builder.Build();
+        output = output with
+        {
+            Schema = builder.Build()
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual OutputDataModelDefinition Build() => this.Output;
+    public OutputDataModelDefinition Build() => output;
 
 }

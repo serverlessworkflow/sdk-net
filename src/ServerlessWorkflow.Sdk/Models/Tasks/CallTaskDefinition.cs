@@ -16,32 +16,36 @@ namespace ServerlessWorkflow.Sdk.Models.Tasks;
 /// <summary>
 /// Represents the definition of a task used to call a predefined function
 /// </summary>
+[Description("Represents the definition of a task used to call a predefined function")]
 [DataContract]
-public record CallTaskDefinition
+public sealed record CallTaskDefinition
     : TaskDefinition
 {
 
     /// <inheritdoc/>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    [IgnoreDataMember, JsonIgnore]
     public override string Type => TaskType.Call;
 
     /// <summary>
     /// Gets/sets the reference to the function to call
     /// </summary>
+    [Description("The reference to the function to call")]
     [Required, MinLength(1)]
-    [DataMember(Name = "call", Order = 1), JsonPropertyName("call"), JsonPropertyOrder(1), YamlMember(Alias = "call", Order = 1)]
-    public required virtual string Call { get; set; }
+    [DataMember(Order = 1, Name = "call"), JsonPropertyOrder(1), JsonPropertyName("call")]
+    public required string Call { get; init; }
 
     /// <summary>
-    /// Gets/sets a key/value mapping of the call's arguments
+    /// Gets/sets a key/value mapping, if any, of the call's arguments
     /// </summary>
-    [DataMember(Name = "with", Order = 2), JsonPropertyName("with"), JsonPropertyOrder(2), YamlMember(Alias = "with", Order = 2)]
-    public virtual EquatableDictionary<string, object>? With { get; set; }
+    [Description("A key/value mapping, if any, of the call's arguments")]
+    [DataMember(Order = 2, Name = "with"), JsonPropertyOrder(2), JsonPropertyName("with")]
+    public JsonObject? With { get; init; }
 
     /// <summary>
     /// Gets/sets a boolean indicating whether or not to wait for the called function to return. Defaults to true.
     /// </summary>
-    [DataMember(Name = "await", Order = 3), JsonPropertyName("await"), JsonPropertyOrder(3), YamlMember(Alias = "await", Order = 3)]
-    public virtual bool? Await { get; set; }
+    [Description("A boolean indicating whether or not to wait for the called function to return. Defaults to true.")]
+    [DataMember(Order = 3, Name = "await"), JsonPropertyOrder(3), JsonPropertyName("await")]
+    public bool? Await { get; init; }
 
 }

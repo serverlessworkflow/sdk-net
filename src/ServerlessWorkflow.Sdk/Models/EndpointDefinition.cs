@@ -16,21 +16,24 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of an endpoint
 /// </summary>
+[Description("Represents the definition of an endpoint")]
 [DataContract]
-public record EndpointDefinition
+public sealed record EndpointDefinition
 {
 
     /// <summary>
     /// Gets/sets the endpoint's uri
     /// </summary>
+    [Description("The endpoint's uri")]
     [Required]
-    [DataMember(Name = "uri", Order = 1), JsonPropertyName("uri"), JsonPropertyOrder(1), YamlMember(Alias = "uri", Order = 1)]
-    public required virtual Uri Uri { get; set; }
+    [DataMember(Order = 1, Name = "uri"), JsonPropertyOrder(1), JsonPropertyName("uri")]
+    public required Uri Uri { get; init; }
 
     /// <summary>
     /// Gets/sets the endpoint's authentication policy, if any
     /// </summary>
-    [DataMember(Name = "authentication", Order = 2), JsonPropertyName("authentication"), JsonPropertyOrder(2), YamlMember(Alias = "authentication", Order = 2)]
-    public virtual AuthenticationPolicyDefinition? Authentication { get; set; }
+    [Description("The endpoint's authentication policy, if any")]
+    [DataMember(Order = 2, Name = "authentication"), JsonPropertyOrder(2), JsonPropertyName("authentication")]
+    public AuthenticationPolicyDefinition? Authentication { get; init; }
 
 }

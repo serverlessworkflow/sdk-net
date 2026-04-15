@@ -16,20 +16,23 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the configuration of the limits of a retry policy
 /// </summary>
+[Description("Represents the configuration of the limits of a retry policy")]
 [DataContract]
-public record RetryPolicyLimitDefinition
+public sealed record RetryPolicyLimitDefinition
 {
 
     /// <summary>
     /// Gets/sets the definition of the limits for all retry attempts of a given policy
     /// </summary>
-    [DataMember(Name = "attempt", Order = 1), JsonPropertyName("attempt"), JsonPropertyOrder(1), YamlMember(Alias = "attempt", Order = 1)]
-    public virtual RetryAttemptLimitDefinition? Attempt { get; set; }
+    [Description("The definition of the limits for all retry attempts of a given policy")]
+    [DataMember(Order = 1, Name = "attempt"), JsonPropertyOrder(1), JsonPropertyName("attempt")]
+    public RetryAttemptLimitDefinition? Attempt { get; init; }
 
     /// <summary>
     /// Gets/sets the maximum duration, if any, during which to retry a given task
     /// </summary>
-    [DataMember(Name = "duration", Order = 2), JsonPropertyName("duration"), JsonPropertyOrder(2), YamlMember(Alias = "duration", Order = 2)]
-    public virtual Duration? Duration { get; set; }
+    [Description("The maximum duration, if any, during which to retry a given task")]
+    [DataMember(Order = 2, Name = "duration"), JsonPropertyOrder(2), JsonPropertyName("duration")]
+    public Duration? Duration { get; init; }
 
 }

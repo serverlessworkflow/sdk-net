@@ -11,29 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Serialization;
-
 namespace ServerlessWorkflow.Sdk.IO;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IWorkflowDefinitionWriter"/> interface
 /// </summary>
-/// /// <param name="jsonSerializer">The service used to serialize/deserialize objects to/from JSON</param>
-/// <param name="yamlSerializer">The service used to serialize/deserialize objects to/from JSON</param>
-public class WorkflowDefinitionWriter(IJsonSerializer jsonSerializer, IYamlSerializer yamlSerializer)
+public class WorkflowDefinitionWriter
     : IWorkflowDefinitionWriter
 {
-
-    /// <summary>
-    /// Gets the service used to serialize/deserialize objects to/from JSON
-    /// </summary>
-    protected IJsonSerializer JsonSerializer { get; } = jsonSerializer;
-
-    /// <summary>
-    /// Gets the service used to serialize/deserialize objects to/from YAML
-    /// </summary>
-    protected IYamlSerializer YamlSerializer { get; } = yamlSerializer;
 
     /// <inheritdoc/>
     public virtual async Task WriteAsync(WorkflowDefinition workflow, Stream stream, string format = WorkflowDefinitionFormat.Yaml, CancellationToken cancellationToken = default)
@@ -42,8 +27,8 @@ public class WorkflowDefinitionWriter(IJsonSerializer jsonSerializer, IYamlSeria
         ArgumentNullException.ThrowIfNull(stream);
         var input = format switch
         {
-            WorkflowDefinitionFormat.Json => this.JsonSerializer.SerializeToText(workflow),
-            WorkflowDefinitionFormat.Yaml => this.YamlSerializer.SerializeToText(workflow),
+            WorkflowDefinitionFormat.Json => JsonSerializer.Serialize(workflow, JsonSerializationContext.Default.WorkflowDefinition),
+            WorkflowDefinitionFormat.Yaml => YamlSerializer.Serialize(workflow, JsonSerializationContext.Default.Options),
             _ => throw new NotSupportedException($"The specified workflow definition format '{format}' is not supported"),
         };
         using var streamWriter = new StreamWriter(stream, leaveOpen: true);

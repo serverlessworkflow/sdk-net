@@ -16,92 +16,74 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of a workflow
 /// </summary>
+[Description("Represents the definition of a workflow.")]
 [DataContract]
-public record WorkflowDefinition
+public sealed record WorkflowDefinition
 {
 
     /// <summary>
     /// Gets/sets an object used to document the defined workflow
     /// </summary>
+    [Description("An object used to document the defined workflow.")]
     [Required]
-    [DataMember(Name = "document", Order = 1), JsonPropertyName("document"), JsonPropertyOrder(1), YamlMember(Alias = "document", Order = 1)]
-    public required virtual WorkflowDefinitionMetadata Document { get; set; }
+    [DataMember(Order = 1, Name = "document"), JsonPropertyOrder(1), JsonPropertyName("document")]
+    public required WorkflowDefinitionMetadata Document { get; init; }
 
     /// <summary>
     /// Gets/sets the workflow's input definition, if any
     /// </summary>
-    [DataMember(Name = "input", Order = 2), JsonPropertyName("input"), JsonPropertyOrder(2), YamlMember(Alias = "input", Order = 3)]
-    public virtual InputDataModelDefinition? Input { get; set; }
+    [Description("The workflow's input definition, if any.")]
+    [DataMember(Order = 2, Name = "input"), JsonPropertyOrder(2), JsonPropertyName("input")]
+    public InputDataModelDefinition? Input { get; init; }
 
     /// <summary>
     /// Gets/sets a collection that contains reusable components for the workflow definition
     /// </summary>
-    [DataMember(Name = "use", Order = 3), JsonPropertyName("use"), JsonPropertyOrder(3), YamlMember(Alias = "use", Order = 3)]
-    public virtual ComponentDefinitionCollection? Use { get; set; }
+    [Description("A collection that contains reusable components for the workflow definition.")]
+    [DataMember(Order = 3, Name = "use"), JsonPropertyOrder(3), JsonPropertyName("use")]
+    public ComponentDefinitionCollection? Use { get; init; }
 
     /// <summary>
     /// Gets/sets the workflow's timeout, if any
     /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual TimeoutDefinition? Timeout
-    {
-        get => this.TimeoutValue?.T1Value;
-        set
-        {
-            ArgumentNullException.ThrowIfNull(value);
-            this.TimeoutValue = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets/sets the reference to the workflow's timeout, if any
-    /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual string? TimeoutReference
-    {
-        get => this.TimeoutValue?.T2Value;
-        set
-        {
-            ArgumentException.ThrowIfNullOrWhiteSpace(value);
-            this.TimeoutValue = value;
-        }
-    }
-
-    /// <summary>
-    /// Gets/sets the workflow's timeout, if any
-    /// </summary>
-    [DataMember(Name = "timeout", Order = 4), JsonPropertyName("timeout"), JsonPropertyOrder(4), YamlMember(Alias = "timeout", Order = 4)]
-    protected virtual OneOf<TimeoutDefinition, string>? TimeoutValue { get; set; } = null!;
+    [Description("The workflow's timeout, if any.")]
+    [DataMember(Order = 4, Name = "timeout"), JsonPropertyOrder(4), JsonPropertyName("timeout"), JsonConverter(typeof(OneOfJsonConverter<TimeoutDefinition, string>))]
+    public OneOf<TimeoutDefinition, string>? Timeout { get; init; } = null!;
 
     /// <summary>
     /// Gets/sets the workflow's output definition, if any
     /// </summary>
-    [DataMember(Name = "output", Order = 5), JsonPropertyName("output"), JsonPropertyOrder(5), YamlMember(Alias = "output", Order = 5)]
-    public virtual OutputDataModelDefinition? Output { get; set; }
+    [Description("The workflow's output definition, if any.")]
+    [DataMember(Order = 5, Name = "output"), JsonPropertyOrder(5), JsonPropertyName("output")]
+    public OutputDataModelDefinition? Output { get; init; }
 
     /// <summary>
     /// Gets/sets the definition of the workflow's schedule, if any
     /// </summary>
-    [DataMember(Name = "schedule", Order = 6), JsonPropertyName("schedule"), JsonPropertyOrder(6), YamlMember(Alias = "schedule", Order = 6)]
-    public virtual WorkflowScheduleDefinition? Schedule { get; set; }
+    [Description("The definition of the workflow's schedule, if any.")]
+    [DataMember(Order = 6, Name = "schedule"), JsonPropertyOrder(6), JsonPropertyName("schedule")]
+    public WorkflowScheduleDefinition? Schedule { get; init; }
 
     /// <summary>
     /// Gets/sets the configuration of how the runtime expressions
     /// </summary>
-    [DataMember(Name = "evaluate", Order = 7), JsonPropertyName("evaluate"), JsonPropertyOrder(7), YamlMember(Alias = "evaluate", Order = 7)]
-    public virtual RuntimeExpressionEvaluationConfiguration? Evaluate { get; set; }
+    [Description("The configuration of how the runtime expressions should be evaluated at runtime.")]
+    [DataMember(Order = 7, Name = "evaluate"), JsonPropertyOrder(7), JsonPropertyName("evaluate")]
+    public RuntimeExpressionEvaluationConfiguration? Evaluate { get; init; }
 
     /// <summary>
     /// Gets/sets a name/value mapping of the tasks to perform
     /// </summary>
+    [Description("A name/value mapping of the tasks to perform.")]
     [Required, MinLength(1)]
-    [DataMember(Name = "do", Order = 8), JsonPropertyName("do"), JsonPropertyOrder(8), YamlMember(Alias = "do", Order = 8)]
-    public required virtual Map<string, TaskDefinition> Do { get; set; } = [];
+    [DataMember(Order = 8, Name = "do"), JsonPropertyOrder(8), JsonPropertyName("do")]
+    public required Map<string, TaskDefinition> Do { get; init; } = [];
 
     /// <summary>
     /// Gets/sets a key/value mapping of additional information associated with the workflow
     /// </summary>
-    [DataMember(Name = "metadata", Order = 9), JsonPropertyName("metadata"), JsonPropertyOrder(9), YamlMember(Alias = "metadata", Order = 9)]
-    public virtual EquatableDictionary<string, object>? Metadata { get; set; }
+    [Description("A key/value mapping of additional information associated with the workflow.")]
+    [DataMember(Order = 9, Name = "metadata"), JsonPropertyOrder(9), JsonPropertyName("metadata")]
+    public EquatableDictionary<string, object>? Metadata { get; init; }
 
 }

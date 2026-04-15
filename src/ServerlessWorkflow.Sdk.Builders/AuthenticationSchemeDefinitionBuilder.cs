@@ -31,12 +31,12 @@ public abstract class AuthenticationSchemeDefinitionBuilder<TDefinition>
     public virtual void Use(string secret)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(secret);
-        this.Secret = secret;
+        Secret = secret;
     }
 
     /// <inheritdoc/>
     public abstract TDefinition Build();
 
-    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => this.Build();
+    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => Build();
 
 }

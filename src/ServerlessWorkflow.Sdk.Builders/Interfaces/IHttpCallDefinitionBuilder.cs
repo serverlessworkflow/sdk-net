@@ -84,7 +84,7 @@ public interface IHttpCallDefinitionBuilder
     /// </summary>
     /// <param name="body">The request body</param>
     /// <returns>The configured <see cref="IHttpCallDefinitionBuilder"/></returns>
-    IHttpCallDefinitionBuilder WithBody(object body);
+    IHttpCallDefinitionBuilder WithBody(JsonNode body);
 
     /// <summary>
     /// Uses the specified output format

@@ -32,4 +32,20 @@ public static class FlowDirective
     /// </summary>
     public const string Exit = "exit";
 
+    /// <summary>
+    /// Gets an <see cref="IEnumerable{T}"/> containing all supported flow directives
+    /// </summary>
+    public static readonly IEnumerable<string> All = AsEnumerable();
+
+    /// <summary>
+    /// Gets a new <see cref="IEnumerable{T}"/> containing all supported flow directives
+    /// </summary>
+    /// <returns>An <see cref="IEnumerable{T}"/> containing all supported flow directives</returns>
+    public static IEnumerable<string> AsEnumerable()
+    {
+        yield return Continue;
+        yield return End;
+        yield return Exit;
+    }
+
 }

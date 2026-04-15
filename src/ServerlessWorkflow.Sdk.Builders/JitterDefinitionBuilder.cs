@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -16,47 +16,38 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IJitterDefinitionBuilder"/> interface
 /// </summary>
-/// <param name="from">The minimum duration of the jitter range</param>
-/// <param name="to">The maximum duration of the jitter range</param>
-public class JitterDefinitionBuilder(Duration? from = null, Duration? to = null)
+public sealed class JitterDefinitionBuilder(Duration? from = null, Duration? to = null)
     : IJitterDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the minimum duration of the jitter range
-    /// </summary>
-    protected Duration? JitterFrom { get; set; } = from;
-
-    /// <summary>
-    /// Gets the maximum duration of the jitter range
-    /// </summary>
-    protected Duration? JitterTo { get; set; } = to;
+    Duration? jitterFrom = from;
+    Duration? jitterTo = to;
 
     /// <inheritdoc/>
-    public virtual IJitterDefinitionBuilder From(Duration from)
+    public IJitterDefinitionBuilder From(Duration from)
     {
         ArgumentNullException.ThrowIfNull(from);
-        this.JitterFrom = from;
+        jitterFrom = from;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IJitterDefinitionBuilder To(Duration to)
+    public IJitterDefinitionBuilder To(Duration to)
     {
         ArgumentNullException.ThrowIfNull(to);
-        this.JitterTo = to;
+        jitterTo = to;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual JitterDefinition Build()
+    public JitterDefinition Build()
     {
-        if (this.JitterFrom == null) throw new NullReferenceException("The jitter range's minimum duration must be set");
-        if (this.JitterTo == null) throw new NullReferenceException("The jitter range's maximum duration must be set");
+        if (jitterFrom == null) throw new NullReferenceException("The jitter range's minimum duration must be set");
+        if (jitterTo == null) throw new NullReferenceException("The jitter range's maximum duration must be set");
         return new()
         {
-            From = this.JitterFrom,
-            To = this.JitterTo,
+            From = jitterFrom,
+            To = jitterTo,
         };
     }
 

@@ -11,48 +11,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Neuroglia;
-
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IEventFilterDefinitionCollectionBuilder"/> interface
 /// </summary>
-public class EventFilterDefinitionCollectionBuilder
+public sealed class EventFilterDefinitionCollectionBuilder
     : IEventFilterDefinitionCollectionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the filters the collection to build is made out of
-    /// </summary>
-    protected EquatableList<EventFilterDefinition>? Filters { get; set; }
+    EquatableList<EventFilterDefinition>? filters;
 
     /// <inheritdoc/>
-    public virtual IEventFilterDefinitionCollectionBuilder Event(EventFilterDefinition filter)
+    public IEventFilterDefinitionCollectionBuilder Event(EventFilterDefinition filter)
     {
         ArgumentNullException.ThrowIfNull(filter);
-        this.Filters ??= [];
-        this.Filters.Add(filter);
+        filters ??= [];
+        filters.Add(filter);
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IEventFilterDefinitionCollectionBuilder Event(Action<IEventFilterDefinitionBuilder> setup)
+    public IEventFilterDefinitionCollectionBuilder Event(Action<IEventFilterDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new EventFilterDefinitionBuilder();
         setup(builder);
         var filter = builder.Build();
-        this.Filters ??= [];
-        this.Filters.Add(filter);
+        filters ??= [];
+        filters.Add(filter);
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual EquatableList<EventFilterDefinition> Build()
+    public EquatableList<EventFilterDefinition> Build()
     {
-        if (this.Filters == null || this.Filters.Count < 1) throw new NullReferenceException("The collection must contain at least one event filter");
-        return this.Filters;
+        if (filters == null || filters.Count < 1) throw new NullReferenceException("The collection must contain at least one event filter");
+        return filters;
     }
 
 }

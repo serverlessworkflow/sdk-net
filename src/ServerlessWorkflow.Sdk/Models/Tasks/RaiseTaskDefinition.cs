@@ -16,20 +16,22 @@ namespace ServerlessWorkflow.Sdk.Models.Tasks;
 /// <summary>
 /// Represents the definition of a task used to raise an error
 /// </summary>
+[Description("Represents the definition of a task used to raise an error")]
 [DataContract]
-public record RaiseTaskDefinition
+public sealed record RaiseTaskDefinition
     : TaskDefinition
 {
 
     /// <inheritdoc/>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    [IgnoreDataMember, JsonIgnore]
     public override string Type => TaskType.Raise;
 
     /// <summary>
     /// Gets/sets the definition of the error to raise
     /// </summary>
+    [Description("The definition of the error to raise")]
     [Required]
-    [DataMember(Name = "raise", Order = 1), JsonPropertyName("raise"), JsonPropertyOrder(1), YamlMember(Alias = "raise", Order = 1)]
-    public required virtual RaiseErrorDefinition Raise { get; set; }
+    [DataMember(Order = 1, Name = "raise"), JsonPropertyOrder(1), JsonPropertyName("raise")]
+    public required RaiseErrorDefinition Raise { get; init; }
 
 }

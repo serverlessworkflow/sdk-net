@@ -16,6 +16,7 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the base class for all authentication scheme definitions
 /// </summary>
+[Description("Represents the base class for all authentication scheme definitions")]
 [DataContract]
 public abstract record AuthenticationSchemeDefinition
     : Extendable
@@ -24,13 +25,14 @@ public abstract record AuthenticationSchemeDefinition
     /// <summary>
     /// Gets the name of the authentication scheme
     /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    [IgnoreDataMember, JsonIgnore]
     public abstract string Scheme { get; }
 
     /// <summary>
     /// Gets/sets the name of the secret, if any, used to configure the authentication scheme
     /// </summary>
-    [DataMember(Name = "use", Order = 1), JsonPropertyName("use"), JsonPropertyOrder(1), YamlMember(Alias = "use", Order = 1)]
-    public virtual string? Use { get; set; }
+    [Description("The name of the secret, if any, used to configure the authentication scheme")]
+    [DataMember(Order = 1, Name = "use"), JsonPropertyOrder(1), JsonPropertyName("use")]
+    public string? Use { get; init; }
 
 }

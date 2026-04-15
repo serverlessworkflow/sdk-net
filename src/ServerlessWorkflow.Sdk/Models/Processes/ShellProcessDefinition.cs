@@ -16,28 +16,32 @@ namespace ServerlessWorkflow.Sdk.Models.Processes;
 /// <summary>
 /// Represents the definition of a shell process
 /// </summary>
+[Description("Represents the definition of a shell process")]
 [DataContract]
-public record ShellProcessDefinition
+public sealed record ShellProcessDefinition
     : ProcessDefinition
 {
 
     /// <summary>
     /// Gets/sets the shell command to run
     /// </summary>
+    [Description("The shell command to run")]
     [Required, MinLength(1)]
-    [DataMember(Name = "command", Order = 1), JsonPropertyName("command"), JsonPropertyOrder(1), YamlMember(Alias = "command", Order = 1)]
-    public required virtual string Command { get; set; }
+    [DataMember(Order = 1, Name = "command"), JsonPropertyOrder(1), JsonPropertyName("command")]
+    public required string Command { get; init; }
 
     /// <summary>
     /// Gets/sets the arguments of the shell command to run
     /// </summary>
-    [DataMember(Name = "arguments", Order = 2), JsonPropertyName("arguments"), JsonPropertyOrder(2), YamlMember(Alias = "arguments", Order = 2)]
-    public virtual EquatableList<string>? Arguments { get; set; }
+    [Description("The arguments of the shell command to run")]
+    [DataMember(Order = 2, Name = "arguments"), JsonPropertyOrder(2), JsonPropertyName("arguments")]
+    public EquatableList<string>? Arguments { get; init; }
 
     /// <summary>
     /// Gets/sets a key/value mapping of the environment variables, if any, to use when running the configured process
     /// </summary>
-    [DataMember(Name = "environment", Order = 3), JsonPropertyName("environment"), JsonPropertyOrder(3), YamlMember(Alias = "environment", Order = 3)]
-    public virtual EquatableDictionary<string, string>? Environment { get; set; }
+    [Description("A key/value mapping of the environment variables, if any, to use when running the configured process")]
+    [DataMember(Order = 3, Name = "environment"), JsonPropertyOrder(3), JsonPropertyName("environment")]
+    public EquatableDictionary<string, string>? Environment { get; init; }
 
 }

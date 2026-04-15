@@ -1,0 +1,40 @@
+<Solution>
+  <Folder Name="/.github/">
+    <File Path=".github/PULL_REQUEST_TEMPLATE.md" />
+  </Folder>
+  <Folder Name="/.github/ISSUE_TEMPLATE/">
+    <File Path=".github/ISSUE_TEMPLATE/bug.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/config.yml" />
+    <File Path=".github/ISSUE_TEMPLATE/feature.yml" />
+  </Folder>
+  <Folder Name="/.github/workflows/">
+    <File Path=".github/workflows/build-dotnet.yml" />
+    <File Path=".github/workflows/ci-pipeline.yml" />
+    <File Path=".github/workflows/publish.yml" />
+    <File Path=".github/workflows/release.yml" />
+    <File Path=".github/workflows/test-dotnet.yml" />
+    <File Path=".github/workflows/versioning.yml" />
+  </Folder>
+  <Folder Name="/docs/">
+    <File Path="CODE_OF_CONDUCT.md" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="LICENSE" />
+    <File Path="MAINTAINERS.md" />
+    <File Path="maintainer_guidelines.md" />
+    <File Path="README.md" />
+    <File Path="SECURITY.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/ServerlessWorkflow.Sdk.Builders/ServerlessWorkflow.Sdk.Builders.csproj" Id="861e7c93-d882-47c6-819c-1b6bb24bb383" />
+    <Project Path="src/ServerlessWorkflow.Sdk.IO/ServerlessWorkflow.Sdk.IO.csproj" Id="d9aac545-b384-419c-aeba-fcbe4c6d1bad" />
+    <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Abstractions/ServerlessWorkflow.Sdk.Runtime.Abstractions.csproj" />
+    <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Cli/ServerlessWorkflow.Sdk.Runtime.Cli.csproj" />
+    <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Docker/ServerlessWorkflow.Sdk.Runtime.Docker.csproj" Id="75437264-81aa-4a4b-9fb5-07a80bd176e2" />
+    <Project Path="src/ServerlessWorkflow.Sdk.Runtime.Kubernetes/ServerlessWorkflow.Sdk.Runtime.Kubernetes.csproj" Id="f22a2fff-df92-424f-b7c8-23e84c223a37" />
+    <Project Path="src/ServerlessWorkflow.Sdk.Runtime/ServerlessWorkflow.Sdk.Runtime.csproj" Id="ff379ac7-32ea-48b7-a3d2-921c7b04b8ab" />
+    <Project Path="src/ServerlessWorkflow.Sdk/ServerlessWorkflow.Sdk.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ServerlessWorkflow.Sdk.UnitTests/ServerlessWorkflow.Sdk.UnitTests.csproj" Id="e9c6b522-c1a1-4385-b0ba-bc973f616cf5" />
+  </Folder>
+</Solution>

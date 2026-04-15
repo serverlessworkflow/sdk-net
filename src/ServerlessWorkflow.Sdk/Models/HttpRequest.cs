@@ -16,34 +16,39 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents an object used to describe an HTTP request
 /// </summary>
+[Description("Represents an object used to describe an HTTP request.")]
 [DataContract]
-public record HttpRequest
+public sealed record HttpRequest
 {
 
     /// <summary>
     /// Gets/sets the HTTP method of the described request
     /// </summary>
+    [Description("The HTTP method of the described request.")]
     [Required, MinLength(1)]
-    [DataMember(Name = "method", Order = 1), JsonPropertyName("method"), JsonPropertyOrder(1), YamlMember(Alias = "method", Order = 1)]
-    public required virtual string Method { get; set; }
+    [DataMember(Order = 1, Name = "method"), JsonPropertyOrder(1), JsonPropertyName("method")]
+    public required string Method { get; init; }
 
     /// <summary>
     /// Gets/sets the request URI
     /// </summary>
+    [Description("The request URI.")]
     [Required]
-    [DataMember(Name = "uri", Order = 2), JsonPropertyName("uri"), JsonPropertyOrder(2), YamlMember(Alias = "uri", Order = 2)]
-    public required virtual Uri Uri { get; set; }
+    [DataMember(Order = 2, Name = "uri"), JsonPropertyOrder(2), JsonPropertyName("uri")]
+    public required Uri Uri { get; init; }
 
     /// <summary>
     /// Gets/sets the request headers, if any
     /// </summary>
-    [DataMember(Name = "headers", Order = 3), JsonPropertyName("headers"), JsonPropertyOrder(3), YamlMember(Alias = "headers", Order = 3)]
-    public virtual EquatableDictionary<string, string>? Headers { get; set; }
+    [Description("The request headers, if any.")]
+    [DataMember(Order = 3, Name = "headers"), JsonPropertyOrder(3), JsonPropertyName("headers")]
+    public EquatableDictionary<string, string>? Headers { get; init; }
 
     /// <summary>
     /// Gets/sets the request body, if any
     /// </summary>
-    [DataMember(Name = "body", Order = 4), JsonPropertyName("body"), JsonPropertyOrder(4), YamlMember(Alias = "body", Order = 4)]
-    public virtual object? Body { get; set; }
+    [Description("The request body, if any.")]
+    [DataMember(Order = 4, Name = "body"), JsonPropertyOrder(4), JsonPropertyName("body")]
+    public JsonNode? Body { get; init; }
 
 }

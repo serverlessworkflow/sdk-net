@@ -18,38 +18,35 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="ITimeoutDefinitionBuilder"/> interface
 /// </summary>
-public class TimeoutDefinitionBuilder
+public sealed class TimeoutDefinitionBuilder
     : ITimeoutDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the duration after which to timeout
-    /// </summary>
-    protected Duration? AfterValue { get; set; }
+    Duration? afterValue;
 
     /// <inheritdoc/>
-    public virtual ITimeoutDefinitionBuilder After(string duration)
+    public ITimeoutDefinitionBuilder After(string duration)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(duration);
-        this.AfterValue = XmlConvert.ToTimeSpan(duration);
+        afterValue = XmlConvert.ToTimeSpan(duration);
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual ITimeoutDefinitionBuilder After(Duration duration)
+    public ITimeoutDefinitionBuilder After(Duration duration)
     {
         ArgumentNullException.ThrowIfNull(duration);
-        this.AfterValue = duration;
+        afterValue = duration;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual TimeoutDefinition Build()
+    public TimeoutDefinition Build()
     {
-        if (this.AfterValue == null) throw new NullReferenceException("The duration after which to timeout must be set");
+        if (afterValue == null) throw new NullReferenceException("The duration after which to timeout must be set");
         return new()
         {
-            After = this.AfterValue
+            After = afterValue
         };
     }
 

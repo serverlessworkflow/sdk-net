@@ -11,41 +11,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Serialization;
-
 namespace ServerlessWorkflow.Sdk.IO;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IWorkflowDefinitionReader"/> interface
 /// </summary>
-/// <param name="jsonSerializer">The service used to serialize/deserialize objects to/from JSON</param>
-/// <param name="yamlSerializer">The service used to serialize/deserialize objects to/from JSON</param>
-public class WorkflowDefinitionReader(IJsonSerializer jsonSerializer, IYamlSerializer yamlSerializer)
+public sealed class WorkflowDefinitionReader
     : IWorkflowDefinitionReader
 {
 
-    /// <summary>
-    /// Gets the service used to serialize/deserialize objects to/from JSON
-    /// </summary>
-    protected IJsonSerializer JsonSerializer { get; } = jsonSerializer;
-
-    /// <summary>
-    /// Gets the service used to serialize/deserialize objects to/from YAML
-    /// </summary>
-    protected IYamlSerializer YamlSerializer { get; } = yamlSerializer;
-
     /// <inheritdoc/>
-    public virtual Task<WorkflowDefinition> ReadAsync(Stream stream, WorkflowDefinitionReaderOptions? options = null, CancellationToken cancellationToken = default)
+    public async Task<WorkflowDefinition> ReadAsync(Stream stream, WorkflowDefinitionReaderOptions? options = null, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(stream);
         using var reader = new StreamReader(stream);
-        var input = reader.ReadToEnd();
-        var workflow = (input.TrimStart().StartsWith('{') && input.TrimEnd().EndsWith('}')
-            ? this.JsonSerializer.Deserialize<WorkflowDefinition>(input)
-            : this.YamlSerializer.Deserialize<WorkflowDefinition>(input))
+        var input = (await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false)).Trim();
+        var workflow = (input.StartsWith('{') && input.EndsWith('}')
+            ? JsonSerializer.Deserialize(input, JsonSerializationContext.Default.WorkflowDefinition)
+            : YamlSerializer.Deserialize<WorkflowDefinition>(input, JsonSerializationContext.Default.Options))
             ?? throw new NullReferenceException();
-        return Task.FromResult(workflow);
+        return workflow;
     }
 
     /// <summary>

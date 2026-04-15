@@ -16,36 +16,42 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IListenTaskDefinitionBuilder"/> interface
 /// </summary>
-public class ListenTaskDefinitionBuilder
+public sealed class ListenTaskDefinitionBuilder
     : TaskDefinitionBuilder<IListenTaskDefinitionBuilder, ListenTaskDefinition>, IListenTaskDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the <see cref="ListenTaskDefinition"/> to configure
-    /// </summary>
-    protected ListenTaskDefinition Task { get; } = new() { Listen = null! };
+    ListenTaskDefinition task = new()
+    {
+        Listen = null!
+    };
 
     /// <inheritdoc/>
-    public virtual IListenTaskDefinitionBuilder To(Action<IListenerDefinitionBuilder> setup)
+    public IListenTaskDefinitionBuilder To(Action<IListenerDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new ListenerDefinitionBuilder();
         setup(builder);
-        this.Task.Listen = builder.Build();
+        task = task with
+        {
+            Listen = builder.Build()
+        };
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IListenTaskDefinitionBuilder Foreach(Action<ISubscriptionIteratorDefinitionBuilder> setup)
+    public IListenTaskDefinitionBuilder Foreach(Action<ISubscriptionIteratorDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new SubscriptionIteratorDefinitionBuilder();
         setup(builder);
-        this.Task.Foreach = builder.Build();    
+        task = task with
+        {
+            Foreach = builder.Build()
+        };   
         return this;
     }
 
     /// <inheritdoc/>
-    public override ListenTaskDefinition Build() => this.Configure(this.Task);
+    public override ListenTaskDefinition Build() => Configure(task);
 
 }

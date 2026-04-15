@@ -1,0 +1,103 @@
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#pragma warning disable IDE0130 // Namespace does not match folder structure
+namespace ServerlessWorkflow.Sdk.Runtime;
+
+/// <summary>
+/// Defines extensions for <see cref="IServiceCollection"/>
+/// </summary>
+public static class ServiceCollectionExtensions
+{
+
+    /// <summary>
+    /// Adds and configures a Serverless Workflow runtime with default services
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection"/> to configure</param>
+    /// <param name="configuration">The application's <see cref="IConfiguration"/></param>
+    /// <param name="configure">An <see cref="Action{T}"/> used to configure the <see cref="IWorkflowRuntimeBuilder"/></param>
+    /// <param name="lifetime">The <see cref="ServiceLifetime"/> to use for all runtime services. Defaults to <see cref="ServiceLifetime.Singleton"/></param>
+    /// <returns>The configured <see cref="IServiceCollection"/></returns>
+    public static IServiceCollection AddServerlessWorkflowRuntime(this IServiceCollection services, IConfiguration configuration, Action<IWorkflowRuntimeBuilder>? configure = null, ServiceLifetime lifetime = ServiceLifetime.Singleton)
+    {
+        var builder = new WorkflowRuntimeBuilder(services, configuration, lifetime);
+        services.AddMemoryCache();
+        services.AddHttpClient();
+        services.AddSingleton<IWorkflowRuntime, WorkflowRuntime>();
+        RegisterDefaultServices(builder);
+        RegisterDefaultTaskExecutors(builder);
+        RegisterDefaultCallTaskExecutors(builder);
+        RegisterDefaultRunTaskExecutors(builder);
+        configure?.Invoke(builder);
+        return services;
+    }
+
+    static void RegisterDefaultServices(WorkflowRuntimeBuilder builder)
+    {
+        builder.UseAuthenticationHandler<AuthenticationHandler>();
+        builder.UseCloudEventBus<InMemoryCloudEventBus>();
+        builder.UseOAuth2TokenManager<OAuth2TokenManager>();
+        builder.UseExternalResourceReader<ExternalResourceReader>();
+        builder.UseSecretsManager<SecretsManager>();
+        builder.UseRuntimeExpressionEvaluator<JQRuntimeExpressionEvaluator>();
+        builder.UseRuntimeExpressionEvaluator<JSRuntimeExpressionEvaluator>();
+        builder.UseRuntimeExpressionEvaluatorProvider<RuntimeExpressionEvaluatorProvider>();
+        builder.UseSchemaHandler<JsonSchemaHandler>();
+        builder.UseSchemaHandler<AvroSchemaHandler>();
+        builder.UseSchemaHandler<XmlSchemaHandler>();
+        builder.UseSchemaHandlerProvider<SchemaHandlerProvider>();
+        builder.UseScriptExecutor<NodeJSScriptExecutor>();
+        builder.UseScriptExecutor<PythonScriptExecutor>();
+        builder.UseScriptExecutorProvider<ScriptExecutorProvider>();
+        builder.UseTaskExecutorFactory<TaskExecutorFactory>();
+        builder.UseWorkflowProcessFactory<WorkflowProcessFactory>();
+        builder.UseWorkflowExecutionContextFactory<WorkflowExecutionContextFactory>();
+        builder.UseTaskExecutionContextFactory<TaskExecutionContextFactory>();
+        builder.UseWorkflowDefinitionStore<InMemoryWorkflowDefinitionStore>();
+        builder.UseWorkflowStateStore<InMemoryWorkflowStore>();
+        builder.UseTaskStateStore<InMemoryTaskStateStore>();
+
+    }
+
+    static void RegisterDefaultTaskExecutors(WorkflowRuntimeBuilder builder)
+    {
+        builder.UseTaskExecutor<DoTaskDefinition, DoTaskExecutor>();
+        builder.UseTaskExecutor<EmitTaskDefinition, EmitTaskExecutor>();
+        builder.UseTaskExecutor<ExtensionTaskDefinition, ExtensionTaskExecutor>();
+        builder.UseTaskExecutor<ForTaskDefinition, ForTaskExecutor>();
+        builder.UseTaskExecutor<ForkTaskDefinition, ForkTaskExecutor>();
+        builder.UseTaskExecutor<ListenTaskDefinition, ListenTaskExecutor>();
+        builder.UseTaskExecutor<RaiseTaskDefinition, RaiseTaskExecutor>();
+        builder.UseTaskExecutor<SetTaskDefinition, SetTaskExecutor>();
+        builder.UseTaskExecutor<SwitchTaskDefinition, SwitchTaskExecutor>();
+        builder.UseTaskExecutor<TryTaskDefinition, TryTaskExecutor>();
+        builder.UseTaskExecutor<WaitTaskDefinition, WaitTaskExecutor>();
+    }
+
+    static void RegisterDefaultCallTaskExecutors(WorkflowRuntimeBuilder builder)
+    {
+        builder.UseCallTaskExecutor<HttpCallTaskExecutor>(Function.Http);
+        builder.UseCallTaskExecutor<OpenApiCallTaskExecutor>(Function.OpenApi);
+        builder.UseCallTaskExecutor<AsyncApiCallTaskExecutor>(Function.AsyncApi);
+        builder.UseCallTaskExecutor<GrpcCallTaskExecutor>(Function.Grpc);
+    }
+
+    static void RegisterDefaultRunTaskExecutors(WorkflowRuntimeBuilder builder)
+    {
+        builder.UseRunTaskExecutor<ContainerRunTaskExecutor>(ProcessType.Container);
+        builder.UseRunTaskExecutor<ShellRunTaskExecutor>(ProcessType.Shell);
+        builder.UseRunTaskExecutor<ScriptRunTaskExecutor>(ProcessType.Script);
+        builder.UseRunTaskExecutor<WorkflowRunTaskExecutor>(ProcessType.Workflow);
+    }
+
+}

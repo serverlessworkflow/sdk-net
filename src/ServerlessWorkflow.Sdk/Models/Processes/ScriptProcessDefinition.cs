@@ -16,39 +16,45 @@ namespace ServerlessWorkflow.Sdk.Models.Processes;
 /// <summary>
 /// Represents the definition of a script evaluation process
 /// </summary>
+[Description("Represents the definition of a script evaluation process")]
 [DataContract]
-public record ScriptProcessDefinition
+public sealed record ScriptProcessDefinition
     : ProcessDefinition
 {
 
     /// <summary>
     /// Gets/sets the language of the script to run
     /// </summary>
-    [DataMember(Name = "language", Order = 1), JsonPropertyName("language"), JsonPropertyOrder(1), YamlMember(Alias = "language", Order = 1)]
-    public required virtual string Language { get; set; }
+    [Description("The language of the script to run")]
+    [DataMember(Order = 1, Name = "language"), JsonPropertyOrder(1), JsonPropertyName("language")]
+    public required string Language { get; init; }
 
     /// <summary>
     /// Gets/sets the script's code. Required if <see cref="Source"/> has not been set.
     /// </summary>
-    [DataMember(Name = "code", Order = 2), JsonPropertyName("code"), JsonPropertyOrder(2), YamlMember(Alias = "code", Order = 2)]
-    public virtual string? Code { get; set; }
+    [Description("The script's code. Required if Source has not been set.")]
+    [DataMember(Order = 2, Name = "code"), JsonPropertyOrder(2), JsonPropertyName("code")]
+    public string? Code { get; init; }
 
     /// <summary>
     /// Gets the the script's source. Required if <see cref="Code"/> has not been set.
     /// </summary>
-    [DataMember(Name = "source", Order = 3), JsonPropertyName("source"), JsonPropertyOrder(3), YamlMember(Alias = "source", Order = 3)]
-    public virtual ExternalResourceDefinition? Source { get; set; }
+    [Description("The script's source. Required if Code has not been set.")]
+    [DataMember(Order = 3, Name = "source"), JsonPropertyOrder(3), JsonPropertyName("source")]
+    public ExternalResourceDefinition? Source { get; init; }
 
     /// <summary>
     /// Gets/sets a key/value mapping of the arguments, if any, to pass to the script to run
     /// </summary>
-    [DataMember(Name = "arguments", Order = 4), JsonPropertyName("arguments"), JsonPropertyOrder(4), YamlMember(Alias = "arguments", Order = 4)]
-    public virtual EquatableDictionary<string, object>? Arguments { get; set; }
+    [Description("A key/value mapping of the arguments, if any, to pass to the script to run")]
+    [DataMember(Order = 4, Name = "arguments"), JsonPropertyOrder(4), JsonPropertyName("arguments")]
+    public EquatableDictionary<string, object>? Arguments { get; init; }
 
     /// <summary>
     /// Gets/sets a key/value mapping of the environment variables, if any, to use when running the configured process
     /// </summary>
-    [DataMember(Name = "environment", Order = 5), JsonPropertyName("environment"), JsonPropertyOrder(5), YamlMember(Alias = "environment", Order = 5)]
-    public virtual EquatableDictionary<string, string>? Environment { get; set; }
+    [Description("A key/value mapping of the environment variables, if any, to use when running the configured process")]
+    [DataMember(Order = 5, Name = "environment"), JsonPropertyOrder(5), JsonPropertyName("environment")]
+    public EquatableDictionary<string, string>? Environment { get; init; }
 
 }

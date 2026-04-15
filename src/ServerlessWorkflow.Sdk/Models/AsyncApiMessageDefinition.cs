@@ -16,20 +16,23 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of an AsyncAPI message
 /// </summary>
+[Description("Represents the definition of an AsyncAPI message")]
 [DataContract]
-public record AsyncApiMessageDefinition
+public sealed record AsyncApiMessageDefinition
 {
 
     /// <summary>
     /// Gets/sets the message's payload, if any
     /// </summary>
-    [DataMember(Name = "payload", Order = 1), JsonPropertyName("payload"), JsonPropertyOrder(1), YamlMember(Alias = "payload", Order = 1)]
-    public virtual object? Payload { get; set; }
+    [Description("The message's payload, if any")]
+    [DataMember(Order = 1, Name = "payload"), JsonPropertyOrder(1), JsonPropertyName("payload")]
+    public JsonNode? Payload { get; init; }
 
     /// <summary>
     /// Gets/sets the message's headers, if any
     /// </summary>
-    [DataMember(Name = "headers", Order = 2), JsonPropertyName("headers"), JsonPropertyOrder(2), YamlMember(Alias = "headers", Order = 2)]
-    public virtual object? Headers { get; set; }
+    [Description("The message's headers, if any")]
+    [DataMember(Order = 2, Name = "headers"), JsonPropertyOrder(2), JsonPropertyName("headers")]
+    public JsonObject? Headers { get; init; }
 
 }

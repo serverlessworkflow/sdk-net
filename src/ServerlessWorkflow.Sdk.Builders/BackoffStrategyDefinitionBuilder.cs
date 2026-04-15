@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -16,48 +16,46 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IBackoffStrategyDefinitionBuilder"/> interface
 /// </summary>
-public class BackoffStrategyDefinitionBuilder
+public sealed class BackoffStrategyDefinitionBuilder
     : IBackoffStrategyDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets the underlying service used to build the <see cref="BackoffDefinition"/> to use
-    /// </summary>
-    protected IBackoffDefinitionBuilder? Backoff { get; set; }
+    IBackoffDefinitionBuilder? backoff;
 
     /// <inheritdoc/>
-    public virtual IConstantBackoffDefinitionBuilder Constant()
+    public IConstantBackoffDefinitionBuilder Constant()
     {
         var builder = new ConstantBackoffDefinitionBuilder();
-        this.Backoff = builder;
+        backoff = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual IExponentialBackoffDefinitionBuilder Exponential()
+    public IExponentialBackoffDefinitionBuilder Exponential()
     {
         var builder = new ExponentialBackoffDefinitionBuilder();
-        this.Backoff = builder;
+        backoff = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual ILinearBackoffDefinitionBuilder Linear(Duration? increment = null)
+    public ILinearBackoffDefinitionBuilder Linear(Duration? increment = null)
     {
-        var builder = new LinearBackoffDefinitionBuilder();
-        this.Backoff = builder;
+        var builder = new LinearBackoffDefinitionBuilder(increment);
+        backoff = builder;
         return builder;
     }
 
     /// <inheritdoc/>
-    public virtual BackoffStrategyDefinition Build()
+    public BackoffStrategyDefinition Build()
     {
-        if (this.Backoff == null) throw new NullReferenceException("The backoff strategy must be set");
+        if (backoff == null) throw new NullReferenceException("The backoff strategy must be set");
+        var definition = backoff.Build();
         return new()
         {
-            Constant = this.Backoff is ConstantBackoffDefinition constant ? constant : null,
-            Exponential = this.Backoff is ExponentialBackoffDefinition exponential ? exponential : null,
-            Linear = this.Backoff is LinearBackoffDefinition linear ? linear : null,
+            Constant = definition is ConstantBackoffDefinition constant ? constant : null,
+            Exponential = definition is ExponentialBackoffDefinition exponential ? exponential : null,
+            Linear = definition is LinearBackoffDefinition linear ? linear : null,
         };
     }
 

@@ -1,4 +1,4 @@
-﻿// Copyright © 2024-Present The Serverless Workflow Specification Authors
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"),
 // you may not use this file except in compliance with the License.
@@ -16,118 +16,95 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IRetryPolicyDefinitionBuilder"/> interface
 /// </summary>
-public class RetryPolicyDefinitionBuilder
+public sealed class RetryPolicyDefinitionBuilder
     : IRetryPolicyDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets a runtime expression used to determine whether or not to retry running the task, in a given context
-    /// </summary>
-    protected string? RetryWhen { get; set; }
-
-    /// <summary>
-    /// Gets/sets a runtime expression used to determine whether or not to retry running the task, in a given context
-    /// </summary>
-    protected string? RetryExceptWhen { get; set; }
-
-    /// <summary>
-    /// Gets/sets the parameters, if any, that control the randomness or variability of the delay between retry attempts
-    /// </summary>
-    protected RetryPolicyLimitDefinition? RetryLimit { get; set; }
-
-    /// <summary>
-    /// Gets/sets the delay duration between retry attempts
-    /// </summary>
-    protected Duration? RetryDelay { get; set; }
-
-    /// <summary>
-    /// Gets/sets the limits, if any, of the retry policy to build
-    /// </summary>
-    protected BackoffStrategyDefinition? RetryBackoff { get; set; }
-
-    /// <summary>
-    /// Gets/sets the backoff strategy to use, if any
-    /// </summary>
-    protected JitterDefinition? RetryJitter { get; set; }
+    string? retryWhen;
+    string? retryExceptWhen;
+    RetryPolicyLimitDefinition? retryLimit;
+    Duration? retryDelay;
+    BackoffStrategyDefinition? retryBackoff;
+    JitterDefinition? retryJitter;
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyDefinitionBuilder When(string expression)
+    public IRetryPolicyDefinitionBuilder When(string expression)
     {
-        this.RetryWhen = expression;
+        retryWhen = expression;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyDefinitionBuilder ExceptWhen(string expression)
+    public IRetryPolicyDefinitionBuilder ExceptWhen(string expression)
     {
-        this.RetryExceptWhen = expression;
+        retryExceptWhen = expression;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyDefinitionBuilder Limit(RetryPolicyLimitDefinition limits)
+    public IRetryPolicyDefinitionBuilder Limit(RetryPolicyLimitDefinition limits)
     {
-        this.RetryLimit = limits;
+        retryLimit = limits;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyDefinitionBuilder Limit(Action<IRetryPolicyLimitDefinitionBuilder> setup)
+    public IRetryPolicyDefinitionBuilder Limit(Action<IRetryPolicyLimitDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new RetryPolicyLimitDefinitionBuilder();
         setup(builder);
-        return this.Limit(builder.Build());
+        return Limit(builder.Build());
     }
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyDefinitionBuilder Delay(Duration duration)
+    public IRetryPolicyDefinitionBuilder Delay(Duration duration)
     {
-        this.RetryDelay = duration;
+        retryDelay = duration;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyDefinitionBuilder Backoff(BackoffStrategyDefinition backoff)
+    public IRetryPolicyDefinitionBuilder Backoff(BackoffStrategyDefinition backoff)
     {
-        this.RetryBackoff = backoff;
+        retryBackoff = backoff;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyDefinitionBuilder Backoff(Action<IBackoffStrategyDefinitionBuilder> setup)
+    public IRetryPolicyDefinitionBuilder Backoff(Action<IBackoffStrategyDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new BackoffStrategyDefinitionBuilder();
         setup(builder);
-        return this.Backoff(builder.Build());
+        return Backoff(builder.Build());
     }
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyDefinitionBuilder Jitter(JitterDefinition jitter)
+    public IRetryPolicyDefinitionBuilder Jitter(JitterDefinition jitter)
     {
-        this.RetryJitter = jitter;
+        retryJitter = jitter;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IRetryPolicyDefinitionBuilder Jitter(Action<IJitterDefinitionBuilder> setup)
+    public IRetryPolicyDefinitionBuilder Jitter(Action<IJitterDefinitionBuilder> setup)
     {
         ArgumentNullException.ThrowIfNull(setup);
         var builder = new JitterDefinitionBuilder();
         setup(builder);
-        return this.Jitter(builder.Build());
+        return Jitter(builder.Build());
     }
 
     /// <inheritdoc/>
-    public virtual RetryPolicyDefinition Build() => new()
+    public RetryPolicyDefinition Build() => new()
     {
-        When = this.RetryWhen,
-        ExceptWhen = this.RetryExceptWhen,
-        Limit = this.RetryLimit,
-        Delay = this.RetryDelay,
-        Backoff = this.RetryBackoff,
-        Jitter = this.RetryJitter
+        When = retryWhen,
+        ExceptWhen = retryExceptWhen,
+        Limit = retryLimit,
+        Delay = retryDelay,
+        Backoff = retryBackoff,
+        Jitter = retryJitter
     };
 
 }

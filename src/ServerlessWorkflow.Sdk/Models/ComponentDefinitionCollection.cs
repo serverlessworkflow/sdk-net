@@ -16,56 +16,65 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents a collection of workflow components
 /// </summary>
+[Description("Represents a collection of workflow components.")]
 [DataContract]
-public record ComponentDefinitionCollection
+public sealed record ComponentDefinitionCollection
 {
 
     /// <summary>
     /// Gets/sets a name/value mapping of the workflow's reusable authentication policies
     /// </summary>
-    [DataMember(Name = "authentications", Order = 1), JsonPropertyName("authentications"), JsonPropertyOrder(1), YamlMember(Alias = "authentications", Order = 1)]
-    public virtual EquatableDictionary<string, AuthenticationPolicyDefinition>? Authentications { get; set; }
+    [Description("A name/value mapping of the workflow's reusable authentication policies.")]
+    [DataMember(Order = 1, Name = "authentications"), JsonPropertyOrder(1), JsonPropertyName("authentications")]
+    public EquatableDictionary<string, AuthenticationPolicyDefinition>? Authentications { get; init; }
 
     /// <summary>
     /// Gets/sets a name/value mapping of the catalogs, if any, from which to import reusable components used within the workflow
     /// </summary>
-    [DataMember(Name = "catalogs", Order = 2), JsonPropertyName("catalogs"), JsonPropertyOrder(2), YamlMember(Alias = "catalogs", Order = 2)]
-    public virtual EquatableDictionary<string, CatalogDefinition>? Catalogs { get; set; }
+    [Description("A name/value mapping of the catalogs, if any, from which to import reusable components used within the workflow.")]
+    [DataMember(Order = 2, Name = "catalogs"), JsonPropertyOrder(2), JsonPropertyName("catalogs")]
+    public EquatableDictionary<string, CatalogDefinition>? Catalogs { get; init; }
 
     /// <summary>
     /// Gets/sets a name/value mapping of the workflow's errors, if any
     /// </summary>
-    [DataMember(Name = "errors", Order = 3), JsonPropertyName("errors"), JsonPropertyOrder(3), YamlMember(Alias = "errors", Order = 3)]
-    public virtual EquatableDictionary<string, ErrorDefinition>? Errors { get; set; }
+    [Description("A name/value mapping of the workflow's errors, if any.")]
+    [DataMember(Order = 3, Name = "errors"), JsonPropertyOrder(3), JsonPropertyName("errors")]
+    public EquatableDictionary<string, ErrorDefinition>? Errors { get; init; }
 
     /// <summary>
     /// Gets/sets a name/value mapping of the workflow's extensions, if any
     /// </summary>
-    [DataMember(Name = "extensions", Order = 4), JsonPropertyName("extensions"), JsonPropertyOrder(4), YamlMember(Alias = "extensions", Order = 4)]
-    public virtual EquatableDictionary<string, ExtensionDefinition>? Extensions { get; set; }
+    [Description("A name/value mapping of the workflow's extensions, if any.")]
+    [DataMember(Order = 4, Name = "extensions"), JsonPropertyOrder(4), JsonPropertyName("extensions")]
+    public EquatableDictionary<string, ExtensionDefinition>? Extensions { get; init; }
 
     /// <summary>
     /// Gets/sets a name/value mapping of the workflow's reusable functions
     /// </summary>
-    [DataMember(Name = "functions", Order = 5), JsonPropertyName("functions"), JsonPropertyOrder(5), YamlMember(Alias = "functions", Order = 5)]
-    public virtual EquatableDictionary<string, TaskDefinition>? Functions { get; set; }
+    [Description("A name/value mapping of the workflow's reusable functions.")]
+    [DataMember(Order = 5, Name = "functions"), JsonPropertyOrder(5), JsonPropertyName("functions")]
+    public EquatableDictionary<string, TaskDefinition>? Functions { get; init; }
 
     /// <summary>
     /// Gets/sets a name/value mapping of the workflow's reusable retry policies
     /// </summary>
-    [DataMember(Name = "retries", Order = 6), JsonPropertyName("retries"), JsonPropertyOrder(6), YamlMember(Alias = "retries", Order = 6)]
-    public virtual EquatableDictionary<string, RetryPolicyDefinition>? Retries { get; set; }
+    [Description("A name/value mapping of the workflow's reusable retry policies.")]
+    [DataMember(Order = 6, Name = "retries"), JsonPropertyOrder(6), JsonPropertyName("retries")]
+    public EquatableDictionary<string, RetryPolicyDefinition>? Retries { get; init; }
 
     /// <summary>
     /// Gets/sets a list containing the workflow's secrets
     /// </summary>
-    [DataMember(Name = "secrets", Order = 7), JsonPropertyName("secrets"), JsonPropertyOrder(7), YamlMember(Alias = "secrets", Order = 7)]
-    public virtual EquatableList<string>? Secrets { get; set; }
+    [Description("A list containing the workflow's secrets.")]
+    [DataMember(Order = 7, Name = "secrets"), JsonPropertyOrder(7), JsonPropertyName("secrets")]
+    public EquatableList<string>? Secrets { get; init; }
 
     /// <summary>
     /// Gets/sets a name/value mapping of the workflow's reusable timeouts
     /// </summary>
-    [DataMember(Name = "timeouts", Order = 7), JsonPropertyName("timeouts"), JsonPropertyOrder(8), YamlMember(Alias = "timeouts", Order = 8)]
-    public virtual EquatableDictionary<string, TimeoutDefinition>? Timeouts { get; set; }
+    [Description("A name/value mapping of the workflow's reusable timeouts.")]
+    [DataMember(Order = 8, Name = "timeouts"), JsonPropertyOrder(8), JsonPropertyName("timeouts")]
+    public EquatableDictionary<string, TimeoutDefinition>? Timeouts { get; init; }
 
 }

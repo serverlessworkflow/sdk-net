@@ -16,15 +16,17 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the configuration of an event's emission
 /// </summary>
+[Description("Represents the configuration of an event's emission")]
 [DataContract]
-public record EventEmissionDefinition
+public sealed record EventEmissionDefinition
 {
 
     /// <summary>
     /// Gets/sets the definition of the event to emit
     /// </summary>
+    [Description("The definition of the event to emit")]
     [Required]
-    [DataMember(Name = "event", Order = 1), JsonPropertyName("event"), JsonPropertyOrder(1), YamlMember(Alias = "event", Order = 1)]
-    public required virtual EventDefinition Event { get; set; }
+    [DataMember(Order = 1, Name = "event"), JsonPropertyOrder(1), JsonPropertyName("event")]
+    public required EventDefinition Event { get; init; }
 
 }

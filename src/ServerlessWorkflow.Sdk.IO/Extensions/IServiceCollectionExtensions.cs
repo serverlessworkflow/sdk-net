@@ -11,11 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Microsoft.Extensions.DependencyInjection;
-using Neuroglia.Serialization;
-using Neuroglia.Serialization.Yaml;
-using ServerlessWorkflow.Sdk.Serialization.Yaml;
-
+#pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace ServerlessWorkflow.Sdk.IO;
 
 /// <summary>
@@ -31,25 +27,6 @@ public static class IServiceCollectionExtensions
     /// <returns>The configured <see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddServerlessWorkflowIO(this IServiceCollection services) 
     {
-        services.AddJsonSerializer();
-        services.AddYamlDotNetSerializer(options =>
-        {
-            YamlSerializer.DefaultSerializerConfiguration(options.Serializer);
-            YamlSerializer.DefaultDeserializerConfiguration(options.Deserializer);
-            options.Deserializer.WithNodeDeserializer(
-                inner => new TaskDefinitionYamlDeserializer(inner),
-                syntax => syntax.InsteadOf<JsonSchemaDeserializer>());
-            options.Deserializer.WithNodeDeserializer(
-                inner => new OneOfNodeDeserializer(inner),
-                syntax => syntax.InsteadOf<TaskDefinitionYamlDeserializer>());
-            options.Deserializer.WithNodeDeserializer(
-               inner => new OneOfScalarDeserializer(inner),
-               syntax => syntax.InsteadOf<StringEnumDeserializer>());
-            var mapEntryConverter = new MapEntryYamlConverter(() => options.Serializer.Build(), () => options.Deserializer.Build());
-            options.Deserializer.WithTypeConverter(mapEntryConverter);
-            options.Serializer.WithTypeConverter(mapEntryConverter);
-            options.Serializer.WithTypeConverter(new OneOfConverter());
-        });
         services.AddSingleton<IWorkflowDefinitionReader, WorkflowDefinitionReader>();
         services.AddSingleton<IWorkflowDefinitionWriter, WorkflowDefinitionWriter>();
         return services;

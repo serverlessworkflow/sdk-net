@@ -11,40 +11,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Neuroglia;
-
 namespace ServerlessWorkflow.Sdk.Builders;
 
 /// <summary>
 /// Represents the default implementation of the <see cref="IEventFilterDefinitionBuilder"/> interface
 /// </summary>
 /// <param name="attributes">A name/value mapping of the attributes to filter events by. Supports runtime expressions</param>
-public class EventFilterDefinitionBuilder(IDictionary<string, object>? attributes = null)
+public sealed class EventFilterDefinitionBuilder(JsonObject? attributes = null)
     : IEventFilterDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets a name/value mapping of the attributes to filter errors by
-    /// </summary>
-    protected virtual EquatableDictionary<string, object> Attributes { get; set; } = attributes == null ? new() : new(attributes);
+    JsonObject attributes = attributes ?? [];
 
     /// <inheritdoc/>
-    public virtual IEventFilterDefinitionBuilder With(string name, object value)
+    public IEventFilterDefinitionBuilder With(string name, JsonNode value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        this.Attributes[name] = value;
+        attributes[name] = value;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual IEventFilterDefinitionBuilder With(IDictionary<string, object> attributes)
+    public IEventFilterDefinitionBuilder With(JsonObject attributes)
     {
         ArgumentNullException.ThrowIfNull(attributes);
-        this.Attributes = new(attributes);
+        this.attributes = attributes;
         return this;
     }
 
     /// <inheritdoc/>
-    public virtual EventFilterDefinition Build() => new() { With = this.Attributes };
+    public EventFilterDefinition Build() => new() 
+    { 
+        With = attributes 
+    };
 
 }

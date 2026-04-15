@@ -16,33 +16,37 @@ namespace ServerlessWorkflow.Sdk.Models.Tasks;
 /// <summary>
 /// Represents the definition of a task that executes a set of subtasks iteratively for each element in a collection
 /// </summary>
+[Description("Represents the definition of a task that executes a set of subtasks iteratively for each element in a collection")]
 [DataContract]
-public record ForTaskDefinition
+public sealed record ForTaskDefinition
     : TaskDefinition
 {
 
     /// <inheritdoc/>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    [IgnoreDataMember, JsonIgnore]
     public override string Type => TaskType.For;
 
     /// <summary>
     /// Gets/sets the definition of the loop that iterates over a range of values
     /// </summary>
+    [Description("The definition of the loop that iterates over a range of values")]
     [Required]
-    [DataMember(Name = "for", Order = 1), JsonPropertyName("for"), JsonPropertyOrder(1), YamlMember(Alias = "for", Order = 1)]
-    public required virtual ForLoopDefinition For { get; set; }
+    [DataMember(Order = 1, Name = "for"), JsonPropertyOrder(1), JsonPropertyName("for")]
+    public required ForLoopDefinition For { get; init; }
 
     /// <summary>
     /// Gets/sets a runtime expression that represents the condition, if any, that must be met for the iteration to continue
     /// </summary>
-    [DataMember(Name = "while", Order = 2), JsonPropertyName("while"), JsonPropertyOrder(2), YamlMember(Alias = "while", Order = 2)]
-    public virtual string? While { get; set; }
+    [Description("A runtime expression that represents the condition, if any, that must be met for the iteration to continue")]
+    [DataMember(Order = 2, Name = "while"), JsonPropertyOrder(2), JsonPropertyName("while")]
+    public string? While { get; init; }
 
     /// <summary>
     /// Gets/sets the tasks to perform for each item in the collection
     /// </summary>
+    [Description("The tasks to perform for each item in the collection")]
     [Required]
-    [DataMember(Name = "do", Order = 3), JsonPropertyName("do"), JsonPropertyOrder(3), YamlMember(Alias = "do", Order = 3)]
-    public required virtual Map<string, TaskDefinition> Do { get; set; }
+    [DataMember(Order = 3, Name = "do"), JsonPropertyOrder(3), JsonPropertyName("do")]
+    public required Map<string, TaskDefinition> Do { get; init; }
 
 }

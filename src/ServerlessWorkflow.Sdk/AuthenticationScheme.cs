@@ -45,6 +45,11 @@ public static class AuthenticationScheme
     public const string OpenIDConnect = "OpenIDConnect";
 
     /// <summary>
+    /// Gets an <see cref="IEnumerable{T}"/> containing the authentication schemes supported by default
+    /// </summary>
+    public static readonly IEnumerable<string> All = AsEnumerable();
+
+    /// <summary>
     /// Gets a new <see cref="IEnumerable{T}"/> containing the authentication schemes supported by default
     /// </summary>
     /// <returns>A new <see cref="IEnumerable{T}"/> containing the authentication schemes supported by default</returns>

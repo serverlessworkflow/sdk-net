@@ -16,20 +16,24 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents an object used to configure the workflow's runtime expression evaluation
 /// </summary>
+[Description("Represents an object used to configure the workflow's runtime expression evaluation.")]
 [DataContract]
-public record RuntimeExpressionEvaluationConfiguration
+public sealed record RuntimeExpressionEvaluationConfiguration
 {
 
     /// <summary>
     /// Gets/sets the language used for writing runtime expressions. Defaults to <see cref="RuntimeExpressions.Languages.JQ"/>.
     /// </summary>
-    [DataMember(Name = "language", Order = 1), JsonPropertyName("language"), JsonPropertyOrder(1), YamlMember(Alias = "language", Order = 1)]
-    public virtual string Language { get; set; } = RuntimeExpressions.Languages.JQ;
+    [Description("The language used for writing runtime expressions. Defaults to JQ.")]
+    [Required, StringLength(int.MaxValue, MinimumLength = 1)]
+    [DataMember(Order = 1, Name = "language"), JsonPropertyOrder(1), JsonPropertyName("language")]
+    public string Language { get; init; } = RuntimeExpressions.Languages.JQ;
 
     /// <summary>
     /// Gets/sets the language used for writing runtime expressions. Defaults to <see cref="RuntimeExpressionEvaluationMode.Strict"/>
     /// </summary>
-    [DataMember(Name = "mode", Order = 2), JsonPropertyName("mode"), JsonPropertyOrder(2), YamlMember(Alias = "mode", Order = 2)]
-    public virtual string? Mode { get; set; }
+    [Description("The mode used for evaluating runtime expressions. Defaults to Strict.")]
+    [DataMember(Order = 2, Name = "mode"), JsonPropertyOrder(2), JsonPropertyName("mode")]
+    public string? Mode { get; init; }
 
 }

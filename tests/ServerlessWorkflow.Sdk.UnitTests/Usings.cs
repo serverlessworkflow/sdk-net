@@ -11,6 +11,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+global using AwesomeAssertions;
+global using AwesomeAssertions.Primitives;
+global using Json.More;
+global using Json.Patch;
+global using Json.Pointer;
+global using Microsoft.Extensions.Logging;
+global using Moq;
+global using ServerlessWorkflow.Sdk.Builders;
+global using ServerlessWorkflow.Sdk.IO;
 global using ServerlessWorkflow.Sdk.Models;
+global using ServerlessWorkflow.Sdk.Models.Authentication;
+global using ServerlessWorkflow.Sdk.Models.Calls;
+global using ServerlessWorkflow.Sdk.Models.Processes;
+global using ServerlessWorkflow.Sdk.Models.Tasks;
+global using ServerlessWorkflow.Sdk.Runtime;
+global using ServerlessWorkflow.Sdk.Runtime.Models;
+global using ServerlessWorkflow.Sdk.Runtime.Services;
+global using ServerlessWorkflow.Sdk.Runtime.Services.Executors;
+global using ServerlessWorkflow.Sdk.Serialization.Json;
 global using ServerlessWorkflow.Sdk.UnitTests.Services;
-global using FluentAssertions;
+global using System.Net;
+global using System.Reactive.Subjects;
+global using System.Text.Json;
+global using System.Text.Json.Nodes;
+global using Yaml2JsonNode;

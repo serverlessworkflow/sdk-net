@@ -11,68 +11,73 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using ServerlessWorkflow.Sdk.Models.Processes;
-
 namespace ServerlessWorkflow.Sdk.Models;
 
 /// <summary>
 /// Represents the configuration of a process execution
 /// </summary>
+[Description("Represents the configuration of a process execution")]
 [DataContract]
-public record ProcessTypeDefinition
+public sealed record ProcessTypeDefinition
 {
 
     /// <summary>
     /// Gets/sets the configuration of the container to run
     /// </summary>
-    [DataMember(Name = "container", Order = 1), JsonPropertyName("container"), JsonPropertyOrder(1), YamlMember(Alias = "container", Order = 1)]
-    public virtual ContainerProcessDefinition? Container { get; set; }
+    [Description("The configuration of the container to run")]
+    [DataMember(Order = 1, Name = "container"), JsonPropertyOrder(1), JsonPropertyName("container")]
+    public ContainerProcessDefinition? Container { get; init; }
 
     /// <summary>
     /// Gets/sets the configuration of the shell command to run
     /// </summary>
-    [DataMember(Name = "shell", Order = 2), JsonPropertyName("shell"), JsonPropertyOrder(2), YamlMember(Alias = "shell", Order = 2)]
-    public virtual ShellProcessDefinition? Shell { get; set; }
+    [Description("The configuration of the shell command to run")]
+    [DataMember(Order = 2, Name = "shell"), JsonPropertyOrder(2), JsonPropertyName("shell")]
+    public ShellProcessDefinition? Shell { get; init; }
 
     /// <summary>
     /// Gets/sets the configuration of the script to run
     /// </summary>
-    [DataMember(Name = "script", Order = 3), JsonPropertyName("script"), JsonPropertyOrder(3), YamlMember(Alias = "script", Order = 3)]
-    public virtual ScriptProcessDefinition? Script { get; set; }
+    [Description("The configuration of the script to run")]
+    [DataMember(Order = 3, Name = "script"), JsonPropertyOrder(3), JsonPropertyName("script")]
+    public ScriptProcessDefinition? Script { get; init; }
 
     /// <summary>
     /// Gets/sets the configuration of the workflow to run
     /// </summary>
-    [DataMember(Name = "workflow", Order = 4), JsonPropertyName("workflow"), JsonPropertyOrder(4), YamlMember(Alias = "workflow", Order = 4)]
-    public virtual WorkflowProcessDefinition? Workflow { get; set; }
+    [Description("The configuration of the workflow to run")]
+    [DataMember(Order = 4, Name = "workflow"), JsonPropertyOrder(4), JsonPropertyName("workflow")]
+    public WorkflowProcessDefinition? Workflow { get; init; }
 
     /// <summary>
     /// Gets/sets a boolean indicating whether or not to await the process completion before continuing. Defaults to 'true'.
     /// </summary>
-    [DataMember(Name = "await", Order = 5), JsonPropertyName("await"), JsonPropertyOrder(5), YamlMember(Alias = "await", Order = 5)]
-    public virtual bool? Await { get; set; }
+    [Description("A boolean indicating whether or not to await the process completion before continuing. Defaults to 'true'.")]
+    [DataMember(Order = 5, Name = "await"), JsonPropertyOrder(5), JsonPropertyName("await")]
+    public bool? Await { get; init; }
 
     /// <summary>
     /// Gets/sets the output of the process.<para></para>
     /// See <see cref="ProcessReturnType"/><para></para>
     /// Defaults to <see cref="ProcessReturnType.Stdout"/>
     /// </summary>
-    [DataMember(Name = "return", Order = 6), JsonPropertyName("return"), JsonPropertyOrder(6), YamlMember(Alias = "return", Order = 6)]
-    public virtual string? Return { get; set; }
+    [Description("The output of the process. See ProcessReturnType. Defaults to ProcessReturnType.Stdout")]
+    [DataMember(Order = 6, Name = "return"), JsonPropertyOrder(6), JsonPropertyName("return")]
+    public string? Return { get; init; }
 
     /// <summary>
     /// Gets the type of the defined process tasks
     /// </summary>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
-    public virtual string ProcessType
+    [IgnoreDataMember, JsonIgnore]
+    public string ProcessType
     {
         get
         {
-            if (this.Container != null) return Models.ProcessType.Container;
-            if (this.Shell != null) return Models.ProcessType.Shell;
-            if (this.Script != null) return Models.ProcessType.Script;
-            if (this.Workflow != null) return Models.ProcessType.Workflow;
-            return Models.ProcessType.Extension;
+            if (Container != null) return Sdk.ProcessType.Container;
+            if (Shell != null) return Sdk.ProcessType.Shell;
+            if (Script != null) return Sdk.ProcessType.Script;
+            if (Workflow != null) return Sdk.ProcessType.Workflow;
+            return Sdk.ProcessType.Extension;
         }
     }
 

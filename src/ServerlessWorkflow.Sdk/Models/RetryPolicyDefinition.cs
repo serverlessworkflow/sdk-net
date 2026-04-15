@@ -16,45 +16,52 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of a retry policy
 /// </summary>
+[Description("Represents the definition of a retry policy")]
 [DataContract]
-public record RetryPolicyDefinition
+public sealed record RetryPolicyDefinition
     : ReferenceableComponentDefinition
 {
 
     /// <summary>
     /// Gets/sets a runtime expression used to determine whether or not to retry running the task, in a given context
     /// </summary>
-    [DataMember(Name = "when", Order = 1), JsonPropertyName("when"), JsonPropertyOrder(1), YamlMember(Alias = "when", Order = 1)]
-    public virtual string? When { get; set; }
+    [Description("A runtime expression used to determine whether or not to retry running the task, in a given context")]
+    [DataMember(Order = 1, Name = "when"), JsonPropertyOrder(1), JsonPropertyName("when")]
+    public string? When { get; init; }
 
     /// <summary>
     /// Gets/sets a runtime expression used to determine whether or not to retry running the task, in a given context
     /// </summary>
-    [DataMember(Name = "exceptWhen", Order = 2), JsonPropertyName("exceptWhen"), JsonPropertyOrder(2), YamlMember(Alias = "exceptWhen", Order = 2)]
-    public virtual string? ExceptWhen { get; set; }
+    [Description("A runtime expression used to determine whether or not to retry running the task, in a given context")]
+    [DataMember(Order = 2, Name = "exceptWhen"), JsonPropertyOrder(2), JsonPropertyName("exceptWhen")]
+    public string? ExceptWhen { get; init; }
 
     /// <summary>
     /// Gets/sets the limits, if any, of the retry policy
     /// </summary>
-    [DataMember(Name = "limit", Order = 3), JsonPropertyName("limit"), JsonPropertyOrder(2), YamlMember(Alias = "limit", Order = 3)]
-    public virtual RetryPolicyLimitDefinition? Limit { get; set; }
+    [Description("The limits, if any, of the retry policy")]
+    [DataMember(Order = 3, Name = "limit"), JsonPropertyOrder(3), JsonPropertyName("limit")]
+    public RetryPolicyLimitDefinition? Limit { get; init; }
 
     /// <summary>
     /// Gets/sets the delay duration between retry attempts
     /// </summary>
-    [DataMember(Name = "delay", Order = 4), JsonPropertyName("delay"), JsonPropertyOrder(4), YamlMember(Alias = "delay", Order = 4)]
-    public virtual Duration? Delay { get; set; }
+    [Description("The delay duration between retry attempts")]
+    [DataMember(Order = 4, Name = "delay"), JsonPropertyOrder(4), JsonPropertyName("delay")]
+    public Duration? Delay { get; init; }
 
     /// <summary>
     /// Gets/sets the backoff strategy to use, if any
     /// </summary>
-    [DataMember(Name = "backoff", Order = 5), JsonPropertyName("backoff"), JsonPropertyOrder(5), YamlMember(Alias = "backoff", Order = 5)]
-    public virtual BackoffStrategyDefinition? Backoff { get; set; }
+    [Description("The backoff strategy to use, if any")]
+    [DataMember(Order = 5, Name = "backoff"), JsonPropertyOrder(5), JsonPropertyName("backoff")]
+    public BackoffStrategyDefinition? Backoff { get; init; }
 
     /// <summary>
     /// Gets/sets the parameters, if any, that control the randomness or variability of the delay between retry attempts
     /// </summary>
-    [DataMember(Name = "jitter", Order = 6), JsonPropertyName("jitter"), JsonPropertyOrder(6), YamlMember(Alias = "jitter", Order = 6)]
-    public virtual JitterDefinition? Jitter { get; set; }
+    [Description("The parameters, if any, that control the randomness or variability of the delay between retry attempts")]
+    [DataMember(Order = 6, Name = "jitter"), JsonPropertyOrder(6), JsonPropertyName("jitter")]
+    public JitterDefinition? Jitter { get; init; }
 
 }

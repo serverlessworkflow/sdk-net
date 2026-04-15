@@ -1,0 +1,164 @@
+// Copyright © 2024-Present The Serverless Workflow Specification Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License"),
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+namespace ServerlessWorkflow.Sdk.UnitTests.Cases.Runtime.Services.Executors;
+
+public class SwitchTaskExecutorTests
+    : TaskExecutorTestsBase
+{
+
+    [Fact]
+    public async Task Execute_Should_Match_First_True_Case()
+    {
+        // Arrange
+        var switchCases = new Map<string, SwitchCaseDefinition>();
+        switchCases.Add(new("caseA", new SwitchCaseDefinition { When = "${ .status == \"active\" }", Then = FlowDirective.End }));
+        switchCases.Add(new("caseB", new SwitchCaseDefinition { When = "${ .status == \"inactive\" }", Then = FlowDirective.Continue }));
+
+        var definition = new SwitchTaskDefinition { Switch = switchCases };
+        var input = new JsonObject { ["status"] = "active" };
+        var taskContext = CreateTaskExecutionContext(definition, input);
+
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+
+        var expressionMock = Mock.Get(taskContext.Object.Workflow.Expressions);
+        // First case matches
+        expressionMock.Setup(e => e.EvaluateAsync(
+            It.Is<string>(s => s.Contains("active")),
+            It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(JsonValue.Create(true));
+        // Second case does not match
+        expressionMock.Setup(e => e.EvaluateAsync(
+            It.Is<string>(s => s.Contains("inactive")),
+            It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(JsonValue.Create(false));
+
+        var executor = new SwitchTaskExecutor(
+            CreateServiceProvider().Object,
+            Mock.Of<ILogger<SwitchTaskExecutor>>(),
+            CreateExecutionContextFactory().Object,
+            CreateExecutorFactory().Object,
+            CreateSchemaHandlerProvider().Object,
+            taskContext.Object);
+
+        // Act
+        await executor.ExecuteAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        taskContext.Verify(
+            c => c.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task Execute_Should_Use_Default_Case_When_No_Condition_Matches()
+    {
+        // Arrange
+        var switchCases = new Map<string, SwitchCaseDefinition>();
+        switchCases.Add(new("caseA", new SwitchCaseDefinition { When = "${ .status == \"active\" }", Then = FlowDirective.End }));
+        switchCases.Add(new("default", new SwitchCaseDefinition { Then = FlowDirective.Continue }));
+
+        var definition = new SwitchTaskDefinition { Switch = switchCases };
+        var input = new JsonObject { ["status"] = "unknown" };
+        var taskContext = CreateTaskExecutionContext(definition, input);
+
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+
+        var expressionMock = Mock.Get(taskContext.Object.Workflow.Expressions);
+        // No cases match
+        expressionMock.Setup(e => e.EvaluateAsync(
+            It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(JsonValue.Create(false));
+
+        var executor = new SwitchTaskExecutor(
+            CreateServiceProvider().Object,
+            Mock.Of<ILogger<SwitchTaskExecutor>>(),
+            CreateExecutionContextFactory().Object,
+            CreateExecutorFactory().Object,
+            CreateSchemaHandlerProvider().Object,
+            taskContext.Object);
+
+        // Act
+        await executor.ExecuteAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        taskContext.Verify(
+            c => c.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task Execute_Should_Use_Task_Then_When_No_Case_Matches_And_No_Default()
+    {
+        // Arrange
+        var switchCases = new Map<string, SwitchCaseDefinition>();
+        switchCases.Add(new("caseA", new SwitchCaseDefinition { When = "${ .status == \"active\" }", Then = FlowDirective.End }));
+
+        var definition = new SwitchTaskDefinition { Switch = switchCases, Then = FlowDirective.Continue };
+        var input = new JsonObject { ["status"] = "unknown" };
+        var taskContext = CreateTaskExecutionContext(definition, input);
+
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Running);
+
+        var expressionMock = Mock.Get(taskContext.Object.Workflow.Expressions);
+        expressionMock.Setup(e => e.EvaluateAsync(
+            It.IsAny<string>(), It.IsAny<JsonNode>(), It.IsAny<JsonObject?>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(JsonValue.Create(false));
+
+        var executor = new SwitchTaskExecutor(
+            CreateServiceProvider().Object,
+            Mock.Of<ILogger<SwitchTaskExecutor>>(),
+            CreateExecutionContextFactory().Object,
+            CreateExecutorFactory().Object,
+            CreateSchemaHandlerProvider().Object,
+            taskContext.Object);
+
+        // Act
+        await executor.ExecuteAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        taskContext.Verify(
+            c => c.SetResultAsync(It.IsAny<JsonNode?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()),
+            Times.AtLeastOnce);
+    }
+
+    [Fact]
+    public async Task Execute_Should_Skip_When_Already_Completed()
+    {
+        // Arrange
+        var switchCases = new Map<string, SwitchCaseDefinition>();
+        switchCases.Add(new("caseA", new SwitchCaseDefinition { When = "${ true }", Then = FlowDirective.End }));
+
+        var definition = new SwitchTaskDefinition { Switch = switchCases };
+        var taskContext = CreateTaskExecutionContext(definition);
+
+        Mock.Get(taskContext.Object.Instance).Setup(s => s.Status).Returns(Sdk.Runtime.TaskStatus.Completed);
+
+        var executor = new SwitchTaskExecutor(
+            CreateServiceProvider().Object,
+            Mock.Of<ILogger<SwitchTaskExecutor>>(),
+            CreateExecutionContextFactory().Object,
+            CreateExecutorFactory().Object,
+            CreateSchemaHandlerProvider().Object,
+            taskContext.Object);
+
+        // Act
+        await executor.ExecuteAsync(TestContext.Current.CancellationToken);
+
+        // Assert
+        taskContext.Verify(
+            i => i.StartAsync(It.IsAny<CancellationToken>()),
+            Times.Never);
+    }
+
+}

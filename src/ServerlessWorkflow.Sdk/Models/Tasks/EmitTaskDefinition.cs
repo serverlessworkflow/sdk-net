@@ -16,19 +16,21 @@ namespace ServerlessWorkflow.Sdk.Models.Tasks;
 /// <summary>
 /// Represents the configuration of a task used to emit an event
 /// </summary>
+[Description("Represents the configuration of a task used to emit an event")]
 [DataContract]
-public record EmitTaskDefinition
+public sealed record EmitTaskDefinition
     : TaskDefinition
 {
 
     /// <inheritdoc/>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    [IgnoreDataMember, JsonIgnore]
     public override string Type => TaskType.Emit;
 
     /// <summary>
     /// Gets/sets the configuration of an event's emission
     /// </summary>
-    [DataMember(Name = "emit", Order = 1), JsonPropertyName("emit"), JsonPropertyOrder(1), YamlMember(Alias = "emit", Order = 1)]
-    public required virtual EventEmissionDefinition Emit { get; set; }
+    [Description("The configuration of an event's emission")]
+    [DataMember(Order = 1, Name = "emit"), JsonPropertyOrder(1), JsonPropertyName("emit")]
+    public required EventEmissionDefinition Emit { get; init; }
 
 }

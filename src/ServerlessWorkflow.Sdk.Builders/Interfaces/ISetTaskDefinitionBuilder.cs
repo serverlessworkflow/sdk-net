@@ -26,13 +26,13 @@ public interface ISetTaskDefinitionBuilder
     /// <param name="name">The name of the variable to set</param>
     /// <param name="value">The value of the variable to set. Supports runtime expressions</param>
     /// <returns>The configured <see cref="ISetTaskDefinitionBuilder"/></returns>
-    ISetTaskDefinitionBuilder Set(string name, object value);
+    ISetTaskDefinitionBuilder Set(string name, JsonNode value);
 
     /// <summary>
     /// Configures the task to set the specified variable
     /// </summary>
     /// <param name="variables">A name/value mapping of the variables to set</param>
     /// <returns>The configured <see cref="ISetTaskDefinitionBuilder"/></returns>
-    ISetTaskDefinitionBuilder Set(IDictionary<string, object> variables);
+    ISetTaskDefinitionBuilder Set(JsonObject variables);
 
 }

@@ -16,19 +16,21 @@ namespace ServerlessWorkflow.Sdk.Models.Tasks;
 /// <summary>
 /// Represents the definition of an extension's task
 /// </summary>
+[Description("Represents the definition of an extension's task")]
 [DataContract]
-public record ExtensionTaskDefinition
-    : TaskDefinition, IExtensible
+public sealed record ExtensionTaskDefinition
+    : TaskDefinition
 {
 
     /// <inheritdoc/>
-    [IgnoreDataMember, JsonIgnore, YamlIgnore]
+    [IgnoreDataMember, JsonIgnore]
     public override string Type => TaskType.Extension;
 
     /// <summary>
     /// Gets/sets the task definition's extension data, if any
     /// </summary>
-    [DataMember(Name = "extensionData", Order = 1), JsonExtensionData]
-    public virtual IDictionary<string, object>? ExtensionData { get; set; }
+    [Description("The task definition's extension data, if any")]
+    [DataMember(Order = 1, Name = "extensionData"), JsonExtensionData]
+    public IDictionary<string, JsonElement>? ExtensionData { get; set; }
 
 }

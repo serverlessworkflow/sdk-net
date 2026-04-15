@@ -11,6 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+global using Semver;
 global using ServerlessWorkflow.Sdk.Models;
 global using ServerlessWorkflow.Sdk.Models.Authentication;
+global using ServerlessWorkflow.Sdk.Models.Calls;
+global using ServerlessWorkflow.Sdk.Models.Processes;
 global using ServerlessWorkflow.Sdk.Models.Tasks;
+global using System.Text.Json.Nodes;
+global using System.Text.RegularExpressions;

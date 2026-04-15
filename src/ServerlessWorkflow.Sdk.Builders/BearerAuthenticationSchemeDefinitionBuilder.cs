@@ -16,34 +16,31 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IBearerAuthenticationSchemeDefinitionBuilder"/> interface
 /// </summary>
-public class BearerAuthenticationSchemeDefinitionBuilder
+public sealed class BearerAuthenticationSchemeDefinitionBuilder
     : AuthenticationSchemeDefinitionBuilder<BearerAuthenticationSchemeDefinition>, IBearerAuthenticationSchemeDefinitionBuilder
 {
 
-    /// <summary>
-    /// Gets/sets the bearer token to use
-    /// </summary>
-    protected string? Token { get; set; }
+    string? token;
 
     /// <inheritdoc/>
-    public virtual IBearerAuthenticationSchemeDefinitionBuilder WithToken(string token)
+    public IBearerAuthenticationSchemeDefinitionBuilder WithToken(string token)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(token);
-        this.Token = token;
+        this.token = token;
         return this;
     }
 
     /// <inheritdoc/>
     public override BearerAuthenticationSchemeDefinition Build()
     {
-        if (string.IsNullOrWhiteSpace(this.Token)) throw new NullReferenceException("The token must be set");
+        if (string.IsNullOrWhiteSpace(token)) throw new NullReferenceException("The token must be set");
         return new()
         {
-            Use = this.Secret,
-            Token = this.Token
+            Use = Secret,
+            Token = token
         };
     }
 
-    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => this.Build();
+    AuthenticationSchemeDefinition IAuthenticationSchemeDefinitionBuilder.Build() => Build();
 
 }

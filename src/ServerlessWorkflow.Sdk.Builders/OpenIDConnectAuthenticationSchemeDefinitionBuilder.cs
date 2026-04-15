@@ -16,29 +16,29 @@ namespace ServerlessWorkflow.Sdk.Builders;
 /// <summary>
 /// Represents the default implementation of the <see cref="IOpenIDConnectAuthenticationSchemeDefinitionBuilder"/> interface
 /// </summary>
-public class OpenIDConnectAuthenticationSchemeDefinitionBuilder
+public sealed class OpenIDConnectAuthenticationSchemeDefinitionBuilder
     : OAuth2AuthenticationSchemeDefinitionBuilder<OpenIDConnectSchemeDefinition, IOpenIDConnectAuthenticationSchemeDefinitionBuilder>, IOpenIDConnectAuthenticationSchemeDefinitionBuilder
 {
 
     /// <inheritdoc/>
     public override OpenIDConnectSchemeDefinition Build()
     {
-        if (this.Authority == null) throw new NullReferenceException("The authority must be set");
-        if (string.IsNullOrWhiteSpace(this.GrantType)) throw new NullReferenceException("The grant type must be set");
+        if (Authority == null) throw new NullReferenceException("The authority must be set");
+        if (string.IsNullOrWhiteSpace(GrantType)) throw new NullReferenceException("The grant type must be set");
         return new()
         {
-            Use = this.Secret,
-            Authority = this.Authority,
-            Grant = this.GrantType,
-            Client = this.Client,
-            Request = this.Request,
-            Issuers = this.Issuers,
-            Audiences = this.Audiences,
-            Scopes = this.Scopes,
-            Actor = this.Actor,
-            Username = this.Username,
-            Password = this.Password,
-            Subject = this.Subject
+            Use = Secret,
+            Authority = Authority,
+            Grant = GrantType,
+            Client = Client,
+            Request = Request,
+            Issuers = Issuers,
+            Audiences = Audiences,
+            Scopes = Scopes,
+            Actor = Actor,
+            Username = Username,
+            Password = Password,
+            Subject = Subject
         };
     }
 

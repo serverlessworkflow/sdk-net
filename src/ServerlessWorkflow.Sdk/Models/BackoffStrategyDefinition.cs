@@ -16,26 +16,30 @@ namespace ServerlessWorkflow.Sdk.Models;
 /// <summary>
 /// Represents the definition of a retry backoff strategy
 /// </summary>
+[Description("Represents the definition of a retry backoff strategy")]
 [DataContract]
-public record BackoffStrategyDefinition
+public sealed record BackoffStrategyDefinition
 {
 
     /// <summary>
     /// Gets/sets the definition of the constant backoff to use, if any
     /// </summary>
-    [DataMember(Name = "constant", Order = 1), JsonPropertyName("constant"), JsonPropertyOrder(1), YamlMember(Alias = "constant", Order = 1)]
-    public virtual ConstantBackoffDefinition? Constant { get; set; }
+    [Description("The definition of the constant backoff to use, if any")]
+    [DataMember(Order = 1, Name = "constant"), JsonPropertyOrder(1), JsonPropertyName("constant")]
+    public ConstantBackoffDefinition? Constant { get; init; }
 
     /// <summary>
     /// Gets/sets the definition of the exponential backoff to use, if any
     /// </summary>
-    [DataMember(Name = "exponential", Order = 2), JsonPropertyName("exponential"), JsonPropertyOrder(2), YamlMember(Alias = "exponential", Order = 2)]
-    public virtual ExponentialBackoffDefinition? Exponential { get; set; }
+    [Description("The definition of the exponential backoff to use, if any")]
+    [DataMember(Order = 2, Name = "exponential"), JsonPropertyOrder(2), JsonPropertyName("exponential")]
+    public ExponentialBackoffDefinition? Exponential { get; init; }
 
     /// <summary>
     /// Gets/sets the definition of the linear backoff to use, if any
     /// </summary>
-    [DataMember(Name = "linear", Order = 3), JsonPropertyName("linear"), JsonPropertyOrder(3), YamlMember(Alias = "linear", Order = 3)]
-    public virtual LinearBackoffDefinition? Linear { get; set; }
+    [Description("The definition of the linear backoff to use, if any")]
+    [DataMember(Order = 3, Name = "linear"), JsonPropertyOrder(3), JsonPropertyName("linear")]
+    public LinearBackoffDefinition? Linear { get; init; }
 
 }
